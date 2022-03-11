@@ -1,0 +1,102 @@
+.message__section__hedder_BULK {
+  margin-top: 20px;
+  width: 100%;
+  height: 20%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  h3 {
+    font-weight: 500;
+    color: #ffff;
+  }
+}
+
+.message__section__body__bulk {
+  margin-top: 20px;
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  height: 80%;
+  align-items: center;
+  justify-content: center;
+
+  form {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    .rmsc .dropdown-container {
+      background-color: #dfa75c !important;
+      border: 1px solid #fff !important;
+    }
+    .rmsc .gray {
+      color: #ffffff;
+    }
+    .form__input_section {
+      width: 80%;
+      height: 80%;
+      display: flex;
+      flex-direction: column;
+
+      ::placeholder {
+        /* Chrome, Firefox, Opera, Safari 10.1+ */
+        color: white;
+        opacity: 1; /* Firefox */
+      }
+
+      textarea {
+        padding-top: 10px;
+        color: #fff;
+        padding-left: 10px;
+        outline: none;
+        margin-top: 10px;
+        outline: none;
+        border: 2px solid #fff;
+        background-color: transparent;
+      }
+    }
+    .form__button {
+      margin-bottom: 20px;
+      width: 100%;
+      height: 20%;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      button {
+        margin-top: 20px;
+        margin-left: 15px;
+        margin-right: 15px;
+        width: 30%;
+        height: 40px;
+        color: #dfa75c;
+        border-radius: 5px;
+        border: none;
+        outline: none;
+      }
+    }
+  }
+}
+
+.select-wrapper.disable-toggle-all .select-toggle-all {
+  display: none;
+}
+
+@media (max-width: 768px) {
+  .message__section__body__bulk {
+    form {
+      .form__input_section {
+      }
+      .form__button {
+        margin-top: 20px !important;
+        button {
+          margin-top: 20px !important;
+          color: #dfa75c !important;
+          width: 40% !important;
+          height: 40px !important;
+        }
+      }
+    }
+  }
+}

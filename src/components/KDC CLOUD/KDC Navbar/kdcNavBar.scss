@@ -1,0 +1,136 @@
+.kdc__menu__bar {
+  position: absolute;
+  width: 30vw;
+  min-height: 90vh;
+  background-color: rgba(0, 0, 0, 0.7);
+  margin-top: 80px;
+  transform: translate(-500px);
+  transition: all 1s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 5;
+  &.active {
+    transform: translate(0);
+  }
+}
+
+.kdcNavbar {
+  width: 100vw;
+  background-color: black;
+  height: 80px;
+  align-items: center;
+  display: flex;
+  padding-left: 20px;
+  padding-right: 20px;
+  justify-content: space-between;
+  .left__kdcNavbar__navbar__section {
+    .logo__section__name {
+      display: flex;
+      align-items: center;
+      cursor: pointer;
+      h2 {
+        margin-left: 10px;
+        color: #fff;
+        font-family: adobe-myungjo-std;
+        font-style: normal;
+        font-weight: 400;
+      }
+    }
+  }
+  .mid__kdcNavbar__navbar__section {
+    color: #fff;
+
+    .wrapper__div__sections {
+      padding: 6px;
+      margin-left: 5px;
+      margin-right: 5px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 5px;
+
+      &.active {
+        background-color: #3e3e3e;
+      }
+    }
+    .right__slide__section {
+      width: 40%;
+      height: 100%;
+      align-items: center;
+      justify-content: flex-start;
+      display: flex;
+
+      .sliderss {
+        margin-top: 30px;
+        width: 450px;
+      }
+
+      img {
+        width: 100px;
+        height: 100px;
+        object-fit: cover;
+        border-radius: 10px;
+      }
+
+      .slick-prev:before,
+      .slick-next:before {
+        color: #ffffffed;
+      }
+
+      .css-19xm0h7-MuiButtonBase-root-MuiPaginationItem-root.Mui-selected {
+        background-color: #040153ed !important;
+        color: #fff !important;
+      }
+    }
+  }
+
+  .right__kdcNavbar__navbar__section {
+    .search__options {
+      display: flex;
+
+      input {
+        width: 100%;
+        background-color: transparent;
+        border-left: none;
+        border-right: none;
+        border-top: none;
+        outline: none;
+        padding-left: 3px;
+        color: #ffff;
+        margin-right: 15px;
+        width: 200px;
+      }
+    }
+  }
+}
+
+@media only screen and (max-width: 768px) {
+  .kdc__menu__bar {
+    width: 100vw;
+  }
+
+  .kdcNavbar {
+    flex-direction: column;
+    height: auto;
+    padding: 10px;
+    .left__kdcNavbar__navbar__section {
+    }
+
+    .mid__kdcNavbar__navbar__section {
+      .wrapper__div__sections {
+      }
+      .right__slide__section {
+        .sliderss {
+          width: 300px;
+        }
+      }
+    }
+
+    .right__kdcNavbar__navbar__section {
+      svg {
+        width: 20px;
+      }
+    }
+  }
+}

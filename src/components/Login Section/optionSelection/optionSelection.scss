@@ -1,0 +1,258 @@
+.OptionSelection {
+  display: flex;
+  width: 100%;
+  height: 100%;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+
+  .dineInoverlayer {
+    z-index: 2;
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.75);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    .dineInPopupDIV {
+      position: absolute;
+      width: 30%;
+      height: 70%;
+      background-color: #fff;
+      display: flex;
+      flex-direction: column;
+      border-radius: 15px;
+
+      align-items: center;
+
+      .headder__dinein {
+        margin-bottom: 20px;
+        color: #040153;
+      }
+
+      button {
+        width: 70%;
+        height: 50px;
+        padding: 5px;
+        border-radius: 10px;
+        outline: none;
+        border: none;
+        background-color: #e93b2d;
+      }
+      .table__detaill__section {
+        display: flex;
+        width: 70%;
+        justify-content: space-between;
+        margin-top: 10px;
+        margin-bottom: 10px;
+        background-color: #e39d16;
+        padding: 5px;
+        border-radius: 10px;
+        align-items: center;
+        height: 50px;
+
+        h4 {
+          font-weight: 500;
+        }
+        input {
+          height: 30px;
+          border-radius: 8px;
+          outline: none;
+          border: none;
+          padding-left: 10px;
+        }
+      }
+
+      .closeIconSection {
+        display: flex;
+        padding: 5px;
+        width: 100%;
+        justify-content: flex-end;
+
+        .MuiSvgIcon-root {
+          color: #040153;
+          font-size: 30px;
+        }
+      }
+    }
+  }
+
+  .overlay__black__section {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.75);
+  }
+
+  .overlay__Section__for__orderTaking {
+    position: absolute;
+    width: 30%;
+    height: 70%;
+    background-color: #fff;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-self: center;
+    border-radius: 15px;
+    .top__section {
+      display: flex;
+      justify-content: space-between;
+      width: 100%;
+      height: 10%;
+      .closeBtnIcon {
+        margin-top: 10px;
+        margin-right: 10px;
+        cursor: pointer;
+        width: 40px;
+      }
+
+      h1 {
+        margin-left: 20%;
+        font-size: 25px;
+        margin-top: 20px;
+        color: #040153;
+      }
+    }
+    .body__section {
+      margin-left: 25%;
+      width: 100%;
+      height: 90%;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      width: 50%;
+      button {
+        height: 45px;
+        width: 100%;
+        margin-top: 5px;
+        margin-bottom: 5px;
+        border-radius: 10px;
+        outline: none;
+        border: none;
+        color: #040153;
+
+        h6 {
+          font-size: 15px;
+        }
+
+        &.yellow__color {
+          background-color: rgb(235, 180, 0);
+        }
+        &.green__color {
+          background-color: #009751;
+        }
+        &.red__color {
+          background-color: rgb(247, 67, 67);
+        }
+
+        &:hover {
+          background-color: #040153;
+          color: white;
+        }
+      }
+    }
+    &.mainOptionSection {
+      .top__section {
+        h1 {
+          margin-left: 30% !important;
+        }
+      }
+    }
+  }
+  .orderTaking {
+    width: 40%;
+    height: 100%;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    .order__taking__option {
+      cursor: pointer;
+      width: 70%;
+      height: 70%;
+      background-color: #fff;
+      border-radius: 20px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 10px 9px 9px -8px rgba(0, 0, 0, 0.75);
+      img {
+        width: 100%;
+        object-fit: cover;
+      }
+    }
+  }
+  .mainoption {
+    width: 40%;
+    height: 100%;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    .inside__section_mainoption {
+      cursor: pointer;
+      padding-top: 10%;
+      border-radius: 20px;
+      width: 70%;
+      height: 70%;
+      background-color: #fff;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 10px 9px 9px -8px rgba(0, 0, 0, 0.75);
+      img {
+        width: 70%;
+
+        object-fit: cover;
+      }
+    }
+  }
+}
+
+@media (max-width: 768px) {
+  .OptionSelection {
+    flex-direction: column;
+
+    .orderTaking {
+      width: 100%;
+      height: 50%;
+      .order__taking__option {
+        width: 90%;
+
+        img {
+          width: 40%;
+        }
+      }
+    }
+
+    .mainoption {
+      width: 100%;
+      height: 50%;
+
+      .inside__section_mainoption {
+        width: 90%;
+
+        img {
+          width: 30%;
+          margin-bottom: 40px;
+          object-fit: cover;
+        }
+      }
+    }
+
+    .overlay__Section__for__orderTaking {
+      width: 90%;
+      .top__section {
+        h1 {
+          font-size: 20px;
+          margin-left: 23%;
+        }
+      }
+    }
+  }
+}

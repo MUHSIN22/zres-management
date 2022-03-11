@@ -1,0 +1,217 @@
+.DashBoard {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+
+  align-items: center;
+  justify-content: center;
+  .top__category__section {
+    width: 100%;
+    height: 15%;
+
+    .hedder__category {
+      margin-top: 3%;
+      display: flex;
+      color: #040153 !important;
+      button {
+        position: absolute;
+        right: 5%;
+        background-color: #009751;
+        color: #040153;
+        border: none;
+        outline: none;
+        padding: 2px;
+        border-radius: 8px;
+        padding-left: 5px;
+        padding-right: 5px;
+      }
+      .line_passer {
+        width: 60%;
+        height: 1px;
+        background-color: #040153;
+        margin-top: 39px;
+        opacity: 1;
+      }
+      .option__box {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 20%;
+        height: 40px;
+        border: 1px solid #040153;
+        border-top: none;
+        border-left: none;
+        border-right: none;
+
+        h5 {
+          cursor: pointer;
+          font-size: 12px;
+        }
+
+        &.firstvalue {
+          border-top: 1px solid #040153;
+          border-bottom: none;
+          border-right: 1px solid #040153;
+        }
+        &.restValue {
+          border-top: 1px solid #040153;
+          border-left: 1px solid #040153;
+          border-bottom: none;
+          border-right: 1px solid #040153;
+        }
+      }
+    }
+  }
+  .master__body__section {
+    .headder__div__section {
+      position: relative;
+      width: 100%;
+      background-color: #040153;
+      padding: 12px;
+      display: flex;
+      border-radius: 8px;
+      justify-content: space-between;
+
+      .date__popup__section {
+        width: 50%;
+        height: 250px;
+        position: absolute;
+        background-color: rgb(255, 255, 255);
+        top: 100%;
+        right: 0;
+        padding: 10px;
+        z-index: 2;
+        border-radius: 8px;
+        box-shadow: 0 0 10px grey;
+
+        .DATE__SECTION__WRAPPER {
+          display: flex;
+          justify-content: space-evenly;
+          width: 100%;
+          height: 80%;
+          align-items: center;
+
+          .dateSectionss {
+            h4 {
+              font-weight: 400;
+              color: #040153;
+              margin-top: 5px;
+              margin-bottom: 5px;
+              font-size: 25px;
+            }
+            input {
+              height: 40px;
+              border-radius: 8px;
+              outline: none;
+              border: none;
+              padding-left: 5px;
+              padding-right: 5px;
+              width: 100%;
+              border: 1px solid #040153;
+            }
+          }
+        }
+
+        .BTN__SECTIONS {
+          width: 100%;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          height: 20%;
+
+          button {
+            width: 40%;
+            height: 30px;
+            margin-left: 5px;
+            cursor: pointer;
+            outline: none;
+            border: none;
+            border-radius: 5px;
+            margin-right: 5px;
+            background-color: rgb(224, 224, 224);
+
+            &.apply__btn {
+              background-color: #009751;
+              color: #fff;
+            }
+          }
+        }
+      }
+      .left__side__type {
+        .css-zcbmsk-MuiButtonBase-root-MuiButton-root {
+          background-color: rgb(255, 255, 255);
+          color: #040153;
+        }
+
+        .DashBoard
+          .master__body__section
+          .headder__div__section
+          .left__side__type
+          .css-zcbmsk-MuiButtonBase-root-MuiButton-root {
+          background-color: red;
+        }
+        select {
+          height: 25px;
+          padding: 5px;
+          border-radius: 5px;
+          outline: none;
+          border: none;
+        }
+      }
+
+      .right___side__date__section {
+        background-color: #017951;
+        min-width: 250px;
+        align-items: center;
+        display: flex;
+        justify-content: center;
+
+        .MuiSvgIcon-root {
+          color: #040153;
+          width: 20px;
+          margin-left: 5px;
+          margin-right: 5px;
+        }
+
+        h5 {
+          font-weight: 400;
+          margin-left: 5px;
+          margin-right: 5px;
+        }
+        select {
+          color: #040153;
+          height: 25px;
+          background-color: transparent;
+          outline: none;
+          border: none;
+        }
+      }
+    }
+    width: 95%;
+    border-radius: 20px;
+    height: 100%;
+
+    margin-top: 20px;
+    margin-bottom: 20px;
+  }
+}
+
+@media only screen and (max-width: 768px) {
+  .DashBoard {
+    .top__category__section {
+      .hedder__category {
+        .line_passer {
+          width: 0%;
+        }
+        .option__box {
+          width: 100%;
+          h5 {
+            font-size: 12px;
+            font-weight: 500;
+            margin-left: 10px;
+          }
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,281 @@
+.GpStatement {
+  width: 100%;
+  height: 100%;
+
+  .top__section {
+    display: flex;
+    justify-content: space-between;
+    background-color: #b5b4c5;
+    h2 {
+      color: #040153;
+      margin-left: 15px;
+      font-size: 17px;
+    }
+
+    .edit__delete__add__wrapper {
+      display: flex;
+      .different__option {
+        margin-left: 10px;
+        margin-right: 10px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+
+        h5 {
+          color: #040153;
+          font-size: 12px;
+        }
+        svg {
+          width: 25px;
+        }
+      }
+    }
+  }
+
+  // bottom section
+
+  .bottom__Section {
+    width: 100%;
+
+    .table__filter {
+      width: 100%;
+      height: 40px;
+      background-color: #b5b4c5;
+      display: flex;
+      align-items: center;
+      margin-bottom: 8px;
+      border-radius: 5px;
+      .dateSearchWrapper {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin-left: 10px;
+        margin-right: 10px;
+        h5 {
+          margin-right: 5px;
+        }
+      }
+
+      .sales__Type {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin-left: 10px;
+        margin-right: 10px;
+
+        h5 {
+          margin-right: 5px;
+        }
+        select {
+          width: 150px;
+          border: none;
+          outline: none;
+          height: 25px;
+          border-radius: 5px;
+        }
+      }
+
+      .search__Section {
+        button {
+          width: 120px;
+          height: 25px;
+          background: #040153;
+          color: #fff;
+          border-radius: 5px;
+          cursor: pointer;
+          box-shadow: 0 0 10px grey;
+        }
+      }
+    }
+
+    .table__sections {
+      width: 100%;
+      background-color: rgb(255, 255, 255);
+      display: flex;
+      overflow: scroll;
+
+      .table {
+        width: 100%;
+        border-collapse: collapse;
+
+        background-color: rgb(211, 211, 211);
+
+        thead {
+          background-color: #c7c6d7;
+
+          tr th {
+            font-size: 14px;
+            font-weight: 600;
+            letter-spacing: 0.3px;
+            color: #040153;
+            opacity: 1;
+            padding: 12px;
+            vertical-align: top;
+            border: 1px solid #a4a3c1;
+          }
+        }
+        .elapsedTime {
+          color: red;
+        }
+        tbody tr td {
+          font-size: 14px;
+          letter-spacing: 0.35px;
+          font-weight: normal;
+          color: #040153;
+          background-color: #f3f3f3;
+          padding: 8px;
+          text-align: center;
+          border: 1px solid #a4a3c1;
+        }
+
+        tfoot tr td {
+          font-size: 14px;
+          letter-spacing: 0.35px;
+          font-weight: bold;
+          color: #040153;
+          background-color: #f3f3f3;
+          padding: 8px;
+          text-align: center;
+          border: 1px solid #040153;
+        }
+        tbody {
+          display: block;
+          height: 250px;
+          overflow: auto;
+        }
+        thead,
+        tbody,
+        tr {
+          display: table;
+          width: 100%;
+          table-layout: fixed; /* even columns width , fix width of table too*/
+        }
+        .Canceled {
+          background-color: rgb(247, 185, 185) !important;
+        }
+
+        .selectedTr {
+          td {
+            background-color: #c2c0f3;
+          }
+
+          &.cancelActive {
+            td {
+              background-color: rgb(255, 0, 0);
+              color: #ffff;
+            }
+          }
+        }
+      }
+    }
+
+    .canceled__and__total__amount {
+      position: fixed;
+      width: 75%;
+      background-color: #d1d1f8;
+      height: 40px;
+      display: flex;
+      justify-content: flex-end;
+      align-items: center;
+      padding-right: 30px;
+      padding-left: 30px;
+      bottom: 5%;
+
+      .checkbox_Section {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+
+      .total__amount__section {
+        display: flex;
+        align-items: center;
+        margin-left: 15px;
+        margin-right: 15px;
+        justify-content: center;
+
+        h5 {
+          color: #040153;
+          margin-right: 10px;
+          font-size: 12px;
+        }
+
+        .amount__holder {
+          padding: 5px;
+          background-color: #ffff;
+          border-radius: 5px;
+        }
+      }
+    }
+  }
+}
+
+@media only screen and (max-width: 768px) {
+  .GpStatement {
+    .top__section {
+      h2 {
+        font-size: 16px;
+      }
+
+      .edit__delete__add__wrapper {
+        .different__option {
+          svg {
+            width: 20px;
+          }
+        }
+      }
+    }
+    .bottom__Section {
+      .table__filter {
+        height: 100%;
+        flex-direction: column;
+        align-items: initial;
+        .dateSearchWrapper {
+          margin-top: 8px;
+          justify-content: space-between;
+          h5 {
+            font-size: 13px;
+          }
+        }
+        .sales__Type {
+          margin-top: 8px;
+          justify-content: space-between;
+        }
+
+        .search__Section {
+          align-items: center;
+          justify-content: center;
+          display: flex;
+          margin-top: 10px;
+          margin-bottom: 10px;
+        }
+      }
+      .table__sections {
+        border-radius: 0;
+      }
+
+      .canceled__and__total__amount {
+        width: 90%;
+        padding: 0;
+        height: auto;
+        flex-direction: column;
+        position: unset;
+        margin-top: 15px;
+        .checkbox_Section {
+          font-size: 10px;
+          justify-content: space-between;
+          width: 100%;
+        }
+
+        .total__amount__section {
+          width: 100%;
+          justify-content: space-between;
+        }
+        h5 {
+          font-size: 10px;
+        }
+      }
+    }
+  }
+}

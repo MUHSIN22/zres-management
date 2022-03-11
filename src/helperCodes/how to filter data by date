@@ -1,0 +1,70 @@
+0: {date: "2020-07-25T16:44:43.000Z"
+description: "Qwerty"
+id: 89329972},
+1: {date: "2020-07-25T16:46:28.000Z"
+description: "Place bins please"
+id: 65586316},
+2: {date: "2020-07-25T16:49:12.000Z"
+description: "Solve sewerege problem"
+id: 84687816},
+3: {date: "2020-07-27T16:34:47.000Z"
+description: "Test compl"
+id: 56437370},
+4: {date: "2020-07-28T08:40:34.000Z"
+description: "Sewerage problem in my area"
+id: 92402221},
+5: {date: "2020-09-09T11:42:18.000Z"
+description: "problem"
+id: 25613902},
+
+
+fromDate: Sat Jul 25 2020 11:43:00
+toDate: Sat Aug 08 2020 11:43:00
+
+
+
+
+
+
+ useEffect( () => {
+    if (fromDate !== null && toDate !== null) {
+        setReportData(
+            mainData.filter(
+                (obj) =>{
+                    return new Date(obj.date).getTime() >= fromDate.getTime() && new Date(obj.date).getTime() <= toDate.getTime()
+                }
+            )
+        )
+    }
+
+},[toDate])
+
+
+
+
+
+
+
+
+????????????????????????????????????????????
+cart
+
+
+  const handleCheckboxClick = (e, data, prod) => {
+    const AddonAlreadySelectOrNOT = checkedStat.find(
+      (items) => items.id === data.id
+    );
+
+    console.log("selected data", data, "other data", prod);
+    if (AddonAlreadySelectOrNOT) {
+      setCheckedState(
+        checkedStat.map((item) =>
+          item.id === data.id
+            ? { ...AddonAlreadySelectOrNOT, checked: e.target.checked }
+            : item
+        )
+      );
+    } else {
+      setCheckedState([...checkedStat, { ...data, checked: e.target.checked }]);
+    }
+  };

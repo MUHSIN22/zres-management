@@ -1,0 +1,62 @@
+.ChangDue {
+  width: 50%;
+  height: 50%;
+  background-color: #fff;
+  border-radius: 10px;
+
+  .changeDue__headder {
+    width: 100%;
+    height: 20%;
+    display: flex;
+    align-items: center;
+    padding-left: 10px;
+    background-color: #d6e1ff;
+    border-top-left-radius: 10px;
+    border-top-right-radius: 10px;
+
+    h3 {
+      color: #040153;
+    }
+  }
+
+  .changeDue__mid {
+    width: 100%;
+    height: 60%;
+    display: flex;
+    flex-direction: column;
+
+    .changeDue__mid__sections {
+      display: flex;
+      width: 100%;
+      justify-content: space-between;
+      padding-left: 10px;
+      padding-right: 10px;
+      margin-top: 10px;
+      margin-bottom: 10px;
+      color: #040153;
+    }
+  }
+  .changeDue__bottom {
+    width: 100%;
+    padding: 5px;
+    display: flex;
+    justify-content: flex-end;
+    padding-right: 15px;
+    cursor: pointer;
+    button {
+      width: 60px;
+      height: 30px;
+      border: none;
+      outline: none;
+      background-color: #040153;
+      color: #fff;
+      border-radius: 8px;
+    }
+  }
+}
+@media only screen and(max-width:768px) {
+  .ChangDue {
+    width: 100%;
+    height: 40%;
+  }
+}

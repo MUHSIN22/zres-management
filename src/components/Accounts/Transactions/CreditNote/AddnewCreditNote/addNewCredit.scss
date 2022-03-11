@@ -1,0 +1,407 @@
+.AddNewCredit {
+  width: 100%;
+
+  background-color: #ffffff;
+  border-radius: 15px;
+  padding: 10px;
+  .headderName {
+    color: #040153;
+    margin-bottom: 10px;
+    margin-left: 10px;
+  }
+
+  .top__Section {
+    display: flex;
+
+    width: 100%;
+    padding-left: 20px;
+    padding-right: 20px;
+
+    .left__Section {
+      width: 50%;
+
+      display: flex;
+      flex-direction: column;
+
+      .top {
+        width: 100%;
+        display: flex;
+        align-items: center;
+        margin-bottom: 15px;
+        justify-content: space-between;
+        .input__sections {
+          display: flex;
+          width: 100%;
+          margin-right: 15px;
+          align-items: center;
+          justify-content: space-between;
+
+          h5 {
+            margin-right: 15px;
+            color: #040153;
+            font-size: 12px;
+          }
+          input {
+            border-radius: 10px;
+            height: 30px;
+            border: none;
+            outline: none;
+            padding-left: 15px;
+            box-shadow: 0 0 10px rgb(146, 146, 146);
+          }
+        }
+      }
+      .bottom {
+        display: flex;
+        align-items: center;
+        width: 100%;
+        justify-content: space-between;
+        .input__sections {
+          justify-content: space-between;
+          width: 100%;
+          display: flex;
+          margin-right: 15px;
+          align-items: center !important;
+
+          &.invDate {
+          }
+          h5 {
+            color: #040153;
+            margin-right: 15px;
+            font-size: 12px;
+          }
+          input {
+            border-radius: 10px;
+            height: 30px;
+            border: none;
+            outline: none;
+            padding-left: 15px;
+            margin-left: 10%;
+            box-shadow: 0 0 10px rgb(146, 146, 146);
+          }
+        }
+      }
+    }
+    .right__section {
+      width: 50%;
+      margin-top: 10px;
+
+      display: flex;
+      flex-direction: column;
+
+      align-items: flex-end;
+
+      .radioBtn__Section {
+        display: flex;
+        align-items: center;
+
+        h5 {
+          margin-right: 15px;
+          color: #040153;
+          font-size: 12px;
+        }
+
+        .radio__sec {
+          display: flex;
+          align-items: center;
+
+          justify-content: center;
+          margin-left: 5px;
+          margin-right: 5px;
+          margin-top: 10px;
+
+          label {
+            color: #040153;
+            font-size: 12px;
+            box-shadow: 0 0 10px rgb(146, 146, 146);
+          }
+        }
+      }
+
+      .input__Sections {
+        display: flex;
+        margin-top: 15px;
+        align-items: center;
+
+        h5 {
+          margin-right: 15px;
+          color: #040153;
+          font-size: 12px;
+        }
+        input {
+          width: 400px;
+          border-radius: 10px;
+          height: 30px;
+          border: none;
+          outline: none;
+          box-shadow: 0 0 10px rgb(146, 146, 146);
+
+          padding-left: 15px;
+        }
+
+        select {
+          border-radius: 10px;
+          height: 30px;
+          border: none;
+          outline: none;
+          padding-left: 15px;
+          min-width: 400px;
+          box-shadow: 0 0 10px rgb(146, 146, 146);
+        }
+      }
+    }
+  }
+
+  .mid__section {
+    margin-top: 15px;
+    .table__sectionsss {
+      width: 100%;
+      background-color: rgb(255, 255, 255);
+      display: flex;
+      overflow: scroll;
+      border-radius: 15px;
+      .table {
+        width: 100%;
+        border-spacing: 0;
+        border-collapse: collapse;
+        border-radius: 10px;
+        background-color: rgb(211, 211, 211);
+
+        thead {
+          background-color: #c7c6d7;
+          .orderNuber__th {
+            width: 20%;
+          }
+          .location__th {
+            width: 10%;
+          }
+
+          tr th {
+            font-size: 14px;
+            font-weight: 600;
+            letter-spacing: 0.3px;
+            color: #040153;
+            opacity: 1;
+            padding: 12px;
+            vertical-align: top;
+            border: 1px solid #6e6c9b;
+          }
+        }
+        .elapsedTime {
+          color: red;
+        }
+        tbody tr td {
+          font-size: 14px;
+          letter-spacing: 0.35px;
+          font-weight: normal;
+          color: #040153;
+          background-color: #ffffff;
+          padding: 8px;
+          text-align: center;
+          border: 1px solid #b2b1c2;
+
+          .button {
+            width: 130px;
+            text-decoration: none;
+            line-height: 35px;
+            display: inline-block;
+            font-weight: medium;
+            color: #ffffff;
+            background-color: #009751;
+            text-align: center;
+            vertical-align: middle;
+            user-select: none;
+            font-size: 14px;
+            opacity: 1;
+            border-radius: 10px;
+            box-shadow: 0 0 5px grey;
+          }
+        }
+      }
+    }
+    .total__section {
+      display: flex;
+      justify-content: flex-end;
+      .totalss {
+        padding: 5px;
+        background-color: rgb(82, 82, 82);
+        color: white;
+        margin-left: 10px;
+        &.disc {
+          margin-right: 15%;
+        }
+      }
+    }
+  }
+
+  .bottom__sections {
+    width: 100%;
+
+    background-color: transparent;
+
+    .top__input__section {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-end;
+      justify-content: space-evenly;
+      padding-right: 20px;
+
+      .sections {
+        width: 100%;
+        display: flex;
+        justify-content: flex-end;
+        align-items: center;
+
+        .input__section {
+          margin-left: 10px;
+          margin-right: 10px;
+          margin-top: 10px;
+          margin-bottom: 10px;
+          color: #040153;
+          display: flex;
+          align-items: center;
+          h5 {
+            margin-left: 5px;
+            margin-right: 5px;
+            font-weight: 500;
+
+            &.netAmt {
+              font-weight: bold;
+            }
+          }
+
+          input {
+            border-radius: 10px;
+            height: 30px;
+            border: none;
+            box-shadow: 0 0 10px rgb(146, 146, 146);
+
+            outline: none;
+            padding-left: 15px;
+          }
+        }
+      }
+    }
+    .bottom__btn__section {
+      width: 100%;
+      height: 100px;
+      background-color: #b5b4c5;
+      display: flex;
+      align-items: center;
+      button {
+        width: 10%;
+        height: 30px;
+        margin-left: 10px;
+        margin-right: 10px;
+        background-color: #8685a2;
+        color: #040153;
+        font-size: 15px;
+        font-weight: bold;
+        border: none;
+        outline: none;
+        border-radius: 3px;
+        cursor: pointer;
+      }
+    }
+  }
+}
+
+@media only screen and (max-width: 768px) {
+  .AddNewCredit {
+    width: 100%;
+    padding: 10px;
+    .headderName {
+      h3 {
+        font-size: 15px;
+      }
+    }
+
+    .top__Section {
+      width: 100%;
+      display: flex;
+      flex-direction: column;
+      padding: 0;
+      .left__Section {
+        width: 100%;
+        flex-direction: column;
+        .top {
+          width: 100%;
+          .input__sections {
+            justify-content: space-between;
+            margin-top: 5px;
+            margin-bottom: 5px;
+            h5 {
+              margin-right: 20px;
+            }
+          }
+        }
+        .bottom {
+          flex-direction: column;
+
+          .input__sections {
+            margin-top: 5px;
+            margin-bottom: 5px;
+            align-items: center;
+            justify-content: space-between;
+
+            h5 {
+              margin-right: 20px;
+            }
+          }
+        }
+      }
+      .right__section {
+        width: 100%;
+        align-items: center;
+        margin-top: 15px;
+      }
+    }
+    .mid__section {
+      .table__sectionsss {
+        border-radius: 0 !important;
+        margin-bottom: 15px;
+
+        .table {
+          thead {
+            tr th {
+              font-size: 12px;
+              color: #e68578;
+            }
+          }
+          tbody {
+            tr td {
+              font-size: 12px;
+            }
+          }
+        }
+      }
+      .total__section {
+        .totalss {
+          font-size: 12px;
+          margin-left: 0;
+        }
+      }
+    }
+
+    .bottom__sections {
+      margin-top: 10px;
+      margin-bottom: 10px;
+      .top__input__section {
+        .sections {
+          flex-direction: column;
+
+          .input__section {
+            width: 100%;
+            justify-content: space-between;
+          }
+        }
+      }
+
+      .bottom__btn__section {
+        button {
+          width: 30%;
+        }
+      }
+    }
+  }
+}

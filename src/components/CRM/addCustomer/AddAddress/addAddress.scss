@@ -1,0 +1,132 @@
+.Add_Address {
+  margin-top: 30px;
+  width: 100%;
+  hr {
+    margin-top: 10px;
+    opacity: 50%;
+  }
+  .Addresss__headder {
+    h4 {
+      padding-left: 10px;
+      padding-right: 10px;
+      padding-bottom: 10px;
+      font-size: 13px;
+    }
+    hr {
+      opacity: 50%;
+    }
+  }
+  .Address__body {
+    width: 100%;
+    display: flex;
+    flex-wrap: wrap;
+    .customer__body__fields {
+      padding-top: 20px;
+      padding-left: 10px;
+      padding-right: 10px;
+      padding-bottom: 20px;
+      width: calc(100% / 5);
+      margin-right: 20px;
+
+      .mandory__box {
+        display: flex;
+        input {
+          width: 110%;
+          position: relative;
+        }
+        svg {
+          position: absolute;
+          padding-bottom: 25px;
+          right: 1;
+        }
+      }
+      h6 {
+        padding-left: 10px;
+        font-weight: 500;
+      }
+
+      input {
+        cursor: pointer;
+        width: 110%;
+        margin-top: 10px;
+        padding-left: 25px;
+        border-radius: 10px;
+        box-shadow: 0 0 5pt 0.5pt #d3d3d3;
+        border: none;
+        height: 25px;
+        outline: none;
+      }
+      select {
+        cursor: pointer;
+        width: 110%;
+        margin-top: 10px;
+        padding-left: 25px;
+        border-radius: 10px;
+        box-shadow: 0 0 5pt 0.5pt #d3d3d3;
+        border: none;
+        height: 25px;
+        outline: none;
+      }
+    }
+  }
+}
+
+.save__btn {
+  width: 100%;
+
+  button {
+    margin-top: 10px;
+    margin-bottom: 10px;
+    margin-left: 10px;
+    margin-right: 10px;
+    float: right;
+    width: 10%;
+    height: 50px;
+    border-radius: 15px;
+    outline: none;
+    box-shadow: 10px 13px 11px -8px rgba(218, 218, 218, 0.7);
+    border: 1px solid #040153;
+
+    &.cancel__Btn {
+      color: #040153;
+    }
+    &.save__Btn {
+      background-color: #040153;
+      color: #fff;
+    }
+  }
+}
+
+@media (max-width: 768px) {
+  .Add_Address {
+    .Address__body {
+      flex-direction: column;
+      .customer__body__fields {
+        width: 100% !important;
+        input {
+          width: 100% !important;
+        }
+        select {
+          width: 100% !important;
+          padding-left: 0 !important;
+        }
+      }
+    }
+  }
+
+  .save__btn {
+    display: flex;
+    justify-content: space-evenly;
+    align-items: center;
+    margin-bottom: 30px;
+
+    button {
+      float: none !important;
+      margin-left: 0 !important;
+      margin-right: 0 !important;
+      margin-top: 0 !important;
+      margin-bottom: 0 !important;
+      width: 45% !important;
+    }
+  }
+}

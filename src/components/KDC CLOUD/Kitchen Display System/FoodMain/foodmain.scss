@@ -1,0 +1,167 @@
+.FoodMain {
+  width: 100%;
+  height: 100%;
+
+  .FoodMain__expo__top__section {
+    width: 100%;
+    height: 490px;
+    background-color: black;
+
+    overflow: scroll;
+    .food__wrapper__main {
+      width: 100%;
+      display: flex;
+      justify-content: space-between;
+      background-color: rgb(68, 68, 68);
+      margin-top: 10px;
+      margin-bottom: 10px;
+      position: relative;
+      .overlayer__option {
+        position: absolute;
+
+        width: 100%;
+        height: 100%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background-color: rgba(65, 65, 65, 0.7);
+        button {
+          height: 80%;
+          width: 250px;
+          border-radius: 5px;
+          outline: none;
+          color: #fff;
+          border: none;
+          &.startBtn {
+            background-color: #e28a14;
+          }
+
+          &.DoneBtn {
+            background-color: #009751;
+          }
+
+          &.UrgentBtn {
+            background-color: red;
+          }
+        }
+      }
+
+      .food__left__section {
+        display: flex;
+        align-items: center;
+        width: 70%;
+        .color__squire {
+          width: 20%;
+          height: 70px;
+          background-image: linear-gradient(
+            to right,
+            red 50%,
+            rgb(255, 255, 255)
+          );
+
+          &.green {
+            background-image: linear-gradient(
+              to right,
+              #009751 50%,
+              rgb(255, 255, 255)
+            );
+          }
+
+          &.blue {
+            background-image: linear-gradient(
+              to right,
+              #31cdd2 50%,
+              rgb(255, 255, 255)
+            );
+          }
+        }
+
+        .sections__food {
+          margin-right: 20px;
+          margin-left: 10px;
+          color: #fff;
+
+          .extraDetails {
+            display: flex;
+            .detailss {
+              margin-left: 10px;
+              margin-right: 10px;
+            }
+          }
+
+          h3 {
+            color: red;
+
+            &.green {
+              color: #009751;
+            }
+
+            &.blue {
+              color: #31cdd2;
+            }
+          }
+        }
+      }
+
+      .food__right__section {
+        width: 30%;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding-right: 20px;
+        color: #fff;
+
+        svg {
+          width: 30px;
+        }
+      }
+    }
+  }
+
+  .FoodMain__bottom__section {
+    width: 100%;
+    padding: 5px;
+    display: flex;
+    justify-content: space-between;
+    background-color: #707070;
+
+    .BtnSection {
+      display: flex;
+      .button {
+        display: flex;
+        align-items: center;
+        width: 20%x;
+        height: 50px;
+        background-color: rgb(0, 0, 0);
+        margin-left: 10px;
+        padding: 15px;
+        margin-right: 10px;
+        color: #fff;
+        border-radius: 10px;
+        cursor: pointer;
+        svg {
+          width: 30px;
+        }
+        h4 {
+          margin-left: 15px;
+        }
+      }
+    }
+  }
+}
+
+@media only screen and (max-width: 768px) {
+  .FoodMain__bottom__section {
+    flex-wrap: wrap;
+    .BtnSection {
+      flex-wrap: wrap;
+      margin-top: 10px;
+      margin-bottom: 10px;
+      button {
+        width: 100%;
+        margin-top: 10px;
+        margin-bottom: 10px;
+      }
+    }
+  }
+}

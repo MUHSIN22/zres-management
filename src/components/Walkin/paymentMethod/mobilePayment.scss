@@ -1,0 +1,60 @@
+.MobilePayment {
+  width: 100%;
+  height: 100%;
+
+  .top__payment__avialable {
+    display: flex;
+    height: 20%;
+    .avilablepay {
+      width: 70px;
+      height: 70px;
+      background-color: rgb(255, 255, 255);
+      border-radius: 50%;
+      padding: 5px;
+      margin: 5px;
+
+      img {
+        width: 100%;
+        height: 100%;
+        object-fit: contain;
+      }
+    }
+  }
+
+  .bottom__verification {
+    height: 60%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    width: 100%;
+
+    h3 {
+      margin-bottom: 15px;
+    }
+
+    .input__area__fiels {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 100%;
+      input {
+        width: 50%;
+        height: 40px;
+
+        outline: none;
+        padding-left: 10px;
+        font-size: 20px;
+      }
+
+      button {
+        width: 80px;
+        height: 40px;
+        background-color: #040153;
+        color: #ffff;
+        border: none;
+        outline: none;
+      }
+    }
+  }
+}

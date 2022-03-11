@@ -1,0 +1,43 @@
+const DummyData = [
+  {
+    id: 1,
+    OrderNumber: "#1455 cheeseBurger X 10 wheat X 10 click for more detail",
+    OrderTakenAt: "8:15am",
+    ElapsedTime: "3:01:30",
+    Driver: "shibu",
+    Location: "NewYork",
+    Amount: 15000,
+    Status: false,
+  },
+  {
+    id: 2,
+    OrderNumber: "#1455 cheeseBurger X 10 wheat X 10 click for more detail",
+    OrderTakenAt: "10:15am",
+    ElapsedTime: "3:01:30",
+    Driver: "rohan",
+    Location: "kerala",
+    Amount: 18000,
+    Status: false,
+  },
+  {
+    id: 3,
+    OrderNumber: "#1455 cheeseBurger X 10 wheat X 10 click for more detail",
+    OrderTakenAt: "12:15am",
+    ElapsedTime: "3:01:30",
+    Driver: "rahul",
+    Location: "korea",
+    Amount: 17000,
+    Status: false,
+  },
+  {
+    id: 4,
+    OrderNumber: "#1455 cheeseBurger X 10 wheat X 10 click for more detail",
+    OrderTakenAt: "8:15am",
+    ElapsedTime: "3:01:30",
+    Driver: "shibu",
+    Location: "NewYork",
+    Amount: 15000,
+    Status: false,
+  },
+];
+export default DummyData;

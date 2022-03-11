@@ -1,0 +1,246 @@
+.settingsManager__wrapper {
+  width: 100%;
+  height: 100%;
+  background-color: rgb(255, 255, 255);
+  border-radius: 10px;
+
+  .button__section__setting__manager {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    margin-top: 10px;
+
+    button {
+      background-color: #040153;
+      color: #fff;
+      border: none;
+      outline: none;
+      border-radius: 8px;
+      width: 20%;
+      height: 30px;
+      margin-left: 10px;
+      margin-right: 10px;
+      cursor: pointer;
+    }
+  }
+
+  .setting__manager__headder {
+    color: #040153;
+    width: 100%;
+    padding: 10px;
+    h2 {
+      margin-left: 15px;
+      font-weight: 500;
+      font-size: 18px;
+    }
+  }
+  .settings__manager__sections__container {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 10px;
+    margin-bottom: 10px;
+
+    .settings__manager__left__section {
+      width: 29%;
+      height: 100%;
+      background-color: #c7c6d7;
+      margin-left: 1%;
+      border-radius: 5px;
+      padding: 5px;
+
+      select {
+        width: 100%;
+        height: 30px;
+        border-radius: 5px;
+        outline: none;
+        border: none;
+        font-weight: 600;
+      }
+
+      input {
+        margin-top: 15px;
+        width: 100%;
+        height: 30px;
+        border-radius: 5px;
+        outline: none;
+        border: none;
+        padding-left: 10px;
+        font-weight: 600;
+      }
+
+      .settingmnager__left__bottom__section__wrapper {
+        width: 100%;
+        height: 100%;
+        .settingmanager__headding__section {
+          margin-top: 15px;
+          background-color: transparent;
+          border: none;
+        }
+
+        .seettings__section__area {
+          width: 100%;
+          height: 300px;
+          background-color: rgb(255, 255, 255);
+          overflow: scroll;
+
+          .diff__setting__sections {
+            width: 100%;
+            margin-top: 10px;
+            margin-bottom: 10px;
+            color: #040153;
+            padding: 5px;
+
+            .headder__setting__name {
+              display: flex;
+              width: 100%;
+              align-items: center;
+
+              .linebar {
+                margin-left: 5px;
+                width: 100%;
+                height: 1px;
+                background-color: #040153;
+                margin-top: 5px;
+              }
+            }
+
+            .heddersetting__chidren {
+              h5 {
+                font-weight: 500;
+              }
+            }
+          }
+        }
+      }
+    }
+
+    .settings__manager__right__sections {
+      width: 68%;
+      height: 100%;
+      background-color: #c7c6d7;
+      border-radius: 5px;
+      margin-right: 1%;
+      display: flex;
+
+      padding: 10px;
+      flex-direction: column;
+      .setting__manager__input__section {
+        display: flex;
+        justify-content: center;
+        justify-content: space-between;
+        margin-top: 10px;
+        margin-bottom: 10px;
+        padding-left: 30%;
+
+        select {
+          width: 80%;
+          border: none;
+          outline: none;
+          border-radius: 5px;
+          height: 30px;
+        }
+
+        input {
+          border: none;
+          outline: none;
+          border-radius: 5px;
+          width: 70%;
+          padding: 5px;
+        }
+        button {
+          background-color: #040153;
+          width: 40px;
+          color: #fff;
+          outline: none;
+          border: none;
+          border-radius: 10px;
+        }
+        textarea {
+          width: 80%;
+        }
+
+        .in__sections {
+          display: flex;
+          width: 100%;
+          align-items: center;
+          h4 {
+            margin-right: 10px;
+          }
+
+          select {
+            width: 50%;
+          }
+        }
+        .table__sectionsss {
+          width: 80%;
+          background-color: rgb(255, 255, 255);
+          display: flex;
+
+          border-radius: 15px;
+          overflow: scroll;
+          .table {
+            border-spacing: 0;
+            width: 100%;
+            border-collapse: collapse;
+            border-radius: 10px;
+            background-color: rgb(211, 211, 211);
+
+            thead {
+              background-color: rgb(255, 255, 255);
+
+              .orderNuber__th {
+                width: 20%;
+              }
+              .location__th {
+                width: 10%;
+              }
+
+              tr th {
+                font-size: 14px;
+                font-weight: 600;
+                letter-spacing: 0.3px;
+                color: #040153;
+                opacity: 1;
+                padding: 12px;
+                vertical-align: top;
+              }
+            }
+            .elapsedTime {
+              color: red;
+            }
+            tbody tr td {
+              font-size: 14px;
+              letter-spacing: 0.35px;
+              font-weight: normal;
+              color: #040153;
+              background-color: #ffffff;
+              padding: 8px;
+              text-align: center;
+              border-top: 1px solid #bbbbbb85;
+
+              .button {
+                width: 130px;
+                text-decoration: none;
+                line-height: 35px;
+                display: inline-block;
+                font-weight: medium;
+                color: #ffffff;
+                background-color: #009751;
+                text-align: center;
+                vertical-align: middle;
+                user-select: none;
+                font-size: 14px;
+                opacity: 1;
+                border-radius: 10px;
+                box-shadow: 0 0 5px grey;
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}

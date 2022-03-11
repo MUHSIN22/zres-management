@@ -1,0 +1,193 @@
+.recipeCard {
+  width: 100%;
+  .recipeCard__headder {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-top: 30px;
+
+    h2 {
+      font-weight: 500;
+      color: #040153;
+      font-size: 25px;
+    }
+  }
+  .recipeCard__body__section {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    h4 {
+      font-weight: 500;
+      color: #040153;
+    }
+    .recipeCard__image__upload__Section {
+      width: 100%;
+      display: flex;
+
+      justify-content: flex-end;
+      .drop__image__section {
+        padding-right: 10px;
+        margin-top: 20px;
+
+        .container {
+          background-color: #fff;
+          width: 100%;
+          height: 50%;
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+          justify-content: center;
+          padding: 5px;
+          border-radius: 15px;
+          .dropzone {
+            padding: 10px;
+            background-color: rgba(4, 1, 83, 0.2);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            border-radius: 15px;
+
+            p {
+              font-size: 12px;
+              color: #040153;
+            }
+
+            button {
+              margin-top: 10px;
+              width: 80%;
+              border-radius: 10px;
+              border: none;
+              outline: none;
+              height: 20px;
+            }
+          }
+        }
+      }
+    }
+
+    .recipeCard__other__details {
+      width: 100%;
+      display: flex;
+
+      .left__recipeCard__other__detailss {
+        width: 40%;
+        padding-left: 3%;
+        display: flex;
+        flex-direction: column;
+
+        .recipie__name__section {
+          width: 100%;
+          margin-top: 10px;
+          margin-bottom: 10px;
+          input {
+            margin-right: 5%;
+            width: 90%;
+            border-top: none;
+            outline: none;
+            border-left: none;
+            height: 30px;
+            border-right: none;
+          }
+          h4 {
+            font-weight: 500;
+          }
+        }
+
+        .recipieDefficulty__Section {
+          margin-top: 25px;
+
+          .checkbox__section {
+            width: 100%;
+            display: flex;
+            align-items: center;
+
+            .checkbox__main__container {
+              width: 50%;
+              display: flex;
+              flex-direction: column;
+              align-items: space-between;
+              justify-content: center;
+
+              .checkbox__container {
+                display: flex;
+                align-items: center;
+
+                h4 {
+                  margin-left: 5px;
+                  font-size: 12px;
+                  margin-right: 5px;
+                }
+              }
+            }
+          }
+        }
+      }
+      .right__recipeCard__other__detailss {
+        width: 60%;
+        display: flex;
+        flex-direction: column;
+
+        .prepration__Section__area {
+          margin-top: 20px;
+        }
+
+        .recipeCard__add__ingredients__section {
+          width: 100%;
+
+          .ingrident__shower__section {
+            display: flex;
+            width: 100%;
+            justify-content: center;
+            height: 200px;
+            overflow: scroll;
+            box-shadow: 0 0 10px grey;
+            ul {
+              margin-left: 20px;
+            }
+          }
+          .top__input__area__Section {
+            width: 100%;
+            height: 40px;
+
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            input {
+              width: 70%;
+              border-top: none;
+              outline: none;
+              border-left: none;
+              height: 30px;
+              border-right: none;
+            }
+            .MuiSvgIcon-root {
+              font-size: 30px;
+              cursor: pointer;
+            }
+          }
+        }
+      }
+    }
+  }
+
+  .recipeCard__bottom__section {
+    width: 100%;
+    display: flex;
+    justify-content: flex-end;
+
+    button {
+      background-color: #040153;
+      color: #ffff;
+      border: none;
+      outline: none;
+      cursor: pointer;
+      margin-right: 50px;
+      width: 100px;
+      border-radius: 5px;
+      height: 30px;
+    }
+  }
+}

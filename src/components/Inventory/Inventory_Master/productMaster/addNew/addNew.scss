@@ -1,0 +1,259 @@
+//   popup new section
+
+.add__new__sections {
+  width: 100%;
+  margin-bottom: 30px;
+  max-width: 80vw;
+  padding-bottom: 30px;
+  background-color: rgb(255, 255, 255);
+  box-shadow: 0 0 10px grey;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+
+  justify-content: center;
+  height: auto;
+  border-radius: 15px;
+  .headding__Section {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    height: 15%;
+    padding-left: 5%;
+    color: #040153;
+    padding-bottom: 30px;
+    padding-top: 30px;
+
+    h2 {
+      font-size: 18px;
+    }
+  }
+  .inner__Section {
+    width: 80%;
+    height: 80%;
+    border-radius: 10px;
+    // background-color: rgba(4, 1, 83, 0.2);
+
+    form {
+      width: 100%;
+      height: 100%;
+      .top__secton {
+        display: flex;
+        justify-content: space-evenly;
+        width: 100%;
+        height: 90%;
+        .lef__Side__form {
+          width: 50%;
+          height: 100%;
+          .input__Sections {
+            display: flex;
+            margin-top: 15px;
+            margin-bottom: 15px;
+            justify-content: space-between;
+            align-items: center;
+            padding-left: 20px;
+            padding-right: 20px;
+
+            h5 {
+              color: #040153;
+              font-size: 12px;
+            }
+            select {
+              width: 60%;
+              height: 30px;
+              border-radius: 5px;
+              outline: none;
+              border: none;
+              box-shadow: 0 0 10px rgb(146, 146, 146);
+            }
+            input {
+              width: 60%;
+              height: 30px;
+              border-radius: 5px;
+              outline: none;
+              border: none;
+              box-shadow: 0 0 10px rgb(146, 146, 146);
+              padding-left: 10px;
+
+              &.Orderblock__Checkbox {
+                margin-right: 30%;
+                box-shadow: none;
+              }
+            }
+          }
+        }
+        .right__side__form {
+          width: 50%;
+          height: 100%;
+          .input__Sections {
+            display: flex;
+            margin-top: 15px;
+            margin-bottom: 15px;
+            justify-content: space-between;
+            align-items: center;
+            padding-left: 20px;
+            padding-right: 20px;
+
+            h5 {
+              font-size: 12px;
+              color: #040153;
+            }
+
+            input {
+              width: 60%;
+              height: 30px;
+              border-radius: 5px;
+              outline: none;
+              border: none;
+              padding-left: 10px;
+              box-shadow: 0 0 10px rgb(146, 146, 146);
+
+              &.Input__resizer {
+                width: 40%;
+                margin-right: 20%;
+              }
+            }
+            select {
+              outline: none;
+              border: none;
+              width: 60%;
+              height: 30px;
+              box-shadow: 0 0 10px rgb(146, 146, 146);
+
+              border-radius: 5px;
+            }
+          }
+          .drop__image__section {
+            padding-right: 10px;
+            margin-top: 20px;
+            margin-bottom: 20px;
+            .container {
+              background-color: #fff;
+              width: 50%;
+              height: 50%;
+              display: flex;
+              flex-direction: column;
+              align-items: center;
+              justify-content: center;
+              padding: 5px;
+              border-radius: 15px;
+              .dropzone {
+                padding: 30px;
+                background-color: rgba(4, 1, 83, 0.2);
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                justify-content: center;
+                border-radius: 15px;
+
+                p {
+                  font-size: 12px;
+                  color: #040153;
+                }
+
+                button {
+                  margin-top: 10px;
+                  width: 100%;
+                  border-radius: 10px;
+                  border: none;
+                  outline: none;
+                  height: 20px;
+                  box-shadow: 0 0 5px grey;
+                }
+              }
+            }
+          }
+        }
+      }
+      .bottom__btn__section {
+        width: 100%;
+        height: 10%;
+        display: flex;
+        align-items: center;
+        justify-content: flex-end;
+        padding-right: 50px;
+
+        .button_holder {
+          width: 20%;
+          height: 30px;
+          background-color: #fff;
+          color: #040153;
+
+          outline: none;
+          margin-left: 10px;
+          margin-right: 10px;
+          border-radius: 15px;
+          cursor: pointer;
+
+          display: flex;
+          align-items: center;
+          justify-content: center;
+        }
+
+        button {
+          width: 120px;
+          height: 50px;
+          background-color: #040153;
+          color: #ffff;
+          border: none;
+          outline: none;
+          border: 1px solid #040153;
+
+          border-radius: 15px;
+          cursor: pointer;
+          margin-bottom: 30px;
+        }
+      }
+    }
+    .cancel__btn__section__bttom {
+      width: 100%;
+      display: flex;
+      justify-content: flex-end;
+      padding-right: 5.5%;
+
+      button {
+        width: 120px;
+        height: 50px;
+        background-color: #fff;
+        color: #040153;
+        border: none;
+        border: 1px solid #040153;
+
+        outline: none;
+
+        border-radius: 15px;
+        cursor: pointer;
+        margin-bottom: 30px;
+      }
+    }
+  }
+}
+
+@media only screen and (max-width: 768px) {
+  .add__new__sections {
+    width: 100%;
+
+    .inner__Section {
+      width: 100%;
+
+      form {
+        .top__secton {
+          flex-direction: column;
+          align-items: center;
+          justify-content: center;
+          .lef__Side__form {
+            width: 100%;
+          }
+          .right__side__form {
+            width: 100%;
+            .drop__image__section {
+              margin-left: 20px;
+              padding-right: 0;
+            }
+          }
+        }
+      }
+    }
+  }
+}

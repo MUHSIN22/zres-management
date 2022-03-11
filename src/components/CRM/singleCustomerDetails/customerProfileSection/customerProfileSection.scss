@@ -1,0 +1,243 @@
+.top__left {
+  width: 55%;
+  height: 350px;
+  background-color: rgb(255, 255, 255);
+  border-radius: 15px;
+  padding-left: 25px;
+  padding-right: 25px;
+  color: #040153;
+  padding-bottom: 10px;
+  hr {
+    height: 3px;
+    background-color: #040153;
+    color: #040153;
+    opacity: 50%;
+  }
+  .top__left__headder {
+    padding-left: 25px;
+    padding-right: 25px;
+    border-radius: 15px;
+    background-color: rgb(255, 255, 255);
+    width: 100%;
+    height: 20%;
+    display: flex;
+    justify-content: space-between;
+
+    .hedder__left {
+      width: 70%;
+      height: 100%;
+      display: flex;
+      align-items: center;
+      padding-top: 20px;
+
+      .accoount__profile_pic {
+        width: 60px;
+        height: 60px;
+        position: relative;
+        .MuiSvgIcon-root {
+          width: 60px;
+          height: 60px;
+        }
+        .svg__top__icon {
+          width: 20px;
+          position: absolute;
+          right: 5%;
+          bottom: 60%;
+        }
+      }
+      .name__section {
+        margin-left: 10px;
+        display: flex;
+        align-items: center;
+        justify-content: flex-start;
+        flex-direction: column;
+        p {
+          color: grey;
+          font-size: 11px;
+        }
+      }
+      .create__new__acc {
+        padding-top: 20px;
+        padding-left: 10px;
+        h5 {
+          text-decoration: underline;
+          font-size: 12px;
+        }
+      }
+    }
+    .headder__right {
+      width: 30%;
+      height: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-direction: column;
+      p {
+        color: grey;
+        font-size: 11px;
+      }
+    }
+  }
+
+  .top__left__mid {
+    width: 100%;
+    height: 80%;
+    background-color: rgb(211, 211, 211);
+    border-radius: 15px;
+
+    .main__section {
+      width: 100%;
+      height: 80%;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      h5 {
+        margin-top: 10%;
+        font-weight: 500;
+        font-size: 15px;
+      }
+      button {
+        margin-top: 20px;
+        width: 40%;
+        height: 20%;
+        border-radius: 30px;
+        outline: none;
+        background-color: #040153;
+        border: none;
+        color: #fff;
+        h4 {
+          font-weight: 500;
+        }
+      }
+    }
+    .main__footer {
+      width: 100%;
+      height: 20%;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding-left: 30px;
+      padding-right: 20px;
+      .left_section {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        h5 {
+          text-decoration: underline;
+          font-size: 12px;
+        }
+      }
+      .right__section {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        .placeorder__btn {
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          width: 100%;
+          height: 20px;
+          color: #fff;
+          background-color: #040153;
+          border-radius: 20px;
+          padding: 20px;
+
+          h4 {
+            font-weight: 400;
+            font-size: 13px;
+          }
+        }
+      }
+    }
+  }
+}
+
+@media only screen and (max-width: 768px) {
+  .top__left {
+    margin-bottom: 30px !important;
+    width: 100% !important;
+    padding-left: 0 !important;
+    padding-right: 0 !important;
+    justify-content: center !important;
+
+    .hr_headder {
+      margin-left: 3%;
+      margin-right: 3%;
+    }
+
+    .top__left__headder {
+      padding-left: 0 !important;
+      padding-right: 0 !important;
+      height: 15% !important;
+
+      .hedder__left {
+        width: 65% !important;
+        .accoount__profile_pic {
+          width: 50px !important;
+          height: 50px !important;
+          margin-bottom: 5px;
+          .MuiSvgIcon-root {
+            width: 50px !important;
+            height: 50px !important;
+          }
+        }
+        .name__section {
+          p {
+            font-size: 10px !important;
+          }
+        }
+        .create__new__acc {
+          h5 {
+            font-size: 10px;
+          }
+        }
+      }
+
+      .headder__right {
+        width: 35% !important;
+        p {
+          font-size: 10px;
+        }
+      }
+    }
+
+    .top__left__mid {
+      margin-left: 2%;
+      width: 95% !important;
+      height: 85% !important;
+      border-radius: 0 !important;
+      .main__section {
+        padding-left: 15px;
+        h5 {
+          font-size: 16px;
+        }
+        button {
+          width: 40%;
+          height: 12%;
+
+          h4 {
+            font-size: 14px;
+          }
+        }
+      }
+      .main__footer {
+        padding-left: 15px !important;
+        padding-right: 15px !important;
+        .left_section {
+          h5 {
+            font-size: 12px;
+          }
+        }
+        .right__section {
+          .placeorder__btn {
+            width: 100%;
+            h4 {
+              font-size: 14px;
+            }
+          }
+        }
+      }
+    }
+  }
+}

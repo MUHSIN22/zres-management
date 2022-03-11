@@ -1,0 +1,205 @@
+.customer_details {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+
+  flex-direction: column;
+  .customerdetails__headder {
+    width: 90%;
+    height: 10%;
+    background-color: #31cdd2;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-radius: 15px;
+    padding-left: 15px;
+    padding-right: 15px;
+    color: #040153;
+
+    .customerdetails__headder__leftside {
+      h2 {
+        font-weight: 500;
+        font-size: 16px;
+      }
+    }
+    .customerdetails__headder__rightside {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      .status__btn {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin-left: 10px;
+        margin-right: 10px;
+
+        h5 {
+          font-size: 10px;
+        }
+        .MuiSvgIcon-root {
+          font-size: 10px;
+        }
+
+        .expired {
+          color: red;
+        }
+        .activeCustomer {
+          color: #009751;
+        }
+        .inActiveCustomer {
+          color: #e1870e;
+        }
+      }
+    }
+  }
+  .customerdetails__body {
+    color: #040153;
+    width: 100%;
+    min-height: 90%;
+    margin-top: 20px;
+    border-radius: 15px;
+    display: flex;
+    flex-direction: column;
+    background-color: rgb(255, 255, 255);
+    align-items: center;
+    // padding-top: 15px;
+
+    .pagination {
+      padding-top: 10px;
+      padding-bottom: 10px;
+
+      .css-1pi9rcw-MuiButtonBase-root-MuiPaginationItem-root.Mui-selected {
+        background-color: #040153 !important;
+      }
+    }
+    .table__three {
+      width: 95%;
+      border-collapse: collapse;
+      border-radius: 10px;
+      background-color: rgb(255, 255, 255);
+
+      thead {
+        // background-color: rgb(255, 255, 255);
+
+        tr th {
+          font-size: 13px;
+          font-weight: 700;
+          letter-spacing: 0.3px;
+          color: #040153;
+          opacity: 1;
+          padding: 12px;
+          vertical-align: top;
+
+          &.total_amount {
+            text-align: right;
+          }
+        }
+      }
+      tbody tr td {
+        font-size: 12px;
+        letter-spacing: 0.35px;
+        font-weight: normal;
+        color: #040153;
+        // background-color: #ffffff;
+        padding: 8px;
+        text-align: center;
+        border-top: 1px solid rgb(177, 177, 177);
+      }
+      tbody {
+        tr {
+          td {
+            &.status__icons {
+              &.active {
+                color: #009751;
+              }
+              &.inactive {
+                color: #e1870e;
+              }
+              &.expired {
+                color: #ff0000;
+              }
+              .activeCustomer {
+                width: 10px;
+              }
+            }
+            &.total_amount {
+              text-align: right;
+              padding-right: 5%;
+            }
+          }
+        }
+      }
+    }
+  }
+}
+
+@media (max-width: 768px) {
+  .customer_details {
+    .customerdetails__headder {
+      padding-top: 10px;
+      padding-bottom: 10px;
+      width: 100%;
+      .customerdetails__headder__leftside {
+        width: 50%;
+        h2 {
+          font-size: 18px;
+        }
+      }
+      .customerdetails__headder__rightside {
+        padding-top: 10px;
+        padding-bottom: 10px;
+        padding-left: 10px;
+        padding-right: 10px;
+
+        width: 50%;
+        .status__btn {
+          margin-left: 0px !important;
+          margin-right: 5px !important;
+
+          .MuiSvgIcon-root {
+            font-size: 10px;
+          }
+          h5 {
+            font-size: 10px;
+            font-weight: 500;
+          }
+        }
+      }
+    }
+    .customerdetails__body {
+      background-color: #fff !important;
+      .table__three {
+        thead {
+          display: none;
+        }
+        tbody,
+        tr,
+        td {
+          display: block;
+          width: 100%;
+        }
+
+        tr {
+          margin-bottom: 10px;
+          background-color: rgb(255, 255, 255);
+        }
+
+        tbody tr td {
+          text-align: right;
+          padding-left: 50%;
+          position: relative;
+        }
+      }
+    }
+    .table__three td:before {
+      content: attr(data-label);
+      position: absolute;
+      left: 0;
+      width: 50%;
+      padding-left: 15px;
+      font-weight: 600;
+      text-align: left;
+    }
+  }
+}

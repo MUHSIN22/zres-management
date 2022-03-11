@@ -1,0 +1,51 @@
+.singleCustomer__details {
+  margin-top: 40px;
+  display: flex;
+  width: 102%;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  background-color: rgb(224, 224, 224);
+  position: relative;
+
+  .headder__top__section {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    height: 100%;
+    padding-left: 50px;
+    padding-right: 50px;
+
+    // user name add address section
+  }
+}
+/* width */
+::-webkit-scrollbar {
+  width: 5px !important;
+  height: 5px;
+}
+
+/* Track */
+::-webkit-scrollbar-track {
+  background: #f1f1f1;
+}
+
+/* Handle */
+::-webkit-scrollbar-thumb {
+  background: #888;
+}
+
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+  background: #555;
+}
+
+@media only screen and (max-width: 768px) {
+  .singleCustomer__details {
+    .headder__top__section {
+      flex-direction: column !important;
+      padding-left: 0px !important;
+      padding-right: 0px !important;
+    }
+  }
+}

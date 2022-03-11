@@ -1,0 +1,106 @@
+.SettingMakker {
+  width: 100%;
+  padding: 10px;
+  background-color: #fff;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+  align-items: center;
+
+  .setting__maker__headder {
+    width: 100%;
+    margin-top: 2%;
+    margin-bottom: 2%;
+    h2 {
+      font-weight: 500;
+      color: #040153;
+    }
+  }
+
+  .setting__wrapper {
+    width: 97%;
+    height: 90%;
+    background-color: #c7c6d7;
+    display: flex;
+
+    .left__setting__section {
+      width: 30%;
+      padding: 5px;
+
+      .left__setting__headder {
+        width: 100%;
+        height: 10%;
+        align-items: center;
+        justify-content: center;
+        display: flex;
+        color: #040153;
+      }
+
+      .left__setteng__container {
+        width: 100%;
+        overflow: scroll;
+        height: 300px;
+        background-color: #fff;
+        border-radius: 10px;
+      }
+    }
+
+    .right__setting__section {
+      width: 70%;
+      display: flex;
+      color: #040153;
+
+      .setting__section__details {
+        margin-top: 5%;
+        padding-left: 10px;
+        width: 100%;
+        display: flex;
+
+        flex-direction: column;
+
+        .settingMaker__section__input {
+          margin-top: 20px;
+          width: 100%;
+          display: flex;
+          justify-content: space-between;
+          align-items: center;
+          justify-content: center;
+          margin-bottom: 20px;
+          h3 {
+            font-weight: 500;
+          }
+          select {
+            margin-left: 10px;
+            margin-right: 10px;
+            width: 60%;
+            height: 40px;
+            border: none;
+            outline: none;
+            border-radius: 10px;
+            padding-left: 5px;
+          }
+        }
+        .settingMaker__details__btn__section {
+          display: flex;
+          width: 100%;
+          align-items: center;
+          justify-content: center;
+          margin-top: 20px;
+
+          button {
+            margin-left: 10px;
+            margin-right: 10px;
+            width: 15%;
+            height: 30px;
+            background-color: #040153;
+            color: #fff;
+            border-radius: 8px;
+            border: none;
+            outline: none;
+          }
+        }
+      }
+    }
+  }
+}

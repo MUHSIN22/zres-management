@@ -1,0 +1,24 @@
+.menuBar__section {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  .sections {
+    display: flex;
+    margin-top: 20px;
+    margin-bottom: 20px;
+    align-items: center;
+    cursor: pointer;
+
+    svg {
+      width: 30px;
+      height: 30px;
+    }
+    h3 {
+      margin-left: 10px;
+      color: #fff;
+    }
+  }
+}
+
+@media only screen and (max-width: 768px) {
+}

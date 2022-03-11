@@ -1,0 +1,351 @@
+.RecipeInventory {
+  .top__section {
+    .headder__headding__section {
+      background-color: #e0e0e0;
+      color: #040153;
+      padding: 10px;
+      h2 {
+        font-size: 17px;
+      }
+    }
+  }
+
+  .body__section {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    background-color: #e0e0e0;
+    .inner__container {
+      width: 90%;
+
+      background-color: #b5b4c5;
+      padding: 30px;
+      border-radius: 15px;
+      .top__section {
+        width: 100%;
+        display: flex;
+        .left__Section {
+          width: 40%;
+          color: #040153;
+          .headding__sections {
+            color: #040153;
+            padding: 30px;
+            h3 {
+              font-size: 20px;
+              font-weight: 400;
+            }
+          }
+
+          .input__Section {
+            .input__holder {
+              display: flex;
+              align-items: center;
+              justify-content: space-between;
+              margin-top: 10px;
+
+              .css-9ddj71-MuiInputBase-root-MuiOutlinedInput-root {
+                padding: 0 !important;
+              }
+
+              label[data-shrink="false"]
+                + .MuiInputBase-formControl
+                .css-11u53oe-MuiSelect-select-MuiInputBase-input-MuiOutlinedInput-input {
+                background-color: #fff !important;
+                padding: 10px !important;
+              }
+
+              h5 {
+                margin-right: 15px;
+                font-size: 12px;
+              }
+              input {
+                height: 40px;
+                width: 63%;
+                margin-right: 10px;
+                padding-left: 10px;
+                border: none;
+                border-radius: 5px;
+
+                outline: none;
+              }
+
+              select {
+                height: 40px;
+                width: 63%;
+                margin-right: 10px;
+                padding-left: 10px;
+                border: none;
+                border-radius: 5px;
+
+                outline: none;
+              }
+            }
+          }
+          .difficultey__section {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-top: 30px;
+            margin-bottom: 30px;
+            h3 {
+              font-weight: 500;
+              margin-right: 15px;
+              font-size: 12px;
+            }
+          }
+          .checkbox__section {
+            width: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+            .checkbox__main__container {
+              width: 50%;
+              display: flex;
+              flex-direction: column;
+              align-items: space-between;
+              justify-content: center;
+
+              .checkbox__container {
+                display: flex;
+                align-items: center;
+
+                h4 {
+                  margin-left: 5px;
+                  font-size: 12px;
+                  margin-right: 5px;
+                }
+              }
+            }
+          }
+        }
+
+        .right__section {
+          width: 100%;
+          .recipeCard__image__upload__Section {
+            width: 100%;
+            display: flex;
+
+            justify-content: flex-end;
+            .drop__image__section {
+              padding-right: 10px;
+              margin-top: 20px;
+
+              .container {
+                width: 100%;
+                height: 50%;
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                justify-content: center;
+                padding: 5px;
+                border-radius: 15px;
+                .dropzone {
+                  padding: 10px;
+                  background-color: rgba(4, 1, 83, 0.2);
+                  display: flex;
+                  flex-direction: column;
+                  align-items: center;
+                  justify-content: center;
+                  border-radius: 15px;
+
+                  p {
+                    font-size: 12px;
+                    color: #040153;
+                  }
+
+                  button {
+                    margin-top: 10px;
+                    width: 80%;
+                    border-radius: 10px;
+                    border: none;
+                    outline: none;
+                    height: 20px;
+                  }
+                }
+              }
+            }
+          }
+          .imagee__sliderss {
+            width: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+          }
+          .ingredient__section {
+            margin-top: 15px;
+            .ingredient__top__section {
+              .input__Section {
+                display: flex;
+                align-items: center;
+                justify-content: center;
+
+                h4 {
+                  margin-right: 15px;
+                  color: #040153;
+                  font-size: 12px;
+                }
+                input {
+                  width: 10%;
+                  height: 40px;
+                  outline: none;
+                  border: none;
+                  padding-left: 15px;
+                  margin-left: 10px;
+                  margin-right: 10px;
+                  border-radius: 5px;
+                }
+                select {
+                  border-radius: 5px;
+
+                  width: 40%;
+                  height: 40px;
+                  outline: none;
+                  border: none;
+                  padding-left: 15px;
+
+                  &.select__units {
+                    width: 10%;
+                  }
+                }
+
+                .add__btn__section {
+                  background-color: #fff;
+                  color: #040153;
+                  padding: 6px;
+                  margin-left: 5px;
+                  margin-right: 5px;
+                  cursor: pointer;
+                }
+                .deletbtn__sction {
+                  background-color: #fff;
+                  color: red;
+                  padding: 6px;
+                  margin-left: 5px;
+                  margin-right: 5px;
+                  cursor: pointer;
+                }
+              }
+            }
+
+            .ingredient__bottom__section {
+              width: 100%;
+              display: flex;
+              align-items: center;
+              justify-content: center;
+              .bottom__section__wrapper {
+                width: 60%;
+                background-color: #fff;
+                min-height: 200px;
+                display: flex;
+
+                border-radius: 5px;
+
+                margin-top: 20px;
+                padding-left: 50px;
+                padding-top: 30px;
+              }
+            }
+          }
+        }
+      }
+      .bottom__section {
+        margin-top: 20px;
+        width: 100%;
+        h3 {
+          color: #040153;
+          margin-right: 15px;
+          font-size: 12px;
+        }
+
+        .rich__text__Section__wrapperss {
+          width: 100%;
+          padding-left: 50px;
+          padding-right: 50px;
+          margin-top: 10px;
+          margin-bottom: 10px;
+          height: 350px;
+        }
+
+        .button__Section {
+          width: 100%;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+
+          button {
+            background-color: #040153;
+
+            width: 30%;
+            height: 30px;
+            border-radius: 5px;
+            outline: none;
+            border: none;
+            color: #ffff;
+            margin-left: 10px;
+            margin-right: 10px;
+          }
+        }
+      }
+    }
+  }
+}
+
+@media only screen and (max-width: 768px) {
+  .RecipeInventory {
+    .body__section {
+      .inner__container {
+        width: 100%;
+
+        .top__section {
+          flex-direction: column;
+
+          .left__Section {
+            width: 100%;
+          }
+          .right__section {
+            .ingredient__section {
+              .ingredient__top__section {
+                width: 100%;
+                .input__Section {
+                  width: 100%;
+                  flex-direction: column;
+
+                  input {
+                    width: 100%;
+                  }
+
+                  select {
+                    width: 100%;
+                    margin-top: 10px;
+                    margin-bottom: 10px;
+
+                    &.select__units {
+                      width: 50%;
+                    }
+                  }
+
+                  .add__btn__section {
+                  }
+                }
+              }
+
+              .ingredient__bottom__section {
+                .bottom__section__wrapper {
+                  width: 100%;
+                }
+              }
+            }
+          }
+        }
+        .bottom__section {
+          .rich__text__Section__wrapperss {
+            padding: 0;
+          }
+        }
+      }
+    }
+  }
+}

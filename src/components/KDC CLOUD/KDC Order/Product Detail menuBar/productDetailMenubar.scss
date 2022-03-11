@@ -1,0 +1,57 @@
+.ProductDetailMenuBars {
+  width: 100%;
+  height: 100%;
+  position: relative;
+  .closeBtns {
+    position: absolute;
+    color: #ffff;
+    right: 10%;
+    cursor: pointer;
+  }
+
+  .top__sectionss {
+    width: 100%;
+    height: 20%;
+    color: #fff;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    .DateandTime {
+      display: flex;
+      justify-content: space-between;
+      padding-left: 15px;
+      padding-right: 15px;
+      margin-bottom: 15px;
+    }
+    .headder__Sectioon {
+      margin-top: 15px;
+      text-align: center;
+    }
+  }
+
+  .bottom__sections {
+    background-color: #fff;
+    width: 100%;
+    height: 80%;
+
+    .different__section__areasss {
+      width: 100%;
+      margin-top: 15px;
+      margin-bottom: 15px;
+      .different__Section__area__headder {
+        text-align: center;
+        background-color: rgb(177, 177, 177);
+        color: #040153;
+        padding: 5px;
+      }
+      .details {
+        color: #040153;
+        .details__wrapper {
+          display: flex;
+          justify-content: space-between;
+          padding: 10px;
+        }
+      }
+    }
+  }
+}

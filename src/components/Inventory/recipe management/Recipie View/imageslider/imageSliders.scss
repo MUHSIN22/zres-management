@@ -1,0 +1,29 @@
+.right__slide__section {
+  width: 40%;
+  height: 100%;
+  align-items: center;
+  justify-content: flex-start;
+  display: flex;
+
+  .sliderss {
+    margin-top: 30px;
+    width: 350px;
+  }
+
+  img {
+    width: 100px;
+    height: 100px;
+    object-fit: cover;
+    border-radius: 10px;
+  }
+}
+
+.slick-prev:before,
+.slick-next:before {
+  color: #040153ed;
+}
+
+.css-19xm0h7-MuiButtonBase-root-MuiPaginationItem-root.Mui-selected {
+  background-color: #040153ed !important;
+  color: #fff !important;
+}

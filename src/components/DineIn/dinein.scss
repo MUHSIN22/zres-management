@@ -1,0 +1,301 @@
+.reservation__booking__wrapper {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  background-color: rgba(0, 0, 0, 0.5);
+  z-index: 1;
+  transform: translateY(-200%);
+  transition: all 1s ease-in-out;
+
+  &.active {
+    transform: translateY(0);
+    .recervation__booking__dive {
+      transform: translateX(0px);
+    }
+  }
+
+  .recervation__booking__dive {
+    width: 40%;
+    height: 90%;
+    background-color: #fff;
+    border-radius: 10px;
+    margin-right: 1%;
+    z-index: 2;
+    transform: translateX(500px);
+    transition: all 5s ease-in-out;
+  }
+}
+
+.DineIn {
+  position: relative;
+  width: 100%;
+
+  padding: 10px;
+
+  .Dinein__top__nav__section,
+  .bottom__nav__section {
+    width: 100%;
+    height: 60px;
+    background-color: #fff;
+    display: flex;
+    margin-top: 10px;
+    align-items: center;
+    border-radius: 10px;
+    .left__dinein__section__nav {
+      width: 50%;
+      display: flex;
+      padding: 10px;
+
+      button {
+        border-radius: 8px;
+        width: calc(100% / 4);
+        height: 30px;
+        outline: none;
+        border: none;
+        background-color: #040153;
+        color: #fff;
+      }
+
+      .dinein__nav__left__btn {
+        background-color: #040153;
+        width: calc(100% / 5);
+        height: 30px;
+        margin-left: 10px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 8px;
+        cursor: pointer;
+        margin-right: 10px;
+        color: #fff;
+        box-shadow: 0 0 10px rgb(58, 58, 58);
+
+        h4 {
+          font-weight: 500;
+          margin-left: 5px;
+          font-size: 12px;
+        }
+      }
+    }
+
+    .right__dinein__section__nav {
+      width: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+
+      .popup__details__section {
+        width: 100%;
+        position: absolute;
+        top: 100%;
+      }
+
+      button {
+        height: 30px;
+        padding: 5px;
+        margin-left: 5px;
+        border-radius: 10px;
+        margin-right: 5px;
+        outline: none;
+        border: none;
+        padding-left: 5px;
+        padding-right: 5px;
+
+        font-weight: 500;
+      }
+
+      .right__dine__refresh__btn {
+        background-color: #040153;
+        width: calc(100% / 4);
+        height: 40px;
+        margin-left: 10px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 8px;
+        margin-right: 10px;
+        color: #fff;
+        box-shadow: 0 0 10px rgb(58, 58, 58);
+
+        h4 {
+          font-weight: 500;
+          margin-left: 5px;
+          font-size: 12px;
+        }
+      }
+    }
+  }
+
+  .bottom__dine__table__section {
+    width: 100%;
+
+    .pagination {
+      display: flex;
+      width: 100%;
+      align-items: center;
+      justify-content: center;
+      padding-top: 10px;
+      padding-bottom: 10px;
+
+      .css-1pi9rcw-MuiButtonBase-root-MuiPaginationItem-root.Mui-selected {
+        background-color: #040153 !important;
+      }
+    }
+
+    .dine__table__wrapper {
+      width: 100%;
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: center;
+
+      .dine__in__table {
+        width: 160px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        padding: 5px;
+        justify-content: center;
+        margin: 10px;
+
+        .table__background {
+          background-color: #cdccdd;
+          padding: 10px;
+          width: 150px;
+          height: 120px;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+
+          .tableInResturent {
+            .svgDinein {
+              fill: rgb(255, 255, 255);
+              stroke: #040153;
+
+              &.avilableTable {
+                stroke: #ffffff !important;
+                fill: #009751 !important;
+              }
+              &.occupiedTable {
+                stroke: #ffffff !important;
+                fill: #aaaaaa !important;
+              }
+
+              &.DoneSoonTable {
+                stroke: #ffffff !important;
+                fill: #040153 !important;
+              }
+
+              &.ReservationTable {
+                stroke: #ffffff !important;
+                fill: #e1870e !important;
+              }
+            }
+          }
+          &.active {
+            background-color: #cdccdd;
+
+            .tableInResturent {
+              .svgDinein {
+                fill: rgb(255, 255, 255) !important;
+                stroke: #858181 !important;
+              }
+            }
+          }
+        }
+
+        .btnmaindine {
+          margin-top: 10px;
+          padding: 5px;
+          border-radius: 5px;
+          outline: none;
+          border: none;
+          font-weight: 500;
+
+          &.occupied__btn {
+            background-color: #cdccdd;
+          }
+
+          &.avilable__btn {
+            background-color: rgb(0, 151, 81);
+            color: #fff;
+          }
+
+          &.doneSoon__btn {
+            background-color: rgb(4, 1, 83);
+            color: #fff;
+          }
+
+          &.reservation__btn {
+            background-color: rgb(225, 135, 14);
+            color: #fff;
+          }
+        }
+      }
+    }
+  }
+}
+
+@media only screen and (max-width: 768px) {
+  .reservation__booking__wrapper {
+    .recervation__booking__dive {
+      width: 100%;
+      height: 30%;
+    }
+  }
+  .DineIn {
+    .Dinein__top__nav__section,
+    .bottom__nav__section {
+      flex-direction: column;
+      height: auto;
+
+      .left__dinein__section__nav {
+        width: 100%;
+        flex-wrap: wrap;
+
+        .dinein__nav__left__btn {
+          width: calc(100% / 1) !important;
+          margin-top: 5px;
+          margin-bottom: 5px;
+          svg {
+            display: none;
+          }
+        }
+      }
+      .right__dinein__section__nav {
+        width: 100%;
+        flex-wrap: wrap;
+
+        button {
+        }
+        .right__dine__refresh__btn {
+          width: 90%;
+          margin-top: 10px;
+          margin-bottom: 10px;
+        }
+      }
+    }
+
+    .bottom__nav__section {
+      flex-direction: column-reverse;
+    }
+
+    .bottom__dine__table__section {
+      .dine__table__wrapper {
+        .dine__in__table {
+          margin-right: 5px;
+          margin-left: 5px;
+          width: 130px;
+
+          .table__background {
+            width: 130px;
+          }
+        }
+      }
+    }
+  }
+}

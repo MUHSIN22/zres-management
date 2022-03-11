@@ -1,0 +1,148 @@
+.AccountHead {
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  justify-content: center;
+  background-color: #b5b4c5;
+  border-radius: 15px;
+  .headder__top__section {
+    display: flex;
+    justify-content: flex-end;
+
+    .different__option {
+      margin-top: 15px;
+      background-color: #040153;
+      padding-left: 5px;
+      padding-right: 5px;
+      margin-left: 15px;
+      color: #fff;
+      cursor: pointer;
+      margin-right: 15px;
+      width: 100px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 6px;
+
+      svg {
+        width: 18px;
+      }
+    }
+  }
+  .main__body__section {
+    width: 100%;
+    min-height: 500px;
+    .body__section {
+      h2 {
+        color: #040153;
+        margin-top: 10px;
+        margin-bottom: 30px;
+        margin-left: 15px;
+        margin-right: 15px;
+        font-size: 17px;
+      }
+      margin-top: 20px;
+      width: 100%;
+      height: 100%;
+      padding: 3px;
+      .table__sectionsss {
+        width: 100%;
+        background-color: rgb(255, 255, 255);
+        display: flex;
+
+        overflow: scroll;
+        .table {
+          border-spacing: 0;
+          width: 100%;
+          border-collapse: collapse;
+          border-radius: 10px;
+          background-color: rgb(211, 211, 211);
+
+          thead {
+            background-color: #c7c6d7;
+
+            .orderNuber__th {
+              width: 20%;
+            }
+            .location__th {
+              width: 10%;
+            }
+
+            tr th {
+              font-size: 14px;
+              font-weight: bold;
+              letter-spacing: 0.3px;
+              color: #040153;
+              opacity: 1;
+              padding: 12px;
+              vertical-align: top;
+              border: 1px solid #b2b1c2;
+            }
+          }
+          .elapsedTime {
+            color: red;
+          }
+          tbody {
+            display: block;
+            height: 400px;
+            overflow: auto;
+          }
+          thead,
+          tbody tr {
+            display: table;
+            width: 100%;
+            table-layout: fixed; /* even columns width , fix width of table too*/
+          }
+
+          tbody tr td {
+            font-size: 14px;
+            letter-spacing: 0.35px;
+            font-weight: normal;
+            color: #040153;
+            background-color: #ffffff;
+            padding: 8px;
+            text-align: center;
+            border: 1px solid #b2b1c2;
+
+            .button {
+              width: 130px;
+              text-decoration: none;
+              line-height: 35px;
+              display: inline-block;
+              font-weight: medium;
+              color: #ffffff;
+              background-color: #009751;
+              text-align: center;
+              vertical-align: middle;
+              user-select: none;
+              font-size: 14px;
+              opacity: 1;
+              border-radius: 10px;
+              box-shadow: 0 0 5px grey;
+            }
+          }
+        }
+      }
+    }
+  }
+}
+
+@media (max-width: 768px) {
+  .AccountHead {
+    .headder__top__section {
+      justify-content: space-evenly;
+    }
+    .main__body__section {
+    }
+    .body__section {
+      h2 {
+        text-align: center;
+      }
+      .table__sections {
+        .table {
+          width: 100%;
+        }
+      }
+    }
+  }
+}

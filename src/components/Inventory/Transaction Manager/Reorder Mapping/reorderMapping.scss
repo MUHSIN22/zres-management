@@ -1,0 +1,262 @@
+.ReorderMapping {
+  width: 100%;
+  min-height: 500px;
+
+  .top__section {
+    display: flex;
+    justify-content: space-between;
+    background-color: #b5b4c5;
+    border-radius: 5px;
+    h2 {
+      color: #040153;
+      margin-left: 15px;
+      margin-right: 15px;
+      margin-top: 10px;
+      margin-bottom: 10px;
+      font-size: 17px;
+    }
+
+    .edit__delete__add__wrapper {
+      display: flex;
+      .different__option {
+        margin-left: 10px;
+        margin-right: 10px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+
+        h5 {
+          color: #040153;
+          font-size: 12px;
+          margin-right: 2px;
+        }
+        svg {
+          width: 18px;
+        }
+      }
+    }
+  }
+
+  // bottom section
+
+  .bottom__Section {
+    width: 100%;
+
+    .table__filter {
+      width: 100%;
+      height: 40px;
+      background-color: #b5b4c5;
+
+      display: flex;
+      align-items: center;
+      h5 {
+        margin-right: 5px;
+        font-size: 12px;
+      }
+      .dateSearchWrapper {
+        color: #040153;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin-left: 10px;
+        margin-right: 10px;
+      }
+      .input__Section {
+        display: flex;
+        align-items: center;
+        color: #040153;
+
+        select {
+          margin-left: 5px;
+          width: 200px;
+          height: 25px;
+          margin-right: 10px;
+        }
+      }
+
+      .search__Section {
+        button {
+          width: 120px;
+          height: 25px;
+          background: #040153;
+          color: #fff;
+          border-radius: 5px;
+          border: none;
+          outline: none;
+        }
+      }
+    }
+    .bottom__btn__sectionss {
+      width: 100%;
+      margin-top: 30px;
+      button {
+        width: 120px;
+        height: 30px;
+        background: #040153;
+        color: #fff;
+        margin-left: 10px;
+        margin-right: 10px;
+        border-radius: 5px;
+        border: none;
+        outline: none;
+      }
+    }
+    .table__sections {
+      width: 100%;
+      background-color: rgb(255, 255, 255);
+      display: flex;
+      overflow: scroll;
+      border-radius: 10px;
+      border: 1.5px solid #040153;
+      .table {
+        width: 100%;
+        border-collapse: collapse;
+        border-radius: 10px;
+        background-color: rgb(211, 211, 211);
+
+        thead {
+          background-color: #c7c6d7;
+          .orderNuber__th {
+            width: 20%;
+          }
+          .location__th {
+            width: 10%;
+          }
+
+          tr th {
+            font-size: 14px;
+            font-weight: 600;
+            letter-spacing: 0.3px;
+            color: #040153;
+            opacity: 1;
+            padding: 12px;
+            vertical-align: top;
+            border: 1px solid #a4a3c1;
+          }
+        }
+        .elapsedTime {
+          color: red;
+        }
+        tbody tr td {
+          font-size: 14px;
+          letter-spacing: 0.35px;
+          font-weight: normal;
+          color: #040153;
+          background-color: #f3f3f3;
+          padding: 8px;
+          text-align: center;
+          border: 1px solid #a4a3c1;
+        }
+
+        .selectedTr {
+          td {
+            background-color: #c2c0f3;
+          }
+
+          &.cancelActive {
+            td {
+              background-color: rgb(255, 0, 0);
+              color: #ffff;
+            }
+          }
+        }
+      }
+    }
+
+    .canceled__and__total__amount {
+      position: fixed;
+      width: 75%;
+      background-color: #d1d1f8;
+
+      height: 40px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding-right: 30px;
+      padding-left: 30px;
+      bottom: 5%;
+
+      .checkbox_Section {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+
+      .total__amount__section {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+
+        h5 {
+          color: #040153;
+          margin-right: 10px;
+        }
+
+        .amount__holder {
+          padding: 5px;
+          background-color: #ffff;
+          border-radius: 5px;
+        }
+      }
+    }
+  }
+}
+
+@media only screen and (max-width: 768px) {
+  .ReorderMapping {
+    .top__section {
+      h2 {
+        font-size: 16px;
+      }
+
+      .edit__delete__add__wrapper {
+        .different__option {
+          svg {
+            width: 20px;
+          }
+        }
+      }
+    }
+    .bottom__Section {
+      .table__filter {
+        height: 100%;
+        flex-direction: column;
+        align-items: initial;
+
+        .dateSearchWrapper {
+          justify-content: space-between;
+
+          margin-top: 8px;
+          h5 {
+            font-size: 13px;
+          }
+        }
+
+        .search__Section {
+          align-items: center;
+          justify-content: center;
+          display: flex;
+          margin-top: 10px;
+          margin-bottom: 10px;
+        }
+      }
+
+      .table__sections {
+        border-radius: 0;
+        .table {
+          border-radius: 0;
+        }
+      }
+
+      .canceled__and__total__amount {
+        .checkbox_Section {
+          font-size: 10px;
+        }
+        h5 {
+          font-size: 10px;
+        }
+      }
+    }
+  }
+}

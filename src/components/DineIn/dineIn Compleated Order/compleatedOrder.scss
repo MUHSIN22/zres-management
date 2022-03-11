@@ -1,0 +1,178 @@
+.CompleatedOrder {
+  width: 100%;
+  height: 400px;
+  background-color: rgb(255, 255, 255);
+  margin-top: 10px;
+  margin-bottom: 10px;
+  border-radius: 10px;
+  overflow: scroll;
+  .runningOrder__headder {
+    h3 {
+      font-weight: 500;
+      color: #040153;
+      padding: 10px;
+    }
+  }
+  .TableSection {
+    width: 100%;
+
+    background-color: rgb(255, 255, 255);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 15px;
+
+    .table {
+      width: 99%;
+      border-collapse: collapse;
+      border-radius: 10px;
+      background-color: rgb(211, 211, 211);
+
+      thead {
+        background-color: rgb(255, 255, 255);
+
+        .orderNuber__th {
+          width: 20%;
+        }
+
+        tr th {
+          font-size: 14px;
+          font-weight: 600;
+          letter-spacing: 0.3px;
+          color: #040153;
+          opacity: 1;
+          padding: 12px;
+          vertical-align: top;
+        }
+      }
+      .elapsedTime {
+        color: red;
+      }
+      tbody tr td {
+        font-size: 14px;
+        letter-spacing: 0.35px;
+        font-weight: normal;
+        color: #040153;
+        background-color: #ffffff;
+        padding: 8px;
+        text-align: center;
+        border-top: 1px solid #3f3f3f85;
+
+        .button {
+          margin-top: 5px;
+          margin-bottom: 5px;
+          width: 140px;
+
+          font-weight: medium;
+          color: #ffffff;
+          background-color: #009751;
+          text-align: center;
+
+          border-radius: 10px;
+          box-shadow: 0 0 5px grey;
+
+          svg {
+            margin-right: 5px;
+          }
+          &.Running__order {
+            background-color: #009751;
+          }
+          &.doneSoon {
+            background-color: #040153;
+            color: #fff;
+          }
+
+          &.prntBill {
+            background-color: #040153;
+            width: 200px;
+          }
+        }
+      }
+    }
+  }
+
+  .TotalOrder {
+    width: 100%;
+
+    background-color: rgb(255, 255, 255);
+    display: flex;
+    border-radius: 15px;
+    padding: 5px;
+
+    .table {
+      width: 99%;
+      border-collapse: collapse;
+      border-radius: 10px;
+      background-color: rgb(138, 138, 138);
+
+      thead {
+        background-color: rgb(224, 224, 224);
+
+        .orderNuber__th {
+          width: 20%;
+        }
+
+        tr th {
+          font-size: 14px;
+          font-weight: 600;
+          letter-spacing: 0.3px;
+          color: #040153;
+          opacity: 1;
+          padding: 12px;
+          text-align: left;
+          vertical-align: top;
+        }
+      }
+      .elapsedTime {
+        color: red;
+      }
+      tbody tr td {
+        font-size: 14px;
+        letter-spacing: 0.35px;
+        font-weight: normal;
+        color: #040153;
+        background-color: rgb(224, 224, 224);
+        padding: 8px;
+
+        border-top: 1px solid #3f3f3f85;
+      }
+    }
+  }
+}
+
+@media (max-width: 768px) {
+  .CompleatedOrder {
+    .TableSection {
+      .table {
+        thead {
+          display: none;
+        }
+        tbody,
+        tr,
+        td {
+          display: block;
+          width: 100%;
+        }
+
+        tr {
+          margin-bottom: 10px;
+        }
+
+        tbody tr td {
+          text-align: right;
+          padding-left: 50%;
+          position: relative;
+        }
+      }
+    }
+    .table td:before {
+      content: attr(data-label);
+      position: absolute;
+      left: 0;
+      width: 50%;
+      padding-left: 15px;
+      font-weight: 600;
+      text-align: left;
+    }
+  }
+}

@@ -1,0 +1,37 @@
+.LoyalityPopup {
+  width: 400px;
+  height: 400px;
+  background-color: #fff;
+  box-shadow: 0 0 10px rgb(70, 70, 70);
+  left: 40%;
+  right: 40%;
+  border-radius: 15px;
+  position: absolute;
+  top: 20%;
+  z-index: 2;
+
+  .loyality__Popup__headder {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    position: relative;
+    padding: 5px;
+    color: #040153;
+
+    h3 {
+      font-weight: 500;
+      font-size: 25px;
+    }
+
+    .MuiSvgIcon-root {
+      font-size: 25px;
+      cursor: pointer;
+    }
+
+    .close__icon__loyality__opoup {
+      position: absolute;
+      right: 10px;
+    }
+  }
+}

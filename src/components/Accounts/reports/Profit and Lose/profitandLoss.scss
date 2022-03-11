@@ -1,0 +1,290 @@
+.ProfitAndLose {
+  width: 100%;
+
+  .top__Section {
+    width: 100%;
+    background-color: #d1d1f8;
+    border-radius: 10px;
+    padding-bottom: 18px;
+    .headder__Section {
+      display: flex;
+      height: 100px;
+      align-items: center;
+      justify-content: space-between;
+      padding-left: 30px;
+      padding-right: 30px;
+
+      .left {
+        h3 {
+          color: #040153;
+          font-size: 17px;
+        }
+      }
+      .right {
+        display: flex;
+
+        .icon__section {
+          padding: 5px;
+          background-color: #040153;
+          color: #fff;
+          display: flex;
+          margin-left: 5px;
+          margin-right: 5px;
+          align-items: center;
+          justify-content: center;
+          border-radius: 7px;
+          h4 {
+            font-weight: 400;
+            margin-left: 5px;
+            font-size: 12px;
+          }
+        }
+      }
+    }
+    .bottom__section {
+      width: 100%;
+      display: flex;
+      align-items: center;
+      .input__Section {
+        display: flex;
+
+        .checkbox__fiels {
+          display: flex;
+
+          .check__field {
+            display: flex;
+            align-items: center;
+            margin-left: 10px;
+            color: #040153;
+            h4 {
+              margin-left: 5px;
+              font-size: 12px;
+            }
+          }
+        }
+        .input__field {
+          margin-left: 5px;
+          margin-right: 5px;
+          display: flex;
+          align-items: center;
+
+          h4 {
+            margin-right: 5px;
+            color: #040153;
+            font-size: 12px;
+          }
+
+          input {
+            width: 180px;
+            padding: 5px;
+            border: none;
+            outline: none;
+            border-radius: 5px;
+            box-shadow: 10px 13px 8px -8px rgba(102, 101, 102, 0.75);
+          }
+
+          select {
+            width: 180px;
+            border: none;
+            outline: none;
+            border-radius: 5px;
+            padding: 5px;
+            box-shadow: 10px 13px 8px -8px rgba(102, 101, 102, 0.75);
+          }
+        }
+      }
+
+      .bottom__input__section {
+        display: flex;
+        align-items: center;
+        .input__field {
+          margin-left: 5px;
+          margin-right: 5px;
+          display: flex;
+          align-items: center;
+
+          h4 {
+            margin-left: 5px;
+            margin-right: 5px;
+            color: #040153;
+            font-size: 15px;
+            font-weight: 500;
+          }
+
+          select {
+            width: 180px;
+            border: none;
+            outline: none;
+            border-radius: 5px;
+            padding: 5px;
+            box-shadow: 10px 13px 8px -8px rgba(102, 101, 102, 0.75);
+          }
+        }
+        .checkbox__fiels {
+          display: flex;
+
+          .check__field {
+            display: flex;
+            align-items: center;
+            margin-left: 10px;
+            color: #040153;
+            h4 {
+              margin-left: 5px;
+              font-size: 15px;
+              font-weight: 500;
+            }
+          }
+        }
+
+        .serch__box {
+          padding: 4px;
+          border-radius: 5px;
+          background-color: #040153;
+          margin-left: 10px;
+          color: #fff;
+          width: 100px;
+          h4 {
+            text-align: center;
+            font-weight: 500;
+          }
+        }
+      }
+    }
+  }
+
+  .bottom__Section {
+    margin-top: 30px;
+    .table__sections {
+      width: 100%;
+      background-color: rgb(255, 255, 255);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 15px;
+      .table {
+        width: 100%;
+        border-collapse: collapse;
+        border-radius: 10px;
+        background-color: rgb(211, 211, 211);
+
+        thead {
+          background-color: #c7c6d7;
+
+          .orderNuber__th {
+            width: 20%;
+          }
+          .location__th {
+            width: 10%;
+          }
+
+          tr th {
+            font-size: 14px;
+            font-weight: bold;
+            letter-spacing: 0.3px;
+            color: #040153;
+            opacity: 1;
+            padding: 12px;
+            vertical-align: top;
+            border: 1px solid #6e6c9b;
+          }
+        }
+
+        tfoot tr td {
+          font-size: 14px;
+          letter-spacing: 0.35px;
+          font-weight: bold;
+          color: red;
+          background-color: #c7c6d7;
+          padding: 8px;
+          text-align: center;
+          border: 1px solid #b2b1c2;
+        }
+
+        .elapsedTime {
+          color: red;
+        }
+        tbody tr td {
+          font-size: 14px;
+          letter-spacing: 0.35px;
+          font-weight: normal;
+          color: #040153;
+          background-color: #f3f3f3;
+          padding: 8px;
+          text-align: center;
+          border: 1px solid #b2b1c2;
+        }
+
+        .Canceled {
+          background-color: rgb(247, 185, 185) !important;
+        }
+
+        .selectedTr {
+          td {
+            background-color: #c2c0f3;
+          }
+
+          &.cancelActive {
+            td {
+              background-color: rgb(255, 0, 0);
+              color: #ffff;
+            }
+          }
+        }
+      }
+    }
+  }
+}
+
+@media only screen and (max-width: 768px) {
+  .ProfitAndLose {
+    .top__Section {
+      .headder__Section {
+        .left {
+          h3 {
+            font-size: 16px;
+          }
+        }
+
+        .right {
+          margin-left: 10px;
+          .icon__section {
+            padding: 2px;
+          }
+        }
+      }
+
+      .bottom__section {
+        flex-direction: column;
+        .input__Section {
+          flex-direction: column;
+
+          padding-right: 10px;
+          .input__field {
+            width: 100%;
+            margin-top: 5px;
+            justify-content: space-between;
+          }
+        }
+        .bottom__input__section {
+          flex-direction: column;
+          padding-right: 10px;
+          .input__field {
+            width: 100%;
+            justify-content: space-between;
+          }
+
+          .checkbox__fiels {
+            .check__field {
+              h4 {
+                font-size: 12px;
+              }
+            }
+          }
+        }
+      }
+    }
+
+    .bottom__Section {
+    }
+  }
+}

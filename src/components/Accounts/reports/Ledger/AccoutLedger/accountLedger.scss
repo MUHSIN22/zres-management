@@ -1,0 +1,164 @@
+.AccountLedger {
+  .headder__Section {
+    display: flex;
+    height: 100px;
+    align-items: center;
+    justify-content: space-between;
+    padding-left: 30px;
+    padding-right: 30px;
+    background-color: #a7a6d3;
+    border-radius: 10px;
+
+    .left {
+      display: flex;
+      align-items: center;
+      .MuiSvgIcon-root {
+        font-size: 35px !important;
+        cursor: pointer;
+      }
+      h3 {
+        margin-left: 10px;
+        color: #040153;
+        font-size: 15px;
+      }
+
+      .checkbox__Section {
+        display: flex;
+        align-items: center;
+        margin-left: 12px;
+        margin-top: 30px;
+        color: #040153;
+
+        h5 {
+          font-size: 12px;
+        }
+      }
+    }
+    .right {
+      display: flex;
+
+      .icon__section {
+        padding: 5px;
+        background-color: #040153;
+        color: #fff;
+        display: flex;
+        margin-left: 5px;
+        margin-right: 5px;
+        align-items: center;
+        justify-content: center;
+        border-radius: 7px;
+        h4 {
+          font-weight: 400;
+          margin-left: 5px;
+          font-size: 12px;
+        }
+      }
+    }
+  }
+  .table__bottom__section {
+    margin-top: 15px;
+    .table__sections {
+      width: 100%;
+      background-color: rgb(255, 255, 255);
+      display: flex;
+      overflow: scroll;
+
+      .table {
+        width: 100%;
+        border-collapse: collapse;
+        border-radius: 10px;
+        background-color: rgb(211, 211, 211);
+
+        thead {
+          background-color: #c7c6d7;
+
+          .orderNuber__th {
+            width: 20%;
+          }
+          .location__th {
+            width: 10%;
+          }
+
+          tr th {
+            font-size: 14px;
+            font-weight: 600;
+            letter-spacing: 0.3px;
+            color: #040153;
+            opacity: 1;
+            padding: 12px;
+            vertical-align: top;
+            border: 1px solid #6e6c9b;
+          }
+        }
+        .elapsedTime {
+          color: red;
+        }
+        tbody,
+        tr td {
+          font-size: 14px;
+          letter-spacing: 0.35px;
+          font-weight: normal;
+          color: #040153;
+          background-color: #f3f3f3;
+          padding: 8px;
+          text-align: center;
+          border: 1px solid #040153;
+          border: 1px solid #b2b1c2;
+        }
+
+        tfoot tr td {
+          color: #040153;
+          font-size: 14px;
+          letter-spacing: 0.35px;
+          font-weight: normal;
+          color: #040153;
+          background-color: #f3f3f3;
+          padding: 8px;
+          text-align: center;
+          border: 1px solid #040153;
+          border: 1px solid #b2b1c2;
+        }
+
+        .Canceled {
+          background-color: rgb(247, 185, 185) !important;
+        }
+
+        .selectedTr {
+          td {
+            background-color: #c2c0f3;
+          }
+
+          &.cancelActive {
+            td {
+              background-color: rgb(255, 0, 0);
+              color: #ffff;
+            }
+          }
+        }
+      }
+    }
+  }
+}
+
+@media only screen and (max-width: 768px) {
+  .AccountLedger {
+    .headder__Section {
+      flex-direction: column;
+      height: auto;
+      .left {
+        margin-top: 10px;
+        margin-bottom: 10px;
+        h3 {
+          font-size: 15px;
+        }
+      }
+
+      .right {
+        margin-bottom: 10px;
+        .icon__section {
+          padding: 3px;
+        }
+      }
+    }
+  }
+}
