@@ -1,11 +1,11 @@
 import React from "react";
-import { useHistory } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import "./profileHeadder.scss";
 function ProfileHeadder() {
-  const history = useHistory();
+  const navigate = useNavigate();
 
   const handleSettingMenu = () => {
-    history.push("/setting");
+    navigate("/setting");
   };
 
   return (

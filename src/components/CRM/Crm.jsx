@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { BrowserRouter as Router, Switch, Route, Link } from "react-router-dom";
+import { BrowserRouter as Router, Route, Link, Routes } from "react-router-dom";
 import "./crm.scss";
 
 import AddCustomer from "./addCustomer/AddCustomer";
@@ -15,7 +15,7 @@ function Crm() {
     <Router>
 
       <div className="Crm">
-        <Switch>
+        <Routes>
 
 
           <Route path="/addCustomer">
@@ -46,7 +46,7 @@ function Crm() {
           </Route>
 
           
-        </Switch>
+        </Routes>
       </div>
 
 

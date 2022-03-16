@@ -1,13 +1,13 @@
 import React, { useEffect, useState } from "react";
 import "./loginPage.scss";
 import BgImage from "./img/blog-img-temp.jpg";
-import { useHistory } from "react-router";
+import { useNavigate } from "react-router";
 import Alert from "@mui/material/Alert";
 import Stack from "@mui/material/Stack";
 import LoadingScreen from "../../loadingScreen/LoadingScreen";
 
 function LoginPage() {
-  const history = useHistory();
+  const navigate = useNavigate()
   const [auth, setAuth] = useState();
   const [loading, setLoading] = useState(false);
   const [typeValue, setTypeValue] = useState("");
@@ -45,7 +45,7 @@ function LoginPage() {
   useEffect(() => {
     const timer = setTimeout(() => {
       if (loading) {
-        history.push("./optionSection");
+        navigate("./optionSection");
       }
     }, 5000);
     return () => clearTimeout(timer);

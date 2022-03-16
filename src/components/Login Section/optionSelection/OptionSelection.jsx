@@ -3,9 +3,9 @@ import "./optionSelection.scss";
 import CasherImage from "./img/1.jpg";
 import OfficePerson from "./img/officePerson.jpg";
 import CloseIcon from "@mui/icons-material/Close";
-import { useHistory } from "react-router";
+import { useNavigate } from "react-router";
 function OptionSelection() {
-  const history = useHistory();
+  const navigate = useNavigate();
   const [SelctedOption, setSelectedOption] = useState("");
   // const [closeBtnClick, setCloseBtnClick] = useState(false);
 
@@ -19,54 +19,54 @@ function OptionSelection() {
     let valuesSelected = e.target.innerText;
 
     if (valuesSelected === "Crm") {
-      history.push({
+      navigate({
         pathname: "/mainPage",
         state: { detail: "CRM" },
       });
     } else if (valuesSelected === "Inventory") {
-      history.push({
+      navigate({
         pathname: "/mainPage",
         state: { detail: "Inventory" },
       });
     } else if (valuesSelected === "Accounts") {
-      history.push({
+      navigate({
         pathname: "/mainPage",
         state: { detail: "Accounts" },
       });
     } else if (valuesSelected === "Delivery") {
-      history.push({
+      navigate({
         pathname: "/mainPage",
         state: { detail: "DeliveryManager" },
       });
     } else if (valuesSelected === "Existing Check") {
-      history.push({
+      navigate({
         pathname: "/mainPage",
         state: { detail: "DeliveryManager" },
       });
     } else if (valuesSelected === "New Check") {
-      history.push({
+      navigate({
         pathname: "/mainPage",
         state: { detail: "WalkIn" },
       });
     } else if (valuesSelected === "Walk In") {
-      history.push({
+      navigate({
         pathname: "/mainPage",
         state: { detail: "WalkIn" },
       });
     } else if (valuesSelected === "Dine In") {
       setDineInpopUp(true);
 
-      // history.push({
+      // navigate({
       //   pathname: "/mainPage",
       //   state: { detail: "DineIn" },
       // });
     } else if (valuesSelected === "View Table") {
-      history.push({
+      navigate({
         pathname: "/mainPage",
         state: { detail: "DineIn" },
       });
     } else if (valuesSelected === "Take Away") {
-      history.push({
+      navigate({
         pathname: "/mainPage",
         state: { detail: "DeliveryManager", subnav: "takeAwayOrder" },
       });

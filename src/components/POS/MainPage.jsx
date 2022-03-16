@@ -4,7 +4,7 @@ import ArrowForwardIosIcon from "@mui/icons-material/ArrowForwardIos";
 import ArrowBackIosIcon from "@mui/icons-material/ArrowBackIos";
 import Crm from "../CRM/Crm";
 import DeliveryManager from "../Delivery Manager/DeliveryManager";
-import { useLocation, useHistory } from "react-router-dom";
+import { useLocation, useNavigate, BrowserRouter, Outlet, Routes, Route } from "react-router-dom";
 import Inventory from "../Inventory/Inventory";
 import Accounts from "../Accounts/Accounts";
 import DashBoard from "../DashBoad/DashBoard";
@@ -12,7 +12,7 @@ import Walkin from "../Walkin/Walkin";
 import DineIn from "../DineIn/DineIn";
 
 function MainPage() {
-  const history = useHistory();
+  const navigate = useNavigate();
   const location = useLocation();
   const [clicked, SetClicked] = useState("Dashboard");
   const [ShrinkNav, setShrikNav] = useState(true);
@@ -26,7 +26,7 @@ function MainPage() {
   }, [datafromProp]);
 
   const handleBackBtn = () => {
-    history.push("./optionSection");
+    navigate("./optionSection");
   };
 
   // useEffect(() => {
@@ -84,7 +84,10 @@ function MainPage() {
               "detail__section " +
               (clicked === "Dashboard" && "selected__Section")
             }
-            onClick={() => SetClicked("Dashboard")}
+            onClick={() => {
+              SetClicked("Dashboard");
+              navigate("/mainPage")
+            }}
           >
             <svg
               xmlns="http://www.w3.org/2000/svg"
@@ -110,7 +113,10 @@ function MainPage() {
             className={
               "detail__section " + (clicked === "WalkIn" && "selected__Section")
             }
-            onClick={() => SetClicked("WalkIn")}
+            onClick={() => {
+              SetClicked("WalkIn")
+              navigate("/mainPage/walkin")
+            }}
           >
             <svg
               xmlns="http://www.w3.org/2000/svg"
@@ -133,7 +139,10 @@ function MainPage() {
             className={
               "detail__section " + (clicked === "DineIn" && "selected__Section")
             }
-            onClick={() => SetClicked("DineIn")}
+            onClick={() => {
+              SetClicked("DineIn")
+              navigate("/mainPage/dinein")
+            }}
           >
             <svg
               xmlns="http://www.w3.org/2000/svg"
@@ -159,7 +168,10 @@ function MainPage() {
             className={
               "detail__section " + (clicked === "CRM" && "selected__Section")
             }
-            onClick={() => SetClicked("CRM")}
+            onClick={() => {
+              SetClicked("CRM")
+              navigate("/mainPage/crm")
+            }}
           >
             <svg
               xmlns="http://www.w3.org/2000/svg"
@@ -220,7 +232,10 @@ function MainPage() {
               (clicked === "DeliveryManager" &&
                 "selected__Section deliveryManagerSelected")
             }
-            onClick={() => SetClicked("DeliveryManager")}
+            onClick={() => {
+              SetClicked("DeliveryManager")
+              navigate("/mainPage/delivery-manager")
+            }}
           >
             <svg
               id="delivery_dining_black_24dp_1_"
@@ -281,6 +296,7 @@ function MainPage() {
             onClick={() => {
               SetClicked("Inventory");
               setInventoryClick(!InventoryClick);
+              navigate("/mainPage/inventory")
             }}
           >
             <svg
@@ -308,6 +324,7 @@ function MainPage() {
             onClick={() => {
               SetClicked("Accounts");
               setInventoryClick(!InventoryClick);
+              navigate("/mainPage/accounts")
             }}
           >
             <svg
@@ -359,7 +376,19 @@ function MainPage() {
       </div>
 
       <div className="main__page__right__body">
-        {clicked === "CRM" && (
+        <div className="section">
+            {/* <Outlet></Outlet> */}
+            <Routes>
+              <Route path="/" element={<DashBoard />}/>
+              <Route path="/walkin" element={<Walkin />}/>
+              <Route path="/crm" element={<Crm/>}/>
+              <Route path="/delivery-manager" element={<DeliveryManager />}/>
+              <Route path="/inventory" element={<Inventory/>}/>
+              <Route path="/dinein" element={<DineIn/>}/>
+              <Route path="/accounts" element={<Accounts />}/>
+            </Routes>
+        </div>
+        {/* {clicked === "CRM" && (
           <div className="section">
             <Crm />
           </div>
@@ -399,7 +428,7 @@ function MainPage() {
           <div className="section">
             <Accounts InventoryClick={InventoryClick} />
           </div>
-        )}
+        )} */}
       </div>
     </div>
   );
