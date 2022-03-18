@@ -81,6 +81,7 @@ function Walkin({ dataToSendToWlkinPage }) {
   const [addNotes, setAddNotes] = useState(false);
   const [notes, SetNotes] = useState([]);
   const [loyalityPopup, setLoyalityPopup] = useState(false);
+  const [allmenu,setAllmenu] = useState([])
   // useEffect(() => {
   //   const timeout = setTimeout(() => {
   //     const current = new Date().toLocaleString();
@@ -243,6 +244,19 @@ function Walkin({ dataToSendToWlkinPage }) {
       setChangeQtyPopup(false);
     }
   };
+    const getallMenu = async ()=>{
+      const res = await fetch('https://zres.clubsoft.co.in/api/v1/WalkIn/GetAllMenuGroup?CMPid=1',
+      {
+        method:'GET'
+      })
+      const menu = await res.json()
+      setAllmenu(menu)
+      console.log(menu)
+    }
+
+    useEffect(() => {
+      getallMenu()
+    }, [])
 
   return (
     <>
@@ -803,7 +817,7 @@ function Walkin({ dataToSendToWlkinPage }) {
               <div className="product__list__wrapper">
                 <>
                   {mainCategoryPic === "" &&
-                    refData.map((mainCat, index) => (
+                    allmenu.map((mainCat, index) => (
                       <div
                         className="single__product"
                         onClick={() => setMainCategoryPic(mainCat.headCategory)}
@@ -815,7 +829,10 @@ function Walkin({ dataToSendToWlkinPage }) {
                             alt=""
                           />
                         )}
-                        <h6>{mainCat.headCategory}</h6>
+                        {
+   <h6>{mainCat.MenuGroupName}</h6>
+                        }
+                     
                       </div>
                     ))}
                   {/* subCategory Section */}
