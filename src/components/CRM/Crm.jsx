@@ -11,46 +11,16 @@ function Crm() {
   const [smsCategory, setSmsCategory] = useState("personalised");
 
   return (
-
-    <Router>
-
       <div className="Crm">
-        <Routes>
-
-
-          <Route path="/addCustomer">
-            <div className="crm__front_body">
-              <AddCustomer />
-            </div>
-          </Route>
-
-
-          <Route path="/sms">
-            <div className="crm__front_body">
-              <Sms smsType={smsCategory} />
-            </div>
-          </Route>
-
-
-          <Route path="/customerDetail">
-            <div className="crm__front_body">
-              <CustomerDetails />
-            </div>
-          </Route>
-
-
-          <Route path="/">
-            <div className="crm__front_body">
-              <CrmFront setSmsCategory={setSmsCategory} />
-            </div>
-          </Route>
-
-          
-        </Routes>
+        <div className="crm__front_body">
+          <Routes>
+            <Route path="/addCustomer" element={<AddCustomer />}/>
+            <Route path="/sms" element={<Sms smsType={smsCategory} />}/>
+            <Route path="/customerDetail" element={<CustomerDetails />}/>
+            <Route path="/" element={<CrmFront setSmsCategory={setSmsCategory} />}/>
+          </Routes>
+        </div>
       </div>
-
-
-    </Router>
   );
 }
 
