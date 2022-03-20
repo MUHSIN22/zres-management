@@ -82,6 +82,7 @@ function Walkin({ dataToSendToWlkinPage }) {
   const [notes, SetNotes] = useState([]);
   const [loyalityPopup, setLoyalityPopup] = useState(false);
   const [allmenu,setAllmenu] = useState([])
+  const [searchCustomer,setSearchCustomer] = useState([])
   // useEffect(() => {
   //   const timeout = setTimeout(() => {
   //     const current = new Date().toLocaleString();
@@ -195,26 +196,34 @@ function Walkin({ dataToSendToWlkinPage }) {
     setAddCustomer(false);
   };
 
+  const searchCustmer = async ()=>{
+    const res = await fetch('https://zres.clubsoft.co.in/api/v1/Customer?CMPid=1',{
+      method:'GET'
+    })
+    const customers = await res.json()
+    setSearchCustomer(customers)
+  }
+
   const [filterdCustomer, setFilteredCustomer] = useState([]);
   const [filtValue, setFiltValue] = useState("");
   const handleCustomerSearch = (e) => {
     const searchedValue = e.target.value;
+    searchCustmer()
     setFiltValue(searchedValue);
-    const filterData = dummyUser.filter((data) => {
+    const filterData = searchCustomer.filter((data) => {
       if (searchedValue) {
         return (
-          data.phone.toString().includes(searchedValue) ||
-          data.name.toLocaleLowerCase().includes(searchedValue)
+          data.Phone.toString().includes(searchedValue) ||
+          data.CName.toLocaleLowerCase().includes(searchedValue)
         );
       }
       return "";
     });
     setFilteredCustomer(filterData);
-    console.log("FILTER DATA", filterData);
   };
   const [selectedCusetomer, setSelectedCustomer] = useState({});
   const handleSelectedCustomer = (id) => {
-    const customerDetails = dummyUser.find((data) => data.id === id);
+    const customerDetails = searchCustomer.find((data) => data.id === id);
     setSelectedCustomer(customerDetails);
     setFiltValue("");
   };
@@ -482,13 +491,13 @@ function Walkin({ dataToSendToWlkinPage }) {
                 {/* <button>Search</button> */}
                 {filtValue !== "" && (
                   <div className="searchResultBox">
-                    {filterdCustomer?.map((dummyData) => (
+                    {filterdCustomer?.map((searchCustomer) => (
                       <div
                         className="customerss"
-                        onClick={() => handleSelectedCustomer(dummyData.id)}
+                        onClick={() => handleSelectedCustomer(searchCustomer.CustomerID)}
                       >
-                        <h6>{dummyData.name}</h6>
-                        <h6>{dummyData.phone}</h6>
+                        <h6>{searchCustomer.CName}</h6>
+                        <h6>{searchCustomer.Phone}</h6>
                       </div>
                     ))}
                   </div>
