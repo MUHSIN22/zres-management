@@ -820,7 +820,7 @@ function Walkin({ dataToSendToWlkinPage }) {
                     allmenu.map((mainCat, index) => (
                       <div
                         className="single__product"
-                        onClick={() => setMainCategoryPic(mainCat.headCategory)}
+                        onClick={() => setMainCategoryPic(mainCat.MenuGroupName)}
                       >
                         {" "}
                         {switchOn && (
@@ -840,7 +840,7 @@ function Walkin({ dataToSendToWlkinPage }) {
                   {mainCategoryPic !== "" &&
                     refData
                       .filter((items) => {
-                        if (items.headCategory === mainCategoryPic) {
+                        if (items.headCategory !== mainCategoryPic) {
                           return items;
                         }
                       })
