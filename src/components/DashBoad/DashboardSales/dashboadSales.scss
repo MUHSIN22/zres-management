@@ -1,46 +1,31 @@
-.hourly__breakdown {
-  width: 100%;
+.dashboard-sales-container {
+  margin-top: 1rem;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  grid-template-areas:
+    "linechart linechart linechart"
+    "announcement total-sale chart-of-sale"
+    "announcement modification-and-reprint chart-of-sale"
+    "order-by-location top-selling-items sales-by-location"
+    "staff-wise-report hourly-breakdown top-grossing-items"
+    "staff-wise-report cancelled-orders top-grossing-items"
+    "staff-wise-report total-orders top-grossing-items";
+  grid-gap: 1rem;
 
-  .headding__and__back__section {
+  
+  .lineChart__section {
+    border-radius: 15px;
     width: 100%;
-    display: flex;
-    color: #040153;
-    padding: 10px;
-    align-items: center;
-    h2 {
-      font-size: 25px;
-    }
-
-    .MuiSvgIcon-root {
-      font-size: 30px;
-      cursor: pointer;
-    }
+    grid-area: linechart;
   }
-}
-
-.lineChart__section {
-  margin-top: 15px;
-  padding: 10px;
-  border-radius: 15px;
-  margin-bottom: 30px;
-  width: 100%;
-  height: 300px;
-}
-
-.section__main__container {
-  display: flex;
-  margin-top: 15px;
-  margin-bottom: 20px;
-  width: 100%;
-  height: 400px;
   .gridBox {
-    width: calc(100% / 3);
+    width: 100%;
     height: 100%;
     background-color: rgb(255, 255, 255);
-    margin: 15px;
+    padding: 1rem;
   }
-
   .grid__item__1 {
+    grid-area: announcement;
     .pie__char__section__dashboads {
       margin-top: 20%;
       height: 50%;
@@ -50,16 +35,16 @@
       color: #040153;
       margin-top: 20px;
     }
-
+  
     hr {
       margin-top: 15px;
       margin-bottom: 15px;
     }
-
+  
     ol {
       margin-left: 40%;
       color: #040153;
-
+  
       li {
         margin-top: 5px;
         margin-bottom: 5px;
@@ -77,7 +62,7 @@
       justify-content: flex-end;
       padding: 5px;
     }
-
+  
     h4 {
       text-align: center;
       text-decoration: underline;
@@ -94,7 +79,7 @@
       padding: 5px;
       margin-top: 15px;
       height: auto;
-
+  
       input {
         width: 70%;
         height: 50px;
@@ -104,7 +89,7 @@
         padding-left: 10px;
         color: #040153;
       }
-
+  
       button {
         height: 50px;
         width: 30%;
@@ -114,7 +99,7 @@
         border-radius: 5px;
       }
     }
-
+  
     .post__detail__section {
       width: 100%;
       height: 50%;
@@ -125,85 +110,73 @@
       color: #040153;
     }
   }
-
-  .grid__item__2__warpper {
-    width: calc(100% / 3);
-    margin-left: 10px;
-    margin-right: 10px;
-    margin-top: 15px;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    height: 100%;
-
-    .grid__item__in__wrapper1 {
-      width: 100%;
-      height: calc(100% / 2);
-      background-color: rgb(255, 255, 255);
-      margin-bottom: 10px;
-
-      .top__icon__section {
-        display: flex;
-        width: 100%;
-        justify-content: flex-end;
-        padding: 5px;
-      }
-
-      h4 {
-        text-align: center;
-        text-decoration: underline;
-        font-weight: 500;
-        color: #040153;
-        margin-top: 3px;
-        font-size: 14px;
-      }
-
-      h2 {
-        text-align: center;
-        color: #040153;
-        margin-top: 5px;
-        font-size: 25px;
-      }
-    }
-
-    .grid__item__in__wrapper2 {
-      width: 100%;
-      height: calc(100% / 2);
-      background-color: rgb(255, 255, 255);
-
-      .top__icon__section {
-        display: flex;
-        width: 100%;
-        justify-content: flex-end;
-        padding: 5px;
-      }
-
-      h4 {
-        text-align: center;
-        text-decoration: underline;
-        font-weight: 500;
-        color: #040153;
-        margin-top: 3px;
-        font-size: 14px;
-      }
-
-      h2 {
-        text-align: center;
-        color: #040153;
-        margin-top: 5px;
-        font-size: 25px;
-      }
-    }
-  }
-
-  .grid__item__4 {
+  .total-sales{
+    grid-area: total-sale;
+    width: 100%;
+    background-color: rgb(255, 255, 255);
+    margin-bottom: 10px;
+  
     .top__icon__section {
       display: flex;
       width: 100%;
       justify-content: flex-end;
       padding: 5px;
     }
-
+  
+    h4 {
+      text-align: center;
+      text-decoration: underline;
+      font-weight: 500;
+      color: #040153;
+      margin-top: 3px;
+      font-size: 14px;
+    }
+  
+    h2 {
+      text-align: center;
+      color: #040153;
+      margin-top: 5px;
+      font-size: 25px;
+    }
+  }
+  
+  .modification-and-reprint {
+    width: 100%;
+    grid-area: modification-and-reprint;
+    background-color: rgb(255, 255, 255);
+  
+    .top__icon__section {
+      display: flex;
+      width: 100%;
+      justify-content: flex-end;
+      padding: 5px;
+    }
+  
+    h4 {
+      text-align: center;
+      text-decoration: underline;
+      font-weight: 500;
+      color: #040153;
+      margin-top: 3px;
+      font-size: 14px;
+    }
+  
+    h2 {
+      text-align: center;
+      color: #040153;
+      margin-top: 5px;
+      font-size: 25px;
+    }
+  }
+  .grid__item__4 {
+    grid-area: chart-of-sale;
+    .top__icon__section {
+      display: flex;
+      width: 100%;
+      justify-content: flex-end;
+      padding: 5px;
+    }
+  
     h4 {
       text-align: center;
       text-decoration: underline;
@@ -213,16 +186,9 @@
       font-size: 14px;
     }
   }
-}
-
-.bottom__div__section {
-  margin-top: 100px;
-  display: flex;
-  width: 100%;
-  height: 600px;
 
   .div__area__section {
-    width: calc(100% / 3);
+    width: 100%;
     height: 100%;
     background-color: rgb(255, 255, 255);
     margin-right: 5px;
@@ -310,50 +276,111 @@
       }
     }
   }
+  .mid__chid__section {
+    background-color: rgb(255, 255, 255);
+    height: 100%;
+    width: 100%;
+
+    margin-bottom: 10px;
+    h4 {
+      text-align: center;
+      text-decoration: underline;
+      font-weight: 500;
+      color: #040153;
+      margin-top: 3px;
+      font-size: 14px;
+    }
+    .inner__section__contaier {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      color: #040153;
+
+      h3 {
+        font-size: 20px;
+      }
+      h2 {
+        font-size: 25px;
+      }
+      .MuiSvgIcon-root {
+        font-size: 50px;
+        color: #040153;
+      }
+    }
+    .top__icon__section {
+      display: flex;
+      width: 100%;
+      justify-content: flex-end;
+      padding: 5px;
+    }
+  }
+
+  .hourly-breakdown-card{
+    grid-area: hourly-breakdown;
+  }
+  .order-by-location{
+    grid-area: order-by-location;
+  }
+  .top-selling-items{
+    grid-area: top-selling-items;
+  }
+  .sales-by-location{
+    grid-area: sales-by-location;
+  }
+  .staff-wise-report{
+    grid-area: staff-wise-report;
+  }
+  .cancelled-orders{
+    grid-area: cancelled-orders;
+  }
+  .total-orders{
+    grid-area: total-orders;
+  }
+  .top-grossing-items{
+    grid-area: top-grossing-items;
+  }
+}
+.hourly__breakdown {
+  width: 100%;
+
+  .headding__and__back__section {
+    width: 100%;
+    display: flex;
+    color: #040153;
+    padding: 10px;
+    align-items: center;
+    h2 {
+      font-size: 25px;
+    }
+
+    .MuiSvgIcon-root {
+      font-size: 30px;
+      cursor: pointer;
+    }
+  }
+
+
+
+ 
+
+  
 
   .div__section__mid {
     display: flex;
     flex-direction: column;
-    .mid__chid__section {
-      background-color: rgb(255, 255, 255);
-      height: calc(100% / 3);
-      width: 100%;
-
-      margin-bottom: 10px;
-      h4 {
-        text-align: center;
-        text-decoration: underline;
-        font-weight: 500;
-        color: #040153;
-        margin-top: 3px;
-        font-size: 14px;
-      }
-      .inner__section__contaier {
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        justify-content: center;
-        color: #040153;
-
-        h3 {
-          font-size: 20px;
-        }
-        h2 {
-          font-size: 25px;
-        }
-        .MuiSvgIcon-root {
-          font-size: 50px;
-          color: #040153;
-        }
-      }
-      .top__icon__section {
-        display: flex;
-        width: 100%;
-        justify-content: flex-end;
-        padding: 5px;
-      }
-    }
+    
   }
+}
+
+
+.bottom__div__section {
+  margin-top: 100px;
+  display: flex;
+  width: 100%;
+  height: 600px;
+
+  
 }
 
 @media only screen and(max-width:768px) {

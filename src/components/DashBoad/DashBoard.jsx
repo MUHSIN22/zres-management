@@ -13,29 +13,35 @@ import "react-datepicker/dist/react-datepicker.css";
 import Button from "@mui/material/Button";
 import Menu from "@mui/material/Menu";
 import MenuItem from "@mui/material/MenuItem";
+import { Link, Outlet, Route, Routes, useNavigate } from "react-router-dom";
 
 const masterCategiry = [
   {
     id: 0,
     name: "Sales",
+    link: 'sales'
   },
   {
     id: 1,
     name: "Marketing",
+    link: 'marketing'
   },
 
   {
     id: 2,
     name: "Inventory",
+    link: 'inventory'
   },
 
   {
     id: 3,
     name: "Bussiness Summary",
+    link: 'bussiness-summary'
   },
 ];
 
 function DashBoard() {
+  const navigate = useNavigate();
   const [dateTimePopup, setDateTimePopup] = useState(false);
   const [startDate, setStartDate] = useState(null);
   const [toDate, setToDate] = useState(null);
@@ -43,7 +49,7 @@ function DashBoard() {
   const [categoryID, setCategoryID] = useState("");
   const [subCategoryCss, setSubCategoryCss] = useState("firstValue");
   const [selCategory, setSelCategory] = useState(masterCategiry);
-
+  const [activeSubCategory, setActiveSubCategory] = useState(0)
   const [clickedSubCategory, setClickedSubCategory] = useState(
     selCategory[0].name
   );
@@ -68,53 +74,42 @@ function DashBoard() {
     setToDate(date);
   };
 
+  // To handle the clicking on the subcategory [sales,marketing,inventory,bussiness summary]
+  const handleSubCategory = (itemId) => {
+    setActiveSubCategory(itemId);
+  }
+
+  const checkActiveLink = () => {
+    let paths = window.location.pathname.split('/');
+
+    switch (paths[paths.length - 1] === "" ? paths[paths.length - 2] : paths[paths.length - 1]) {
+      case "sales":
+
+    }
+  }
+
   useEffect(() => {
-    setSelCategory(masterCategiry);
-    setClickedSubCategory(masterCategiry[0].name);
+    let paths = window.location.pathname.split('/');
+    if (paths[paths.length - 1] === "dashboard") {
+      navigate('/mainPage/dashboard/sales')
+    }
   }, []);
-
-  // first section needed
-
-  console.log(startDate, toDate);
 
   return (
     <div className="DashBoard">
       <div className="top__category__section">
         {/*top category section  */}
         <div className="hedder__category">
-          <div
-            className={
-              "option__box " + (subCategoryCss === "firstValue" && "firstvalue")
-            }
-            onClick={() => {
-              setSubCategoryCss("firstValue");
-              setClickedSubCategory(selCategory[0].name);
-            }}
-          >
-            <h5>{selCategory[0].name}</h5>
-          </div>
-
-          {selCategory
-            .filter((data) => data.id !== 0)
-            .map((cat) => (
-              <div
-                key={cat.id}
-                className={
-                  categoryID === cat.id
-                    ? "option__box " +
-                      (subCategoryCss === "restValue" && "restValue ")
-                    : "option__box "
-                }
-                onClick={() => {
-                  setSubCategoryCss("restValue");
-                  setCategoryID(cat.id);
-                  setClickedSubCategory(cat.name);
-                }}
-              >
-                <h5>{cat.name}</h5>
-              </div>
-            ))}
-
+          {
+            selCategory.map((item) => (
+              <Link
+                to={item.link}
+                key={item.id}
+                className={"option__box " + (item.id === activeSubCategory ? "active-category": null)}
+                onClick={() => {handleSubCategory(item.id)}}
+              >{item.name}</Link>
+            ))
+          }
           <div className="line_passer"></div>
         </div>
       </div>
@@ -239,10 +234,8 @@ function DashBoard() {
           </div>
         </div>
 
-        {clickedSubCategory === "Sales" && <DashboadSales />}
-        {clickedSubCategory === "Marketing" && <Marketting />}
-        {clickedSubCategory === "Inventory" && <DashBoadInventory />}
-        {clickedSubCategory === "Bussiness Summary" && <BussinessSummary />}
+        {/* dashboard items appears below on clicking sub categories */}
+        <Outlet />
       </div>
     </div>
   );

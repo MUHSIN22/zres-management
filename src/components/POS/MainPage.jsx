@@ -10,6 +10,10 @@ import Accounts from "../Accounts/Accounts";
 import DashBoard from "../DashBoad/DashBoard";
 import Walkin from "../Walkin/Walkin";
 import DineIn from "../DineIn/DineIn";
+import DashboadSales from "../DashBoad/DashboardSales/DashboadSales";
+import Marketting from "../DashBoad/Marketing/Marketting";
+import DashBoadInventory from "../DashBoad/DashBoadInventory/DashBoadInventory";
+import BussinessSummary from "../DashBoad/bussiness summary/BussinessSummary";
 
 function MainPage() {
   const navigate = useNavigate();
@@ -86,7 +90,7 @@ function MainPage() {
             }
             onClick={() => {
               SetClicked("Dashboard");
-              navigate("/mainPage")
+              navigate("/mainPage/dashboard/sales")
             }}
           >
             <svg
@@ -377,9 +381,13 @@ function MainPage() {
 
       <div className="main__page__right__body">
         <div className="section">
-            {/* <Outlet></Outlet> */}
             <Routes>
-              <Route path="/" element={<DashBoard />}/>
+              <Route path="/dashboard" element={<DashBoard />}>
+                <Route path="sales" element={<DashboadSales/>}/>
+                <Route path="marketing" element={<Marketting/>}/>
+                <Route path="inventory" element={<DashBoadInventory/>}/>
+                <Route path="bussiness-summary" element={<BussinessSummary/>}/>
+              </Route>
               <Route path="/walkin" element={<Walkin />}/>
               <Route path="/crm" element={<Crm/>}/>
               <Route path="/delivery-manager" element={<DeliveryManager />}/>
