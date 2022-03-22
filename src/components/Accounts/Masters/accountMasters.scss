@@ -48,17 +48,24 @@
           font-size: 12px;
         }
 
-        &.firstvalue {
-          border-top: 1px solid #040153;
-          border-bottom: none;
-          border-right: 1px solid #040153;
-        }
-        &.restValue {
+        .active-subcategory{
           border-top: 1px solid #040153;
           border-left: 1px solid #040153;
           border-bottom: none;
           border-right: 1px solid #040153;
         }
+
+        // &.firstvalue {
+        //   border-top: 1px solid #040153;
+        //   border-bottom: none;
+        //   border-right: 1px solid #040153;
+        // }
+        // &.restValue {
+        //   border-top: 1px solid #040153;
+        //   border-left: 1px solid #040153;
+        //   border-bottom: none;
+        //   border-right: 1px solid #040153;
+        // }
       }
     }
   }
