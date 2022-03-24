@@ -42,17 +42,22 @@
         border-top: none;
         border-left: none;
         border-right: none;
+        text-decoration: none;
+        color: #040153;
 
         h5 {
           cursor: pointer;
           font-size: 12px;
         }
 
-        .active-subcategory{
+        &.active-category{
           border-top: 1px solid #040153;
           border-left: 1px solid #040153;
           border-bottom: none;
           border-right: 1px solid #040153;
+        }
+        &:first-child{
+          border-left: none;
         }
 
         // &.firstvalue {

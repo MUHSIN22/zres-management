@@ -118,19 +118,6 @@ function AccountHead() {
                     <td colspan="4">AccountHeadName</td>
                     <td>12</td>
                   </tr>
-                  <tr
-                    style={{ cursor: "pointer" }}
-                    onClick={() => {
-                      setAddNewBtn(true);
-                      setMainTableView(false);
-                    }}
-                  >
-                    <td>125</td>
-                    <td>152</td>
-                    <td>45</td>
-                    <td colspan="4">AccountHeadName</td>
-                    <td>12</td>
-                  </tr>
                 </tbody>
               </table>
             </div>
