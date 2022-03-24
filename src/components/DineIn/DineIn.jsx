@@ -362,7 +362,11 @@ function DineIn({ SetClicked }) {
                   >
                     {getStatusLength("Reservation")} Reservation
                   </button>
-                  <div className="right__dine__refresh__btn">
+                  <div className="right__dine__refresh__btn"
+                    onClick={()=>{
+                      window.location.reload(false)
+                    }}
+                  >
                     <svg
                       xmlns="http://www.w3.org/2000/svg"
                       width="27.501"
