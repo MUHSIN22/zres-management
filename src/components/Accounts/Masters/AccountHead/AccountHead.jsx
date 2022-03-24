@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import { accountServices } from "../../../../Services/AccountsServices";
 import "./accountHead.scss";
 import AccountHeadAdd from "./AccountHeadAdd/AccountHeadAdd";
 
@@ -7,7 +8,17 @@ function AccountHead() {
   const [mainTableView, setMainTableView] = useState(true);
   const [editTableData, setEditTableData] = useState([]);
   const [editTableSelectedID, setEditTableSelctedID] = useState(0);
+  const [headData, setHeadData] = useState([])
 
+  useEffect(() => {
+    accountServices.getAccountHeadData()
+      .then(data => {
+        setHeadData(data)
+      })
+      .catch(err => {
+        console.log(err);
+      })
+  }, [])
   return (
     <div className="AccountHead">
       {/* sucess message for add btn */}
@@ -105,19 +116,24 @@ function AccountHead() {
                   </tr>
                 </thead>
                 <tbody>
-                  <tr
-                    style={{ cursor: "pointer" }}
-                    onClick={() => {
-                      setAddNewBtn(true);
-                      setMainTableView(false);
-                    }}
-                  >
-                    <td>125</td>
-                    <td>152</td>
-                    <td>45</td>
-                    <td colspan="4">AccountHeadName</td>
-                    <td>12</td>
-                  </tr>
+                  {
+                    headData.map((item, index) => (
+                      <tr
+                        style={{ cursor: "pointer" }}
+                        key={index}
+                        onClick={() => {
+                          setAddNewBtn(true);
+                          setMainTableView(false);
+                        }}
+                      >
+                        <td>{index + 1}</td>
+                        <td>{item.AccountHeadID}</td>
+                        <td>{item.AHCode}</td>
+                        <td colspan="4">{item.AccountHeadName}</td>
+                        <td>{item.AccountGroupID}</td>
+                      </tr>
+                    ))
+                  }
                 </tbody>
               </table>
             </div>
