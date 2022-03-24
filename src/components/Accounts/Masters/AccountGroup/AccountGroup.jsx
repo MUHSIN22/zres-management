@@ -11,7 +11,7 @@ function AccountGroup({ fetchALLAccountGroupList, accoutGroupList }) {
   const [groupData, setGroupData] = useState([]);
 
   useEffect(() => {
-    accountServices.getAccountGroupData().then((data) => {
+    accountServices.getAccountGroupData().then((data) => { 
       setGroupData(data)
     }).catch((err) => {
       console.log(err);
