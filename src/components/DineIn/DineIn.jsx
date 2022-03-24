@@ -325,6 +325,7 @@ function DineIn({ SetClicked }) {
                         setSelectedAvialibilityTable={
                           setSelectedAvialibilityTable
                         }
+                        dataToDisplay={getTableAvailability}
                       />
                     )}
                   </div>
@@ -332,7 +333,7 @@ function DineIn({ SetClicked }) {
                   <button
                     style={{ backgroundColor: "#009751", color: "#fff" }}
                     onClick={() =>
-                      setSelectedAvialibilityTable("avilable__btn")
+                      setSelectedAvialibilityTable("Available")
                     }
                   >
                     {getStatusLength("Available")} Available
@@ -340,7 +341,7 @@ function DineIn({ SetClicked }) {
                   <button
                     style={{ backgroundColor: "#c8c8cf", color: "#040153" }}
                     onClick={() =>
-                      setSelectedAvialibilityTable("occupied__btn")
+                      setSelectedAvialibilityTable("Occupied")
                     }
                   >
                     {getStatusLength("Occupied")} Occupied
@@ -348,7 +349,7 @@ function DineIn({ SetClicked }) {
                   <button
                     style={{ backgroundColor: "#040153", color: "#fff" }}
                     onClick={() =>
-                      setSelectedAvialibilityTable("doneSoon__btn")
+                      setSelectedAvialibilityTable("DoneSoon")
                     }
                   >
                     {getStatusLength("DoneSoon")} Done Soon
@@ -356,7 +357,7 @@ function DineIn({ SetClicked }) {
                   <button
                     style={{ backgroundColor: "#e1870e", color: "#040153" }}
                     onClick={() =>
-                      setSelectedAvialibilityTable("reservation__btn")
+                      setSelectedAvialibilityTable("Reservation")
                     }
                   >
                     {getStatusLength("Reservation")} Reservation
