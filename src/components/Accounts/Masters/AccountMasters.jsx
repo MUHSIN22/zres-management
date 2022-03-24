@@ -26,8 +26,18 @@ function AccountMaster() {
     setActiveSubCategory(itemId)
   }
 
+  const handleSubCategory = () => {
+    let path = window.location.pathname.split('/')
+    selCategory.forEach((item) => {
+      if(item.link === (path[path.length -1] === "" ? path[path.length - 2] : path[path.length -1])){
+        setActiveSubCategory(item.id);
+      }
+    })
+  }
+
   useEffect(() => {
     setSelCategory(masterCategiry);
+    handleSubCategory();
   }, []);
 
   // first section needed
