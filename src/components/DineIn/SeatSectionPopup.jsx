@@ -35,10 +35,10 @@ function SeatSectionPopup({
         </div>
       </div>
       <div className="avialble__table__section">
-        {dataToDisplay?.map((dta) => (
+        {dataToDisplay?.map((data) => (
           <div className="tabless__details">
-            <h4>Table {dta.tableNo}</h4>
-            <h4>{dta.tableType}</h4>
+            <h4>Table {data.tableNo}</h4>
+            <h4>{data.tableType}</h4>
           </div>
         ))}
       </div>

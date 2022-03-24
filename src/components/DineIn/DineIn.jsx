@@ -44,8 +44,9 @@ function DineIn({ SetClicked }) {
   const indexOfFirstPost = indexOfLastPost - postPerPage;
   const [totalTablesLength, setTotalTablesLength] = useState(0);
   const [dataToSendToWlkinPage, setDataToSendToWalkinPage] =
-    useState(dataToSendToWalkin);
+  useState(dataToSendToWalkin);
   const [getAllTableData, setGetAllTableData] = useState({});
+  const [allTableData, setAllTableData] = useState({});
   const [getTableAvailability, setGetTableAvailability] = useState({});
 
   for (let i = 1; i <= Math.ceil(10 / postPerPage); i++) {
@@ -58,6 +59,7 @@ function DineIn({ SetClicked }) {
       .then((res) => {
         setGetAllTableData(res.data);
         setTotalTablesLength(res.data.length);
+        setAllTableData(res.data)
       });
   }, []);
 
@@ -97,8 +99,19 @@ function DineIn({ SetClicked }) {
       setRecervation(true);
     }
   };
-  const filterHandler = (type) => {
-    console.log(type);
+  const filterHandlerForArea = (area) => {
+    
+    if(allTableData.length>0){
+      if(area!=="all"){
+        const newTableData = allTableData.filter((data)=>{
+          return data.DineInArea===area
+        })
+        setGetAllTableData(newTableData)
+      }else{
+        setGetAllTableData(allTableData)
+      }
+    }
+
   };
   const handleCloseWalkinPage = () => {
     setDineIn(true);
@@ -201,7 +214,7 @@ function DineIn({ SetClicked }) {
                 <div className="left__dinein__section__nav">
                   <div
                     className="dinein__nav__left__btn"
-                    onClick={() => filterHandler("all")}
+                    onClick={() => filterHandlerForArea("all")}
                   >
                     <svg
                       xmlns="http://www.w3.org/2000/svg"
@@ -223,7 +236,7 @@ function DineIn({ SetClicked }) {
                   </div>
                   <div
                     className="dinein__nav__left__btn"
-                    onClick={() => filterHandler("mainArea")}
+                    onClick={() => filterHandlerForArea("Main Area")}
                   >
                     <svg
                       xmlns="http://www.w3.org/2000/svg"
@@ -245,7 +258,7 @@ function DineIn({ SetClicked }) {
                   </div>
                   <div
                     className="dinein__nav__left__btn"
-                    onClick={() => filterHandler("patioArea")}
+                    onClick={() => filterHandlerForArea("Patio Area")}
                   >
                     <svg
                       xmlns="http://www.w3.org/2000/svg"
@@ -267,7 +280,7 @@ function DineIn({ SetClicked }) {
                   </div>
                   <div
                     className="dinein__nav__left__btn"
-                    onClick={() => filterHandler("familyArea")}
+                    onClick={() => filterHandlerForArea("Family Area")}
                   >
                     <svg
                       xmlns="http://www.w3.org/2000/svg"
