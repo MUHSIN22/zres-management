@@ -4,7 +4,6 @@ import Pagination from "@mui/material/Pagination";
 import Stack from "@mui/material/Stack";
 import DineDummyData from "./DummyData";
 import ProfileHeadder from "../profile Headder and Settings/ProfileHeadder";
-import { useHistory } from "react-router-dom";
 import RunningOrder from "./DineIn RunningOrder/RunningOrder";
 import CompleatedOrder from "./dineIn Compleated Order/CompleatedOrder";
 import RecervationBooking from "./reservationBooking/RecervationBooking";
@@ -47,6 +46,7 @@ function DineIn({ SetClicked }) {
   useState(dataToSendToWalkin);
   const [getAllTableData, setGetAllTableData] = useState({});
   const [allTableData, setAllTableData] = useState({});
+  const [allTableAvailability, setAllTableAvailability] = useState({});
   const [getTableAvailability, setGetTableAvailability] = useState({});
 
   for (let i = 1; i <= Math.ceil(10 / postPerPage); i++) {
@@ -68,6 +68,7 @@ function DineIn({ SetClicked }) {
       .get("https://zres.clubsoft.co.in/DineIn/GetAvailableTables?CMPid=1")
       .then((res) => {
         setGetTableAvailability(res.data);
+        setAllTableAvailability(res.data);
       });
   }, []);
 
@@ -99,8 +100,14 @@ function DineIn({ SetClicked }) {
       setRecervation(true);
     }
   };
+  const getStatusLength = (type) => {
+    if(getTableAvailability.length>0){
+      return getTableAvailability.filter((data)=>{
+        return data.TableStatus === type
+      }).length
+    }
+  }
   const filterHandlerForArea = (area) => {
-    
     if(allTableData.length>0){
       if(area!=="all"){
         const newTableData = allTableData.filter((data)=>{
@@ -111,8 +118,14 @@ function DineIn({ SetClicked }) {
         setGetAllTableData(allTableData)
       }
     }
-
+    if(allTableAvailability.length>0){
+      const newAvailabilityData = allTableAvailability.filter((data)=>{
+        return data.DineInArea===area
+      })
+      setGetTableAvailability(newAvailabilityData)
+    }
   };
+
   const handleCloseWalkinPage = () => {
     setDineIn(true);
     setDatatoWalkin(false);
@@ -319,7 +332,7 @@ function DineIn({ SetClicked }) {
                       setSelectedAvialibilityTable("avilable__btn")
                     }
                   >
-                    8 Available
+                    {getStatusLength("Available")} Available
                   </button>
                   <button
                     style={{ backgroundColor: "#c8c8cf", color: "#040153" }}
@@ -327,7 +340,7 @@ function DineIn({ SetClicked }) {
                       setSelectedAvialibilityTable("occupied__btn")
                     }
                   >
-                    5 Occupied
+                    {getStatusLength("Occupied")} Occupied
                   </button>
                   <button
                     style={{ backgroundColor: "#040153", color: "#fff" }}
@@ -335,7 +348,7 @@ function DineIn({ SetClicked }) {
                       setSelectedAvialibilityTable("doneSoon__btn")
                     }
                   >
-                    5 Done Soon
+                    {getStatusLength("DoneSoon")} Done Soon
                   </button>
                   <button
                     style={{ backgroundColor: "#e1870e", color: "#040153" }}
@@ -343,7 +356,7 @@ function DineIn({ SetClicked }) {
                       setSelectedAvialibilityTable("reservation__btn")
                     }
                   >
-                    8 Reservation
+                    {getStatusLength("Reservation")} Reservation
                   </button>
                   <div className="right__dine__refresh__btn">
                     <svg
