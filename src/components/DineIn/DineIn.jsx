@@ -12,6 +12,13 @@ import Walkin from "../Walkin/Walkin";
 import SeatSectionPopup from "./SeatSectionPopup";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import axios from "axios";
+import TwoSeater from "./dinein svg/Round/TwoSeaterRound";
+import SixSeater from "./dinein svg/Round/SixSeaterRound";
+import FourSeater from "./dinein svg/Round/FourSeaterRound";
+import TwoSeaterSquare from "./dinein svg/Square/TwoSeaterSquare";
+import FourSeaterSquare from "./dinein svg/Square/FourSeaterSquare";
+import SixSeaterSquare from "./dinein svg/Square/SixSeaterSquare";
+import TwoSeaterCorner from "./dinein svg/Corner/TwoSeaterCorner";
 
 const dataToSendToWalkin = {
   tableNo: "4",
@@ -35,21 +42,22 @@ function DineIn({ SetClicked }) {
   const [postPerPage, setPostPerPage] = useState(12);
   const indexOfLastPost = currentPage * postPerPage;
   const indexOfFirstPost = indexOfLastPost - postPerPage;
-  const currentPost = DineDummyData.slice(indexOfFirstPost, indexOfLastPost);
+  const [totalTablesLength, setTotalTablesLength] = useState(0);
   const [dataToSendToWlkinPage, setDataToSendToWalkinPage] =
     useState(dataToSendToWalkin);
   const [getAllTableData, setGetAllTableData] = useState({});
   const [getTableAvailability, setGetTableAvailability] = useState({});
 
-  for (let i = 1; i <= Math.ceil(DineDummyData.length / postPerPage); i++) {
+  for (let i = 1; i <= Math.ceil(10 / postPerPage); i++) {
     pageNumber.push(i);
   }
-
+  console.log(DineDummyData.length / postPerPage, "");
   useEffect(() => {
     axios
       .get("https://zres.clubsoft.co.in/DineIn/GetAllTablesInDine?CMPid=1")
       .then((res) => {
         setGetAllTableData(res.data);
+        setTotalTablesLength(res.data.length);
       });
   }, []);
 
@@ -89,24 +97,50 @@ function DineIn({ SetClicked }) {
       setRecervation(true);
     }
   };
-  const filterHandler = (type) =>{
+  const filterHandler = (type) => {
     console.log(type);
-  }
+  };
   const handleCloseWalkinPage = () => {
-    setDineIn(true); 
+    setDineIn(true);
     setDatatoWalkin(false);
   };
-  const isItAvailable = (value) => {
+  const svgFilter = (seat, shape, id) => {
     if (getTableAvailability.length > 0) {
-      return getTableAvailability.filter((data) => {
-        if (data.DineInSettingsID === value) {
+      var checkAvailbility = getTableAvailability.filter((data) => {
+        if (data.DineInSettingsID === id) {
           return data;
         }
       })[0].TableStatus;
     }
+
+    if (shape === "Round") {
+      switch (seat) {
+        case 2:
+          return <TwoSeater availability={checkAvailbility} />;
+        case 4:
+          return <FourSeater availability={checkAvailbility} />;
+        case 6:
+          return <SixSeater availability={checkAvailbility} />;
+        default:
+          return null;
+      }
+    } else if (shape === "Square") {
+      switch (seat) {
+        case 2:
+          return <TwoSeaterSquare availability={checkAvailbility} />;
+        case 4:
+          return <FourSeaterSquare  availability={checkAvailbility}/>;
+        case 6:
+          return <SixSeaterSquare  availability={checkAvailbility}/>;
+        default:
+          return null;
+      }
+    } else {
+      return <TwoSeaterCorner availability={checkAvailbility}/>;
+    }
   };
   if (getAllTableData.length < 0) {
-    return <h1>Loading...</h1>
+    return <h1>Loading...</h1>;
   } else {
     return (
       <>
@@ -347,665 +381,13 @@ function DineIn({ SetClicked }) {
                                     "active "))
                               }
                             >
-                              {data.TableType === "4 Seater" && (
-                                <div className="4seater__table tableInResturent">
-                                  <svg
-                                    className={isItAvailable(
-                                      data.DineInSettingsID
-                                    ) +" svgDinein"}
-                                    xmlns="http://www.w3.org/2000/svg"
-                                    width="100"
-                                    height="100"
-                                    viewBox="0 0 116.141 118"
-                                  >
-                                    <g
-                                      id="Group_2136"
-                                      data-name="Group 2136"
-                                      transform="translate(0 0.251)"
-                                    >
-                                      <g
-                                        id="Rectangle_858"
-                                        data-name="Rectangle 858"
-                                        transform="translate(32.813 -0.251)"
-                                        // fill="#fff"
-                                        // stroke="#040153"
-                                        stroke-width="5"
-                                      >
-                                        <rect
-                                          width="49"
-                                          height="36"
-                                          rx="16"
-                                          stroke="none"
-                                        />
-                                        <rect
-                                          x="2.5"
-                                          y="2.5"
-                                          width="44"
-                                          height="31"
-                                          rx="13.5"
-                                          fill="none"
-                                        />
-                                      </g>
-                                      <g
-                                        id="Rectangle_861"
-                                        data-name="Rectangle 861"
-                                        transform="translate(0 83.603) rotate(-90)"
-                                        // fill="#fff"
-                                        // stroke="#040153"
-                                        stroke-width="5"
-                                      >
-                                        <rect
-                                          width="49.096"
-                                          height="35.458"
-                                          rx="16"
-                                          stroke="none"
-                                        />
-                                        <rect
-                                          x="2.5"
-                                          y="2.5"
-                                          width="44.096"
-                                          height="30.458"
-                                          rx="13.5"
-                                          fill="none"
-                                        />
-                                      </g>
-                                      <g
-                                        id="Rectangle_859"
-                                        data-name="Rectangle 859"
-                                        transform="translate(32.813 81.749)"
-                                        // fill="#fff"
-                                        // stroke="#040153"
-                                        stroke-width="5"
-                                      >
-                                        <rect
-                                          width="49"
-                                          height="36"
-                                          rx="16"
-                                          stroke="none"
-                                        />
-                                        <rect
-                                          x="2.5"
-                                          y="2.5"
-                                          width="44"
-                                          height="31"
-                                          rx="13.5"
-                                          fill="none"
-                                        />
-                                      </g>
-                                      <g
-                                        id="Rectangle_860"
-                                        data-name="Rectangle 860"
-                                        transform="translate(80.683 83.322) rotate(-90)"
-                                        // fill="#fff"
-                                        // stroke="#040153"
-                                        stroke-width="5"
-                                      >
-                                        <rect
-                                          width="49.096"
-                                          height="35.458"
-                                          rx="16"
-                                          stroke="none"
-                                        />
-                                        <rect
-                                          x="2.5"
-                                          y="2.5"
-                                          width="44.096"
-                                          height="30.458"
-                                          rx="13.5"
-                                          fill="none"
-                                        />
-                                      </g>
-                                      <g
-                                        id="Ellipse_15"
-                                        data-name="Ellipse 15"
-                                        transform="translate(19.813 19.749)"
-                                        // fill="#fff"
-                                        // stroke="#040153"
-                                        stroke-width="5"
-                                      >
-                                        <circle
-                                          cx="38.5"
-                                          cy="38.5"
-                                          r="38.5"
-                                          stroke="none"
-                                        />
-                                        <circle
-                                          cx="38.5"
-                                          cy="38.5"
-                                          r="36"
-                                          fill="none"
-                                        />
-                                      </g>
-                                      <g
-                                        id="Rectangle_862"
-                                        data-name="Rectangle 862"
-                                        transform="translate(35.813 4.749)"
-                                        // fill="#fff"
-                                        // stroke="#040153"
-                                        stroke-width="5"
-                                      >
-                                        <rect
-                                          width="43"
-                                          height="10"
-                                          rx="5"
-                                          stroke="none"
-                                        />
-                                        <rect
-                                          x="2.5"
-                                          y="2.5"
-                                          width="38"
-                                          height="5"
-                                          rx="2.5"
-                                          fill="none"
-                                        />
-                                      </g>
-                                      <g
-                                        id="Rectangle_863"
-                                        data-name="Rectangle 863"
-                                        transform="translate(35.813 104.749)"
-                                        // fill="#fff"
-                                        // stroke="#040153"
-                                        stroke-width="5"
-                                      >
-                                        <rect
-                                          width="43"
-                                          height="10"
-                                          rx="5"
-                                          stroke="none"
-                                        />
-                                        <rect
-                                          x="2.5"
-                                          y="2.5"
-                                          width="38"
-                                          height="5"
-                                          rx="2.5"
-                                          fill="none"
-                                        />
-                                      </g>
-                                      <g
-                                        id="Rectangle_864"
-                                        data-name="Rectangle 864"
-                                        transform="translate(13.813 36.749) rotate(90)"
-                                        // fill="#fff"
-                                        // stroke="#040153"
-                                        stroke-width="5"
-                                      >
-                                        <rect
-                                          width="44"
-                                          height="9"
-                                          rx="4.5"
-                                          stroke="none"
-                                        />
-                                        <rect
-                                          x="2.5"
-                                          y="2.5"
-                                          width="39"
-                                          height="4"
-                                          rx="2"
-                                          fill="none"
-                                        />
-                                      </g>
-                                      <g
-                                        id="Rectangle_865"
-                                        data-name="Rectangle 865"
-                                        transform="translate(112.813 36.749) rotate(90)"
-                                        // fill="#fff"
-                                        // stroke="#040153"
-                                        stroke-width="5"
-                                      >
-                                        <rect
-                                          width="44"
-                                          height="9"
-                                          rx="4.5"
-                                          stroke="none"
-                                        />
-                                        <rect
-                                          x="2.5"
-                                          y="2.5"
-                                          width="39"
-                                          height="4"
-                                          rx="2"
-                                          fill="none"
-                                        />
-                                      </g>
-                                    </g>
-                                  </svg>
-                                </div>
-                              )}
-                              {data.TableType === "6 Seater" && (
-                                <div className="6seater__table tableInResturent">
-                                  <svg
-                                    className={isItAvailable(
-                                      data.DineInSettingsID
-                                    ) +" svgDinein"}
-                                    xmlns="http://www.w3.org/2000/svg"
-                                    width="120"
-                                    height="110"
-                                    viewBox="0 0 172.013 115"
-                                  >
-                                    <g
-                                      id="Group_2160"
-                                      data-name="Group 2160"
-                                      transform="translate(12643.451 -3149)"
-                                    >
-                                      <g
-                                        id="Rectangle_866"
-                                        data-name="Rectangle 866"
-                                        transform="translate(-12622 3170)"
-                                        // fill="#fff"
-                                        // stroke="#040153"
-                                        stroke-width="5"
-                                      >
-                                        <rect
-                                          width="130"
-                                          height="71"
-                                          stroke="none"
-                                        />
-                                        <rect
-                                          x="2.5"
-                                          y="2.5"
-                                          width="125"
-                                          height="66"
-                                          fill="none"
-                                        />
-                                      </g>
-                                      <g
-                                        id="Rectangle_867"
-                                        data-name="Rectangle 867"
-                                        transform="translate(-12546 3149)"
-                                        // fill="#fff"
-                                        // stroke="#040153"
-                                        stroke-width="5"
-                                      >
-                                        <rect
-                                          width="37"
-                                          height="25"
-                                          rx="8"
-                                          stroke="none"
-                                        />
-                                        <rect
-                                          x="2.5"
-                                          y="2.5"
-                                          width="32"
-                                          height="20"
-                                          rx="5.5"
-                                          fill="none"
-                                        />
-                                      </g>
-                                      <g
-                                        id="Rectangle_880"
-                                        data-name="Rectangle 880"
-                                        transform="translate(-12546 3239)"
-                                        // fill="#fff"
-                                        // stroke="#040153"
-                                        stroke-width="5"
-                                      >
-                                        <rect
-                                          width="37"
-                                          height="25"
-                                          rx="8"
-                                          stroke="none"
-                                        />
-                                        <rect
-                                          x="2.5"
-                                          y="2.5"
-                                          width="32"
-                                          height="20"
-                                          rx="5.5"
-                                          fill="none"
-                                        />
-                                      </g>
-                                      <g
-                                        id="Rectangle_876"
-                                        data-name="Rectangle 876"
-                                        transform="translate(-12607 3149)"
-                                        // fill="#fff"
-                                        // stroke="#040153"
-                                        stroke-width="5"
-                                      >
-                                        <rect
-                                          width="38"
-                                          height="25"
-                                          rx="8"
-                                          stroke="none"
-                                        />
-                                        <rect
-                                          x="2.5"
-                                          y="2.5"
-                                          width="33"
-                                          height="20"
-                                          rx="5.5"
-                                          fill="none"
-                                        />
-                                      </g>
-                                      <g
-                                        id="Rectangle_879"
-                                        data-name="Rectangle 879"
-                                        transform="translate(-12607 3238)"
-                                        // fill="#fff"
-                                        // stroke="#040153"
-                                        stroke-width="5"
-                                      >
-                                        <rect
-                                          width="38"
-                                          height="26"
-                                          rx="8"
-                                          stroke="none"
-                                        />
-                                        <rect
-                                          x="2.5"
-                                          y="2.5"
-                                          width="33"
-                                          height="21"
-                                          rx="5.5"
-                                          fill="none"
-                                        />
-                                      </g>
-                                      <g
-                                        id="Rectangle_868"
-                                        data-name="Rectangle 868"
-                                        transform="translate(-12496.81 3225.825) rotate(-90)"
-                                        // fill="#fff"
-                                        // stroke="#040153"
-                                        stroke-width="5"
-                                      >
-                                        <rect
-                                          width="37.694"
-                                          height="25.371"
-                                          rx="8"
-                                          stroke="none"
-                                        />
-                                        <rect
-                                          x="2.5"
-                                          y="2.5"
-                                          width="32.694"
-                                          height="20.371"
-                                          rx="5.5"
-                                          fill="none"
-                                        />
-                                      </g>
-                                      <g
-                                        id="Rectangle_878"
-                                        data-name="Rectangle 878"
-                                        transform="translate(-12618.08 3187.912) rotate(90)"
-                                        // fill="#fff"
-                                        // stroke="#040153"
-                                        stroke-width="5"
-                                      >
-                                        <rect
-                                          width="37.694"
-                                          height="25.371"
-                                          rx="8"
-                                          stroke="none"
-                                        />
-                                        <rect
-                                          x="2.5"
-                                          y="2.5"
-                                          width="32.694"
-                                          height="20.371"
-                                          rx="5.5"
-                                          fill="none"
-                                        />
-                                      </g>
-                                      <g
-                                        id="Rectangle_877"
-                                        data-name="Rectangle 877"
-                                        transform="translate(-12633.376 3189.725) rotate(90)"
-                                        // fill="#fff"
-                                        // stroke="#040153"
-                                        stroke-width="5"
-                                      >
-                                        <rect
-                                          width="33.345"
-                                          height="7.249"
-                                          rx="3.624"
-                                          stroke="none"
-                                        />
-                                        <rect
-                                          x="2.5"
-                                          y="2.5"
-                                          width="28.345"
-                                          height="2.249"
-                                          rx="1.124"
-                                          fill="none"
-                                        />
-                                      </g>
-                                      <g
-                                        id="Rectangle_898"
-                                        data-name="Rectangle 898"
-                                        transform="translate(-12473.396 3190.306) rotate(90)"
-                                        // fill="#fff"
-                                        // stroke="#040153"
-                                        stroke-width="5"
-                                      >
-                                        <rect
-                                          width="33.345"
-                                          height="7.249"
-                                          rx="3.624"
-                                          stroke="none"
-                                        />
-                                        <rect
-                                          x="2.5"
-                                          y="2.5"
-                                          width="28.345"
-                                          height="2.249"
-                                          rx="1.124"
-                                          fill="none"
-                                        />
-                                      </g>
-                                      <g
-                                        id="Rectangle_899"
-                                        data-name="Rectangle 899"
-                                        transform="translate(-12604.767 3150.87)"
-                                        // fill="#fff"
-                                        // stroke="#040153"
-                                        stroke-width="5"
-                                      >
-                                        <rect
-                                          width="33.345"
-                                          height="7.249"
-                                          rx="3.624"
-                                          stroke="none"
-                                        />
-                                        <rect
-                                          x="2.5"
-                                          y="2.5"
-                                          width="28.345"
-                                          height="2.249"
-                                          rx="1.124"
-                                          fill="none"
-                                        />
-                                      </g>
-                                      <g
-                                        id="Path_3085"
-                                        data-name="Path 3085"
-                                        transform="translate(-12543.889 3150.87)"
-                                        fill="#fff"
-                                      ></g>
-                                      <g
-                                        id="Rectangle_901"
-                                        data-name="Rectangle 901"
-                                        transform="translate(-12543.889 3254.45)"
-                                        // fill="#fff"
-                                        // stroke="#040153"
-                                        stroke-width="5"
-                                      >
-                                        <rect
-                                          width="33.345"
-                                          height="7.249"
-                                          rx="3.624"
-                                          stroke="none"
-                                        />
-                                        <rect
-                                          x="2.5"
-                                          y="2.5"
-                                          width="28.345"
-                                          height="2.249"
-                                          rx="1.124"
-                                          fill="none"
-                                        />
-                                      </g>
-                                      <g
-                                        id="Rectangle_902"
-                                        data-name="Rectangle 902"
-                                        transform="translate(-12604.767 3254.45)"
-                                        // fill="#fff"
-                                        // stroke="#040153"
-                                        stroke-width="5"
-                                      >
-                                        <rect
-                                          width="33.345"
-                                          height="7.249"
-                                          rx="3.624"
-                                          stroke="none"
-                                        />
-                                        <rect
-                                          x="2.5"
-                                          y="2.5"
-                                          width="28.345"
-                                          height="2.249"
-                                          rx="1.124"
-                                          fill="none"
-                                        />
-                                      </g>
-                                    </g>
-                                  </svg>
-                                </div>
-                              )}
-
-                              {data.TableType === "Round Table" && (
-                                <div className="2seater__table tableInResturent">
-                                  <svg
-                                    className={isItAvailable(
-                                      data.DineInSettingsID
-                                    ) +" svgDinein"}
-                                    xmlns="http://www.w3.org/2000/svg"
-                                    width="99.291"
-                                    height="90"
-                                    viewBox="0 0 99.291 90"
-                                  >
-                                    <g
-                                      id="Group_2139"
-                                      data-name="Group 2139"
-                                      transform="translate(12527 -3153)"
-                                    >
-                                      <g
-                                        id="Rectangle_867"
-                                        data-name="Rectangle 867"
-                                        transform="translate(-12511 3153)"
-                                        // fill="#fff"
-                                        // stroke="#040153"
-                                        stroke-width="5"
-                                      >
-                                        <rect
-                                          width="44"
-                                          height="30"
-                                          rx="8"
-                                          stroke="none"
-                                        />
-                                        <rect
-                                          x="2.5"
-                                          y="2.5"
-                                          width="39"
-                                          height="25"
-                                          rx="5.5"
-                                          fill="none"
-                                        />
-                                      </g>
-                                      <g
-                                        id="Rectangle_868"
-                                        data-name="Rectangle 868"
-                                        transform="translate(-12457.247 3229.632) rotate(-90)"
-                                        // fill="#fff"
-                                        // stroke="#040153"
-                                        stroke-width="5"
-                                      >
-                                        <rect
-                                          width="43.885"
-                                          height="29.538"
-                                          rx="8"
-                                          stroke="none"
-                                        />
-                                        <rect
-                                          x="2.5"
-                                          y="2.5"
-                                          width="38.885"
-                                          height="24.538"
-                                          rx="5.5"
-                                          fill="none"
-                                        />
-                                      </g>
-                                      <g
-                                        id="Rectangle_869"
-                                        data-name="Rectangle 869"
-                                        transform="translate(-12509 3153)"
-                                        // fill="#fff"
-                                        // stroke="#040153"
-                                        stroke-width="5"
-                                      >
-                                        <rect
-                                          width="39"
-                                          height="9"
-                                          rx="4.5"
-                                          stroke="none"
-                                        />
-                                        <rect
-                                          x="2.5"
-                                          y="2.5"
-                                          width="34"
-                                          height="4"
-                                          rx="2"
-                                          fill="none"
-                                        />
-                                      </g>
-                                      <g
-                                        id="Rectangle_870"
-                                        data-name="Rectangle 870"
-                                        transform="translate(-12436 3227) rotate(-90)"
-                                        // fill="#fff"
-                                        // stroke="#040153"
-                                        stroke-width="5"
-                                      >
-                                        <rect
-                                          width="39"
-                                          height="8"
-                                          rx="4"
-                                          stroke="none"
-                                        />
-                                        <rect
-                                          x="2.5"
-                                          y="2.5"
-                                          width="34"
-                                          height="3"
-                                          rx="1.5"
-                                          fill="none"
-                                        />
-                                      </g>
-                                      <g
-                                        id="Rectangle_866"
-                                        data-name="Rectangle 866"
-                                        transform="translate(-12527 3175)"
-                                        // fill="#fff"
-                                        // stroke="#040153"
-                                        stroke-width="5"
-                                      >
-                                        <rect
-                                          width="76"
-                                          height="68"
-                                          stroke="none"
-                                        />
-                                        <rect
-                                          x="2.5"
-                                          y="2.5"
-                                          width="71"
-                                          height="63"
-                                          fill="none"
-                                        />
-                                      </g>
-                                    </g>
-                                  </svg>
-                                </div>
-                              )}
+                              <div className=" tableInResturent">
+                                {svgFilter(
+                                  data.NoOfSeat,
+                                  data.ShapeOfTable,
+                                  data.DineInSettingsID
+                                )}
+                              </div>
                             </div>
 
                             <button
