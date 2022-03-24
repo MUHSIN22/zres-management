@@ -2,30 +2,42 @@ import React, { useEffect, useState } from "react";
 import AccountHead from "./AccountHead/AccountHead";
 import AccountGroup from "./AccountGroup/AccountGroup";
 import "./accountMasters.scss";
+import { Link, Outlet } from "react-router-dom";
 
 const masterCategiry = [
   {
     id: 0,
     name: "Account Head",
+    link: 'head'
   },
   {
     id: 1,
     name: "Account Group",
+    link: 'group'
   },
 ];
 
 function AccountMaster() {
-  const [categoryID, setCategoryID] = useState("");
-  const [subCategoryCss, setSubCategoryCss] = useState("firstValue");
   const [selCategory, setSelCategory] = useState(masterCategiry);
+  const [activeSubCategory,setActiveSubCategory] = useState(0);
 
-  const [clickedSubCategory, setClickedSubCategory] = useState(
-    selCategory[0].name
-  );
+
+  const handleNavigation = (itemId) => {
+    setActiveSubCategory(itemId)
+  }
+
+  const handleSubCategory = () => {
+    let path = window.location.pathname.split('/')
+    selCategory.forEach((item) => {
+      if(item.link === (path[path.length -1] === "" ? path[path.length - 2] : path[path.length -1])){
+        setActiveSubCategory(item.id);
+      }
+    })
+  }
 
   useEffect(() => {
     setSelCategory(masterCategiry);
-    setClickedSubCategory(masterCategiry[0].name);
+    handleSubCategory();
   }, []);
 
   // first section needed
@@ -35,39 +47,22 @@ function AccountMaster() {
       <div className="top__category__section">
         {/*top category section  */}
         <div className="hedder__category">
-          <div
-            className={
-              "option__box " + (subCategoryCss === "firstValue" && "firstvalue")
-            }
-            onClick={() => {
-              setSubCategoryCss("firstValue");
-              setClickedSubCategory(selCategory[0].name);
-            }}
-          >
-            <h5>{selCategory[0].name}</h5>
-          </div>
-
-          {selCategory
-            .filter((data) => data.id !== 0)
-            .map((cat) => (
-              <div
-                key={cat.id}
-                className={
-                  categoryID === cat.id
-                    ? "option__box " +
-                      (subCategoryCss === "restValue" && "restValue ")
-                    : "option__box "
-                }
-                onClick={() => {
-                  setSubCategoryCss("restValue");
-                  setCategoryID(cat.id);
-                  setClickedSubCategory(cat.name);
-                }}
-              >
-                <h5>{cat.name}</h5>
-              </div>
-            ))}
-
+          {
+              selCategory.map((item) => (
+                <Link
+                  className={
+                    "option__box " + (item.id === activeSubCategory ? "active-category": null)
+                  }
+                  to={`/mainPage/accounts/master/${item.link}`}
+                  key={item.id}
+                  onClick={() => {
+                    handleNavigation(item.id)
+                  }}
+                >
+                  <h5>{item.name}</h5>
+                </Link>
+              ))
+          }
           <div className="line_passer"></div>
         </div>
       </div>
@@ -75,8 +70,7 @@ function AccountMaster() {
       {/* PRODUCT MASTER SECTION */}
 
       <div className="master__body__section">
-        {clickedSubCategory === "Account Head" && <AccountHead />}
-        {clickedSubCategory === "Account Group" && <AccountGroup />}
+          <Outlet/>
       </div>
     </div>
   );

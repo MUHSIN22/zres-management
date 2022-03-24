@@ -89,6 +89,31 @@
       align-items: center;
       justify-content: center;
       flex-direction: column;
+      .accounts-list{
+        // display: none;
+        position: absolute;
+        width: max-content;
+        left: 98%;
+        list-style: none;
+        display: none;
+        li{
+          margin: 5px 0;
+          border-radius: 8px;
+          background: #fff;
+          border: 2px solid #040153;
+          padding: 1rem;
+          a{
+            color: #040153;
+            text-decoration: none;
+          }
+        }
+      }
+      .account-btn{
+        position: relative;
+        &:hover .accounts-list{
+          display: block;
+        }
+      }
       .detail__section {
         cursor: pointer;
         width: 100%;

@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import { accountServices } from "../../../../Services/AccountsServices";
 import "./accountGroup.scss";
 
 import AccountGroupAdd from "./AccountGroupAdd/AccountGroupAdd";
@@ -7,7 +8,15 @@ function AccountGroup({ fetchALLAccountGroupList, accoutGroupList }) {
   const [addNewBtn, setAddNewBtn] = useState(false);
   const [mainTableView, setMainTableView] = useState(true);
   const [editTableSelectedID, setEditTableSelctedID] = useState(0);
+  const [groupData, setGroupData] = useState([]);
 
+  useEffect(() => {
+    accountServices.getAccountGroupData().then((data) => {
+      setGroupData(data)
+    }).catch((err) => {
+      console.log(err);
+    })
+  }, [])
   return (
     <>
       <div className="AccountGroup">
@@ -109,30 +118,23 @@ function AccountGroup({ fetchALLAccountGroupList, accoutGroupList }) {
                     </tr>
                   </thead>
                   <tbody>
-                    <tr
-                      style={{ cursor: "pointer" }}
-                      onClick={() => {
-                        setAddNewBtn(true);
-                        setMainTableView(false);
-                      }}
-                    >
-                      <td>12</td>
-                      <td>154</td>
-                      <td>grpAbb</td>
-                      <td colspan="5">AccountGroupName</td>
-                    </tr>
-                    <tr
-                      style={{ cursor: "pointer" }}
-                      onClick={() => {
-                        setAddNewBtn(true);
-                        setMainTableView(false);
-                      }}
-                    >
-                      <td>12</td>
-                      <td>154</td>
-                      <td>grpAbb</td>
-                      <td colspan="5">AccountGroupName</td>
-                    </tr>
+                    {
+                      groupData.map((data, index) => (
+                        <tr
+                          key={index}
+                          style={{ cursor: "pointer" }}
+                          onClick={() => {
+                            setAddNewBtn(true);
+                            setMainTableView(false);
+                          }}
+                        >
+                          <td>{data.AccountGroupID}</td>
+                          <td>{data.AGCode}</td>
+                          <td>{data.GroupAbbr}</td>
+                          <td colspan="5">{data.AccountGroupName}</td>
+                        </tr>
+                      )) 
+                    }
                   </tbody>
                 </table>
               </div>

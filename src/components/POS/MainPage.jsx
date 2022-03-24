@@ -4,7 +4,7 @@ import ArrowForwardIosIcon from "@mui/icons-material/ArrowForwardIos";
 import ArrowBackIosIcon from "@mui/icons-material/ArrowBackIos";
 import Crm from "../CRM/Crm";
 import DeliveryManager from "../Delivery Manager/DeliveryManager";
-import { useLocation, useNavigate, BrowserRouter, Outlet, Routes, Route } from "react-router-dom";
+import { useLocation, useNavigate, Routes, Route, Link } from "react-router-dom";
 import Inventory from "../Inventory/Inventory";
 import Accounts from "../Accounts/Accounts";
 import DashBoard from "../DashBoad/DashBoard";
@@ -14,6 +14,12 @@ import DashboadSales from "../DashBoad/DashboardSales/DashboadSales";
 import Marketting from "../DashBoad/Marketing/Marketting";
 import DashBoadInventory from "../DashBoad/DashBoadInventory/DashBoadInventory";
 import BussinessSummary from "../DashBoad/bussiness summary/BussinessSummary";
+import AccountMaster from "../Accounts/Masters/AccountMasters";
+import ReportsAccount from "../Accounts/reports/ReportsAccount";
+import AccountTransaction from "../Accounts/Transactions/AccountTransaction";
+import ChartOfAccountMain from "../Accounts/Chart Of Account/ChartOfAccountMain";
+import AccountHead from "../Accounts/Masters/AccountHead/AccountHead";
+import AccountGroup from "../Accounts/Masters/AccountGroup/AccountGroup";
 
 function MainPage() {
   const navigate = useNavigate();
@@ -322,13 +328,14 @@ function MainPage() {
 
           <div
             className={
+              "account-btn "+
               "detail__section " +
               (clicked === "Accounts" && "selected__Section")
             }
             onClick={() => {
               SetClicked("Accounts");
               setInventoryClick(!InventoryClick);
-              navigate("/mainPage/accounts")
+              // navigate("/mainPage/accounts")
             }}
           >
             <svg
@@ -348,6 +355,20 @@ function MainPage() {
             </svg>
 
             <h5>Accounts</h5>
+            <ul className="accounts-list">
+              <li>
+                <Link to="/mainPage/accounts/master/head">Master</Link>
+              </li>
+              <li>
+                <Link to="/mainPage/accounts/transactions">Transactions</Link>
+              </li>
+              <li>
+                <Link to="/mainPage/accounts/chart-of-accounts">Chart of Account</Link>
+              </li>
+              <li>
+                <Link to="/mainPage/accounts/reports">Reports</Link>
+              </li>
+            </ul>
           </div>
         </div>
         <div className="lower__logout__section">
@@ -376,25 +397,34 @@ function MainPage() {
             </g>
           </svg>
           <h5>Logout</h5>
+
         </div>
       </div>
 
       <div className="main__page__right__body">
         <div className="section">
-            <Routes>
-              <Route path="/dashboard" element={<DashBoard />}>
-                <Route path="sales" element={<DashboadSales/>}/>
-                <Route path="marketing" element={<Marketting/>}/>
-                <Route path="inventory" element={<DashBoadInventory/>}/>
-                <Route path="bussiness-summary" element={<BussinessSummary/>}/>
+          <Routes>
+            <Route path="/dashboard" element={<DashBoard />}>
+              <Route path="sales" element={<DashboadSales />} />
+              <Route path="marketing" element={<Marketting />} />
+              <Route path="inventory" element={<DashBoadInventory />} />
+              <Route path="bussiness-summary" element={<BussinessSummary />} />
+            </Route>
+            <Route path="/walkin" element={<Walkin />} />
+            <Route path="/crm" element={<Crm />} />
+            <Route path="/delivery-manager" element={<DeliveryManager />} />
+            <Route path="/inventory" element={<Inventory />} />
+            <Route path="/dinein" element={<DineIn />} />
+            <Route path="/accounts" element={<Accounts />}>
+              <Route path="master" element={<AccountMaster />}>
+                <Route path="head" element={<AccountHead/>}/>
+                <Route path="group" element={<AccountGroup/>}/>
               </Route>
-              <Route path="/walkin" element={<Walkin />}/>
-              <Route path="/crm" element={<Crm/>}/>
-              <Route path="/delivery-manager" element={<DeliveryManager />}/>
-              <Route path="/inventory" element={<Inventory/>}/>
-              <Route path="/dinein" element={<DineIn/>}/>
-              <Route path="/accounts" element={<Accounts />}/>
-            </Routes>
+              <Route path="reports" element={<ReportsAccount />}/>
+              <Route path="transactions" element={ <AccountTransaction /> }/>
+              <Route path="chart-of-accounts" element={<ChartOfAccountMain />}/>
+            </Route>
+          </Routes>
         </div>
         {/* {clicked === "CRM" && (
           <div className="section">
