@@ -52,7 +52,6 @@ function DineIn({ SetClicked }) {
   for (let i = 1; i <= Math.ceil(10 / postPerPage); i++) {
     pageNumber.push(i);
   }
-  console.log(DineDummyData.length / postPerPage, "");
   useEffect(() => {
     axios
       .get("https://zres.clubsoft.co.in/DineIn/GetAllTablesInDine?CMPid=1")
@@ -104,7 +103,7 @@ function DineIn({ SetClicked }) {
     if(getTableAvailability.length>0){
       return getTableAvailability.filter((data)=>{
         return data.TableStatus === type
-      }).length
+      }).length 
     }
   }
   const filterHandlerForArea = (area) => {
@@ -119,10 +118,14 @@ function DineIn({ SetClicked }) {
       }
     }
     if(allTableAvailability.length>0){
-      const newAvailabilityData = allTableAvailability.filter((data)=>{
-        return data.DineInArea===area
-      })
-      setGetTableAvailability(newAvailabilityData)
+      if(area!=="all"){
+        const newAvailabilityData = allTableAvailability.filter((data)=>{
+          return data.DineInArea===area
+        })
+        setGetTableAvailability(newAvailabilityData)
+      }else{
+        setGetTableAvailability(allTableAvailability)
+      }
     }
   };
 
@@ -132,7 +135,7 @@ function DineIn({ SetClicked }) {
   };
   const svgFilter = (seat, shape, id) => {
     if (getTableAvailability.length > 0) {
-      var checkAvailbility = getTableAvailability.filter((data) => {
+      var checkAvailbility = getTableAvailability.filter(data => {
         if (data.DineInSettingsID === id) {
           return data;
         }
