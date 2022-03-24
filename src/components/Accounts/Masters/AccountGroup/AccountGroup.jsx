@@ -7,7 +7,14 @@ function AccountGroup({ fetchALLAccountGroupList, accoutGroupList }) {
   const [addNewBtn, setAddNewBtn] = useState(false);
   const [mainTableView, setMainTableView] = useState(true);
   const [editTableSelectedID, setEditTableSelctedID] = useState(0);
+  const base_url = process.env.REACT_APP_BASE_URL;
+  const getAccountGroupData = () => {
+    console.log(base_url);
+  }
 
+  useEffect(()=>{
+    getAccountGroupData();
+  },[])
   return (
     <>
       <div className="AccountGroup">
@@ -109,18 +116,6 @@ function AccountGroup({ fetchALLAccountGroupList, accoutGroupList }) {
                     </tr>
                   </thead>
                   <tbody>
-                    <tr
-                      style={{ cursor: "pointer" }}
-                      onClick={() => {
-                        setAddNewBtn(true);
-                        setMainTableView(false);
-                      }}
-                    >
-                      <td>12</td>
-                      <td>154</td>
-                      <td>grpAbb</td>
-                      <td colspan="5">AccountGroupName</td>
-                    </tr>
                     <tr
                       style={{ cursor: "pointer" }}
                       onClick={() => {
