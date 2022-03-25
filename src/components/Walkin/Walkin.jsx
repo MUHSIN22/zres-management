@@ -86,6 +86,8 @@ function Walkin({ dataToSendToWlkinPage }) {
   const [food, setFood] = useState([])
   const [item, setItem] = useState('all')
   const [beverage, setBeverage] = useState([])
+  const [itembymenu,setItembymenu] = useState([])
+  const [menubyid,setMenubyid] = useState('')
   // useEffect(() => {
   //   const timeout = setTimeout(() => {
   //     const current = new Date().toLocaleString();
@@ -253,11 +255,18 @@ function Walkin({ dataToSendToWlkinPage }) {
       })
     const menu = await res.json()
     setAllmenu(menu)
-    console.log(menu)
   }
 
   useEffect(() => {
     getallMenu()
+    walkinServices.getItembyMenu()
+    .then(data => {
+      setItembymenu(data)
+    })
+    .catch(err => {
+      console.log(err);
+    }); 
+    console.log(menubyid)
   }, [])
 
   return (
@@ -725,7 +734,7 @@ function Walkin({ dataToSendToWlkinPage }) {
                 <div className="left__section__headdr">
                   <div
                     className="menuCategory"
-                    onClick={() => setMainCategoryPic("")}
+                    onClick={() => {setMainCategoryPic("")}}
                   >
                     <svg
                       id="house_black_24dp"
@@ -803,11 +812,11 @@ function Walkin({ dataToSendToWlkinPage }) {
 
               <div className="product__list__wrapper">
                 <>
-                  {item === 'all' &&
+                  { mainCategoryPic === "" &&
                     allmenu.map((mainCat, index) => (
                       <div
                         className="single__product"
-                        onClick={() => setMainCategoryPic(mainCat.MenuGroupName)} 
+                        onClick={() => { setMainCategoryPic(mainCat.MenuGroupName);setMenubyid(mainCat.MenuGroupId);setItem('')}} 
                       >
                         {" "}
                         {switchOn && (
@@ -828,7 +837,7 @@ function Walkin({ dataToSendToWlkinPage }) {
                     food.map((foods) => (
                       <div
                         className="single__product"
-                        onClick={() => setMainCategoryPic(foods.MenuGroupName)}
+                        onClick={() => {setMainCategoryPic(foods.MenuGroupName);setMenubyid(foods.MenuGroupId);setItem('')}}
                       >
                         {" "}
                         {switchOn && (
@@ -850,7 +859,7 @@ function Walkin({ dataToSendToWlkinPage }) {
                     beverage.map((beverages) => (
                       <div
                         className="single__product"
-                        onClick={() => setMainCategoryPic(beverages.MenuGroupName)}
+                        onClick={() => {setMainCategoryPic(beverages.MenuGroupName);setMenubyid(beverages.MenuGroupId);setItem('')}}
                       >
                         {" "}
                         {switchOn && (
@@ -868,22 +877,15 @@ function Walkin({ dataToSendToWlkinPage }) {
                   }
                   {/* subCategory Section */}
 
-                  {mainCategoryPic !== "" &&
-                    refData
-                      .filter((items) => {
-                        if (items.headCategory !== mainCategoryPic) {
-                          return items;
-                        }
-                      })
+                  {(mainCategoryPic !== "") &&
+                    itembymenu
+                      .filter(items=> items.MenuGroupID === menubyid )
 
-                      .map((subcat) =>
-                        subcat.categoryChilds.map((categ) => (
+                      .map((categ) => (
                           <div
                             className="single__product"
                             onClick={() =>
-                              subcat.categoryChilds.find(
-                                (cat) => cat.includes === "adons"
-                              )
+                              categ.IsAddOn === true
                                 ? setItemDetailsClick(true)
                                 : HandleAddToCart(categ)
                             }
@@ -897,10 +899,11 @@ function Walkin({ dataToSendToWlkinPage }) {
                               </>
                             )}
 
-                            <h6>{categ.name}</h6>
+                            <h6>{categ.ItemName}</h6>
                           </div>
                         ))
-                      )}
+                      
+                    }
                 </>
               </div>
             </div>
