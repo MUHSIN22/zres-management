@@ -3,7 +3,7 @@ import "./walkin.scss";
 import AddIcon from "@mui/icons-material/Add";
 import Checkbox from "@mui/material/Checkbox";
 import CancelIcon from "@mui/icons-material/Cancel";
-
+import { walkinServices } from "../../Services/WalkinServices";
 import Switch from "@mui/material/Switch";
 import Tooltip from "@mui/material/Tooltip";
 import BurgerOptionSection from "./Choose Options for food/BurgerOptionSection";
@@ -81,8 +81,11 @@ function Walkin({ dataToSendToWlkinPage }) {
   const [addNotes, setAddNotes] = useState(false);
   const [notes, SetNotes] = useState([]);
   const [loyalityPopup, setLoyalityPopup] = useState(false);
-  const [allmenu,setAllmenu] = useState([])
-  const [searchCustomer,setSearchCustomer] = useState([])
+  const [allmenu, setAllmenu] = useState([])
+  const [searchCustomer, setSearchCustomer] = useState([])
+  const [food, setFood] = useState([])
+  const [item, setItem] = useState('all')
+  const [beverage, setBeverage] = useState([])
   // useEffect(() => {
   //   const timeout = setTimeout(() => {
   //     const current = new Date().toLocaleString();
@@ -183,22 +186,12 @@ function Walkin({ dataToSendToWlkinPage }) {
   );
 
   const [splitCheck, setSplitCheck] = useState(false);
-  const [addCustomer, setAddCustomer] = useState(false);
   const [walikinView, setWalkinView] = useState(true);
 
-  const handleAddCustomer = () => {
-    setWalkinView(false);
-    setAddCustomer(true);
-  };
 
-  const handleCloseCusetomerAdd = () => {
-    setWalkinView(true);
-    setAddCustomer(false);
-  };
-
-  const searchCustmer = async ()=>{
-    const res = await fetch('https://zres.clubsoft.co.in/api/v1/Customer?CMPid=1',{
-      method:'GET'
+  const searchCustmer = async () => {
+    const res = await fetch('https://zres.clubsoft.co.in/api/v1/Customer?CMPid=1', {
+      method: 'GET'
     })
     const customers = await res.json()
     setSearchCustomer(customers)
@@ -253,28 +246,24 @@ function Walkin({ dataToSendToWlkinPage }) {
       setChangeQtyPopup(false);
     }
   };
-    const getallMenu = async ()=>{
-      const res = await fetch('https://zres.clubsoft.co.in/api/v1/WalkIn/GetAllMenuGroup?CMPid=1',
+  const getallMenu = async () => {
+    const res = await fetch('https://zres.clubsoft.co.in/WalkIn/GetAllMenuGroup?CMPid=1',
       {
-        method:'GET'
+        method: 'GET'
       })
-      const menu = await res.json()
-      setAllmenu(menu)
-      console.log(menu)
-    }
+    const menu = await res.json()
+    setAllmenu(menu)
+    console.log(menu)
+  }
 
-    useEffect(() => {
-      getallMenu()
-    }, [])
+  useEffect(() => {
+    getallMenu()
+  }, [])
 
   return (
     <>
-      {/* add customer views */}
-      {addCustomer && (
-        <div className="add__customer__page">
-          <AddCustomer handleCloseCusetomerAdd={handleCloseCusetomerAdd} />
-        </div>
-      )}
+
+
 
       {/* payment sucessfull popup */}
 
@@ -326,9 +315,17 @@ function Walkin({ dataToSendToWlkinPage }) {
 
           <div className="walkin__headder__nav">
             <ProfileHeadder />
-            <div className="bottom__nav__section">
+            <div className="bottom__nav__section" >
               <div className="left__bottom__nav__section">
-                <div className="buttons btnOrange">
+                <div className="buttons btnOrange" onClick={() => {
+                  walkinServices.getFood()
+                    .then(data => {
+                      setFood(data)
+                    })
+                    .catch(err => {
+                      console.log(err);
+                    }); setItem('food')
+                }}>
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
                     width="19.607"
@@ -397,7 +394,16 @@ function Walkin({ dataToSendToWlkinPage }) {
 
                   <h5>Food</h5>
                 </div>
-                <div className="buttons btnBlue">
+                <div className="buttons btnBlue" onClick={() => {
+                  walkinServices.getBeverage()
+                    .then(data => {
+                      setBeverage(data)
+                    })
+                    .catch(err => {
+                      console.log(err);
+                    }); setItem('beverage')
+
+                }}>
                   <img
                     src="https://www.freepnglogos.com/uploads/drinks-png/drinks-and-cocktails-14.png"
                     alt=""
@@ -405,39 +411,8 @@ function Walkin({ dataToSendToWlkinPage }) {
                   <h5>Beverage</h5>
                 </div>
 
-                <div className="buttons btnGreen" onClick={handleAddCustomer}>
-                  <h5>Add Customer</h5>
-                </div>
               </div>
               <div className="right__bottom__nav__section">
-                <div
-                  className="buttons"
-                  onClick={() => setLoyalityPopup(true)}
-                  style={{ backgroundColor: "#dfa75c" }}
-                >
-                  <h5>Loyality</h5>
-                </div>
-                <div className="buttons btnOrange addNotess">
-                  {addNotes && <AddNotes SetNotes={SetNotes} notes={notes} />}
-
-                  <svg
-                    onClick={() => setAddNotes(!addNotes)}
-                    xmlns="http://www.w3.org/2000/svg"
-                    width="22.444"
-                    height="22.444"
-                    viewBox="0 0 22.444 22.444"
-                  >
-                    <path
-                      id="Path_24"
-                      data-name="Path 24"
-                      d="M18.8,9.28,10.084.562A1.925,1.925,0,0,0,8.718,0H1.937A1.943,1.943,0,0,0,0,1.937V8.718a1.933,1.933,0,0,0,.572,1.376L9.29,18.812a1.925,1.925,0,0,0,1.366.562,1.894,1.894,0,0,0,1.366-.572L18.8,12.022a1.894,1.894,0,0,0,.572-1.366A1.957,1.957,0,0,0,18.8,9.28Zm-8.147,8.166L1.937,8.718V1.937H8.718v-.01l8.718,8.718Z"
-                      transform="matrix(0.174, 0.985, -0.985, 0.174, 19.08, 0)"
-                      fill="#fff"
-                    />
-                  </svg>
-
-                  <h5 onClick={() => setAddNotes(!addNotes)}>Add Notes</h5>
-                </div>
                 <div className="buttons btnBlue">
                   <AddIcon />
                   <h5>Discounts</h5>
@@ -700,10 +675,13 @@ function Walkin({ dataToSendToWlkinPage }) {
               </div>
 
               <div className="bottom__walkin__left__mid__Section">
+
                 <h3>Sub Total :{subTotal}</h3>
                 <h3>Tax : 5000</h3>
                 <h2>Total : 15000.00</h2>
+
               </div>
+
             </div>
             {/* <div className="walkin__mid__mid__section">
               <div className="top__mid__mid__section">
@@ -825,11 +803,11 @@ function Walkin({ dataToSendToWlkinPage }) {
 
               <div className="product__list__wrapper">
                 <>
-                  {mainCategoryPic === "" &&
+                  {item === 'all' &&
                     allmenu.map((mainCat, index) => (
                       <div
                         className="single__product"
-                        onClick={() => setMainCategoryPic(mainCat.MenuGroupName)}
+                        onClick={() => setMainCategoryPic(mainCat.MenuGroupName)} 
                       >
                         {" "}
                         {switchOn && (
@@ -839,11 +817,55 @@ function Walkin({ dataToSendToWlkinPage }) {
                           />
                         )}
                         {
-   <h6>{mainCat.MenuGroupName}</h6>
+                          <h6>{mainCat.MenuGroupName}</h6>
                         }
-                     
+
                       </div>
                     ))}
+
+                  {
+                    item === 'food' && 
+                    food.map((foods) => (
+                      <div
+                        className="single__product"
+                        onClick={() => setMainCategoryPic(foods.MenuGroupName)}
+                      >
+                        {" "}
+                        {switchOn && (
+                          <img
+                            src="https://pngimg.com/uploads/burger_sandwich/burger_sandwich_PNG4114.png"
+                            alt=""
+                          />
+                        )}
+                        {
+                          <h6>{foods.MenuGroupName}</h6>
+                        }
+
+                      </div>
+                    ))
+                  }
+
+                  {
+                    item === 'beverage' &&
+                    beverage.map((beverages) => (
+                      <div
+                        className="single__product"
+                        onClick={() => setMainCategoryPic(beverages.MenuGroupName)}
+                      >
+                        {" "}
+                        {switchOn && (
+                          <img
+                            src="https://pngimg.com/uploads/burger_sandwich/burger_sandwich_PNG4114.png"
+                            alt=""
+                          />
+                        )}
+                        {
+                          <h6>{beverages.MenuGroupName}</h6>
+                        }
+
+                      </div>
+                    ))
+                  }
                   {/* subCategory Section */}
 
                   {mainCategoryPic !== "" &&
