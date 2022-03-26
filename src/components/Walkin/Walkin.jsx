@@ -333,7 +333,8 @@ function Walkin({ dataToSendToWlkinPage }) {
                     })
                     .catch(err => {
                       console.log(err);
-                    }); setItem('food')
+                    }); setItem('food');setMainCategoryPic('Foods');
+
                 }}>
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
@@ -410,7 +411,7 @@ function Walkin({ dataToSendToWlkinPage }) {
                     })
                     .catch(err => {
                       console.log(err);
-                    }); setItem('beverage')
+                    }); setItem('beverage');setMainCategoryPic('Beverages');
 
                 }}>
                   <img
@@ -833,7 +834,7 @@ function Walkin({ dataToSendToWlkinPage }) {
                     ))}
 
                   {
-                    item === 'food' && 
+                    (item === 'food' && mainCategoryPic=== 'Foods') && 
                     food.map((foods) => (
                       <div
                         className="single__product"
@@ -855,7 +856,7 @@ function Walkin({ dataToSendToWlkinPage }) {
                   }
 
                   {
-                    item === 'beverage' &&
+                    (item === 'beverage' && mainCategoryPic === 'Beverages') &&
                     beverage.map((beverages) => (
                       <div
                         className="single__product"
@@ -877,10 +878,10 @@ function Walkin({ dataToSendToWlkinPage }) {
                   }
                   {/* subCategory Section */}
 
-                  {(mainCategoryPic !== "") &&
+                  {(mainCategoryPic !== "Beverages" && mainCategoryPic !== "Foods") &&
                     itembymenu
                       .filter(items=> items.MenuGroupID === menubyid )
-
+                       
                       .map((categ) => (
                           <div
                             className="single__product"
