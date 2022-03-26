@@ -20,6 +20,14 @@ import AccountTransaction from "../Accounts/Transactions/AccountTransaction";
 import ChartOfAccountMain from "../Accounts/Chart Of Account/ChartOfAccountMain";
 import AccountHead from "../Accounts/Masters/AccountHead/AccountHead";
 import AccountGroup from "../Accounts/Masters/AccountGroup/AccountGroup";
+import Journals from "../Accounts/Transactions/Journals/Journals";
+import DebitNote from "../Accounts/Transactions/Debit note/DebitNote";
+import Contra from "../Accounts/Transactions/Contra/Contra";
+import SupplyerPayment from "../Accounts/Transactions/Supplyer payment/SupplyerPayment";
+import CashRecipt from "../Accounts/Transactions/Cash Recept/CashRecipt";
+import CashPayment from "../Accounts/Transactions/Cash Payment/CashPayment";
+import OpeningBalance from "../Accounts/Transactions/Opening Balance/OpeningBalance";
+import CreditNote from "../Accounts/Transactions/CreditNote/CreditNote";
 
 function MainPage() {
   const navigate = useNavigate();
@@ -421,7 +429,16 @@ function MainPage() {
                 <Route path="group" element={<AccountGroup/>}/>
               </Route>
               <Route path="reports" element={<ReportsAccount />}/>
-              <Route path="transactions" element={ <AccountTransaction /> }/>
+              <Route path="transactions" element={ <AccountTransaction /> }>
+                <Route path="journals" element={<Journals/>}/>
+                <Route path="debit-note" element={<DebitNote/>}/>
+                <Route path="contra" element={<Contra/>}/>
+                <Route path="supplier-payment" element={<SupplyerPayment/>}/>
+                <Route path="cash-receipt" element={<CashRecipt/>}/>
+                <Route path="cash-payment" element={<CashPayment/>}/>
+                <Route path="opening-balance" element={<OpeningBalance/>}/>
+                <Route path="credit-note" element={<CreditNote/>}/>
+              </Route>
               <Route path="chart-of-accounts" element={<ChartOfAccountMain />}/>
             </Route>
           </Routes>

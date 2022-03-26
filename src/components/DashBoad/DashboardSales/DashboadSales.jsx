@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { Fragment, useEffect, useState } from "react";
 import "./dashboadSales.scss";
 
 import LineChartSection from "./charts/LineChart";
@@ -11,10 +11,41 @@ import DoughNutChart from "./charts/doughNutChart";
 import { faFolder } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import ModalFolderOption from "../Modal/ModalFolderOption";
+import { dashboardServices } from "../../../Services/DashboardServices";
 
 function DashboadSales() {
   const [hourlyBreakdown, setHourlyBreakdown] = useState(false);
   const [open, setOpen] = useState(false);
+  const [topGrossingItems, setTopGrossingItems] = useState([])
+  const [topSellingItems, setTopSellingItems] = useState([])
+  const [chartOfSales, setChartOfSales] = useState([
+    { name: "Sales", value: 0 },
+    { name: "Purchase", value: 0 },
+    { name: "Gross Profit", value: 0 },
+  ])
+
+  useEffect(() => {
+    dashboardServices.getChartOfSales()
+      .then(res => {
+        res.forEach((item) => {
+          setChartOfSales([
+            { name: "Sales", value: chartOfSales[0].value + item.Sale },
+            { name: "Purchase", value: chartOfSales[1].value + item.Purchase },
+            { name: "Gross Profit", value: chartOfSales[2].value + item.GrossPorfit },
+          ])
+        })
+      })
+
+    // Get top Grossing Items
+    dashboardServices.getTopGrossingItems()
+      .then(res => setTopGrossingItems(res))
+      .catch(err => console.log(err))
+
+    // Get top Selling items
+    dashboardServices.getTopSellingItems()
+      .then(data => setTopSellingItems(data))
+      .catch(err => console.log(err))
+  }, [])
 
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
@@ -352,10 +383,10 @@ function DashboadSales() {
         <h4 style={{ marginBottom: "10px" }}>Chart of Sales</h4>
 
         <div className="" style={{ width: "100%", height: "100%" }}>
-          <DoughNutChart />
+          <DoughNutChart chartOfSales={chartOfSales} />
         </div>
       </div>
-      
+
       <div className="gridBox grid__item__1 order-by-location">
         <div className="top__icon__section">
           <FontAwesomeIcon
@@ -382,21 +413,25 @@ function DashboadSales() {
 
         <h4>Top Selling Item</h4>
 
-        <h2>Cheese Burger</h2>
-        <h4>100.00 Sold</h4>
+        {
+          topSellingItems[0]&&
+          <Fragment>
+            <h2>{topSellingItems[0].ItemName}</h2>
+            <h4>{topSellingItems[0].NoOfSales} Sold</h4>
+          </Fragment>
+        }
         <hr />
         <ol>
-          <li>
-            <div className="inner__li">
-              <h5>Coffee</h5> <h5>500 sold</h5>{" "}
-            </div>
-          </li>
-          <li>
-            {" "}
-            <div className="inner__li">
-              <h5>Coffee</h5> <h5>500 sold</h5>{" "}
-            </div>
-          </li>
+          {
+            topSellingItems.map((item, index) => (
+              <li>
+                <div className="inner__li">
+                  <h5>{item.ItemName}</h5> <h5>{item.NoOfSales} sold</h5>{" "}
+                </div>
+              </li>
+            ))
+          }
+
         </ol>
       </div>
 
@@ -448,7 +483,7 @@ function DashboadSales() {
         </div>
       </div>
 
-      
+
       <div
         className="mid__chid__section top__mid__section hourly-breakdown-card"
         onClick={() => setHourlyBreakdown(true)}
@@ -466,7 +501,7 @@ function DashboadSales() {
         </div>
       </div>
 
-      
+
       <div className="mid__chid__section mid__mid__section cancelled-orders">
         <div className="top__icon__section">
           <FontAwesomeIcon
@@ -482,8 +517,8 @@ function DashboadSales() {
           <h5>OMR 0.000</h5>
         </div>
       </div>
-      
-      
+
+
       <div className="mid__chid__section bottom__mid__section total-orders">
         <div className="top__icon__section">
           <FontAwesomeIcon
@@ -509,21 +544,24 @@ function DashboadSales() {
           />
         </div>
         <h4>Top Grossing Items</h4>
-        <h2>Cheese Burger</h2>
-        <h4>100.00 Sold</h4>
+        {
+          topGrossingItems[0] &&
+          <>
+            <h2>{topGrossingItems[0].ItemName}</h2>
+            <h4>{topGrossingItems[0].NoOfSales} Sold</h4>
+          </>
+        }
         <hr />
         <ol>
-          <li>
-            <div className="inner__li">
-              <h5>Coffee</h5> <h5>500 sold</h5>{" "}
-            </div>
-          </li>
-          <li>
-            {" "}
-            <div className="inner__li">
-              <h5>Coffee</h5> <h5>500 sold</h5>{" "}
-            </div>
-          </li>
+          {
+            topGrossingItems.map((item, index) => (
+              <li key={index}>
+                <div className="inner__li">
+                  <h5>{item.ItemName}</h5> <h5>{item.NoOfSales} sold</h5>{" "}
+                </div>
+              </li>
+            ))
+          }
         </ol>
       </div>
     </div>

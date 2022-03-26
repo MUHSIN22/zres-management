@@ -1,5 +1,6 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { useState } from "react";
+import { accountServices } from "../../../../Services/AccountsServices";
 
 import "./SupplyerPayment.scss";
 import SupplyerPaymentAdd from "./supplyerPaymentAdd/SupplyerPaymentAdd";
@@ -53,11 +54,37 @@ const Data = [
 function SupplyerPayment() {
   const [addNewBtn, setAddNewBtn] = useState(false);
   const [mainTableView, setMainTableView] = useState(true);
-
+  const [supplierPayment,setSupplierPayment] = useState([])
+  const [suppliers,setSuppliers] = useState([]);
+  const [supplier,setSupplier] = useState(null)
   const [fromDate, setFromDate] = useState("");
   const [toDate, setToDate] = useState("");
 
   const [clickedTr, SetClickedTr] = useState("");
+
+  const handleSupplierSearch = () => {
+    console.log(fromDate,toDate,supplier);
+    if(fromDate && toDate && supplier){
+      accountServices.getSupplierByFilter(fromDate,toDate,supplier)
+      .then(data => {setSupplierPayment(data);console.log(data);})
+      .catch(err => console.log(err))
+    }
+  }
+
+
+  useEffect(() => {
+    accountServices.getTransactionSupplierPayments()
+    .then(data => {
+      console.log(data);
+      setSupplierPayment(data)
+    }).catch(err => console.log(err))
+    
+    accountServices.getSuppliers()
+    .then( data => {
+      setSuppliers(data);
+    }).catch(err => console.log(err))
+
+  },[])
 
   return (
     <>
@@ -166,14 +193,18 @@ function SupplyerPayment() {
 
               <div className="input__Section">
                 <h5>Supplier</h5>
-                <select name="" id="">
-                  <option value=""></option>
-                  <option value=""></option>
+                <select name="" id="" onChange={(e) => setSupplier(e.target.value)}>
+                  <option value="null">Supplier</option>
+                  {
+                    suppliers.map(item => (
+                      <option value={item.Value}>{item.Text}</option>
+                    ))
+                  }
                 </select>
               </div>
 
               <div className="search__Section">
-                <button>Search</button>
+                <button onClick={handleSupplierSearch}>Search</button>
               </div>
             </div>
             <div className="table__sections">
@@ -188,27 +219,27 @@ function SupplyerPayment() {
                     <th colspan="3">Supplier</th>
                     <th>Perticulars</th>
                     <th>Bank Charge</th>
-                    <th>Amound</th>
+                    <th>Amount</th>
                   </tr>
                 </thead>
                 <tbody>
-                  {Data.map((datas) => (
+                  {supplierPayment[0]?supplierPayment.map((item) => (
                     <tr
-                      keys={datas.id}
-                      className={clickedTr === datas.SINO && "selectedTr "}
-                      onClick={() => SetClickedTr(datas.SINO)}
+                      keys={item.sid}
+                      className={clickedTr === item.sid && "selectedTr "}
+                      onClick={() => SetClickedTr(item.sid)}
                     >
-                      <td>{datas.SINO}</td>
-                      <td>{datas.ArrNo}</td>
-                      <td>{datas.ArrDate}</td>
-                      <td>{datas.InvNo}</td>
-                      <td colspan="3">{datas.Supplier}</td>
-                      <td>Invoice payment</td>
+                      <td>{item.sid}</td>
+                      <td>{item.ArrNo}</td>
+                      <td>{new Date(item.entryDate).toLocaleDateString()}</td>
+                      <td>{item.refno}</td>
+                      <td colspan="3">{item.Supplier}</td>
+                      <td>{item.Particulars}</td>
 
-                      <td>{datas.Amound}</td>
-                      <td>2500</td>
+                      <td>{item.BankCharge}</td>
+                      <td>{item.AmountPaid}</td>
                     </tr>
-                  ))}
+                  )):"No data found"}
                 </tbody>
               </table>
             </div>

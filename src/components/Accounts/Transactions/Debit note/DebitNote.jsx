@@ -1,5 +1,6 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { useState } from "react";
+import { accountServices } from "../../../../Services/AccountsServices";
 import AddNewDebitNote from "./addNewDebitNote/AddNewDebitNote";
 import "./debitNote.scss";
 
@@ -52,11 +53,25 @@ const Data = [
 function DebitNote() {
   const [addNewBtn, setAddNewBtn] = useState(false);
   const [mainTableView, setMainTableView] = useState(true);
-
-  const [fromDate, setFromDate] = useState("");
-  const [toDate, setToDate] = useState("");
+  const [debitNote,setDebitNote] = useState([])
+  const [fromDate, setFromDate] = useState(null);
+  const [toDate, setToDate] = useState(null);
 
   const [clickedTr, SetClickedTr] = useState("");
+
+  const handleFilteredData = () => {
+    if(fromDate && toDate){
+      accountServices.getFilteredDebitNote(fromDate,toDate)
+      .then(data => setDebitNote(data))
+      .catch(err => console.log(err))
+    }
+  }
+
+  useEffect(() => {
+    accountServices.getAllDebitNote()
+    .then(data => setDebitNote(data))
+    .catch(err => console.log(err))
+  },[])
 
   return (
     <>
@@ -164,7 +179,7 @@ function DebitNote() {
               </div>
 
               <div className="search__Section">
-                <button>Search</button>
+                <button onClick={handleFilteredData}>Search</button>
               </div>
             </div>
             <div className="table__sections">
@@ -182,22 +197,22 @@ function DebitNote() {
                   </tr>
                 </thead>
                 <tbody>
-                  {Data.map((datas) => (
+                  {debitNote[0]? debitNote.map((item) => (
                     <tr
-                      keys={datas.id}
-                      className={clickedTr === datas.SINO && "selectedTr "}
-                      onClick={() => SetClickedTr(datas.SINO)}
+                      keys={item.DnID}
+                      className={clickedTr === item.DnID && "selectedTr "}
+                      onClick={() => SetClickedTr(item.DnID)}
                     >
-                      <td>{datas.SINO}</td>
-                      <td>{datas.ArrNo}</td>
-                      <td>{datas.ArrDate}</td>
-                      <td>{datas.InvNo}</td>
-                      <td>{datas.InvDate}</td>
-                      <td colspan="3">{datas.Supplier}</td>
-                      <td>{datas.Amound}</td>
-                      <td>{datas.UserName}</td>
+                      <td>{item.DnID}</td>
+                      <td>No</td>
+                      <td>{new Date(item.EntryDate).toLocaleDateString()}</td>
+                      <td>No</td>
+                      <td>No</td>
+                      <td colspan="3">Need name instead of ID</td>
+                      <td>{item.Amount}</td>
+                      <td>Need name instead of user ID</td>
                     </tr>
-                  ))}
+                  )):"No data found"}
                 </tbody>
               </table>
             </div>

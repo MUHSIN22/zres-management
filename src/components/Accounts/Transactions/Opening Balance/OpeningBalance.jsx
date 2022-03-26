@@ -1,7 +1,8 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { useState } from "react";
 import SearchIcon from "@mui/icons-material/Search";
 import "./OpeningBalance.scss";
+import { accountServices } from "../../../../Services/AccountsServices";
 
 const Date = [
   {
@@ -47,8 +48,13 @@ const Date = [
 
 function OpeningBalance() {
   const [clickedTr, SetClickedTr] = useState("");
+  const [openingBalance,setOpeningBalance] = useState([]);
 
-  const [sendingtoPrint, setSendingToPrint] = useState(false);
+  useEffect(()=>{
+    accountServices.getOpeningBalance()
+    .then(data => setOpeningBalance(data))
+    .catch(err => console.log(err))
+  },[])
 
   return (
     <div className="OpeningBalance">
@@ -250,15 +256,15 @@ function OpeningBalance() {
                 <th>Credit</th>
               </tr>
             </thead>
-            <tbody>
-              {Date.map((datas) => (
+            <tbody className="table-body">
+              {openingBalance.map((item,index) => (
                 <tr
-                  keys={datas.id}
-                  className={clickedTr === datas.SINO && "selectedTr "}
-                  onClick={() => SetClickedTr(datas.SINO)}
+                  keys={index}
+                  className={clickedTr === item.OBid && "selectedTr "}
+                  onClick={() => SetClickedTr(item.OBid)}
                 >
-                  <td>{datas.SINO}</td>
-                  <td>15</td>
+                  <td>{item.OBid}</td>
+                  <td>{item.OBid}</td>
                   <td>Metro super market</td>
                   <td></td>
                   <td>5000</td>
