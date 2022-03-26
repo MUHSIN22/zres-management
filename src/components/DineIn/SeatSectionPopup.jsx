@@ -5,26 +5,28 @@ import DineDummyData from "./DummyData";
 function SeatSectionPopup({
   selectedAvialbilityTabel,
   setSelectedAvialibilityTable,
+  dataToDisplay
 }) {
-  const [dataToDisplay, setDataToDisaplay] = useState([]);
+  const [filterdData, setFilterdData] = useState()
   useEffect(() => {
-    const filterdData = DineDummyData.filter(
-      (x) => x.tableInfo === selectedAvialbilityTabel
-    );
-    setDataToDisaplay(filterdData);
-  }, [selectedAvialbilityTabel]);
+    const newData = dataToDisplay.filter((data)=>{
+      return data.TableStatus === selectedAvialbilityTabel
+    })
+    setFilterdData(newData)
+  }, [selectedAvialbilityTabel])
+  
 
   return (
     <div className="seatSectionPopup">
       <div className="seatSectionPopup__headder">
-        {selectedAvialbilityTabel === "avilable__btn" && (
+        {selectedAvialbilityTabel === "Available" && (
           <h3>Avialable Seat</h3>
         )}
-        {selectedAvialbilityTabel === "occupied__btn" && <h3>Occupied Seat</h3>}
-        {selectedAvialbilityTabel === "doneSoon__btn" && (
+        {selectedAvialbilityTabel === "Occupied" && <h3>Occupied Seat</h3>}
+        {selectedAvialbilityTabel === "DoneSoon" && (
           <h3>Done Soon Seat</h3>
         )}
-        {selectedAvialbilityTabel === "reservation__btn" && (
+        {selectedAvialbilityTabel === "Reservation" && (
           <h3>Reserved Seat</h3>
         )}
         <div
@@ -35,10 +37,10 @@ function SeatSectionPopup({
         </div>
       </div>
       <div className="avialble__table__section">
-        {dataToDisplay?.map((dta) => (
+        {filterdData && filterdData.map((data) => (
           <div className="tabless__details">
-            <h4>Table {dta.tableNo}</h4>
-            <h4>{dta.tableType}</h4>
+            <h4>Table {data.DineInSettingsID}</h4>
+            <h4>{data.NoOfSeat} Seater</h4>
           </div>
         ))}
       </div>
