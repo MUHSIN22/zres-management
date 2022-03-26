@@ -27,13 +27,11 @@ function DashboadSales() {
   useEffect(() => {
     dashboardServices.getChartOfSales()
       .then(res => {
-        res.forEach((item) => {
-          setChartOfSales([
-            { name: "Sales", value: chartOfSales[0].value + item.Sale },
-            { name: "Purchase", value: chartOfSales[1].value + item.Purchase },
-            { name: "Gross Profit", value: chartOfSales[2].value + item.GrossPorfit },
-          ])
-        })
+        setChartOfSales([
+          { name: "Sales", value: res[0].Sale },
+          { name: "Purchase", value:  res[0].Purchase },
+          { name: "Gross Profit", value:  res[0].GrossProfit },
+        ])
       })
 
     // Get top Grossing Items
