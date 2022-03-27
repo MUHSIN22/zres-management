@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import "./burgerOptionSection.scss";
 import Checkbox from "@mui/material/Checkbox";
-function BurgerOptionSection({ setItemDetailsClick }) {
+function BurgerOptionSection({ setItemDetailsClick,productName }) {
   const Addons = [
     {
       id: 1,
@@ -91,73 +91,21 @@ function BurgerOptionSection({ setItemDetailsClick }) {
   const [selectedOption, setSelectedOption] = useState("AddOns");
   const [checkedStat, setCheckedState] = useState(Addons);
 
-  // const handleCheckboxClick = (e, data, prod) => {
-  //   const AddonAlreadySelectOrNOT = checkedStat.find(
-  //     (items) => items.id === prod.id
-  //   );
-
-  //   // const clickedAdons = checkedStat.map((d) =>
-  //   //   d.items.find((items) => items.id === data.id)
-  //   // );
-
-  //   const clickedAdons = () => {
-  //     if (AddonAlreadySelectOrNOT) {
-  //       AddonAlreadySelectOrNOT.items.map((dta) => dta.id === data.id);
-  //     }
-  //   };
-  //   console.log("the selec id", clickedAdons());
-  //   console.log("selected data", data, "other data", prod);
-  //   if (AddonAlreadySelectOrNOT) {
-  //     setCheckedState(
-  //       checkedStat.map((item) =>
-  //         item.id === data.id
-  //           ? { ...AddonAlreadySelectOrNOT, checked: e.target.checked }
-  //           : item
-  //       )
-  //     );
-  //   } else {
-  //     setCheckedState([...checkedStat, { ...data, checked: e.target.checked }]);
-  //   }
-  // };
-
   const handleCheckboxClick = (e, data, prod) => {
     // this looks for the main hedder addons
     const AddonMain = checkedStat.find((items) => items.id === prod.id);
     // this will look for subaddons
     const Selectedsub = AddonMain.items.find((items) => items.id === data.id);
 
-    // setCheckedState([
-    //   checkedStat.find((x) =>
-    //     x.id === prod.id
-    //       ? x.items.map((y) => {
-    //           return { ...y, checked: "true" };
-    //         })
-    //       : x
-    //   ),
-    // ]);
   };
 
   console.log("origin", checkedStat);
 
-  // setOptions(
-  //   options.map((x, index) => {
-  //     if (index !== optionIndex) return x;
-  //     x.subOptions = x.subOptions.map((subItem, subIndex) => {
-  //       console.log(subItem);
-  //       if (subIndex !== subOptionIndex) return subItem;
-  //       return {
-  //         ...subItem,
-  //         text: text,
-  //       };
-  //     });
-
-  //     return x;
-  //   })
-  // );
+ 
   return (
     <div className="BurgerOptionSection">
       <div className="top__hedding__section">
-        <h4>Chicken Burger</h4>
+        <h4>{productName}</h4>
       </div>
 
       <hr />
@@ -280,8 +228,8 @@ function BurgerOptionSection({ setItemDetailsClick }) {
           </text>
         </svg>
         <div className="button__sections__addmodifer__cancel">
-          <button onClick={() => setItemDetailsClick(false)}> Cancel </button>
-          <button style={{ backgroundColor: "#040153", color: "#fff" }}>
+          <button onClick={() => setItemDetailsClick(false) }> Cancel </button>
+          <button style={{ backgroundColor: "#040153", color: "#fff" }} >
             Add Modifier
           </button>
         </div>
