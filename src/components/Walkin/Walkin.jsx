@@ -103,6 +103,7 @@ function Walkin({ dataToSendToWlkinPage }) {
 
   const HandleSwitchONorOFF = (e, value) => {
     if (value === true) {
+      
       setSwichOn(true);
     } else if (value === false) {
       setSwichOn(false);
@@ -113,15 +114,18 @@ function Walkin({ dataToSendToWlkinPage }) {
 
   // add items to cart
 
-  const HandleAddToCart = (Product) => {
-    const ProductExsit = CartItem.find((items) => items.id === Product.id);
-    if (ProductExsit) {
+   const HandleAddToCart = (Product) => {
+     console.log(Product)
+    const ProductExist = CartItem.find((items) => items.MenuID === Product.MenuID);
+    if (ProductExist) {
       setCartItem(
-        CartItem.map((item) =>
-          item.id === Product.id
-            ? { ...ProductExsit, quantity: ProductExsit.quantity + 1 }
+        CartItem.map((item) =>     
+          item.MenuID === Product.MenuID
+            ? { ...ProductExist, quantity: ProductExist.quantity + 1 }
             : item
-        )
+           
+            
+      )
       );
     } else {
       setCartItem([...CartItem, { ...Product, quantity: 1 }]);
@@ -132,19 +136,19 @@ function Walkin({ dataToSendToWlkinPage }) {
 
   const handleDeleteFromCart = (product) => {
     console.log("function trigered");
-    setCartItem(CartItem.filter((item) => item.id !== product.id));
+    setCartItem(CartItem.filter((item) => item.MenuID !== product.MenuID));
   };
 
   // Decrease Quantity
   const handleDecreaseQuantity = (data) => {
-    const ProductExsit = CartItem.find((items) => items.id === data.id);
+    const ProductExsit = CartItem.find((items) => items.MenuID === data.MenuID);
 
     if (ProductExsit.quantity === 1) {
-      setCartItem(CartItem.filter((item) => item.id !== data.id));
+      setCartItem(CartItem.filter((item) => item.MenuID !== data.MenuID));
     } else {
       setCartItem(
         CartItem.map((d) =>
-          d.id === data.id
+          d.id === data.MenuID
             ? { ...ProductExsit, quantity: ProductExsit.quantity - 1 }
             : d
         )
@@ -231,8 +235,9 @@ function Walkin({ dataToSendToWlkinPage }) {
 
   const [newQty, setNewQty] = useState();
   const [errorQtymsg, setErrorQtyMsg] = useState("");
+  
   const handleQuantityUpdate = (data) => {
-    const ProductExsit = CartItem.find((items) => items.id === data.id);
+    const ProductExsit = CartItem.find((items) => items.MenuID === data.MenuID);
 
     if (newQty === "") {
       setErrorQtyMsg("Quantity cant be empty");
@@ -241,7 +246,7 @@ function Walkin({ dataToSendToWlkinPage }) {
     } else if (ProductExsit) {
       setCartItem(
         CartItem.map((d) =>
-          d.id === data.id ? { ...ProductExsit, quantity: newQty } : d
+          d.MenuID === data.MenuID ? { ...ProductExsit, quantity: + newQty } : d
         )
       );
       setNewQty("");
@@ -281,10 +286,11 @@ function Walkin({ dataToSendToWlkinPage }) {
       {itemDetailsClick && (
         <div className="Burger__option__selection__section__container">
           <div className="burger__option__sections__inner__div">
-            <BurgerOptionSection setItemDetailsClick={setItemDetailsClick} />
+            <BurgerOptionSection setItemDetailsClick={setItemDetailsClick} productName={mainCategoryPic}  />
           </div>
         </div>
       )}
+
 
       {/* main body starts here */}
 
@@ -521,8 +527,8 @@ function Walkin({ dataToSendToWlkinPage }) {
                               <td> </td>
 
                               <div className="item_in__cart__details">
-                                <h5>{items.name}</h5>
-                                {changeQtyPopup && qtyIdSelected === items.id && (
+                                <h5>{items.ItemName}</h5>
+                                {changeQtyPopup && qtyIdSelected === items.MenuID && (
                                   <div className="QuantityPopups">
                                     <div className="top__qty__section">
                                       <div className="closeBtn">
@@ -658,7 +664,7 @@ function Walkin({ dataToSendToWlkinPage }) {
                                   style={{ minWidth: "20px" }}
                                   onClick={() => {
                                     handleEditQtyPopup();
-                                    setSelectedIdSelected(items.id);
+                                    setSelectedIdSelected(items.MenuID);
                                   }}
                                 >
                                   {items.quantity}
@@ -668,7 +674,7 @@ function Walkin({ dataToSendToWlkinPage }) {
                             <td style={{ textAlign: "right" }}>
                               {items.price}
                             </td>
-                            <td>{items.quantity * items.price}</td>
+                            <td>{items.quantity * items.ItemPrice}</td>
                             <td>
                               <CancelIcon
                                 onClick={() => handleDeleteFromCart(items)}
@@ -885,11 +891,12 @@ function Walkin({ dataToSendToWlkinPage }) {
                       .map((categ) => (
                           <div
                             className="single__product"
-                            onClick={() =>
-                              categ.IsAddOn === true
+                            onClick={() =>{
+                              setMainCategoryPic(categ.ItemName) 
+                              categ.IsAddOn === false
                                 ? setItemDetailsClick(true)
                                 : HandleAddToCart(categ)
-                            }
+                            }}
                           >
                             {switchOn && (
                               <>
