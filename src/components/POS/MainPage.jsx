@@ -28,6 +28,14 @@ import CashRecipt from "../Accounts/Transactions/Cash Recept/CashRecipt";
 import CashPayment from "../Accounts/Transactions/Cash Payment/CashPayment";
 import OpeningBalance from "../Accounts/Transactions/Opening Balance/OpeningBalance";
 import CreditNote from "../Accounts/Transactions/CreditNote/CreditNote";
+import Ledger from "../Accounts/reports/Ledger/Ledger";
+import CashBook from "../Accounts/reports/Cash Book/CashBook";
+import BankBook from "../Accounts/reports/Bank book/BankBook";
+import CashFlow from "../Accounts/reports/Cash Flow/CashFlow";
+import BalanceSheet from "../Accounts/reports/Balance Sheet/BalanceSheet";
+import ProfitAndLose from "../Accounts/reports/Profit and Lose/ProfitAndLose";
+import DayBookDetails from "../Accounts/reports/DayBook Details/DayBookDetails";
+import TrialBalance from "../Accounts/reports/Trial Balance/TrialBalance";
 
 function MainPage() {
   const navigate = useNavigate();
@@ -368,13 +376,13 @@ function MainPage() {
                 <Link to="/mainPage/accounts/master/head">Master</Link>
               </li>
               <li>
-                <Link to="/mainPage/accounts/transactions">Transactions</Link>
+                <Link to="/mainPage/accounts/transactions/journals">Transactions</Link>
               </li>
               <li>
                 <Link to="/mainPage/accounts/chart-of-accounts">Chart of Account</Link>
               </li>
               <li>
-                <Link to="/mainPage/accounts/reports">Reports</Link>
+                <Link to="/mainPage/accounts/reports/ledger">Reports</Link>
               </li>
             </ul>
           </div>
@@ -428,7 +436,16 @@ function MainPage() {
                 <Route path="head" element={<AccountHead/>}/>
                 <Route path="group" element={<AccountGroup/>}/>
               </Route>
-              <Route path="reports" element={<ReportsAccount />}/>
+              <Route path="reports" element={<ReportsAccount />}>
+                <Route path="ledger" element={<Ledger/>}/>
+                <Route path="cash-book" element={<CashBook/>}/>
+                <Route path="bank-book" element={<BankBook/>}/>
+                <Route path="cash-flow" element={<CashFlow/>}/>
+                <Route path="balance-sheet" element={<BalanceSheet/>}/>
+                <Route path="profit-and-loss-account" element={<ProfitAndLose/>}/>
+                <Route path="daybook" element={<DayBookDetails/>}/>
+                <Route path="trial-balance" element={<TrialBalance/>}/>
+              </Route>
               <Route path="transactions" element={ <AccountTransaction /> }>
                 <Route path="journals" element={<Journals/>}/>
                 <Route path="debit-note" element={<DebitNote/>}/>

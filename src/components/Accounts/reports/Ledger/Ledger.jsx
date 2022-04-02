@@ -4,6 +4,8 @@ import DatePicker from "react-datepicker";
 import moment from "moment";
 import "react-datepicker/dist/react-datepicker.css";
 import AccountLedger from "./AccoutLedger/AccountLedger";
+import jsPDF from "jspdf";
+import { accountServices } from "../../../../Services/AccountsServices";
 
 const valuesToSend = {
   fromDate: "",
@@ -18,6 +20,7 @@ function Ledger({ searchLedgerEntry }) {
   const [toDate, settoDate] = useState(null);
   const [dropdownList, setDropdownList] = useState([]);
   const [accountNameId, setAccountNameId] = useState();
+  const [ledger, setLedger] = useState([])
   const handleFromDate = (date) => {
     setFromDate(date);
     settoDate(null);
@@ -27,7 +30,7 @@ function Ledger({ searchLedgerEntry }) {
     settoDate(date);
   };
 
-  const handleFilterByData = () => {};
+  const handleFilterByData = () => { };
 
   // useEffect(() => {
   //   handleFilteration();
@@ -72,11 +75,21 @@ function Ledger({ searchLedgerEntry }) {
 
   // const[rowClick,setRowClick]
   console.log("the account id is ", accountNameId);
+  useEffect(() => {
+    accountServices.getAllLedger()
+      .then(data => setLedger(data))
+      .catch(err => console.log(err))
 
+    accountServices.getLedgerDropDown()
+    .then(data => setDropdownList(data))
+    .catch(err => console.log(err))
+  }, [])
+  const downloadPdf = () => {
+
+  }
   return (
     <>
       {clickedTr && <AccountLedger SetClickedTr={SetClickedTr} />}
-
       {!clickedTr && (
         <div className="Ledger">
           <div className="top__Section">
@@ -187,7 +200,7 @@ function Ledger({ searchLedgerEntry }) {
                   </svg>
                   <h4>Export Excel</h4>
                 </div>
-                <div className="icon__section">
+                <div className="icon__section" onClick={downloadPdf}>
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
                     width="11.916"
@@ -329,7 +342,7 @@ function Ledger({ searchLedgerEntry }) {
           </div>
           <div className="bottom__Section">
             <div className="table__sections">
-              <table className="table">
+              <table className="table" id="to-print">
                 <thead>
                   <tr>
                     <th>SINo</th>
@@ -341,14 +354,18 @@ function Ledger({ searchLedgerEntry }) {
                   </tr>
                 </thead>
                 <tbody>
-                  <tr>
-                    <td>1</td>
-                    <td>EntryDate</td>
-                    <td colspan={"2"}>AccountName</td>
+                  {
+                    ledger.map((item, index) => (
+                      <tr key={index}>
+                        <td>{item.EntryNo}</td>
+                        <td>{new Date(item.EntryDate).toLocaleDateString}</td>
+                        <td colspan={"2"}>{item.AccountName}</td>
 
-                    <td>Debit</td>
-                    <td>Credit</td>
-                  </tr>
+                        <td>{item.Debit}</td>
+                        <td>{item.Credit}</td>
+                      </tr>
+                    ))
+                  }
                 </tbody>
                 {/* <tfoot>
                   <tr>

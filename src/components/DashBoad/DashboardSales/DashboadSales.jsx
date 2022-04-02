@@ -18,6 +18,9 @@ function DashboadSales() {
   const [open, setOpen] = useState(false);
   const [topGrossingItems, setTopGrossingItems] = useState([])
   const [topSellingItems, setTopSellingItems] = useState([])
+  const [totalOrders,setTotalOrders] = useState(0);
+  const [cancelledOrders,setCancelledOrders] = useState(0)
+  const [totalSales,setTotalSales] = useState(0)
   const [chartOfSales, setChartOfSales] = useState([
     { name: "Sales", value: 0 },
     { name: "Purchase", value: 0 },
@@ -25,24 +28,39 @@ function DashboadSales() {
   ])
 
   useEffect(() => {
-    dashboardServices.getChartOfSales()
-      .then(res => {
-        setChartOfSales([
-          { name: "Sales", value: res[0].Sale },
-          { name: "Purchase", value:  res[0].Purchase },
-          { name: "Gross Profit", value:  res[0].GrossProfit },
-        ])
-      })
+    // dashboardServices.getChartOfSales()
+    //   .then(res => {
+    //     setChartOfSales([
+    //       { name: "Sales", value: res[0].Sale },
+    //       { name: "Purchase", value:  res[0].Purchase },
+    //       { name: "Gross Profit", value:  res[0].GrossProfit },
+    //     ])
+    //   })
 
-    // Get top Grossing Items
-    dashboardServices.getTopGrossingItems()
-      .then(res => setTopGrossingItems(res))
-      .catch(err => console.log(err))
+    // // Get top Grossing Items
+    // dashboardServices.getTopGrossingItems()
+    //   .then(res => setTopGrossingItems(res))
+    //   .catch(err => console.log(err))
 
-    // Get top Selling items
-    dashboardServices.getTopSellingItems()
-      .then(data => setTopSellingItems(data))
-      .catch(err => console.log(err))
+    // // Get top Selling items
+    // dashboardServices.getTopSellingItems()
+    //   .then(data => setTopSellingItems(data))
+    //   .catch(err => console.log(err))
+    dashboardServices.getSalesData()
+    .then(res => {
+      console.log(res);
+      setChartOfSales([
+        { name: "Sales", value: res.ChartOfSales[0].Sale },
+        { name: "Purchase", value: res.ChartOfSales[0].Purchase },
+        { name: "Gross Profit", value: res.ChartOfSales[0].GrossProfit },
+      ])
+
+      setTopSellingItems(res.TopSellingItems)
+      setTopGrossingItems(res.TopGrossingItems)
+      setTotalOrders(res.TotalOrder[0].TotalOrders)
+      setCancelledOrders(res.CancelledOreders[0].NoOfCancelled)
+      setTotalSales(res.TotalSales[0].TotalSale)
+    })
   }, [])
 
   const handleOpen = () => setOpen(true);
@@ -349,7 +367,7 @@ function DashboadSales() {
           OMR
         </h4>
 
-        <h2>10000</h2>
+        <h2>{totalSales}</h2>
       </div>
 
       <div className="modification-and-reprint">
@@ -511,7 +529,7 @@ function DashboadSales() {
 
         <h4>Cancelled Orders</h4>
         <div className="inner__section__contaier">
-          <h2>0</h2>
+          <h2>{cancelledOrders}</h2>
           <h5>OMR 0.000</h5>
         </div>
       </div>
@@ -528,7 +546,7 @@ function DashboadSales() {
 
         <h4>Total Orders</h4>
         <div className="inner__section__contaier">
-          <h2>50</h2>
+          <h2>{totalOrders}</h2>
           <h5>OMR 50.000</h5>
         </div>
       </div>

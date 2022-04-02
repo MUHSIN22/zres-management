@@ -112,5 +112,103 @@ export const accountServices = {
             .then(data => resolve(data))
             .catch(err => reject(err))
         })
+    },
+
+    // Transactions 
+    // >>Journel
+    getJournelDropDown : () => {
+        return new Promise((resolve,reject) => {
+            fetch(`${BASE_URL}/Journal/GetAccountHeadName?CMPid=1`)
+            .then(res => res.json())
+            .then(data => resolve(data))
+            .catch(err => reject(err))
+        })
+    },
+    getJournelData : () => {
+      return new Promise((resolve,reject) => {
+          fetch(`${BASE_URL}/Journal?CMPid=1`)
+          .then(res => res.json())
+          .then(data => resolve(data))
+          .catch(err => reject(err))
+      })  
+    },
+    getFilteredJournel : (from,to) => {
+        return new Promise((resolve,reject) => {
+            fetch(`${BASE_URL}/Journal/search?fromdate=${from}&todate=${to}&CMPid=1`)
+            .then(res => res.json())
+            .then(data => resolve(data))
+            .catch(err => reject(err))
+        })
+    },
+
+    //-----------------Reports
+    //>>>>>>>>>>>>>>>>Ledger
+    getAllLedger : () => {
+        return new Promise((resolve,reject) => {
+            fetch(`${BASE_URL}/Ledger?CMPid=1`)
+            .then(res => res.json())
+            .then(data => resolve(data))
+            .catch(err => reject(err))
+        })
+    },
+    getLedgerDropDown: () => {
+        return new Promise((resolve,reject) => {
+            fetch(`${BASE_URL}/Ledger/GetAccountHeadName?CMPid=1`)
+            .then(res => res.json())
+            .then(data => resolve(data))
+            .catch(err => reject(err))
+        })
+    },
+    // >>Cash flow
+    getAllCashFlow : () => {
+        return new Promise((resolve,reject) => {
+            fetch(`${BASE_URL}/CashFlow/GetAllCashFlow?CMPid=1`)
+            .then(res => res.json())
+            .then(data => resolve(data))
+            .catch(err => reject(err))
+        })
+    },
+    getFilteredCashFlow : (from,to) => {
+        return new Promise((resolve,reject) => {
+            fetch(`${BASE_URL}/CashFlow/search?fromdate=${from}&todate=${to}&CMPid=1`)
+            .then(res => res.json())
+            .then(data => resolve(data))
+            .catch(err => reject(err))
+        })
+    },
+    // >>>>>>>>>>>>>>>>>cash book
+    getAllCashBook : () => {
+        return new Promise((resolve,reject) => {
+            fetch(`${BASE_URL}/CashBook/GetAllCashBook?CMPid=1`)
+            .then(res => res.json())
+            .then(data => resolve(data))
+            .catch(err => reject(err))
+        })
+    },
+    getFilteredCashBook : (from,to) => {
+        return new Promise((resolve,reject) => {
+            fetch(`${BASE_URL}/CashBook/search?fromdate=${from}&todate=${to}&CMPid=1`)
+            .then(res => res.json())
+            .then(data => resolve(data))
+            .catch(err => reject(err))
+        })
+    },
+
+    // >>>>>>>>>>>>>>>>>>>Bank book
+    getAllBankBook : () => {
+        return new Promise((resolve,reject) => {
+            fetch(`${BASE_URL}/BankBook/GetAllBankBook?CMPid=1`)
+            .then(res => res.json())
+            .then(data => resolve(data))
+            .catch(err => reject(err))
+        })
+    },
+    getFilteredBankBook : (from,to) => {
+        return new Promise((resolve,reject) => {
+            fetch(`${BASE_URL}/BankBook/search?fromdate=${from}&todate=${to}&CMPid=1`)
+            .then(res => res.json())
+            .then(data => resolve(data))
+            .catch(err => reject(err))
+        })
     }
 }

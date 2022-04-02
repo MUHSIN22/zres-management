@@ -1,8 +1,9 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
+import { accountServices } from "../../../../Services/AccountsServices";
 import "./cashflow.scss";
 import Prints from "./Prints/Prints";
 
-const Date = [
+const Data = [
   {
     SINO: "1",
 
@@ -47,7 +48,23 @@ const Date = [
 function CashFlow() {
   const [clickedTr, SetClickedTr] = useState("");
   const [printActive, closePrintActive] = useState(false);
+  const [cashFlow, setCashFlow] = useState([])
+  const [fromDate,setFromDate] = useState(null)
+  const [toDate,setToDate] = useState(null)
+ 
+  const handleFilter = () => {
+    if(fromDate && toDate){
+      accountServices.getFilteredCashFlow(fromDate,toDate)
+      .then(data => setCashFlow(data))
+      .catch(err => console.log(err))
+    }
+  }
 
+  useEffect(() => {
+    accountServices.getAllCashFlow()
+      .then(data => setCashFlow(data))
+      .catch(err => console.log(err))
+  }, [])
   // selecting row
 
   // const[rowClick,setRowClick]
@@ -222,17 +239,17 @@ function CashFlow() {
               <div className="input__Section">
                 <div className="input__field">
                   <h4>From Date</h4>
-                  <input type="date" name="" id="" />
+                  <input type="date" onChange={e => setFromDate(e.target.value)} name="" id="" />
                 </div>
 
                 <div className="input__field">
                   <h4>To Date</h4>
-                  <input type="date" name="" id="" />
+                  <input type="date" onChange={e => setToDate(e.target.value)} name="" id="" />
                 </div>
               </div>
 
               <div className="bottom__input__section">
-                <div className="serch__box">
+                <div className="serch__box" onClick={handleFilter}>
                   <h4>Search</h4>
                 </div>
               </div>
@@ -250,33 +267,16 @@ function CashFlow() {
                   </tr>
                 </thead>
                 <tbody>
-                  <tr>
-                    <td>05/12/2021</td>
-                    <td>1500000</td>
-                    <td>1580000</td>
-                    <td>0</td>
-                  </tr>
-
-                  <tr>
-                    <td>05/12/2021</td>
-                    <td>1500000</td>
-                    <td>1580000</td>
-                    <td>0</td>
-                  </tr>
-
-                  <tr>
-                    <td>05/12/2021</td>
-                    <td>1500000</td>
-                    <td>1580000</td>
-                    <td>0</td>
-                  </tr>
-
-                  <tr>
-                    <td>05/12/2021</td>
-                    <td>1500000</td>
-                    <td>1580000</td>
-                    <td>0</td>
-                  </tr>
+                  {
+                    cashFlow[0] ? cashFlow.map((item,index) => (
+                      <tr key={index}>
+                        <td>{new Date(item.BDate).toLocaleDateString()}</td>
+                        <td>{item.OpeningBalance}</td>
+                        <td>{item.ClosingBalance}</td>
+                        <td>{item.BDifference}</td>
+                      </tr>
+                    )): "No data found"
+                  }
                 </tbody>
               </table>
             </div>

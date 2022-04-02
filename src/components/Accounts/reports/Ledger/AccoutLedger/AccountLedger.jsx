@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import "./accountLedger.scss";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import Prints from "../Prints/Prints";
+import jsPDF from "jspdf";
 const Date = [
   {
     SINO: "1",
@@ -45,8 +46,15 @@ const Date = [
 ];
 
 function AccountLedger({ SetClickedTr }) {
-  const [printActive, closePrintActive] = useState(false);
-
+  const [printActive, closePrintActive] = useState(false)
+  
+  const downloadPdf = () => {
+    console.log("hre");
+    // let doc = new jsPDF()
+    // doc.autoTable({html:"#to-print"})
+    // doc.save("abc.pdf")
+  }
+ 
   return (
     <>
       {printActive && <Prints closePrintActive={closePrintActive} />}
@@ -168,7 +176,7 @@ function AccountLedger({ SetClickedTr }) {
               </svg>
               <h4>Export Excel</h4>
             </div>
-            <div className="icon__section">
+            <div className="icon__section" onClick={downloadPdf}>
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 width="11.916"
@@ -220,7 +228,7 @@ function AccountLedger({ SetClickedTr }) {
 
         <div className="table__bottom__section">
           <div className="table__sections">
-            <table className="table">
+            <table className="table" id="to-print">
               <thead>
                 <tr>
                   <th>Date</th>
