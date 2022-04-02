@@ -454,7 +454,6 @@ function MainPage() {
               <Route path="menu-management" element={<MenuManagement />} />
               <Route path="receipe-management" element={<RecipeManagement />} />
               <Route path="reports" element={<ReportSection />} />
-             
             </Route>
 
             <Route path="/dinein" element={<DineIn />} />
