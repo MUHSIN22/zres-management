@@ -3,15 +3,14 @@ import "./sms.scss";
 import CancelIcon from "@mui/icons-material/Cancel";
 import Bulk from "./SmsSections/Bulk/Bulk";
 import Personalized from "./SmsSections/Personalized/Personalized";
+import { Link } from "react-router-dom";
 
-function Sms({ smsType }) {
-  const [smsCategory, setSmsCategory] = useState("personalised");
+function Sms() {
+
   const [SuccessResult, setSuccessResult] = useState(true);
   const [failResult, setFailResult] = useState(false);
 
-  useEffect(() => {
-    setSmsCategory(smsType);
-  }, [smsType]);
+  
 
   const handleExit = () => {
     setSuccessResult(false);
@@ -106,16 +105,13 @@ function Sms({ smsType }) {
       </div>
       <div className="sms_category">
         <div
-          className={
-            "option__box " + (smsCategory === "personalised" && "personalised ")
-          }
-          onClick={() => setSmsCategory("personalised")}
+          className=
+            "option__box personalised"  
         >
           <h5>Personalized Message</h5>
         </div>
         <div
-          className={"option__box " + (smsCategory === "bulk" && "bulk ")}
-          onClick={() => setSmsCategory("bulk")}
+          className="option__box bulk" 
         >
           <h5>Bulk Message</h5>
         </div>
@@ -185,8 +181,9 @@ function Sms({ smsType }) {
         </div>
         <div className="sms__body__right">
           <div className="messageSection__container">
-            {smsCategory === "personalised" && <Personalized />}
-            {smsCategory === "bulk" && <Bulk />}
+             <Personalized />
+             <Bulk />
+
           </div>
         </div>
       </div>
