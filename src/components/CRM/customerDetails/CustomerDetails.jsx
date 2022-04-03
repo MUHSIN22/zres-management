@@ -5,7 +5,7 @@ import dummyUserData from "./dummyUserData";
 import Pagination from "@mui/material/Pagination";
 import Stack from "@mui/material/Stack";
 import CircleIcon from "@mui/icons-material/Circle";
-
+import { crmServices } from "../../../Services/CrmServices";
 import LoadingScreen from "../../loadingScreen/LoadingScreen";
 
 function CustomerDetails({ fetchALLDataList, dataList }) {
@@ -14,17 +14,27 @@ function CustomerDetails({ fetchALLDataList, dataList }) {
   const [loading, setloading] = useState(false);
 
   console.log("THE OTIGINAL DATA IS", dataFromServer);
-
+  const [cdeatails,setCdeatails] = useState([])
   const pageNumber = [];
   const [currentPage, setCurrentPage] = useState(1);
   const [postPerPage, setPostPerPage] = useState(7);
   const indexOfLastPost = currentPage * postPerPage;
-  const indexOfFirstPost = indexOfLastPost - postPerPage;
-  const currentPost = dummyUserData.slice(indexOfFirstPost, indexOfLastPost);
 
-  for (let i = 1; i <= Math.ceil(dummyUserData.length / postPerPage); i++) {
+  const indexOfFirstPost = indexOfLastPost - postPerPage;
+  const currentPost = cdeatails.slice(indexOfFirstPost, indexOfLastPost);
+  
+
+  for (let i = 1; i <= Math.ceil(cdeatails.length / postPerPage); i++) {
     pageNumber.push(i);
   }
+  console.log(currentPost)
+useEffect(() => {
+ crmServices.getAllcustomer()
+ .then(data =>{
+   setCdeatails(data)
+ })
+}, [])
+
 
   return (
     <>
@@ -65,20 +75,23 @@ function CustomerDetails({ fetchALLDataList, dataList }) {
               </tr>
             </thead>
             <tbody>
-              {currentPost.map((data, index) => (
+              {currentPost && currentPost.map((data, index) => (
                 <tr key={index}>
-                  <td data-label="Customer Id"></td>
-                  <td data-label="Customer Name">name</td>
-                  <td data-label="Address">Kayattal house</td>
-                  <td data-label="Email Id">email</td>
-                  <td data-label="Phone">phone</td>
-                  <td data-label="Loyality Customer">yes</td>
+                  <td data-label="Customer Id">{data.CustomerID}</td>
+                  <td data-label="Customer Name">{data.CName}</td>
+                  <td data-label="Address">{data.Address}</td>
+                  <td data-label="Email Id">{data.Email}</td>
+                  <td data-label="Phone">{data.Phone}</td>
+                  <td data-label="Loyality Customer">{(data.IsLoyaltyCustomer === true)? 'Yes' : 'No'}</td>
+               
                   <td
                     data-label="Status"
-                    className="status__icons active inactive expired"
+                    className={`status__icons ${data.Status === 'Expired' && 'expired'} ${data.Status === 'Active' && 'active'} ${data.Status === 'InActive' && 'inactive'}`}
                   >
-                    <CircleIcon className="activeCustomer" />
-                    <h5>Expired</h5>
+                    
+                    <CircleIcon  />
+    
+                    <h5>{data.Status}</h5>
                   </td>
                 </tr>
               ))}

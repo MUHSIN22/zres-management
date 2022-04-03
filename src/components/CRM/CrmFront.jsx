@@ -64,9 +64,8 @@ function CrmFront({ setSmsCategory }) {
               <div className="data__onOverlayer">
                 <div
                   className="data_contaner"
-                  onClick={() => setSmsCategory("personalised")}
                 >
-                  <Link to="/sms">
+                  <Link to="/mainPage/crm/sms/personalised">
                     {" "}
                     <h4>Personalized Messages</h4>
                   </Link>
@@ -75,9 +74,9 @@ function CrmFront({ setSmsCategory }) {
                 </div>
                 <div
                   className="data_contaner"
-                  onClick={() => setSmsCategory("bulk")}
+                
                 >
-                  <Link to="/sms">
+                  <Link to="/mainPage/crm/sms/bulk">
                     {" "}
                     <h4> Bulk Messages</h4>
                   </Link>
@@ -110,7 +109,7 @@ function CrmFront({ setSmsCategory }) {
               </svg>
             </div>
             <div className="headderSections">
-              <Link to="/addCustomer">
+              <Link to="/mainPage/crm/addCustomer">
                 <h4>Add Cust</h4>
               </Link>
               <svg
@@ -131,7 +130,7 @@ function CrmFront({ setSmsCategory }) {
             </div>
 
             <div className="headderSections">
-              <Link to="/customerDetail">
+              <Link to="/mainPage/crm/customerDetail">
                 <h4>Show all Cust</h4>
               </Link>
 

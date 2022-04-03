@@ -86,8 +86,8 @@ function Walkin({ dataToSendToWlkinPage }) {
   const [food, setFood] = useState([])
   const [item, setItem] = useState('all')
   const [beverage, setBeverage] = useState([])
-  const [itembymenu,setItembymenu] = useState([])
-  const [menubyid,setMenubyid] = useState('')
+  const [itembymenu, setItembymenu] = useState([])
+  const [menubyid, setMenubyid] = useState('')
   // useEffect(() => {
   //   const timeout = setTimeout(() => {
   //     const current = new Date().toLocaleString();
@@ -103,7 +103,7 @@ function Walkin({ dataToSendToWlkinPage }) {
 
   const HandleSwitchONorOFF = (e, value) => {
     if (value === true) {
-      
+
       setSwichOn(true);
     } else if (value === false) {
       setSwichOn(false);
@@ -114,22 +114,24 @@ function Walkin({ dataToSendToWlkinPage }) {
 
   // add items to cart
 
-   const HandleAddToCart = (Product) => {
-     console.log(Product)
+  const HandleAddToCart = (Product) => {
+    console.log(Product)
     const ProductExist = CartItem.find((items) => items.MenuID === Product.MenuID);
     if (ProductExist) {
       setCartItem(
-        CartItem.map((item) =>     
+        CartItem.map((item) =>
           item.MenuID === Product.MenuID
             ? { ...ProductExist, quantity: ProductExist.quantity + 1 }
             : item
-           
-            
-      )
+
+
+        )
+
       );
     } else {
       setCartItem([...CartItem, { ...Product, quantity: 1 }]);
     }
+
   };
 
   // delete item from cart
@@ -187,7 +189,7 @@ function Walkin({ dataToSendToWlkinPage }) {
   // subtotal
 
   const subTotal = CartItem.reduce(
-    (price, item) => price + item.quantity * item.price,
+    (price, item) => price + item.quantity * item.ItemPrice,
     0
   );
 
@@ -196,7 +198,7 @@ function Walkin({ dataToSendToWlkinPage }) {
 
 
   const searchCustmer = async () => {
-    const res = await fetch('https://zres.clubsoft.co.in/api/v1/Customer?CMPid=1', {
+    const res = await fetch('https://zres.clubsoft.co.in/Customer?CMPid=1', {
       method: 'GET'
     })
     const customers = await res.json()
@@ -222,7 +224,7 @@ function Walkin({ dataToSendToWlkinPage }) {
   };
   const [selectedCusetomer, setSelectedCustomer] = useState({});
   const handleSelectedCustomer = (id) => {
-    const customerDetails = searchCustomer.find((data) => data.id === id);
+    const customerDetails = searchCustomer.find((data) => data.CustomerID === id);
     setSelectedCustomer(customerDetails);
     setFiltValue("");
   };
@@ -235,7 +237,7 @@ function Walkin({ dataToSendToWlkinPage }) {
 
   const [newQty, setNewQty] = useState();
   const [errorQtymsg, setErrorQtyMsg] = useState("");
-  
+
   const handleQuantityUpdate = (data) => {
     const ProductExsit = CartItem.find((items) => items.MenuID === data.MenuID);
 
@@ -254,24 +256,14 @@ function Walkin({ dataToSendToWlkinPage }) {
     }
   };
   const getallMenu = async () => {
-    const res = await fetch('https://zres.clubsoft.co.in/WalkIn/GetAllMenuGroup?CMPid=1',
-      {
-        method: 'GET'
-      })
+    const res = await fetch('https://zres.clubsoft.co.in/WalkIn/GetAllMenuGroup?CMPid=1')
     const menu = await res.json()
     setAllmenu(menu)
   }
 
   useEffect(() => {
     getallMenu()
-    walkinServices.getItembyMenu()
-    .then(data => {
-      setItembymenu(data)
-    })
-    .catch(err => {
-      console.log(err);
-    }); 
-    console.log(menubyid)
+
   }, [])
 
   return (
@@ -286,7 +278,7 @@ function Walkin({ dataToSendToWlkinPage }) {
       {itemDetailsClick && (
         <div className="Burger__option__selection__section__container">
           <div className="burger__option__sections__inner__div">
-            <BurgerOptionSection setItemDetailsClick={setItemDetailsClick} productName={mainCategoryPic}  />
+            <BurgerOptionSection setItemDetailsClick={setItemDetailsClick} productName={mainCategoryPic} />
           </div>
         </div>
       )}
@@ -339,7 +331,7 @@ function Walkin({ dataToSendToWlkinPage }) {
                     })
                     .catch(err => {
                       console.log(err);
-                    }); setItem('food');setMainCategoryPic('Foods');
+                    }); setItem('food'); setMainCategoryPic('Foods');
 
                 }}>
                   <svg
@@ -417,7 +409,7 @@ function Walkin({ dataToSendToWlkinPage }) {
                     })
                     .catch(err => {
                       console.log(err);
-                    }); setItem('beverage');setMainCategoryPic('Beverages');
+                    }); setItem('beverage'); setMainCategoryPic('Beverages');
 
                 }}>
                   <img
@@ -469,7 +461,7 @@ function Walkin({ dataToSendToWlkinPage }) {
                         <h4>Guest: {dataToSendToWlkinPage?.guest}</h4>
                       </>
                     )}
-                  <h4>Customer: {selectedCusetomer?.name} </h4>
+                  <h4>Customer: {selectedCusetomer?.CName} </h4>
                 </div>
               </div>
               <div className="customer__search__area">
@@ -545,6 +537,7 @@ function Walkin({ dataToSendToWlkinPage }) {
                                       <input
                                         type="number"
                                         placeholder="Type Quantity"
+
                                         value={newQty}
                                         onChange={(e) =>
                                           setNewQty(e.target.value)
@@ -741,7 +734,7 @@ function Walkin({ dataToSendToWlkinPage }) {
                 <div className="left__section__headdr">
                   <div
                     className="menuCategory"
-                    onClick={() => {setMainCategoryPic("")}}
+                    onClick={() => { setMainCategoryPic("") }}
                   >
                     <svg
                       id="house_black_24dp"
@@ -819,11 +812,17 @@ function Walkin({ dataToSendToWlkinPage }) {
 
               <div className="product__list__wrapper">
                 <>
-                  { mainCategoryPic === "" &&
+                  {mainCategoryPic === "" &&
                     allmenu.map((mainCat, index) => (
                       <div
                         className="single__product"
-                        onClick={() => { setMainCategoryPic(mainCat.MenuGroupName);setMenubyid(mainCat.MenuGroupId);setItem('')}} 
+                        onClick={() => {walkinServices.getItembyMenu()
+                          .then(data => {
+                            setItembymenu(data)
+                          })
+                          .catch(err => {
+                            console.log(err);
+                          }); setMainCategoryPic(mainCat.MenuGroupName); setMenubyid(mainCat.MenuGroupId); setItem('') }}
                       >
                         {" "}
                         {switchOn && (
@@ -840,11 +839,13 @@ function Walkin({ dataToSendToWlkinPage }) {
                     ))}
 
                   {
-                    (item === 'food' && mainCategoryPic=== 'Foods') && 
+                    (item === 'food' && mainCategoryPic === 'Foods') &&
                     food.map((foods) => (
                       <div
                         className="single__product"
-                        onClick={() => {setMainCategoryPic(foods.MenuGroupName);setMenubyid(foods.MenuGroupId);setItem('')}}
+                        onClick={() => {
+                           setMainCategoryPic(foods.MenuGroupName); setMenubyid(foods.MenuGroupId); setItem('')
+                        }}
                       >
                         {" "}
                         {switchOn && (
@@ -866,7 +867,7 @@ function Walkin({ dataToSendToWlkinPage }) {
                     beverage.map((beverages) => (
                       <div
                         className="single__product"
-                        onClick={() => {setMainCategoryPic(beverages.MenuGroupName);setMenubyid(beverages.MenuGroupId);setItem('')}}
+                        onClick={() => { setMainCategoryPic(beverages.MenuGroupName); setMenubyid(beverages.MenuGroupId); setItem('') }}
                       >
                         {" "}
                         {switchOn && (
@@ -884,34 +885,34 @@ function Walkin({ dataToSendToWlkinPage }) {
                   }
                   {/* subCategory Section */}
 
-                  {(mainCategoryPic !== "Beverages" && mainCategoryPic !== "Foods") &&
+                  {(mainCategoryPic !== "Beverages" && mainCategoryPic !== "Foods" && mainCategoryPic !== "") &&
                     itembymenu
-                      .filter(items=> items.MenuGroupID === menubyid )
-                       
-                      .map((categ) => (
-                          <div
-                            className="single__product"
-                            onClick={() =>{
-                              setMainCategoryPic(categ.ItemName) 
-                              categ.IsAddOn === false
-                                ? setItemDetailsClick(true)
-                                : HandleAddToCart(categ)
-                            }}
-                          >
-                            {switchOn && (
-                              <>
-                                <img
-                                  src="https://pngimg.com/uploads/burger_sandwich/burger_sandwich_PNG4114.png"
-                                  alt=""
-                                />
-                              </>
-                            )}
+                      .filter(items => items.MenuGroupID === menubyid)
 
-                            <h6>{categ.ItemName}</h6>
-                          </div>
-                        ))
-                      
-                    }
+                      .map((categ) => (
+                        <div
+                          className="single__product"
+                          onClick={() => {
+                            setMainCategoryPic(categ.ItemName)
+                            categ.IsAddOn === false
+                              ? setItemDetailsClick(true)
+                              : HandleAddToCart(categ)
+                          }}
+                        >
+                          {switchOn && (
+                            <>
+                              <img
+                                src="https://pngimg.com/uploads/burger_sandwich/burger_sandwich_PNG4114.png"
+                                alt=""
+                              />
+                            </>
+                          )}
+
+                          <h6>{categ.ItemName}</h6>
+                        </div>
+                      ))
+
+                  }
                 </>
               </div>
             </div>

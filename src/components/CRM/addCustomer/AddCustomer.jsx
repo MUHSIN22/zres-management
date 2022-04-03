@@ -4,23 +4,39 @@ import Checkbox from "@mui/material/Checkbox";
 import AddAddress from "./AddAddress/AddAddress";
 
 function AddCustomer({ handleCloseCusetomerAdd }) {
+  
+
+
   const [addressPic, setAddressPic] = useState("delevery");
-  const [customerData, setCustomerData] = useState([
+  const [loyality, setLoyality] = useState('off');
+  const [formData, updateFormData] = useState(
     {
-      Name: "Athul",
-      PhoneNumber: "9074967403",
-      AlternatePhone: "985585466",
-      email: "athulpkoffical@gmail.com",
-    },
-  ]);
+      Loyality:loyality,
+      name: "",
+      phoneNumber: "",
+      AlternatePhone:"",
+      Email: ""
+    }
+  );
+ 
+  const handleChange = (e) => {
+    setLoyality(e.target.checked);
+    updateFormData({
+      ...formData, [e.target.name]: e.target.value 
+    });
+  };
+
+ 
 
   return (
     <div className="AddCustomer">
       <div className="add__customer__wrapper">
+        <form action="">
         <div className="addCustomer__headder">
           <h1>Create New Customer</h1>
+
           <div className="headder__chekbox">
-            <Checkbox sx={{ "& .MuiSvgIcon-root": { fontSize: 28 } }} />
+            <input type="checkbox" name="Loyality" checked={loyality} onChange={handleChange}/>
             <h6>Loyality Customer</h6>
           </div>
         </div>
@@ -34,22 +50,23 @@ function AddCustomer({ handleCloseCusetomerAdd }) {
           <div className="generalInformation__body">
             <div className="generalInformation__body__fields">
               <h6>name</h6>
-              <input type="text" name="" id="" />
+              <input type="text" name="name" id="" value={formData.name} onChange={handleChange} />
             </div>
             <div className="generalInformation__body__fields">
               <h6>Phone Number</h6>
-              <input type="number" name="" id="" />
+              <input type="number" value={formData.phoneNumber} name="phoneNumber" id="" onChange={handleChange} />
             </div>
             <div className="generalInformation__body__fields">
               <h6>Alternate Phone</h6>
-              <input type="number" name="" id="" />
+              <input type="number" value={formData.AlternatePhone} name="AlternatePhone" id="" onChange={handleChange} />
             </div>
             <div className="generalInformation__body__fields">
               <h6>Email</h6>
-              <input type="email" name="" id="" />
+              <input type="email" name="Email" value={formData.Email} id="" onChange={handleChange} />
             </div>
+           
           </div>
-
+          
           <div className="generalInformation__footer">
             <div className="footer__delevery_and_pickup">
               <div
@@ -75,7 +92,7 @@ function AddCustomer({ handleCloseCusetomerAdd }) {
         {/* ADDRESS SECTION */}
 
         {addressPic === "delevery" && (
-          <AddAddress handleCloseCusetomerAdd={handleCloseCusetomerAdd} />
+          <AddAddress form={formData} handleCloseCusetomerAdd={handleCloseCusetomerAdd} />
         )}
 
         {/* PICUP SECTION */}
@@ -92,7 +109,10 @@ function AddCustomer({ handleCloseCusetomerAdd }) {
             </div>
           </div>
         )}
+        </form>
+    
       </div>
+      
     </div>
   );
 }

@@ -36,6 +36,16 @@ import BalanceSheet from "../Accounts/reports/Balance Sheet/BalanceSheet";
 import ProfitAndLose from "../Accounts/reports/Profit and Lose/ProfitAndLose";
 import DayBookDetails from "../Accounts/reports/DayBook Details/DayBookDetails";
 import TrialBalance from "../Accounts/reports/Trial Balance/TrialBalance";
+import AddCustomer from "../CRM/addCustomer/AddCustomer";
+import CustomerDetails from "../CRM/customerDetails/CustomerDetails";
+import { Sms } from "@material-ui/icons";
+import CrmFront from "../CRM/CrmFront";
+import PersonalisedMain from "../CRM/sms/SmsSections/Personalized/PersonalisedMain"
+import Master from '../CRM/../Inventory/Inventory_Master/Master'
+import TransactionMaster from '../CRM/../Inventory/Transaction Manager/TransactionMaster'
+import MenuManagement from "../Inventory/MenuManagement/MenuManagement";
+import RecipeManagement from "../Inventory/recipe management/RecipeManagement";
+import ReportSection from "../Inventory/ReportsSection/ReportSection";
 
 function MainPage() {
   const navigate = useNavigate();
@@ -131,10 +141,8 @@ function MainPage() {
                 />
               </g>
             </svg>
-
             <h5>Dashboard</h5>
           </div>
-
           <div
             className={
               "detail__section " + (clicked === "WalkIn" && "selected__Section")
@@ -316,13 +324,13 @@ function MainPage() {
 
           <div
             className={
-              "detail__section " +
+              "account-btn detail__section " +
               (clicked === "Inventory" && "selected__Section")
             }
             onClick={() => {
               SetClicked("Inventory");
               setInventoryClick(!InventoryClick);
-              navigate("/mainPage/inventory")
+
             }}
           >
             <svg
@@ -340,11 +348,28 @@ function MainPage() {
             </svg>
 
             <h5>Inventory</h5>
+            <ul className="accounts-list">
+              <li>
+                <Link to="/mainPage/inventory/masters">Master</Link>
+              </li>
+              <li>
+                <Link to="/mainPage/inventory/transactions">Transactions</Link>
+              </li>
+              <li>
+                <Link to="/mainPage/inventory/menu-management">Menu Management</Link>
+              </li>
+              <li>
+                <Link to="/mainPage/inventory/receipe-management">Reciepe Management</Link>
+              </li>
+              <li>
+                <Link to="/mainPage/inventory/reports">Reports</Link>
+              </li>
+            </ul>
           </div>
 
           <div
             className={
-              "account-btn "+
+              "account-btn " +
               "detail__section " +
               (clicked === "Accounts" && "selected__Section")
             }
@@ -427,14 +452,31 @@ function MainPage() {
               <Route path="bussiness-summary" element={<BussinessSummary />} />
             </Route>
             <Route path="/walkin" element={<Walkin />} />
-            <Route path="/crm" element={<Crm />} />
+
+            <Route path="/crm" element={<Crm />} >
+              <Route path="addCustomer" element={<AddCustomer />} />
+              <Route path="sms" element={<Sms />} >
+                <Route path="personalised" element={<PersonalisedMain />} />
+                <Route path="bulk" element={<Sms />} />
+              </Route>
+              <Route path="customerDetail" element={<CustomerDetails />} />
+              <Route path="" element={<CrmFront />} />
+            </Route>
+
             <Route path="/delivery-manager" element={<DeliveryManager />} />
-            <Route path="/inventory" element={<Inventory />} />
+            <Route path="/inventory" element={<Inventory />} >
+              <Route path="masters" element={<Master />} />
+              <Route path="transactions" element={<TransactionMaster />} />
+              <Route path="menu-management" element={<MenuManagement />} />
+              <Route path="receipe-management" element={<RecipeManagement />} />
+              <Route path="reports" element={<ReportSection />} />
+            </Route>
+
             <Route path="/dinein" element={<DineIn />} />
             <Route path="/accounts" element={<Accounts />}>
               <Route path="master" element={<AccountMaster />}>
-                <Route path="head" element={<AccountHead/>}/>
-                <Route path="group" element={<AccountGroup/>}/>
+                <Route path="head" element={<AccountHead />} />
+                <Route path="group" element={<AccountGroup />} />
               </Route>
               <Route path="reports" element={<ReportsAccount />}>
                 <Route path="ledger" element={<Ledger/>}/>
@@ -457,6 +499,9 @@ function MainPage() {
                 <Route path="credit-note" element={<CreditNote/>}/>
               </Route>
               <Route path="chart-of-accounts" element={<ChartOfAccountMain />}/>
+              <Route path="reports" element={<ReportsAccount />} />
+              <Route path="transactions" element={<AccountTransaction />} />
+              <Route path="chart-of-accounts" element={<ChartOfAccountMain />} />
             </Route>
           </Routes>
         </div>

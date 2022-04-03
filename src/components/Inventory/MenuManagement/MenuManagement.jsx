@@ -3,6 +3,7 @@ import "./menuManagement.scss";
 import MenuDetails from "./Menu details/MenuDetails";
 import AddProducts from "./Menu details/addProductsMenu/AddProducts";
 
+
 const masterCategiry = [
   {
     id: 0,
@@ -20,6 +21,7 @@ function MenuManagement() {
   );
 
   useEffect(() => {
+    
     setSelCategory(masterCategiry);
     setClickedSubCategory(masterCategiry[0].name);
   }, []);
@@ -38,7 +40,7 @@ function MenuManagement() {
               setClickedSubCategory(selCategory[0].name);
             }}
           >
-            <h5>{selCategory[0].name}</h5>
+            <h5>Menu</h5>
           </div>
 
           {selCategory
