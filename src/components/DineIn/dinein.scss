@@ -176,21 +176,21 @@
               fill: rgb(255, 255, 255);
               stroke: #040153;
 
-              &.avilableTable {
+              &.Available {
                 stroke: #ffffff !important;
                 fill: #009751 !important;
               }
-              &.occupiedTable {
+              &.Occupied {
                 stroke: #ffffff !important;
                 fill: #aaaaaa !important;
               }
 
-              &.DoneSoonTable {
+              &.DoneSoon {
                 stroke: #ffffff !important;
                 fill: #040153 !important;
               }
 
-              &.ReservationTable {
+              &.Reservation {
                 stroke: #ffffff !important;
                 fill: #e1870e !important;
               }

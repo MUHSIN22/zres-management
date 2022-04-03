@@ -1,30 +1,17 @@
-import React from "react";
+import axios from "axios";
+import React, { useEffect, useState } from "react";
 import "./runningOrder.scss";
 function RunningOrder() {
-  const data = [
-    {
-      tableNo: 1,
-      id: 1,
-      orderNo: "#4324",
-      status: "done Soon",
-      diningFor: "2hrs",
-    },
-    {
-      tableNo: 2,
-      id: 2,
-      orderNo: "#3324",
-      status: "Running Order",
-      diningFor: "1hrs",
-    },
-
-    {
-      tableNo: 3,
-      id: 3,
-      orderNo: "#1324",
-      status: "done Soon",
-      diningFor: "2hrs",
-    },
-  ];
+  const [data, setData] = useState()
+  useEffect(() => {
+    axios
+      .get("https://zres.clubsoft.co.in/DineIn/RunningOrders?CMPid=1")
+      .then((res) => {
+        setData(res.data);
+      });
+  }, [])
+  
+  
 
   return (
     <div className="RunningOrder">
@@ -46,29 +33,29 @@ function RunningOrder() {
             </tr>
           </thead>
           <tbody>
-            {data.map((d) => (
+            {data && data.map((data) => (
               <tr>
-                <td data-label="Order Number">{d.tableNo}</td>
+                <td data-label="Order Number">{data.TableNumber}</td>
                 <td data-label="Order Taken At">
-                  {d.orderNo} <h6>Burger</h6>
+                  {data.OrderNumber} <h6>Burger</h6>
                 </td>
-                <td data-label="Elapsed Time">OMR 15.00</td>
+                <td data-label="Elapsed Time">{data.Amount}</td>
                 <td data-label="Delivery Area">
                   {" "}
                   <a
                     href="#"
                     className={
                       "button " +
-                      ((d.status === "done Soon" && "doneSoon ") ||
-                        (d.status === "Running Order" && "Running__order"))
+                      ((data.Status === "done Soon" && "doneSoon ") ||
+                        (data.Status === "RunningOrder" && "Running__order"))
                     }
                   >
-                    {d.status}
+                    {data.Status}
                   </a>
                 </td>
                 <td data-label="Amount">About 2 Hrs</td>
                 <td data-label="" colSpan={"2"}>
-                  {d.status === "done Soon" && (
+                  {data.Status === "done Soon" && (
                     <>
                       <a href="#" className="button">
                         <svg
@@ -107,7 +94,7 @@ function RunningOrder() {
                     </>
                   )}
 
-                  {d.status === "Running Order" && (
+                  {data.Status === "RunningOrder" && (
                     <>
                       <a href="#" className="button prntBill">
                         <svg

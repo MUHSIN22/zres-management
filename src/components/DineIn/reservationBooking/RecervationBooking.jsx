@@ -1,7 +1,22 @@
-import React from "react";
+import React, { useState } from "react";
 import CloseIcon from "@mui/icons-material/Close";
 import "./recervationBooking.scss";
 function RecervationBooking({ setRecervation }) {
+  const [reservationBookingData, setReservationBookingData] = useState({
+    ReservationDate: "",
+    DineInSettingsID: 0,
+    CMPid: 0,
+    CustomerID: 0,
+    Reason: "",
+    FromTime: "",
+    ToTime: "",
+    PhoneNumber: "",
+  });
+  const getDate = () => {
+    let date = new Date();
+    let today = date.getDate();
+    return date.toLocaleString();
+  };
   return (
     <div className="RecervationBooking">
       <div className="reservation__nav">
@@ -17,13 +32,13 @@ function RecervationBooking({ setRecervation }) {
               <h5>Loyality Customer</h5>
             </div>
             <div className="date__section">
-              <h5>14 Dec 2021 12:10pm</h5>
+              <h5>{getDate()}</h5>
             </div>
           </div>
 
           <div className="bottom__reservatiom__section">
             <input type="text" placeholder="Name" />
-            <input type="text" placeholder="Phone" />
+            <input type="number" placeholder="Phone" />
             <select name="" id="" placeholder="Table Details">
               <option value="">Table Details</option>
             </select>
