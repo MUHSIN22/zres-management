@@ -1,328 +1,418 @@
 import { red } from "@material-ui/core/colors";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
+import FailSnackbars from "../../../basic components/failSnackBar";
+import SucessSnackbars from "../../../basic components/sucessSidePopup";
+import { accountServices } from "../../../../Services/AccountsServices";
+import DatePicker from "react-datepicker";
+import "react-datepicker/dist/react-datepicker.css";
 import "./cashPayment.scss";
 function CashPayment() {
-  const [edit, setEdit] = useState(false);
+  const dataJournal = {
+    JEntryDate: "",
+    DebitAccountId: "",
+    CreditAccountId: "",
+    JRefNo: "",
+    JCredit: 0,
+    JNarration: "",
+    JDebit: 0,
+    FinancialYearID: 1,
+    CMPid: 1,
+    UserID: 1,
+    DebitAccountName: null,
+    CreditAccountName: null,
+    DebitaccName: null,
+    CreditaccName: null,
+    AccountName: null,
+    ledgerName: null,
+  };
+  const editCreditRef = useRef(null);
+  const editDebitRef = useRef(null);
   const [newJournal, setNewJournal] = useState(false);
-  const [selectBoxValue, setSelectBoxValue] = useState(""); //account name
-  const [narration, setNarration] = useState("");
-  const [recipt, setRecipt] = useState(0);
-  const [payment, setPayment] = useState(0);
-  const [entryNo, setEntryNo] = useState();
-  const [refNo, setRefNo] = useState();
-  const [entryDate, setEntryDate] = useState();
-  const [narrationHeadder, setNarrationHeadder] = useState("");
-  const [savedJournal, setSavedJournal] = useState([]);
-  const [selectedLeftDataRef, setSelectedLeftDataRef] = useState();
+  const [dataJournalToSend, setDataJournalToSend] = useState(dataJournal);
+  const [startDate, setStartDate] = useState(null);
+  const [toDate, setToDate] = useState(null);
+  const [isEdit, setEdit] = useState(false);
+  const [dataFromServer, setDataFromServer] = useState([]);
+  const [debitCredit, setDebitCredit] = useState(0);
+  const [dropdownList, setDropdownList] = useState([]);
+  const [messageToPass, setMessageToPass] = useState("");
+  const [failSnackbar, setFailSnackBar] = useState(false);
+  const [sucessSnackbar, setSucessSnackBar] = useState(false);
+  const [snackBarOpen, setSnackbarOpen] = useState(true);
+  const [creditDropDown,setCreditDropDown] = useState([])
+  const [debitDropDown,setDebitDropDown] = useState([])
+  const [journels,setJournels] = useState([])
+  const [journelEditData,setJournelEditData] = useState([]);
+  const [newData,setNewData] = useState({
+    jCredit: 0,
+    jDebit: 0,
+    CreditAccountId: null,
+    DebitAccountId: null,
+    JEntryDate: null,
+    JNarration: '',
+    JRefNo: null
+  })
+
+  const handleDataInput = (e) => {
+    const value = e.target.value;
+    setNewData({...newData,[e.target.name]:value});
+  };
+
+  // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+
+  const handleFilterSearch = () => {
+    let from = new Date(startDate).toISOString();
+    let to = new Date(toDate).toISOString();
+    if(startDate && toDate){
+      accountServices.getFilteredPayment(new Date(startDate).toISOString(),new Date(toDate).toISOString())
+      .then(res => setJournels(res))
+      .catch(err => console.log(err))
+    }
+  }
 
   const handleNewJournal = () => {
     setNewJournal(true);
-    setEntryNo(1);
-    setRefNo(1);
-    setEntryDate("2021-12-20");
+    setDebitCredit(0);
+    setDataJournalToSend(dataJournal);
   };
 
-  const DatePicker = () => {
-    const dateoftoday = new Date();
-    const day = dateoftoday.getUTCDate();
-    const Month = dateoftoday.getMonth() + 1;
-    const Year = dateoftoday.getFullYear();
-    const DefaultRefNo = 1;
-    const DefaultEntryNo = 1;
+  const handleStartDate = (date) => {
+    setStartDate(date);
+  };
 
-    if (newJournal) {
-      setEntryDate(`${Year}-${Month}-${day}`);
+  const handleToDate = (date) => {
+    setToDate(date);
+  };
 
-      if (!savedJournal) {
-        setRefNo(DefaultRefNo);
-        setEntryNo(DefaultEntryNo);
-      } else {
-        setRefNo(savedJournal.length + 1);
-        setEntryNo(savedJournal.length + 1);
-      }
-    } else {
-      setEntryDate(``);
-    }
+  const handleSave = (e) =>{
+    e.preventDefault();
+    console.log(newData);
+  }
+  const handleUpdate = (event) => {
+    event.preventDefault();
+    console.log(newData);
+  }
+
+  const handleJournalSubmit = (e) => {
+    console.log(newData);
+  };
+
+  const handleClearALL = () => {
+    setNewData({
+      JCredit: '',
+      JDebit: '',
+      CreditAccountId: '',
+      DebitAccountId: '',
+      JEntryDate: '',
+      JNarration: '',
+      JRefNo: ''
+    });
+  };
+
+  const handleEditOptions = (id,index) => {
+    setEdit(true)
+    setJournelEditData([journels[index]])
+    setNewData(journels[index])
+  };
+
+  const handleExitfun = () => {
+    setEdit(false);
+    setNewJournal(false);
+    setNewData({
+      JCredit: '',
+      JDebit: '',
+      CreditAccountId: '',
+      DebitAccountId: '',
+      JEntryDate: '',
+      JNarration: '',
+      JRefNo: ''
+    })
   };
 
   useEffect(() => {
-    DatePicker();
-  }, [newJournal, savedJournal]);
+    accountServices.getPaymentCreditDropDown()
+    .then(data => setCreditDropDown(data))
+    .catch(err => console.log(err))
 
-  const handleNewJournalSave = (e) => {
-    e.preventDefault();
-    setSavedJournal([
-      ...savedJournal,
-      {
-        id: savedJournal.length,
-        EntryNo: entryNo,
-        refNo: refNo,
-        EntryDate: entryDate,
-        NarrationHeadder: narrationHeadder,
-        AccountName: selectBoxValue,
-        Narration: narration,
-        Recipt: recipt,
-        Payment: payment,
-      },
-    ]);
-    setSelectBoxValue("");
-    setNarration("");
-    setRecipt(0);
-    setPayment(0);
+    accountServices.getPaymentDebitDropDown()
+    .then(data => setDebitDropDown(data))
+    .catch(err => console.log(err))
 
-    setEntryNo("");
-    setRefNo("");
-    setEntryDate("");
-    setNarrationHeadder("");
-  };
-
-  const handleSelectedLeftItem = (items) => {
-    setEdit(true);
-    setSelectBoxValue(items.AccountName);
-    setNarration(items.Narration);
-    setRecipt(items.Recipt);
-    setPayment(items.Payment);
-
-    setEntryNo(items.EntryNo);
-    setRefNo(items.refNo);
-    setEntryDate(items.EntryDate);
-    setNarrationHeadder(items.NarrationHeadder);
-  };
-
-  const handleEditJournal = () => {
-    const selectedRef = selectedLeftDataRef;
-  };
+    accountServices.getAllPayment()
+    .then(data => setJournels(data))
+    .catch(err => console.log(err))
+  },[])
 
   return (
-    <div className="CashRecipt">
-      <div className="top__header___Section">
-        <h2>Cash Payment</h2>
-      </div>
+    <>
+      {failSnackbar && (
+        <FailSnackbars
+          MessageToPass={messageToPass}
+          open={snackBarOpen}
+          setOpen={setSnackbarOpen}
+        />
+      )}
+      {sucessSnackbar && (
+        <SucessSnackbars
+          MessageToPass={messageToPass}
+          open={snackBarOpen}
+          setOpen={setSnackbarOpen}
+        />
+      )}
 
-      <div className="date__Search__section">
-        <div className="input__date___section">
-          <input type="date" name="" id="" />
-          <input type="date" name="" id="" />
+      <div className="Journals">
+        <div className="top__header___Section">
+          <h2>Payment</h2>
         </div>
 
-        <div className="search__Section">
-          <button>Search</button>
-        </div>
-      </div>
-      <div className="journal__container">
-        <div className="journal__left__section">
-          <div className="left__top__section">
-            <input type="text" />
+        <div className="date__Search__section">
+          <div className="input__date___section">
+            <DatePicker
+              selected={startDate}
+              onChange={(date) => handleStartDate(date)}
+              dateFormat={"dd/MM/yyyy"}
+              isClearable
+              placeholderText="from date"
+            />
+            <DatePicker
+              selected={toDate}
+              onChange={(date) => handleToDate(date)}
+              dateFormat={"dd/MM/yyyy"}
+              minDate={startDate}
+              isClearable
+              placeholderText="to date"
+            />
           </div>
 
-          <div className="left__bottom__section">
-            <div className="table__sections">
-              <table className="table">
-                <thead>
-                  <tr>
-                    <th>Ref No</th>
-                    <th>Data</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {savedJournal?.map((items) => (
-                    <tr
-                      onClick={() => {
-                        handleSelectedLeftItem(items);
-                        setSelectedLeftDataRef(items.refNo);
-                      }}
-                    >
-                      <td>{items.refNo}</td>
-                      <td>{items.EntryDate}</td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
-            </div>
+          <div className="search__Section">
+            <button type="button" onClick={handleFilterSearch}>Search</button>
           </div>
         </div>
-
-        <div className="journal__right__section">
-          <form onSubmit={(e) => handleNewJournalSave(e)}>
-            <div className="right__top__section">
-              <div className="input__section__container__top">
-                <div className="input__sections">
-                  <h5>Entry No</h5>
-                  <input
-                    required
-                    value={entryNo}
-                    onChange={(e) => setEntryNo(e.target.value)}
-                    type="text"
-                  />
-                </div>
-
-                <div className="input__sections">
-                  <h5>Entry Data</h5>
-                  <input
-                    required
-                    value={entryDate}
-                    onChange={(e) => setEntryDate(e.target.value)}
-                    type="date"
-                    name=""
-                    id=""
-                  />
-                </div>
-              </div>
-              <div className="input__section__container__bottom">
-                <div className="input__sections">
-                  <h5>Ref No</h5>
-                  <input
-                    required
-                    value={refNo}
-                    onChange={(e) => setRefNo(e.target.value)}
-                    type="text"
-                  />
-                </div>
-
-                <div className="input__sections">
-                  <h5>Narration</h5>
-                  <input
-                    value={narrationHeadder}
-                    onChange={(e) => setNarrationHeadder(e.target.value)}
-                    type="text"
-                  />
-                </div>
-              </div>
+        <div className="journal__container">
+          <div className="journal__left__section">
+            <div className="left__top__section">
+              <input type="text" />
             </div>
-            <div className="right__mid__section">
+
+            <div className="left__bottom__section">
               <div className="table__sections">
                 <table className="table">
                   <thead>
                     <tr>
-                      <th
-                        style={{ backgroundColor: "#a09ebd", width: "40px" }}
-                      ></th>
-                      <th>Account Name</th>
-                      <th>Narration</th>
-                      <th>Payment</th>
-                      <th>Recipt</th>
+                      <th>Ref No</th>
+                      <th>Data</th>
                     </tr>
                   </thead>
                   <tbody>
-                    {newJournal && (
-                      <>
-                        <tr>
-                          <td
-                            style={{
-                              backgroundColor: "#cdccdd",
-                              width: "40px",
-                            }}
-                          ></td>
-                          <td>
-                            {" "}
-                            <select
-                              onChange={(e) =>
-                                setSelectBoxValue(e.target.value)
-                              }
-                              required
-                              value={selectBoxValue}
-                              style={{
-                                width: "100%",
-                                outline: "none",
-                                border: "none",
-                                height: "100%",
-                              }}
-                            >
-                              <option value="" disabled>
-                                select
-                              </option>
-                              <option value="one">Dr Rajan Tomas</option>
-                              <option value="two">James Abraham</option>
-                            </select>{" "}
-                          </td>
-
-                          {/* narration */}
-                          <td>
-                            {" "}
-                            <input
-                              value={narration}
-                              onChange={(e) => setNarration(e.target.value)}
-                              style={{
-                                width: "100%",
-                                outline: "none",
-                                border: "none",
-                                height: "100%",
-                              }}
-                              type="text"
-                            />{" "}
-                          </td>
-
-                          {/* Payment */}
-                          <td>
-                            <input
-                              required
-                              value={payment}
-                              onChange={(e) => setPayment(e.target.value)}
-                              style={{
-                                width: "100%",
-                                outline: "none",
-                                border: "none",
-                                height: "100%",
-                              }}
-                              type="number"
-                            />
-                          </td>
-
-                          {/* Recipt */}
-                          <td>
-                            <input
-                              required
-                              value={recipt}
-                              onChange={(e) => setRecipt(e.target.value)}
-                              style={{
-                                width: "100%",
-                                outline: "none",
-                                border: "none",
-                                height: "100%",
-                              }}
-                              type="number"
-                            />
-                          </td>
-                        </tr>
-                      </>
-                    )}
+                    {journels.map((data,index) => (
+                      <tr key={index} onClick={() => handleEditOptions(data.EntryNo,index)}>
+                        <td>{data.JRefNo}</td>
+                        <td>{new Date(data.JEntryDate).toLocaleDateString()}</td>
+                      </tr>
+                    ))}
                   </tbody>
-
-                  <tfoot>
-                    <tr>
-                      <td style={{ border: "none" }}></td>
-                      <td style={{ border: "none" }}></td>
-                      <td style={{ border: "none" }}></td>
-                      <td>0</td>
-                      <td>0</td>
-                    </tr>
-                  </tfoot>
                 </table>
               </div>
-
-              <div className="button__section">
-                {!newJournal && (
-                  <button onClick={() => handleNewJournal()}>New</button>
-                )}
-
-                {edit && <button type="submit">Edit</button>}
-
-                {newJournal && (
-                  <>
-                    {!edit && <button type="submit">Save</button>}
-
-                    <button>Clear</button>
-                  </>
-                )}
-
-                <button>Exit</button>
-              </div>
             </div>
-          </form>
-          {/* <div className="right__bottom__section"></div> */}
+          </div>
+
+          <div className="journal__right__section">
+            <form onSubmit={handleJournalSubmit}>
+              <div className="right__top__section">
+                <div className="input__section__container__top">
+                  {/* <div className="input__sections">
+                    <h5>Entry No</h5>
+                    <input
+                      name="EntryNo"
+                      value={dataJournalToSend.EntryNo}
+                      onChange={handleDataInput}
+                      type="text"
+                      disabled
+                      style={{ boxShadow: "0 0 10px grey" }}
+                    />
+                  </div> */}
+
+                  <div className="input__sections">
+                    <h5>Entry Data</h5>
+                    <input
+                      style={{ marginRight: "35px" }}
+                      type="datetime-local"
+                      name="JEntryDate"
+                      value={newData.JEntryDate}
+                      onChange={handleDataInput}
+                    />
+                  </div>
+                </div>
+                <div className="input__section__container__bottom">
+                  <div className="input__sections">
+                    <h5>Ref No</h5>
+                    <input
+                      required
+                      name="JRefNo"
+                      value={newData.JRefNo}
+                      onChange={handleDataInput}
+                      type="text"
+                    />
+                  </div>
+
+                  <div className="input__sections">
+                    <h5>Narration</h5>
+                    <input
+                      name="JNarration"
+                      value={newData.JNarration}
+                      onChange={handleDataInput}
+                      type="text"
+                      style={{ width: "150px", marginRight: "130px" }}
+                    />
+                  </div>
+                </div>
+              </div>
+              <div className="right__mid__section">
+                <div className="table__sections">
+                  <table className="table">
+                    <thead>
+                      <tr>
+                        <th
+                          style={{ backgroundColor: "#a09ebd", width: "40px" }}
+                        ></th>
+                        <th>Debit Account Name</th>
+                        <th>Credit Account Name</th>
+                        <th>Debit</th>
+                        <th>Credit</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {(newJournal || isEdit) && (
+                        <>
+                          <tr>
+                            <td
+                              style={{
+                                backgroundColor: "#cdccdd",
+                                width: "40px",
+                              }}
+                            ></td>
+
+                            {/* debit */}
+                            <td>
+                              {" "}
+                              <select
+                                name="DebitAccountId"
+                                value={newData.DebitAccountId}
+                                onChange={handleDataInput}
+                                style={{
+                                  width: "100%",
+                                  outline: "none",
+                                  border: "none",
+                                  height: "100%",
+                                }}
+                              >
+                                <option value="" disabled selected>
+                                  Pic Account Type
+                                </option>
+                                {debitDropDown?.map((list) => (
+                                  <option value={list.Text}>
+                                    {list.Text}
+                                  </option>
+                                ))}
+                              </select>{" "}
+                            </td>
+
+                            {/* credit */}
+
+                            <td>
+                              {" "}
+                              <select
+                                name="CreditAccountId"
+                                value={newData.CreditAccountId}
+                                onChange={handleDataInput}
+                                style={{
+                                  width: "100%",
+                                  outline: "none",
+                                  border: "none",
+                                  height: "100%",
+                                }}
+                              >
+                                <option value="" disabled selected>
+                                  Pic Account Type
+                                </option>
+                                {creditDropDown?.map((list) => (
+                                  <option value={list.Value}>
+                                    {list.Text}
+                                  </option>
+                                ))}
+                              </select>{" "}
+                            </td>
+
+                            {/* narration */}
+
+                            {/* debit */}
+                            <td>
+                              <input
+                                required
+                                name="jDebit"
+                                value={newData.JDebit}
+                                onChange={handleDataInput}
+                                style={{
+                                  width: "100%",
+                                  outline: "none",
+                                  border: "none",
+                                  height: "100%",
+                                }}
+                                type="number"
+                              />
+                            </td>
+
+                            {/* credit */}
+                            <td>
+                              <input
+                                required
+                                name="jCredit"
+                                value={newData.JCredit}
+                                onChange={handleDataInput}
+                                style={{
+                                  width: "100%",
+                                  outline: "none",
+                                  border: "none",
+                                  height: "100%",
+                                }}
+                                type="number"
+                              />
+                            </td>
+                          </tr>
+                        </>
+                      )}
+
+                       
+                    </tbody>
+
+                    <tfoot>
+                      <tr>
+                        <td style={{ border: "none" }}></td>
+                        <td style={{ border: "none" }}></td>
+                        <td style={{ border: "none" }}></td>
+                        <td>{newData.jDebit}</td>
+                        <td>{newData.jCredit}</td>
+                      </tr>
+                    </tfoot>
+                  </table>
+                </div>
+
+                <div className="button__section">
+                  {(!newJournal && !isEdit)&& 
+                    <button onClick={handleNewJournal}>New</button>
+                  }
+                  {newJournal && <button type="submit" onClick={handleSave}>Save</button>}
+                  {isEdit && <button type="submit" onClick={handleUpdate}>Update</button>}
+                  <button type="button" onClick={handleClearALL}>Clear</button>
+                  <button type="button" onClick={handleExitfun}>Exit</button>
+                </div>
+              </div>
+            </form>
+            {/* <div className="right__bottom__section"></div> */}
+          </div>
         </div>
       </div>
-    </div>
+    </>
   );
 }
 

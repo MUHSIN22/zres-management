@@ -1,8 +1,11 @@
 import { red } from "@material-ui/core/colors";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import "./cashrecipt.scss";
 import FailSnackbars from "../../../basic components/failSnackBar";
 import SucessSnackbars from "../../../basic components/sucessSidePopup";
+import { accountServices } from "../../../../Services/AccountsServices";
+import DatePicker from "react-datepicker";
+import "react-datepicker/dist/react-datepicker.css";
 const ADDCASHRECIPT = {
   EntryNo: "",
   EntryDate: "",
@@ -17,73 +20,141 @@ const ADDCASHRECIPT = {
   FinancialYearID: "",
 };
 function CashRecipt() {
-  const [cashReciptData, setCashReciptData] = useState([]);
-  const [edit, setEdit] = useState(false);
+  const dataJournal = {
+    JEntryDate: "",
+    DebitAccountId: "",
+    CreditAccountId: "",
+    JRefNo: "",
+    JCredit: 0,
+    JNarration: "",
+    JDebit: 0,
+    FinancialYearID: 1,
+    CMPid: 1,
+    UserID: 1,
+    DebitAccountName: null,
+    CreditAccountName: null,
+    DebitaccName: null,
+    CreditaccName: null,
+    AccountName: null,
+    ledgerName: null,
+  };
+  const editCreditRef = useRef(null);
+  const editDebitRef = useRef(null);
   const [newJournal, setNewJournal] = useState(false);
-  const [dataInCashRecipt, setDataInCashRecipt] = useState([]);
-  const [keyvalue, setKeyvalue] = useState(ADDCASHRECIPT);
-  const [reciptPayment, setReciptPayment] = useState(0);
+  const [dataJournalToSend, setDataJournalToSend] = useState(dataJournal);
+  const [startDate, setStartDate] = useState(null);
+  const [toDate, setToDate] = useState(null);
+  const [isEdit, setEdit] = useState(false);
+  const [dataFromServer, setDataFromServer] = useState([]);
+  const [debitCredit, setDebitCredit] = useState(0);
+  const [dropdownList, setDropdownList] = useState([]);
   const [messageToPass, setMessageToPass] = useState("");
   const [failSnackbar, setFailSnackBar] = useState(false);
   const [sucessSnackbar, setSucessSnackBar] = useState(false);
-
-  const [sucessAdded, setSucessAdded] = useState(true);
   const [snackBarOpen, setSnackbarOpen] = useState(true);
-  const HandleAddDatatToKeyvalue = (e) => {
+  const [creditDropDown,setCreditDropDown] = useState([])
+  const [debitDropDown,setDebitDropDown] = useState([])
+  const [journels,setJournels] = useState([])
+  const [journelEditData,setJournelEditData] = useState([]);
+  const [newData,setNewData] = useState({
+    jCredit: 0,
+    jDebit: 0,
+    CreditAccountId: null,
+    DebitAccountId: null,
+    JEntryDate: null,
+    JNarration: '',
+    JRefNo: null
+  })
+
+  const handleDataInput = (e) => {
     const value = e.target.value;
-
-    setKeyvalue({
-      ...keyvalue,
-      [e.target.name]: value,
-      Reciept: reciptPayment,
-      Payment: reciptPayment,
-    });
+    setNewData({...newData,[e.target.name]:value});
   };
 
-  // form submission to add a product
+  // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 
-  const handleFormSubmit = (e) => {
-    e.preventDefault();
-    setFailSnackBar(false);
-    setSucessSnackBar(false);
-
-    const url = "http://localhost:5000/api/v1/Reciepts";
-    fetch(url, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(keyvalue),
-    })
-      .then((response) => response.json())
-      .then((latestPostFromServer) => {
-        setCashReciptData(latestPostFromServer);
-        setSucessSnackBar(true);
-        setMessageToPass("Sucessfully Added Cash Recipt");
-        setSnackbarOpen(true);
-      })
-      .catch((error) => {
-        console.log(error);
-        setMessageToPass("Error Occure While Adding Cash Recipt");
-        setSnackbarOpen(true);
-        setFailSnackBar(true);
-      });
-
-    setReciptPayment(0);
-    setKeyvalue(ADDCASHRECIPT);
-  };
-
-  // old start
+  const handleFilterSearch = () => {
+    let from = new Date(startDate).toISOString();
+    let to = new Date(toDate).toISOString();
+    if(startDate && toDate){
+      accountServices.getFilteredReciept(new Date(startDate).toISOString(),new Date(toDate).toISOString())
+      .then(res => setJournels(res))
+      .catch(err => console.log(err))
+    }
+  }
 
   const handleNewJournal = () => {
     setNewJournal(true);
+    setDebitCredit(0);
+    setDataJournalToSend(dataJournal);
   };
 
-  const handleeditCashRecipt = (items) => {
-    setEdit(true);
-    setNewJournal(true);
-    setKeyvalue("");
+  const handleStartDate = (date) => {
+    setStartDate(date);
   };
+
+  const handleToDate = (date) => {
+    setToDate(date);
+  };
+
+  const handleSave = (e) =>{
+    e.preventDefault();
+    console.log(newData);
+  }
+  const handleUpdate = (event) => {
+    event.preventDefault();
+    console.log(newData);
+  }
+
+  const handleJournalSubmit = (e) => {
+    console.log(newData);
+  };
+
+  const handleClearALL = () => {
+    setNewData({
+      JCredit: '',
+      JDebit: '',
+      CreditAccountId: '',
+      DebitAccountId: '',
+      JEntryDate: '',
+      JNarration: '',
+      JRefNo: ''
+    });
+  };
+
+  const handleEditOptions = (id,index) => {
+    setEdit(true)
+    setJournelEditData([journels[index]])
+    setNewData(journels[index])
+  };
+
+  const handleExitfun = () => {
+    setEdit(false);
+    setNewJournal(false);
+    setNewData({
+      JCredit: '',
+      JDebit: '',
+      CreditAccountId: '',
+      DebitAccountId: '',
+      JEntryDate: '',
+      JNarration: '',
+      JRefNo: ''
+    })
+  };
+
+  useEffect(() => {
+    accountServices.getRecieptCreditDropDown()
+    .then(data => setCreditDropDown(data))
+    .catch(err => console.log(err))
+
+    accountServices.getRecieptDebitDropDown()
+    .then(data => setDebitDropDown(data))
+    .catch(err => console.log(err))
+
+    accountServices.getAllReciept()
+    .then(data => setJournels(data))
+    .catch(err => console.log(err))
+  },[])
 
   return (
     <>
@@ -101,19 +172,33 @@ function CashRecipt() {
           setOpen={setSnackbarOpen}
         />
       )}
-      <div className="CashRecipt">
+
+      <div className="Journals">
         <div className="top__header___Section">
-          <h2>Cash Recipt</h2>
+          <h2>Reciept</h2>
         </div>
 
         <div className="date__Search__section">
           <div className="input__date___section">
-            <input type="date" name="" id="" />
-            <input type="date" name="" id="" />
+            <DatePicker
+              selected={startDate}
+              onChange={(date) => handleStartDate(date)}
+              dateFormat={"dd/MM/yyyy"}
+              isClearable
+              placeholderText="from date"
+            />
+            <DatePicker
+              selected={toDate}
+              onChange={(date) => handleToDate(date)}
+              dateFormat={"dd/MM/yyyy"}
+              minDate={startDate}
+              isClearable
+              placeholderText="to date"
+            />
           </div>
 
           <div className="search__Section">
-            <button>Search</button>
+            <button type="button" onClick={handleFilterSearch}>Search</button>
           </div>
         </div>
         <div className="journal__container">
@@ -132,15 +217,10 @@ function CashRecipt() {
                     </tr>
                   </thead>
                   <tbody>
-                    {dataInCashRecipt?.map((items, index) => (
-                      <tr
-                        onClick={() => {
-                          handleeditCashRecipt(items.id);
-                        }}
-                        key={index}
-                      >
-                        <td>{items.refNo}</td>
-                        <td>{items.EntryDate}</td>
+                    {journels.map((data,index) => (
+                      <tr key={index} onClick={() => handleEditOptions(data.EntryNo,index)}>
+                        <td>{data.JRefNo}</td>
+                        <td>{new Date(data.JEntryDate).toLocaleDateString()}</td>
                       </tr>
                     ))}
                   </tbody>
@@ -150,29 +230,29 @@ function CashRecipt() {
           </div>
 
           <div className="journal__right__section">
-            <form onSubmit={handleFormSubmit}>
+            <form onSubmit={handleJournalSubmit}>
               <div className="right__top__section">
                 <div className="input__section__container__top">
-                  <div className="input__sections">
+                  {/* <div className="input__sections">
                     <h5>Entry No</h5>
                     <input
-                      required
                       name="EntryNo"
-                      value={keyvalue.EntryNo}
-                      onChange={HandleAddDatatToKeyvalue}
-                      type="number"
+                      value={dataJournalToSend.EntryNo}
+                      onChange={handleDataInput}
+                      type="text"
+                      disabled
+                      style={{ boxShadow: "0 0 10px grey" }}
                     />
-                  </div>
+                  </div> */}
 
                   <div className="input__sections">
                     <h5>Entry Data</h5>
                     <input
-                      required
-                      name="EntryDate"
-                      value={keyvalue.EntryDate}
-                      onChange={HandleAddDatatToKeyvalue}
-                      type="date"
-                      id=""
+                      style={{ marginRight: "35px" }}
+                      type="datetime-local"
+                      name="JEntryDate"
+                      value={newData.JEntryDate}
+                      onChange={handleDataInput}
                     />
                   </div>
                 </div>
@@ -181,13 +261,21 @@ function CashRecipt() {
                     <h5>Ref No</h5>
                     <input
                       required
-                      name="RefNo"
-                      value={keyvalue.RefNo}
-                      onChange={HandleAddDatatToKeyvalue}
-                      type="number"
-                      style={{
-                        marginRight: 15,
-                      }}
+                      name="JRefNo"
+                      value={newData.JRefNo}
+                      onChange={handleDataInput}
+                      type="text"
+                    />
+                  </div>
+
+                  <div className="input__sections">
+                    <h5>Narration</h5>
+                    <input
+                      name="JNarration"
+                      value={newData.JNarration}
+                      onChange={handleDataInput}
+                      type="text"
+                      style={{ width: "150px", marginRight: "130px" }}
                     />
                   </div>
                 </div>
@@ -200,14 +288,14 @@ function CashRecipt() {
                         <th
                           style={{ backgroundColor: "#a09ebd", width: "40px" }}
                         ></th>
-                        <th>Account Name</th>
-                        <th>Narration</th>
-                        <th>Recipt</th>
-                        <th>Payment</th>
+                        <th>Debit Account Name</th>
+                        <th>Credit Account Name</th>
+                        <th>Debit</th>
+                        <th>Credit</th>
                       </tr>
                     </thead>
                     <tbody>
-                      {newJournal && (
+                      {(newJournal || isEdit) && (
                         <>
                           <tr>
                             <td
@@ -216,13 +304,14 @@ function CashRecipt() {
                                 width: "40px",
                               }}
                             ></td>
+
+                            {/* debit */}
                             <td>
                               {" "}
                               <select
-                                name="AccountName"
-                                value={keyvalue.AccountName}
-                                onChange={HandleAddDatatToKeyvalue}
-                                required
+                                name="DebitAccountId"
+                                value={newData.DebitAccountId}
+                                onChange={handleDataInput}
                                 style={{
                                   width: "100%",
                                   outline: "none",
@@ -230,40 +319,52 @@ function CashRecipt() {
                                   height: "100%",
                                 }}
                               >
-                                <option value="" disabled>
-                                  select
+                                <option value="" disabled selected>
+                                  Pic Account Type
                                 </option>
-                                <option value="one">Dr Rajan Tomas</option>
-                                <option value="two">James Abraham</option>
+                                {debitDropDown?.map((list) => (
+                                  <option value={list.Text}>
+                                    {list.Text}
+                                  </option>
+                                ))}
                               </select>{" "}
                             </td>
 
-                            {/* narration */}
+                            {/* credit */}
+
                             <td>
                               {" "}
-                              <input
-                                name="Narration"
-                                value={keyvalue.Narration}
-                                onChange={HandleAddDatatToKeyvalue}
+                              <select
+                                name="CreditAccountId"
+                                value={newData.CreditAccountId}
+                                onChange={handleDataInput}
                                 style={{
                                   width: "100%",
                                   outline: "none",
                                   border: "none",
                                   height: "100%",
                                 }}
-                                type="text"
-                              />{" "}
+                              >
+                                <option value="" disabled selected>
+                                  Pic Account Type
+                                </option>
+                                {creditDropDown?.map((list) => (
+                                  <option value={list.Value}>
+                                    {list.Text}
+                                  </option>
+                                ))}
+                              </select>{" "}
                             </td>
 
-                            {/* Recipt */}
+                            {/* narration */}
+
+                            {/* debit */}
                             <td>
                               <input
                                 required
-                                name="RefNo"
-                                value={reciptPayment}
-                                onChange={(e) =>
-                                  setReciptPayment(e.target.value)
-                                }
+                                name="jDebit"
+                                value={newData.JDebit}
+                                onChange={handleDataInput}
                                 style={{
                                   width: "100%",
                                   outline: "none",
@@ -274,14 +375,13 @@ function CashRecipt() {
                               />
                             </td>
 
-                            {/* Payment */}
+                            {/* credit */}
                             <td>
                               <input
                                 required
-                                value={reciptPayment}
-                                onChange={(e) =>
-                                  setReciptPayment(e.target.value)
-                                }
+                                name="jCredit"
+                                value={newData.JCredit}
+                                onChange={handleDataInput}
                                 style={{
                                   width: "100%",
                                   outline: "none",
@@ -294,6 +394,8 @@ function CashRecipt() {
                           </tr>
                         </>
                       )}
+
+                       
                     </tbody>
 
                     <tfoot>
@@ -301,34 +403,21 @@ function CashRecipt() {
                         <td style={{ border: "none" }}></td>
                         <td style={{ border: "none" }}></td>
                         <td style={{ border: "none" }}></td>
-                        <td>{reciptPayment}</td>
-                        <td>{reciptPayment}</td>
+                        <td>{newData.jDebit}</td>
+                        <td>{newData.jCredit}</td>
                       </tr>
                     </tfoot>
                   </table>
                 </div>
 
                 <div className="button__section">
-                  {!newJournal && (
-                    <button onClick={() => handleNewJournal()}>New</button>
-                  )}
-
-                  {edit && <button type="submit">Edit</button>}
-
-                  {newJournal && (
-                    <>
-                      {!edit && <button type="submit">Save</button>}
-
-                      {/* <button>Clear</button> */}
-                    </>
-                  )}
-
-                  {newJournal && (
-                    <button type="button" onClick={() => setNewJournal(false)}>
-                      {" "}
-                      Exit
-                    </button>
-                  )}
+                  {(!newJournal && !isEdit)&& 
+                    <button onClick={handleNewJournal}>New</button>
+                  }
+                  {newJournal && <button type="submit" onClick={handleSave}>Save</button>}
+                  {isEdit && <button type="submit" onClick={handleUpdate}>Update</button>}
+                  <button type="button" onClick={handleClearALL}>Clear</button>
+                  <button type="button" onClick={handleExitfun}>Exit</button>
                 </div>
               </div>
             </form>

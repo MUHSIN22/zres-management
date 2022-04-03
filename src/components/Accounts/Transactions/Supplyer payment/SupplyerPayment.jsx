@@ -230,10 +230,10 @@ function SupplyerPayment() {
                       onClick={() => SetClickedTr(item.sid)}
                     >
                       <td>{item.sid}</td>
-                      <td>{item.ArrNo}</td>
+                      <td>{item.sid}</td>
                       <td>{new Date(item.entryDate).toLocaleDateString()}</td>
                       <td>{item.refno}</td>
-                      <td colspan="3">{item.Supplier}</td>
+                      <td colspan="3">{item.Name}</td>
                       <td>{item.Particulars}</td>
 
                       <td>{item.BankCharge}</td>

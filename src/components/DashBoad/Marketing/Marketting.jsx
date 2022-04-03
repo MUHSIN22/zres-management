@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import "./marketting.scss";
 import DriveFolderUploadIcon from "@mui/icons-material/DriveFolderUpload";
 import PieChartSection from "../DashboardSales/charts/PieChartSection";
@@ -8,8 +8,18 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 import CircularProgress from "@mui/material/CircularProgress";
 import Box from "@mui/material/Box";
+import { dashboardServices } from "../../../Services/DashboardServices";
 
 function Marketting() {
+  const [marketingData,setMarketingData] = useState({})
+  
+  useEffect(() => {
+    dashboardServices.getMarketingData()
+    .then(data => {setMarketingData(data);console.log(data);})
+    .catch(err => console.log(err))
+
+  },[])
+
   return (
     <div>
       {/* this targets the top small div and one big div */}

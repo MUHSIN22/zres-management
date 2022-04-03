@@ -14,6 +14,17 @@ export const accountServices = {
             })
         })
     },
+    uploadAccountGroupData : (data) => {
+        return new Promise((resolve,reject) => {
+            fetch(`${BASE_URL}/AccountGroup`,{
+                method: 'POST',
+                body: JSON.stringify(data)
+            })
+            .then(res => res.json())
+            .then(res => resolve(res))
+            .catch(err => reject(err))
+        })
+    },
 
     // Account Head
     getAccountHeadData : () => {
@@ -206,6 +217,119 @@ export const accountServices = {
     getFilteredBankBook : (from,to) => {
         return new Promise((resolve,reject) => {
             fetch(`${BASE_URL}/BankBook/search?fromdate=${from}&todate=${to}&CMPid=1`)
+            .then(res => res.json())
+            .then(data => resolve(data))
+            .catch(err => reject(err))
+        })
+    },
+
+
+    // Contra
+    getAllContra : () => {
+        return new Promise((resolve,reject) => {
+            fetch(`${BASE_URL}/Contra?CMPid=1`)
+            .then(res => res.json())
+            .then(data => resolve(data))
+            .catch(err => reject(err))
+        })
+    },
+    getContraDropDown: () => {
+        return new Promise((resolve,reject) => {
+            fetch(`${BASE_URL}/Contra/GetAccountHeadName?CMPid=1`)
+            .then(res => res.json())
+            .then(data => resolve(data))
+            .catch(err => reject(err))
+        })
+    },
+    getFilteredContra : (from,to) => {
+        return new Promise((resolve,reject) => {
+            fetch(`${BASE_URL}/Contra/search?fromdate=${from}&todate=${to}&CMPid=1`)
+            .then(res => res.json())
+            .then(data => resolve(data))
+            .catch(err => console.log(err))
+        })
+    },
+
+    // Reciept 
+    getAllReciept : () => {
+        return new Promise((resolve,reject) => {
+            fetch(`${BASE_URL}/Reciepts?CMPid=1`)
+            .then(res => res.json())
+            .then(data => resolve(data))
+            .catch(err => reject(err))
+        })
+    },
+    getFilteredReciept : (from,to) => {
+        return new Promise((resolve,reject) => {
+            fetch(`${BASE_URL}/Reciepts/search?fromdate=${from}&todate=${to}&CMPid=1`)
+            .then(res => res.json())
+            .then(data => resolve(data))
+            .catch(err => reject(err))
+        })
+    },
+    getRecieptCreditDropDown: () => {
+        return new Promise((resolve,reject) => {
+            fetch(`${BASE_URL}/Reciepts/GetCreditAccountName?CMPid=1`)
+            .then(res => res.json())
+            .then(data => resolve(data))
+            .catch(err => reject(err))
+        })
+    },
+    getRecieptDebitDropDown : () => {
+        return new Promise((resolve,reject) => {
+            fetch(`${BASE_URL}/Reciepts/GetDebitAccountName?CMPid=1`)
+            .then(res => res.json())
+            .then(data => resolve(data))
+            .catch(err => reject(err));
+        })
+    },
+
+    // Payments
+    getAllPayment : () => {
+        return new Promise((resolve,reject) => {
+            fetch(`${BASE_URL}/Payments?CMPid=1`)
+            .then(res => res.json())
+            .then(data => resolve(data))
+            .catch(err => reject(err))
+        })
+    },
+    getFilteredPayment : (from,to) => {
+        return new Promise((resolve,reject) => {
+            fetch(`${BASE_URL}/Payments/search?fromdate=${from}&todate=${to}&CMPid=1`)
+            .then(res => res.json())
+            .then(data => resolve(data))
+            .catch(err => reject(err))
+        })
+    },
+    getPaymentCreditDropDown: () => {
+        return new Promise((resolve,reject) => {
+            fetch(`${BASE_URL}/Payments/GetCreditAccountName?CMPid=1`)
+            .then(res => res.json())
+            .then(data => resolve(data))
+            .catch(err => reject(err))
+        })
+    },
+    getPaymentDebitDropDown : () => {
+        return new Promise((resolve,reject) => {
+            fetch(`${BASE_URL}/Payments/GetDebitAccountName?CMPid=1`)
+            .then(res => res.json())
+            .then(data => resolve(data))
+            .catch(err => reject(err));
+        })
+    },
+
+    // Daybook
+    getAllDayBook : () => {
+        return new Promise((resolve,reject) => {
+            fetch(`${BASE_URL}/DayBook?CMPid=1`)
+            .then(res => res.json())
+            .then(data => resolve(data))
+            .catch(err => reject(err))
+        })
+    },
+    getFilteredDayBook : (from,to) => {
+        return new Promise((resolve,reject) => {
+            fetch(`${BASE_URL}/DayBook/search?fromdate=${from}&todate=${to}&CMPid=1`)
             .then(res => res.json())
             .then(data => resolve(data))
             .catch(err => reject(err))

@@ -21,30 +21,33 @@ import DineIn from "./components/DineIn/DineIn";
 import FoodOrderPage from "./components/foodOrder/FoodOrderPage";
 import PrintComponent from "./components/printing/PrintingComp";
 import Billgenerated from "./components/Walkin/Bills/Billgenerated";
+import { EssentialProvider } from "./Data manager/EssentialContext";
 function App() {
   return (
-    <div className="App">
-      <div className="DeliveryManager__section">
-        <Router>
-          <Routes>
-            <Route path="/printTest" element={<Billgenerated />} />
-            <Route path="/deliveryManager" element={<DeliveryManager />}/>
-            <Route path="/setting" element={<Settings />}/>
-            <Route path="/foodOrder" element={<FoodOrderPage />}/>
-            <Route path="/dinein" element={<DineIn />}/>
-            <Route path="/walkin" element={<Walkin />}/>
-            <Route path="/DashBoad" element={<DashBoard />}/>
-            <Route path="/kdcCloud" element={<KdcCoud />}/>
-            <Route path="/optionSection" element={ <OptionSelection />}/>
-            <Route path="/mainPage/*" element={<MainPage />}/>
-            <Route path="/crm" element={<Crm />}/>
-            <Route path="/inventory" element={<Inventory />}/>
-            <Route path="/accounts" element={<Accounts />}/>
-            <Route path="/" element={<LoginPage />}/>
-          </Routes>
-        </Router>
-      </div>      
-    </div>
+    <EssentialProvider>
+      <div className="App">
+        <div className="DeliveryManager__section">
+          <Router>
+            <Routes>
+              <Route path="/printTest" element={<Billgenerated />} />
+              <Route path="/deliveryManager" element={<DeliveryManager />}/>
+              <Route path="/setting" element={<Settings />}/>
+              <Route path="/foodOrder" element={<FoodOrderPage />}/>
+              <Route path="/dinein" element={<DineIn />}/>
+              <Route path="/walkin" element={<Walkin />}/>
+              <Route path="/DashBoad" element={<DashBoard />}/>
+              <Route path="/kdcCloud" element={<KdcCoud />}/>
+              <Route path="/optionSection" element={ <OptionSelection />}/>
+              <Route path="/mainPage/*" element={<MainPage />}/>
+              <Route path="/crm" element={<Crm />}/>
+              <Route path="/inventory" element={<Inventory />}/>
+              <Route path="/accounts" element={<Accounts />}/>
+              <Route path="/" element={<LoginPage />}/>
+            </Routes>
+          </Router>
+        </div>      
+      </div>
+    </EssentialProvider>
   );
 }
 

@@ -1,4 +1,4 @@
-import React, { Fragment, useEffect, useState } from "react";
+import React, { Fragment, useContext, useEffect, useState } from "react";
 import "./dashboadSales.scss";
 
 import LineChartSection from "./charts/LineChart";
@@ -12,9 +12,11 @@ import { faFolder } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import ModalFolderOption from "../Modal/ModalFolderOption";
 import { dashboardServices } from "../../../Services/DashboardServices";
+import { EssentialContext } from "../../../Data manager/EssentialContext";
 
 function DashboadSales() {
   const [hourlyBreakdown, setHourlyBreakdown] = useState(false);
+  const [essentialData,setEssentialData] = useContext(EssentialContext)
   const [open, setOpen] = useState(false);
   const [topGrossingItems, setTopGrossingItems] = useState([])
   const [topSellingItems, setTopSellingItems] = useState([])
@@ -28,6 +30,7 @@ function DashboadSales() {
   ])
 
   useEffect(() => {
+    console.log(essentialData);
     // dashboardServices.getChartOfSales()
     //   .then(res => {
     //     setChartOfSales([
