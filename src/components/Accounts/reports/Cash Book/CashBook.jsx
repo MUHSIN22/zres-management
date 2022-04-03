@@ -1,7 +1,8 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import "./cashBook.scss";
 import Prints from "./Prints/Prints";
-const Date = [
+import { accountServices } from '../../../../Services/AccountsServices'
+const Data = [
   {
     SINO: "1",
 
@@ -46,10 +47,37 @@ const Date = [
 function CashBook() {
   const [clickedTr, SetClickedTr] = useState("");
   const [printActive, closePrintActive] = useState(false);
-
+  const [cashBook, setCashBook] = useState([])
+  const [totalReciept,setTotalReciept] = useState(0);
+  const [totalPayment,setTotalPayment] = useState(0);
+  const [fromDate,setFromDate] = useState(null);
+  const [toDate,setToDate] = useState(null);
   // selecting row
 
   // const[rowClick,setRowClick]
+  const handleFilterSearch = () => {
+    if(fromDate && toDate){
+      accountServices.getFilteredCashBook(fromDate,toDate)
+      .then(data => {console.log(data);setCashBook(data);})
+      .catch(err => console.log(err))
+    }
+  }
+
+  useEffect(() => {
+    let tp = 0, tr = 0;
+    accountServices.getAllCashBook()
+      .then(data => {
+        setCashBook(data)
+        data.forEach(item => {
+          tp += item.Payment
+          tr += item.Reciept
+        })
+        setTotalPayment(tp)
+        setTotalReciept(tr)
+      })
+      .catch(err => console.log(err))
+      
+  }, [])
 
   return (
     <>
@@ -221,17 +249,17 @@ function CashBook() {
               <div className="input__Section">
                 <div className="input__field">
                   <h4>From Date</h4>
-                  <input type="date" name="" id="" />
+                  <input type="date" name="" id="" onChange={e => setFromDate(e.target.value)}/>
                 </div>
 
                 <div className="input__field">
                   <h4>To Date</h4>
-                  <input type="date" name="" id="" />
+                  <input type="date" name="" id="" onChange={e => setToDate(e.target.value)}/>
                 </div>
               </div>
 
               <div className="bottom__input__section">
-                <div className="serch__box">
+                <div className="serch__box" onClick={handleFilterSearch}>
                   <h4>Search</h4>
                 </div>
               </div>
@@ -252,40 +280,19 @@ function CashBook() {
                   </tr>
                 </thead>
                 <tbody>
-                  <tr>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td style={{ color: "red" }} colspan="2">
-                      Opening Balance
-                    </td>
-                    <td style={{ color: "red" }}>1580025</td>
-                    <td></td>
-                    <td></td>
-                  </tr>
-
-                  <tr>
-                    <td>1</td>
-                    <td>05/12/2021</td>
-                    <td>c-1</td>
-                    <td colspan="2">State Bank Of India</td>
-                    <td></td>
-                    <td>500</td>
-                    <td>157000Dr</td>
-                  </tr>
-
-                  <tr>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td style={{ color: "red" }} colspan="2">
-                      Clossing Balance
-                    </td>
-                    <td></td>
-                    <td style={{ color: "red" }}>157873.000</td>
-                    <td></td>
-                  </tr>
-
+                  {
+                    cashBook.map((item, index) => (
+                      <tr key={index}>
+                        <td>{index+1}</td>
+                        <td>{new Date(item.Date).toLocaleDateString()}</td>
+                        <td>need ref no</td>
+                        <td colspan="2">{item.Particulars}</td>
+                        <td>{item.Reciept}</td>
+                        <td>{item.Payment}</td>
+                        <td>{item.Balance}</td>
+                      </tr>
+                    ))
+                  }
                   <tr>
                     <td></td>
                     <td></td>
@@ -294,12 +301,12 @@ function CashBook() {
                     <td
                       style={{ backgroundColor: "#cdccdd", fontWeight: "bold" }}
                     >
-                      157375.00
+                      {totalReciept}
                     </td>
                     <td
                       style={{ backgroundColor: "#cdccdd", fontWeight: "bold" }}
                     >
-                      157375.00
+                      {totalPayment}
                     </td>
                     <td></td>
                   </tr>

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import CalendarTodayIcon from "@mui/icons-material/CalendarToday";
 import "./dashboad.scss";
 import DashboadSales from "./DashboardSales/DashboadSales";
@@ -14,6 +14,7 @@ import Button from "@mui/material/Button";
 import Menu from "@mui/material/Menu";
 import MenuItem from "@mui/material/MenuItem";
 import { Link, Outlet, Route, Routes, useNavigate } from "react-router-dom";
+import { EssentialContext } from "../../Data manager/EssentialContext";
 
 const masterCategiry = [
   {
@@ -57,6 +58,8 @@ function DashBoard() {
   // mui dropdown
   const [selectedDropdown, setSelectedDropdown] = useState("All Order Type");
   const [anchorEl, setAnchorEl] = React.useState(null);
+  const [essentialData,setEssentialData] = useContext(EssentialContext);
+
   const open = Boolean(anchorEl);
   const handleClick = (event) => {
     setAnchorEl(event.currentTarget);
@@ -67,11 +70,12 @@ function DashBoard() {
 
   const handleStartDate = (date) => {
     setStartDate(date);
-    setToDate(null);
+    setEssentialData({...essentialData,dashboardFromDate:date})
   };
 
   const handleToDate = (date) => {
     setToDate(date);
+    setEssentialData({...essentialData,dashboardToDate:date})
   };
 
   // To handle the clicking on the subcategory [sales,marketing,inventory,bussiness summary]
@@ -84,8 +88,24 @@ function DashBoard() {
 
     switch (paths[paths.length - 1] === "" ? paths[paths.length - 2] : paths[paths.length - 1]) {
       case "sales":
-
+        setActiveSubCategory(0);
+        break;
+      case "marketing":
+        setActiveSubCategory(1);
+        break;
+      case 'inventory':
+        setActiveSubCategory(2);
+        break;
+      case 'bussiness-summary':
+        setActiveSubCategory(3);
+        break;
+      default:
+        return 0
     }
+
+    setEssentialData({...essentialData,dashboardFromDate: new Date().toISOString()})
+    setEssentialData({...essentialData,dashboardToDate: new Date().toISOString()})
+    console.log(new Date().toISOString());
   }
 
   useEffect(() => {
@@ -93,6 +113,7 @@ function DashBoard() {
     if (paths[paths.length - 1] === "dashboard") {
       navigate('/mainPage/dashboard/sales')
     }
+    checkActiveLink()
   }, []);
 
   return (

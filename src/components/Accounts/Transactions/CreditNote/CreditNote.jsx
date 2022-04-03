@@ -1,5 +1,6 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { useState } from "react";
+import { accountServices } from "../../../../Services/AccountsServices";
 import AddNewCredit from "./AddnewCreditNote/AddNewCredit";
 
 import "./creditNote.scss";
@@ -53,11 +54,25 @@ const Data = [
 function CreditNote() {
   const [addNewBtn, setAddNewBtn] = useState(false);
   const [mainTableView, setMainTableView] = useState(true);
-
-  const [fromDate, setFromDate] = useState("");
-  const [toDate, setToDate] = useState("");
+  const [creditNotes,setCreditNotes] = useState([]);
+  const [fromDate, setFromDate] = useState(null);
+  const [toDate, setToDate] = useState(null);
 
   const [clickedTr, SetClickedTr] = useState("");
+
+  const handleFilteredCreditNotes = () => {
+    if(fromDate && toDate){
+      accountServices.getFiltereCreditNotes(fromDate,toDate)
+      .then(data => {console.log(data);setCreditNotes(data);})
+      .catch(err => console.log(err))
+    }
+  }
+
+  useEffect(() => {
+    accountServices.getAllCreditNotes()
+    .then(data => setCreditNotes(data))
+    .catch(err => console.log(err))
+  },[])
 
   return (
     <>
@@ -165,7 +180,7 @@ function CreditNote() {
               </div>
 
               <div className="search__Section">
-                <button>Search</button>
+                <button onClick={handleFilteredCreditNotes}>Search</button>
               </div>
             </div>
             <div className="table__sections">
@@ -181,19 +196,19 @@ function CreditNote() {
                   </tr>
                 </thead>
                 <tbody>
-                  {Data.map((datas) => (
+                  {creditNotes.map(item => (
                     <tr
-                      keys={datas.id}
-                      className={clickedTr === datas.SINO && "selectedTr "}
-                      onClick={() => SetClickedTr(datas.SINO)}
+                      keys={item.CnID}
+                      className={clickedTr === item.CnID && "selectedTr "}
+                      onClick={() => SetClickedTr(item.CnID)}
                     >
-                      <td>{datas.SINO}</td>
+                      <td>{item.CnID}</td>
 
-                      <td>{datas.InvNo}</td>
-                      <td>{datas.InvDate}</td>
-                      <td colspan="3">{datas.Supplier}</td>
-                      <td>{datas.Amound}</td>
-                      <td>{datas.UserName}</td>
+                      <td>Not Available</td>
+                      <td>{new Date(item.EntryDate).toLocaleDateString()}</td>
+                      <td colspan="3">Not Available</td>
+                      <td>{item.Amount}</td>
+                      <td>Need name instead ID</td>
                     </tr>
                   ))}
                 </tbody>

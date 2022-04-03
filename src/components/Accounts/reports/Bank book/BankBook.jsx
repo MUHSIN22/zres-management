@@ -1,7 +1,8 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
+import { accountServices } from "../../../../Services/AccountsServices";
 import "./bankbook.scss";
 import Prints from "./Prints/Prints";
-const Date = [
+const Data = [
   {
     SINO: "1",
 
@@ -46,10 +47,45 @@ const Date = [
 function BankBook() {
   const [clickedTr, SetClickedTr] = useState("");
   const [printActive, closePrintActive] = useState(false);
+  const [bankBook, setBankBook] = useState([]);
+  const [totalPayment,setTotalPayment] = useState(null);
+  const [totalReciept,setTotalReciept] = useState(null);
+  const [fromDate,setFromDate] = useState(null);
+  const [toDate,setToDate] = useState(null);
 
   // selecting row
 
   // const[rowClick,setRowClick]
+  const handleFilterSearch = () => {
+    let tp=0,tr=0;
+    accountServices.getFilteredBankBook(fromDate,toDate)
+    .then(data => {
+      data.forEach(item => {
+        tp+=item.Payment;
+        tr+=item.Reciept;
+      })
+      setBankBook(data)
+      setTotalPayment(tp);
+      setTotalReciept(tr);
+    })
+    .catch(err => console.log(err))
+  }
+
+
+  useEffect(() => {
+    let tp=0,tr=0;
+    accountServices.getAllBankBook()
+      .then(data => {
+        data.forEach(item => {
+          tp+=item.Payment;
+          tr+=item.Reciept;
+        })
+        setBankBook(data)
+        setTotalPayment(tp);
+        setTotalReciept(tr);
+      })
+      .catch(err => console.log(err))
+  }, [])
 
   return (
     <>
@@ -221,17 +257,17 @@ function BankBook() {
               <div className="input__Section">
                 <div className="input__field">
                   <h4>From Date</h4>
-                  <input type="date" name="" id="" />
+                  <input type="date" name="" onChange={e=>setFromDate(e.target.value)} id="" />
                 </div>
 
                 <div className="input__field">
                   <h4>To Date</h4>
-                  <input type="date" name="" id="" />
+                  <input type="date" name="" onChange={e=>setToDate(e.target.value)} id="" />
                 </div>
               </div>
 
               <div className="bottom__input__section">
-                <div className="serch__box">
+                <div className="serch__box" onClick={handleFilterSearch}>
                   <h4>Search</h4>
                 </div>
               </div>
@@ -252,39 +288,19 @@ function BankBook() {
                   </tr>
                 </thead>
                 <tbody>
-                  <tr>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td style={{ color: "red" }} colspan="2">
-                      Opening Balance
-                    </td>
-                    <td style={{ color: "red" }}>1580025</td>
-                    <td></td>
-                    <td></td>
-                  </tr>
-
-                  <tr>
-                    <td>1</td>
-                    <td>05/12/2021</td>
-                    <td>C-1</td>
-                    <td colspan="2">Cash in Hand</td>
-                    <td></td>
-                    <td>500</td>
-                    <td>157000Dr</td>
-                  </tr>
-
-                  <tr>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td style={{ color: "red" }} colspan="2">
-                      Clossing Balance
-                    </td>
-                    <td></td>
-                    <td style={{ color: "red" }}>157873.000</td>
-                    <td></td>
-                  </tr>
+                  {
+                    bankBook.map((item, index) => (
+                      <tr key={index}>
+                        <td>{index + 1}</td>
+                        <td>{new Date(item.Date).toLocaleDateString()}</td>
+                        <td>No Ref no</td>
+                        <td  colspan="2">{item.Particulars}</td>
+                        <td>{item.Reciept}</td>
+                        <td>{item.Payment}</td>
+                        <td>{item.Balance}</td>
+                      </tr>
+                    ))
+                  }
 
                   <tr>
                     <td></td>
@@ -294,12 +310,12 @@ function BankBook() {
                     <td
                       style={{ backgroundColor: "#cdccdd", fontWeight: "bold" }}
                     >
-                      157375.00
+                      {totalReciept}
                     </td>
                     <td
                       style={{ backgroundColor: "#cdccdd", fontWeight: "bold" }}
                     >
-                      157375.00
+                      {totalPayment}
                     </td>
                     <td></td>
                   </tr>

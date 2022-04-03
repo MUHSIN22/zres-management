@@ -1,5 +1,5 @@
 import { red } from "@material-ui/core/colors";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import "./contra.scss";
 import DatePicker from "react-datepicker";
 import moment from "moment";
@@ -7,6 +7,7 @@ import "react-datepicker/dist/react-datepicker.css";
 
 import FailSnackbars from "../../../basic components/failSnackBar";
 import SucessSnackbars from "../../../basic components/sucessSidePopup";
+import { accountServices } from "../../../../Services/AccountsServices";
 function Contra({
   FilterData,
   ContraData,
@@ -34,40 +35,49 @@ function Contra({
     AccountName: null,
     ledgerName: null,
   };
-
+  const editCreditRef = useRef(null);
+  const editDebitRef = useRef(null);
   const [newJournal, setNewJournal] = useState(false);
-  const [entryDate, setEntryDate] = useState(new Date());
   const [dataJournalToSend, setDataJournalToSend] = useState(dataJournal);
   const [startDate, setStartDate] = useState(null);
   const [toDate, setToDate] = useState(null);
-  const [edit, setEdit] = useState(false);
-  const [savedData, setSavedData] = useState([]);
-  const [loading, setloading] = useState(false);
+  const [isEdit, setEdit] = useState(false);
   const [dataFromServer, setDataFromServer] = useState([]);
-  const [editData, setEditData] = useState({});
   const [debitCredit, setDebitCredit] = useState(0);
   const [dropdownList, setDropdownList] = useState([]);
-  const [editTableSelectedID, setEditTableSelctedID] = useState(0);
   const [messageToPass, setMessageToPass] = useState("");
   const [failSnackbar, setFailSnackBar] = useState(false);
   const [sucessSnackbar, setSucessSnackBar] = useState(false);
-  const [sucessAdded, setSucessAdded] = useState(true);
   const [snackBarOpen, setSnackbarOpen] = useState(true);
-
-  const handleFilterByData = () => {};
+  const [dropDown,setDropDown] = useState([])
+  const [journels,setJournels] = useState([])
+  const [journelEditData,setJournelEditData] = useState([]);
+  const [newData,setNewData] = useState({
+    jCredit: 0,
+    jDebit: 0,
+    CreditAccountId: null,
+    DebitAccountId: null,
+    JEntryDate: null,
+    JNarration: '',
+    JRefNo: null
+  })
 
   const handleDataInput = (e) => {
     const value = e.target.value;
-
-    setDataJournalToSend({
-      ...dataJournalToSend,
-      [e.target.name]: value,
-      JCredit: debitCredit,
-      JDebit: debitCredit,
-    });
+    setNewData({...newData,[e.target.name]:value});
   };
 
   // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+
+  const handleFilterSearch = () => {
+    let from = new Date(startDate).toISOString();
+    let to = new Date(toDate).toISOString();
+    if(startDate && toDate){
+      accountServices.getFilteredContra(new Date(startDate).toISOString(),new Date(toDate).toISOString())
+      .then(res => setJournels(res))
+      .catch(err => console.log(err))
+    }
+  }
 
   const handleNewJournal = () => {
     setNewJournal(true);
@@ -77,26 +87,66 @@ function Contra({
 
   const handleStartDate = (date) => {
     setStartDate(date);
-    setToDate(null);
   };
 
   const handleToDate = (date) => {
     setToDate(date);
   };
 
-  const handleJournalSubmit = (e) => {
+  const handleSave = (e) =>{
     e.preventDefault();
+    console.log(newData);
+  }
+  const handleUpdate = (event) => {
+    event.preventDefault();
+    console.log(newData);
+  }
+
+  const handleJournalSubmit = (e) => {
+    console.log(newData);
   };
 
-  const handleClearALL = () => {};
+  const handleClearALL = () => {
+    setNewData({
+      JCredit: '',
+      JDebit: '',
+      CreditAccountId: '',
+      DebitAccountId: '',
+      JEntryDate: '',
+      JNarration: '',
+      JRefNo: ''
+    });
+  };
 
-  const handleEditOptions = (id) => {};
+  const handleEditOptions = (id,index) => {
+    setEdit(true)
+    setJournelEditData([journels[index]])
+    setNewData(journels[index])
+  };
 
   const handleExitfun = () => {
     setEdit(false);
     setNewJournal(false);
-    setDataJournalToSend(dataJournal);
+    setNewData({
+      JCredit: '',
+      JDebit: '',
+      CreditAccountId: '',
+      DebitAccountId: '',
+      JEntryDate: '',
+      JNarration: '',
+      JRefNo: ''
+    })
   };
+
+  useEffect(() => {
+    accountServices.getContraDropDown()
+    .then(data => setDropDown(data))
+    .catch(err => console.log(err))
+
+    accountServices.getAllContra()
+    .then(data => setJournels(data))
+    .catch(err => console.log(err))
+  },[])
 
   return (
     <>
@@ -115,7 +165,7 @@ function Contra({
         />
       )}
 
-      <div className="Contra">
+      <div className="Journals">
         <div className="top__header___Section">
           <h2>Contra</h2>
         </div>
@@ -140,9 +190,7 @@ function Contra({
           </div>
 
           <div className="search__Section">
-            <button type="button" onClick={handleFilterByData}>
-              Search
-            </button>
+            <button type="button" onClick={handleFilterSearch}>Search</button>
           </div>
         </div>
         <div className="journal__container">
@@ -161,10 +209,10 @@ function Contra({
                     </tr>
                   </thead>
                   <tbody>
-                    {dataFromServer.map((data) => (
-                      <tr onClick={() => handleEditOptions(data.EntryNo)}>
+                    {journels.map((data,index) => (
+                      <tr key={index} onClick={() => handleEditOptions(data.EntryNo,index)}>
                         <td>{data.JRefNo}</td>
-                        <td>{data.JEntryDate}</td>
+                        <td>{new Date(data.JEntryDate).toLocaleDateString()}</td>
                       </tr>
                     ))}
                   </tbody>
@@ -195,7 +243,7 @@ function Contra({
                       style={{ marginRight: "35px" }}
                       type="datetime-local"
                       name="JEntryDate"
-                      value={dataJournalToSend.JEntryDate}
+                      value={newData.JEntryDate}
                       onChange={handleDataInput}
                     />
                   </div>
@@ -206,7 +254,7 @@ function Contra({
                     <input
                       required
                       name="JRefNo"
-                      value={dataJournalToSend.JRefNo}
+                      value={newData.JRefNo}
                       onChange={handleDataInput}
                       type="text"
                     />
@@ -216,7 +264,7 @@ function Contra({
                     <h5>Narration</h5>
                     <input
                       name="JNarration"
-                      value={dataJournalToSend.JNarration}
+                      value={newData.JNarration}
                       onChange={handleDataInput}
                       type="text"
                       style={{ width: "150px", marginRight: "130px" }}
@@ -234,13 +282,12 @@ function Contra({
                         ></th>
                         <th>Debit Account Name</th>
                         <th>Credit Account Name</th>
-
                         <th>Debit</th>
                         <th>Credit</th>
                       </tr>
                     </thead>
                     <tbody>
-                      {newJournal && (
+                      {(newJournal || isEdit) && (
                         <>
                           <tr>
                             <td
@@ -255,7 +302,7 @@ function Contra({
                               {" "}
                               <select
                                 name="DebitAccountId"
-                                value={dataJournalToSend.DebitAccountId}
+                                value={newData.DebitAccountId}
                                 onChange={handleDataInput}
                                 style={{
                                   width: "100%",
@@ -267,8 +314,8 @@ function Contra({
                                 <option value="" disabled selected>
                                   Pic Account Type
                                 </option>
-                                {dropdownList?.map((list) => (
-                                  <option value={list.Value}>
+                                {dropDown?.map((list) => (
+                                  <option value={list.Text}>
                                     {list.Text}
                                   </option>
                                 ))}
@@ -281,7 +328,7 @@ function Contra({
                               {" "}
                               <select
                                 name="CreditAccountId"
-                                value={dataJournalToSend.CreditAccountId}
+                                value={newData.CreditAccountId}
                                 onChange={handleDataInput}
                                 style={{
                                   width: "100%",
@@ -293,7 +340,7 @@ function Contra({
                                 <option value="" disabled selected>
                                   Pic Account Type
                                 </option>
-                                {dropdownList?.map((list) => (
+                                {dropDown?.map((list) => (
                                   <option value={list.Value}>
                                     {list.Text}
                                   </option>
@@ -308,11 +355,8 @@ function Contra({
                               <input
                                 required
                                 name="jDebit"
-                                value={debitCredit}
-                                onChange={(e) => {
-                                  setDebitCredit(e.target.value);
-                                  handleDataInput(e);
-                                }}
+                                value={newData.JDebit}
+                                onChange={handleDataInput}
                                 style={{
                                   width: "100%",
                                   outline: "none",
@@ -327,11 +371,9 @@ function Contra({
                             <td>
                               <input
                                 required
-                                value={debitCredit}
-                                onChange={(e) => {
-                                  setDebitCredit(e.target.value);
-                                  handleDataInput(e);
-                                }}
+                                name="jCredit"
+                                value={newData.JCredit}
+                                onChange={handleDataInput}
                                 style={{
                                   width: "100%",
                                   outline: "none",
@@ -344,6 +386,8 @@ function Contra({
                           </tr>
                         </>
                       )}
+
+                       
                     </tbody>
 
                     <tfoot>
@@ -351,33 +395,21 @@ function Contra({
                         <td style={{ border: "none" }}></td>
                         <td style={{ border: "none" }}></td>
                         <td style={{ border: "none" }}></td>
-                        <td>{debitCredit}</td>
-                        <td>{debitCredit}</td>
+                        <td>{newData.jDebit}</td>
+                        <td>{newData.jCredit}</td>
                       </tr>
                     </tfoot>
                   </table>
                 </div>
 
                 <div className="button__section">
-                  {!newJournal && (
-                    <button onClick={() => handleNewJournal()}>New</button>
-                  )}
-
-                  {edit && <button type="submit">Update</button>}
-
-                  {newJournal && (
-                    <>
-                      {!edit && <button type="submit">Save</button>}
-
-                      <button type="button" onClick={handleClearALL}>
-                        Clear
-                      </button>
-                    </>
-                  )}
-
-                  <button type="button" onClick={handleExitfun}>
-                    Exit
-                  </button>
+                  {(!newJournal && !isEdit)&& 
+                    <button onClick={handleNewJournal}>New</button>
+                  }
+                  {newJournal && <button type="submit" onClick={handleSave}>Save</button>}
+                  {isEdit && <button type="submit" onClick={handleUpdate}>Update</button>}
+                  <button type="button" onClick={handleClearALL}>Clear</button>
+                  <button type="button" onClick={handleExitfun}>Exit</button>
                 </div>
               </div>
             </form>

@@ -1,8 +1,9 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import "./dayBookDetails.scss";
 import Prints from "./Prints/Prints";
 import DatePicker from "react-datepicker";
 import moment from "moment";
+import { accountServices } from "../../../../Services/AccountsServices";
 const Data = [
   {
     date: "05/12/2021",
@@ -133,6 +134,7 @@ const Data = [
 ];
 
 function DayBookDetails() {
+  const [dayBook, setDayBook] = useState([])
   const [printActive, closePrintActive] = useState(false);
   const [clickedTr, SetClickedTr] = useState("");
 
@@ -151,6 +153,13 @@ function DayBookDetails() {
   // selecting row
 
   // const[rowClick,setRowClick]
+
+  useEffect(() => {
+    console.log("ABC");
+    accountServices.getAllDayBook()
+      .then(res => { setDayBook(res); console.log(res); })
+      .catch(err => console.log(err))
+  }, [])
 
   return (
     <>
@@ -366,66 +375,45 @@ function DayBookDetails() {
                   </tr>
                 </thead>
                 <tbody>
-                  {Data.map((items) => (
-                    <>
-                      {items.fieldDate.map((fieldData) => (
-                        <tr>
-                          <td>{items.date}</td>
-                          <td colspan="2">{fieldData.name}</td>
-                          <td>{fieldData.type}</td>
-                          <td>{fieldData.Recipet}</td>
-                          <td>{fieldData.payment}</td>
-                        </tr>
-                      ))}
-
-                      <tr>
-                        <td></td>
-                        <td colspan="2" style={{ fontWeight: "bolder" }}>
-                          Total
-                        </td>
-                        <td></td>
-                        <td style={{ fontWeight: "bolder" }}>5000</td>
-                        <td style={{ fontWeight: "bolder" }}>25000</td>
-                      </tr>
-
-                      <tr>
-                        <td style={{ backgroundColor: "#b6b5c6" }}></td>
-                        <td
-                          colspan="2"
-                          style={{ backgroundColor: "#b6b5c6" }}
-                        ></td>
-                        <td style={{ backgroundColor: "#b6b5c6" }}></td>
-                        <td style={{ backgroundColor: "#b6b5c6" }}></td>
-                        <td style={{ backgroundColor: "#b6b5c6" }}></td>
-                      </tr>
-                    </>
+                  {dayBook.map((item) => (
+                    <tr>
+                      <td>{new Date(item.Date).toLocaleDateString()}</td>
+                      <td colspan="2">{item.AccName}</td>
+                      <td>{item.AccType}</td>
+                      <td>{item.Reciept}</td>
+                      <td>{item.Payment}</td>
+                    </tr>
                   ))}
                 </tbody>
 
                 <tfoot>
-                  <tr>
-                    <td></td>
-                    <td colspan="2"></td>
-                    <td></td>
-                    <td
-                      style={{
-                        backgroundColor: "#cdccdd",
-                        textDecoration: "underline",
-                        fontWeight: "bolder",
-                      }}
-                    >
-                      746578.02
-                    </td>
-                    <td
-                      style={{
-                        backgroundColor: "#cdccdd",
-                        textDecoration: "underline",
-                        fontWeight: "bolder",
-                      }}
-                    >
-                      746373.00
-                    </td>
-                  </tr>
+                  {
+                    dayBook[0] && dayBook.reduce((previous,current) => (
+                      <tr>
+                        <td></td>
+                        <td colspan="2"></td>
+                        <td></td>
+                        <td
+                          style={{
+                            backgroundColor: "#cdccdd",
+                            textDecoration: "underline",
+                            fontWeight: "bolder",
+                          }}
+                        >
+                          {parseInt(previous.Reciept) + parseInt(current.Reciept)}
+                        </td>
+                        <td
+                          style={{
+                            backgroundColor: "#cdccdd",
+                            textDecoration: "underline",
+                            fontWeight: "bolder",
+                          }}
+                        >
+                          746373.00
+                        </td>
+                      </tr>
+                    ))
+                  }
                 </tfoot>
               </table>
               <div className="bottom__area__section">

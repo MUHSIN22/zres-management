@@ -1,5 +1,5 @@
 import { display } from "@mui/system";
-import React from "react";
+import React, { useEffect, useState } from "react";
 import {
   PieChart,
   Pie,
@@ -8,13 +8,17 @@ import {
   Tooltip,
   ResponsiveContainer,
 } from "recharts";
-function doughNutChart() {
-  const data02 = [
-    { name: "Sales", value: 2400 },
-    { name: "Purchase", value: 4567 },
-    { name: "Gross Profit", value: 1398 },
-  ];
+import { dashboardServices } from "../../../../Services/DashboardServices";
+function doughNutChart({chartOfSales}) {
+  
+  // const data02 = [
+  //   { name: "Sales", value: 2400 },
+  //   { name: "Purchase", value: 4567 },
+  //   { name: "Gross Profit", value: 1398 },
+  // ];
   const COLORS = ["#040153", "#b196c2", "#7d3a58"];
+
+  console.log(chartOfSales);
   return (
     <div
       style={{ backgroundColor: "#fff", padding: "5px", borderRadius: "15px" }}
@@ -23,7 +27,7 @@ function doughNutChart() {
         <PieChart width={500} height={500}>
           <Pie
             dataKey="value"
-            data={data02}
+            data={chartOfSales}
             cx="50%"
             cy="50%"
             innerRadius={40}
@@ -31,7 +35,7 @@ function doughNutChart() {
             fill="#82ca9d"
           >
             {" "}
-            {data02.map((entry, index) => (
+            {chartOfSales.map((entry, index) => (
               <Cell
                 key={`cell-${index}`}
                 fill={COLORS[index % COLORS.length]}

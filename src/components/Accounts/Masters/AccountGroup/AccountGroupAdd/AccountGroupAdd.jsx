@@ -3,6 +3,7 @@ import "./accountGroupAdd.scss";
 import SucessfullMag from "../../../../Inventory/Transaction Manager/Reports/Stock Cost/clossing stock print/SucessfullMessage/SucessfullMag";
 import FailSnackbars from "../../../../basic components/failSnackBar";
 import SucessSnackbars from "../../../../basic components/sucessSidePopup";
+import { accountServices } from "../../../../../Services/AccountsServices";
 function AccountGroupAdd({
   setAddNewBtn,
   editTableSelectedID,
@@ -36,6 +37,9 @@ function AccountGroupAdd({
 
   const submitFormHandler = (e) => {
     e.preventDefault();
+    accountServices.uploadAccountGroupData(dataToSend)
+    .then(res => console.log(res))
+    .catch(err => console.log(err))
   };
 
   const handleDeletefunctionss = () => {};

@@ -42,7 +42,8 @@
     }
   
     ol {
-      margin-left: 40%;
+      margin: 1rem;
+      margin-left: 2rem;
       color: #040153;
   
       li {
@@ -50,6 +51,7 @@
         margin-bottom: 5px;
         .inner__li {
           display: flex;
+          justify-content: space-between;
           H5 {
             margin-right: 15px;
           }
@@ -261,7 +263,8 @@
     }
 
     ol {
-      margin-left: 35%;
+      padding: 1rem;
+      margin-left: 2rem;
       color: #040153;
 
       li {
@@ -269,6 +272,7 @@
         margin-bottom: 5px;
         .inner__li {
           display: flex;
+          justify-content: space-between;
           H5 {
             margin-right: 15px;
           }
