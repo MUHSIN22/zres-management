@@ -9,6 +9,7 @@ import { red } from "@mui/material/colors";
 import ArrowDropDownIcon from "@mui/icons-material/ArrowDropDown";
 import AddProducts from "./addProductsMenu/AddProducts";
 import ArrowDropUpIcon from "@mui/icons-material/ArrowDropUp";
+import { inventoryServices } from "../../../../Services/InventoryServices";
 
 const Date = [
   {
@@ -73,13 +74,13 @@ function MenuDetails() {
   const [mainpage, setMainPage] = useState(true);
   const [updatableProducts, setUpdatableProducts] = useState([]);
 
-  const [data, setData] = useState(Date);
+  const [data, setData] = useState([]);
   const [datatoRender, setDataTorender] = useState([]);
 
   // this useeffect is used to sort the data initialy to decending order
   useEffect(() => {
     const dataSorted = data.sort((a, b) =>
-      a.Name.toLowerCase() > b.Name.toLowerCase() ? 1 : -1
+      a.ItemName.toLowerCase() > b.ItemName.toLowerCase() ? 1 : -1
     );
 
     setData(dataSorted);
@@ -88,6 +89,10 @@ function MenuDetails() {
   // this use effect is used to refresh the data when sorted
   useEffect(() => {
     setDataTorender(data);
+    inventoryServices.getMenu()
+    .then(data =>{
+      setData(data)
+    })
   }, [data, nameSorting, categorysorting, statusSorting]);
 
   const handleDelete = (id) => {
@@ -112,14 +117,14 @@ function MenuDetails() {
     if (nameSorting) {
       // decending
       const dataSorted = data.sort((a, b) =>
-        a.Name.toLowerCase() > b.Name.toLowerCase() ? 1 : -1
+        a.ItemName.toLowerCase() > b.ItemName.toLowerCase() ? 1 : -1
       );
       setNameSorting(false);
       setData(dataSorted);
     } else {
       //  ascending
       const dataSorted = data.sort((a, b) =>
-        a.Name.toLowerCase() < b.Name.toLowerCase() ? 1 : -1
+        a.ItemName.toLowerCase() < b.ItemName.toLowerCase() ? 1 : -1
       );
       setData(dataSorted);
     }
@@ -150,14 +155,14 @@ function MenuDetails() {
     if (categorysorting) {
       // decending
       const dataSorted = data.sort((a, b) =>
-        a.Category.toLowerCase() > b.Category.toLowerCase() ? 1 : -1
+        a.MenuGroupName.toLowerCase() > b.MenuGroupName.toLowerCase() ? 1 : -1
       );
       setCategorySorting(false);
       setData(dataSorted);
     } else {
       //  ascending
       const dataSorted = data.sort((a, b) =>
-        a.Category.toLowerCase() < b.Category.toLowerCase() ? 1 : -1
+        a.MenuGroupName.toLowerCase() < b.MenuGroupName.toLowerCase() ? 1 : -1
       );
       setData(dataSorted);
     }
@@ -285,15 +290,17 @@ function MenuDetails() {
                       if (search === "") {
                         return datatoRender;
                       } else if (
-                        post.Name.toLowerCase().includes(
+                        post.ItemName.toLowerCase().includes(
                           search.toLowerCase()
-                        ) ||
-                        post.Status.toLowerCase().includes(
-                          search.toLowerCase()
-                        ) ||
-                        post.Category.toLowerCase().includes(
-                          search.toLowerCase()
-                        )
+                        ) 
+                        // ||
+                        // post.Status.toLowerCase().includes(
+                        //   search.toLowerCase()
+                        // ) 
+                        // ||
+                        // post.MenuGroupName.toLowerCase().includes(
+                        //   search.toLowerCase()
+                        // )
                       ) {
                         return datatoRender;
                       }
@@ -311,11 +318,11 @@ function MenuDetails() {
                           <img src={datas.Image} alt="" />
                         </td>
 
-                        <td colSpan="2">{datas.Name}</td>
+                        <td colSpan="2">{datas.ItemName}</td>
 
-                        <td>{datas.Category}</td>
+                        <td>{datas.MenuGroupName === null ? 'No Data in APi': datas.MenuGroupName}</td>
 
-                        <td>{datas.Price}</td>
+                        <td>{datas.ItemPrice}</td>
 
                         <td className="StatusSection" colSpan="2">
                           <div className="td__wrapper">

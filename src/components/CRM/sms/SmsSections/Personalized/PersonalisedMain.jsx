@@ -1,11 +1,15 @@
 import React from "react";
+import { Outlet } from "react-router-dom";
 import "../../sms.scss";
 
 
 function PersonalisedMain() {
   
   return (
-    <p>ff</p>
+<div>
+<Outlet/>
+</div>
+ 
   );
 }
 

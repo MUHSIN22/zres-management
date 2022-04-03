@@ -3,7 +3,7 @@ import "./sms.scss";
 import CancelIcon from "@mui/icons-material/Cancel";
 import Bulk from "./SmsSections/Bulk/Bulk";
 import Personalized from "./SmsSections/Personalized/Personalized";
-import { Link } from "react-router-dom";
+import { Link, Outlet } from "react-router-dom";
 
 function Sms() {
 
@@ -181,8 +181,8 @@ function Sms() {
         </div>
         <div className="sms__body__right">
           <div className="messageSection__container">
-             <Personalized />
-             <Bulk />
+             {/* <Personalized />
+             <Bulk /> */}
 
           </div>
         </div>

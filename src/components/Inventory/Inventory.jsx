@@ -19,10 +19,7 @@ function Inventory({ InventoryClick }) {
       <div className="Inventory">
         {!selectedOption && (
           <>
-            <div className="overlayer__black"></div>
-           
-            <Outlet/>
-            
+            <Outlet/> 
           </>
         )}
 
