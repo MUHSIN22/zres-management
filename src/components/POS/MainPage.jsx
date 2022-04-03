@@ -22,7 +22,7 @@ import AccountHead from "../Accounts/Masters/AccountHead/AccountHead";
 import AccountGroup from "../Accounts/Masters/AccountGroup/AccountGroup";
 import AddCustomer from "../CRM/addCustomer/AddCustomer";
 import CustomerDetails from "../CRM/customerDetails/CustomerDetails";
-import { Sms } from "@material-ui/icons";
+
 import CrmFront from "../CRM/CrmFront";
 import PersonalisedMain from "../CRM/sms/SmsSections/Personalized/PersonalisedMain"
 import Master from '../CRM/../Inventory/Inventory_Master/Master'
@@ -30,6 +30,7 @@ import TransactionMaster from '../CRM/../Inventory/Transaction Manager/Transacti
 import MenuManagement from "../Inventory/MenuManagement/MenuManagement";
 import RecipeManagement from "../Inventory/recipe management/RecipeManagement";
 import ReportSection from "../Inventory/ReportsSection/ReportSection";
+import Sms from "../CRM/sms/Sms";
 
 function MainPage() {
   const navigate = useNavigate();

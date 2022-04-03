@@ -6,6 +6,7 @@ import AddCircleIcon from "@mui/icons-material/AddCircle";
 import CloseOutlinedIcon from "@mui/icons-material/CloseOutlined";
 import AddBoxOutlinedIcon from "@mui/icons-material/AddBoxOutlined";
 import SucessfullMag from "../../../Transaction Manager/Reports/Stock Cost/clossing stock print/SucessfullMessage/SucessfullMag";
+
 const thumbsContainer = {
   display: "flex",
   flexDirection: "row",
@@ -151,8 +152,9 @@ function AddProducts({
   useEffect(() => {
     if (editProduct) {
       const HandleUpdateProductsFeild = () => {
-        SetMenuName(updatableProducts.Name);
-        setPrice(updatableProducts.Price);
+        SetMenuName(updatableProducts.ItemName);
+        setMenucode(updatableProducts.MenuID)
+        setPrice(updatableProducts.ItemPrice);
         setImage(updatableProducts.Image);
         setActiveBlock(updatableProducts.Status);
       };
@@ -192,7 +194,7 @@ function AddProducts({
                   <input
                     type="number"
                     name="menuCode"
-                    value={dataToSend.menuCode}
+                    value={editProduct ?menuCode :dataToSend.menuCode}
                     onChange={handleAddCategoryToSend}
                   />
                 </div>
@@ -201,7 +203,7 @@ function AddProducts({
                   <input
                     type="text"
                     name="menuName"
-                    value={dataToSend.menuName}
+                    value={editProduct ?menuName :dataToSend.menuName}
                     onChange={handleAddCategoryToSend}
                   />
                 </div>
@@ -211,7 +213,7 @@ function AddProducts({
                   <input
                     type="number"
                     name="price"
-                    value={dataToSend.price}
+                    value={editProduct ? price :dataToSend.price}
                     onChange={handleAddCategoryToSend}
                   />
                   <AddBoxOutlinedIcon

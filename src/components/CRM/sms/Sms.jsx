@@ -181,9 +181,8 @@ function Sms() {
         </div>
         <div className="sms__body__right">
           <div className="messageSection__container">
-             {/* <Personalized />
-             <Bulk /> */}
-
+            
+            <Outlet/>
           </div>
         </div>
       </div>
