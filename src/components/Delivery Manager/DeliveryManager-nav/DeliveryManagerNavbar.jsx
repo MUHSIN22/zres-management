@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import MenuIcon from "@mui/icons-material/Menu";
 import CloseIcon from "@mui/icons-material/Close";
 import "./deliveryManagerNav.scss";
+import { Link } from "react-router-dom";
 
 function DeliveryManagerNavbar({
   setSelectedNav,
@@ -32,7 +33,9 @@ function DeliveryManagerNavbar({
                 setMenuIcon(false);
               }}
             >
+              <Link to="">
               <h5>Home Delivery Orders</h5>
+              </Link>
             </div>
             <div
               className={

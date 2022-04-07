@@ -43,7 +43,7 @@ function DineIn({ SetClicked }) {
   const indexOfFirstPost = indexOfLastPost - postPerPage;
   const [totalTablesLength, setTotalTablesLength] = useState(0);
   const [dataToSendToWlkinPage, setDataToSendToWalkinPage] =
-  useState(dataToSendToWalkin);
+    useState(dataToSendToWalkin);
   const [getAllTableData, setGetAllTableData] = useState({});
   const [allTableData, setAllTableData] = useState({});
   const [allTableAvailability, setAllTableAvailability] = useState({});
@@ -52,13 +52,13 @@ function DineIn({ SetClicked }) {
   for (let i = 1; i <= Math.ceil(10 / postPerPage); i++) {
     pageNumber.push(i);
   }
-  useEffect(() => {
+ useEffect(() => {
     axios
       .get("https://zres.clubsoft.co.in/DineIn/GetAllTablesInDine?CMPid=1")
       .then((res) => {
         setGetAllTableData(res.data);
         setTotalTablesLength(res.data.length);
-        setAllTableData(res.data)
+        setAllTableData(res.data);
       });
   }, []);
 
@@ -100,31 +100,31 @@ function DineIn({ SetClicked }) {
     }
   };
   const getStatusLength = (type) => {
-    if(getTableAvailability.length>0){
-      return getTableAvailability.filter((data)=>{
-        return data.TableStatus === type
-      }).length 
+    if (getTableAvailability.length > 0) {
+      return getTableAvailability.filter((data) => {
+        return data.TableStatus === type;
+      }).length;
     }
-  }
+  };
   const filterHandlerForArea = (area) => {
-    if(allTableData.length>0){
-      if(area!=="all"){
-        const newTableData = allTableData.filter((data)=>{
-          return data.DineInArea===area
-        })
-        setGetAllTableData(newTableData)
-      }else{
-        setGetAllTableData(allTableData)
+    if (allTableData.length > 0) {
+      if (area !== "all") {
+        const newTableData = allTableData.filter((data) => {
+          return data.DineInArea === area;
+        });
+        setGetAllTableData(newTableData);
+      } else {
+        setGetAllTableData(allTableData);
       }
     }
-    if(allTableAvailability.length>0){
-      if(area!=="all"){
-        const newAvailabilityData = allTableAvailability.filter((data)=>{
-          return data.DineInArea===area
-        })
-        setGetTableAvailability(newAvailabilityData)
-      }else{
-        setGetTableAvailability(allTableAvailability)
+    if (allTableAvailability.length > 0) {
+      if (area !== "all") {
+        const newAvailabilityData = allTableAvailability.filter((data) => {
+          return data.DineInArea === area;
+        });
+        setGetTableAvailability(newAvailabilityData);
+      } else {
+        setGetTableAvailability(allTableAvailability);
       }
     }
   };
@@ -135,7 +135,7 @@ function DineIn({ SetClicked }) {
   };
   const svgFilter = (seat, shape, id) => {
     if (getTableAvailability.length > 0) {
-      var checkAvailbility = getTableAvailability.filter(data => {
+      var checkAvailbility = getTableAvailability.filter((data) => {
         if (data.DineInSettingsID === id) {
           return data;
         }
@@ -158,14 +158,14 @@ function DineIn({ SetClicked }) {
         case 2:
           return <TwoSeaterSquare availability={checkAvailbility} />;
         case 4:
-          return <FourSeaterSquare  availability={checkAvailbility}/>;
+          return <FourSeaterSquare availability={checkAvailbility} />;
         case 6:
-          return <SixSeaterSquare  availability={checkAvailbility}/>;
+          return <SixSeaterSquare availability={checkAvailbility} />;
         default:
           return null;
       }
     } else {
-      return <TwoSeaterCorner availability={checkAvailbility}/>;
+      return <TwoSeaterCorner availability={checkAvailbility} />;
     }
   };
   if (getAllTableData.length < 0) {
@@ -332,39 +332,32 @@ function DineIn({ SetClicked }) {
 
                   <button
                     style={{ backgroundColor: "#009751", color: "#fff" }}
-                    onClick={() =>
-                      setSelectedAvialibilityTable("Available")
-                    }
+                    onClick={() => setSelectedAvialibilityTable("Available")}
                   >
                     {getStatusLength("Available")} Available
                   </button>
                   <button
                     style={{ backgroundColor: "#c8c8cf", color: "#040153" }}
-                    onClick={() =>
-                      setSelectedAvialibilityTable("Occupied")
-                    }
+                    onClick={() => setSelectedAvialibilityTable("Occupied")}
                   >
                     {getStatusLength("Occupied")} Occupied
                   </button>
                   <button
                     style={{ backgroundColor: "#040153", color: "#fff" }}
-                    onClick={() =>
-                      setSelectedAvialibilityTable("DoneSoon")
-                    }
+                    onClick={() => setSelectedAvialibilityTable("DoneSoon")}
                   >
                     {getStatusLength("DoneSoon")} Done Soon
                   </button>
                   <button
                     style={{ backgroundColor: "#e1870e", color: "#040153" }}
-                    onClick={() =>
-                      setSelectedAvialibilityTable("Reservation")
-                    }
+                    onClick={() => setSelectedAvialibilityTable("Reservation")}
                   >
                     {getStatusLength("Reservation")} Reservation
                   </button>
-                  <div className="right__dine__refresh__btn"
-                    onClick={()=>{
-                      window.location.reload(false)
+                  <div
+                    className="right__dine__refresh__btn"
+                    onClick={() => {
+                      window.location.reload(false);
                     }}
                   >
                     <svg
@@ -388,7 +381,7 @@ function DineIn({ SetClicked }) {
                 </div>
               </div>
               <div className="bottom__dine__table__section">
-                {runningOrder && <RunningOrder />}
+                {runningOrder&& <RunningOrder/>}
                 {compleateOrder && <CompleatedOrder />}
 
                 {mainTableArea && (

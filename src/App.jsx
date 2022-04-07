@@ -28,7 +28,7 @@ function App() {
         <Router>
           <Routes>
             <Route path="/printTest" element={<Billgenerated />} />
-            <Route path="/deliveryManager" element={<DeliveryManager />}/>
+            <Route path="delivery-manager" element={<DeliveryManager />}/>
             <Route path="/setting" element={<Settings />}/>
             <Route path="/foodOrder" element={<FoodOrderPage />}/>
             <Route path="/dinein" element={<DineIn />}/>

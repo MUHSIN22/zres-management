@@ -1,7 +1,10 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import "./waitingForPicup.scss";
 import Select from "react-select";
+import axios from "axios";
 function WaitingForPicup() {
+  const [drivers, setDrivers] = useState([]);
+  const [picupData, setPicupData] = useState([]);
   const [detailsClicked, setDetailsClicked] = useState(false);
   const options = [
     { label: "Mohan", value: "Mohan" },
@@ -12,6 +15,23 @@ function WaitingForPicup() {
     { label: "Sam", value: "Sam" },
   ];
 
+  useEffect(() => {
+    axios
+      .get("https://zres.clubsoft.co.in/DeliveryManager/GetDriver?CMPid=1")
+      .then((req) => {
+        setDrivers(req.data);
+      });
+  }, []);
+  useEffect(() => {
+    axios
+      .get(
+        "https://zres.clubsoft.co.in/DeliveryManager/GetAllPickUpOrders?CMPid=1"
+      )
+      .then((req) => {
+        setPicupData(req.data);
+      });
+  }, []);
+
   const list = [
     { ordername: "cheeeseDurger", qty: "2" },
     { ordername: "jerry", qty: "2" },
@@ -21,18 +41,20 @@ function WaitingForPicup() {
   const half = Math.ceil(list.length / 2);
   const firstHalf = list.splice(0, half);
   const secondHalf = list.splice(-half);
-
-  const [readMore, setReadMore] = useState(false);
-
-  console.log(firstHalf, "second half", secondHalf);
-
-  const [selected, setSelected] = useState([]);
   return (
     <div className="waitingForPicup">
       <div className="top__section">
         <h4>Select Driver:</h4>
         <div className="selectDriver__details">
-          <Select options={options} placeholder="Select Driver" />
+          <select>
+            <option value="" disabled selected hidden>
+              Drivers
+            </option>
+            {drivers &&
+              drivers.map((data) => {
+                return <option value={data.value}>{data.Text}</option>;
+              })}
+          </select>
           <h5>Show Available Drivers</h5>
         </div>
         <div className="areatoDeliver">
@@ -45,7 +67,7 @@ function WaitingForPicup() {
             <thead>
               <tr>
                 <th className="orderNuber__th">Order Number</th>
-                <th>Order Taken At</th>
+                <th>Qty</th>
                 <th>Elapsed Time</th>
                 <th>Driver</th>
                 <th className="location__th">Location</th>
@@ -54,35 +76,35 @@ function WaitingForPicup() {
               </tr>
             </thead>
             <tbody>
-              <tr>
-                <td data-label="Order Number">
-                  #145S -{" "}
-                  {firstHalf.map((items) => (
-                    <>
-                      {"       "}
-                      {items.ordername} X {items.qty}
-                    </>
-                  ))}
-                  <a
-                    href="#"
-                    onClick={() => setDetailsClicked(!detailsClicked)}
-                  >
-                    More details
-                  </a>
-                </td>
-                <td data-label="Order Taken At">08.25 AM</td>
-                <td data-label="Elapsed Time" className="elapsedTime">
-                  03:01:30
-                </td>
-                <td data-label="Driver">UN-Assigned</td>
-                <td data-label="Location">14 KK , Oman , Market Road</td>
-                <td data-label="Amount">OMR 13.000</td>
-                <td>
-                  <a href="#" className="button">
-                    Assign Driver
-                  </a>
-                </td>
-              </tr>
+              {picupData.map((data) => {
+                return (
+                  <tr>
+                    <td data-label="Order Number">
+                      #{data.OrderNo} -
+                          {data.ItemName} 
+                          {" "}
+                      <a
+                        href="#"
+                        onClick={() => setDetailsClicked(!detailsClicked)}
+                      >
+                        More details
+                      </a>
+                    </td>
+                    <td data-label="Order Taken At">{data.Quantity}</td>
+                    <td data-label="Elapsed Time" className="elapsedTime">
+                      {data.ElapsedTime}
+                    </td>
+                    <td data-label="Driver">UN-Assigned</td>
+                    <td data-label="Location">{data.DeliveryArea}</td>
+                    <td data-label="Amount">OMR {" "+data.Amount}.00</td>
+                    <td>
+                      <a href="#" className="button">
+                        Assign Driver
+                      </a>
+                    </td>
+                  </tr>
+                );
+              })}
 
               <tr className="HiddenMainTr">
                 <td colspan="8">
