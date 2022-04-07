@@ -283,3 +283,11 @@
     }
   }
 }
+
+@media print {
+  .Ledger{
+    .top__Section{
+      display: none;
+    }
+  }
+}

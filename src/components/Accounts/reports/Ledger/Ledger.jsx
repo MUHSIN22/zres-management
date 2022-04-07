@@ -5,6 +5,8 @@ import moment from "moment";
 import "react-datepicker/dist/react-datepicker.css";
 import AccountLedger from "./AccoutLedger/AccountLedger";
 import jsPDF from "jspdf";
+import "jspdf-autotable";
+import { CSVLink } from "react-csv";
 import { accountServices } from "../../../../Services/AccountsServices";
 
 const valuesToSend = {
@@ -21,6 +23,7 @@ function Ledger({ searchLedgerEntry }) {
   const [dropdownList, setDropdownList] = useState([]);
   const [accountNameId, setAccountNameId] = useState();
   const [ledger, setLedger] = useState([])
+
   const handleFromDate = (date) => {
     setFromDate(date);
     settoDate(null);
@@ -30,18 +33,12 @@ function Ledger({ searchLedgerEntry }) {
     settoDate(date);
   };
 
-  const handleFilterByData = () => { };
-
-  // useEffect(() => {
-  //   handleFilteration();
-  // }, [convertedFromDate, convertedToDate]);
-
-  const handleCheckBoxFilter = (e) => {
-    const checked = e.target.checked;
-    setFilterValue({
-      ...filterValue,
-      [e.target.name]: checked,
-    });
+  const handleFilterByData = () => {
+    if(accountNameId,fromDate,toDate){
+      accountServices.getFilteredLedger(accountNameId,new Date(fromDate).toISOString(),new Date(toDate).toISOString())
+        .then(res => setLedger(res))
+        .catch(err => console.log(err))
+    }
   };
 
   const handleAccountNameID = (e) => {
@@ -49,32 +46,39 @@ function Ledger({ searchLedgerEntry }) {
     setAccountNameId(data);
   };
 
-  // const handleFilteration = () => {
-  //   setFilterValue({
-  //     ...filterValue,
-  //     fromDate: convertedFromDate,
-  //     toDate: convertedToDate,
-  //   });
-  // };
+  const exportPDF = () => {
+    const unit = "pt";
+    const size = "A4"; // Use A1, A2, A3 or A4
+    const orientation = "portrait"; // portrait or landscape
 
-  // console.log(
-  //   "FilterValue",
-  //   filterValue,
-  //   "FROMDATE",
-  //   convertedFromDate,
-  //   "TODATE",
-  //   convertedToDate
-  // );
+    const marginLeft = 40;
+    const doc = new jsPDF(orientation, unit, size);
 
-  // const handleSubmitDate = () => {
-  //   fetchContraEntry(filterValue.fromDate, filterValue.toDate, () =>
-  //     window.alert("sucess")
-  //   );
-  // };
-  // selecting row
+    doc.setFontSize(15);
 
-  // const[rowClick,setRowClick]
-  console.log("the account id is ", accountNameId);
+    const title = new Date().toLocaleDateString() + " Ledger Report";
+    const headers = [["SINO", "ENTRY NO","ENTRY DATE","ACC NAME","DEBIT","CREDIT"]];
+
+    const data = ledger.map((item,index) => [
+      index,item.EntryNo,
+      new Date(item.EntryDate).toLocaleDateString(),
+      item.AccountName,
+      item.Debit,
+      item.Credit
+      ]
+    )
+    let content = {
+      startY: 50,
+      head: headers,
+      body: data
+    };
+
+    doc.text(title, marginLeft, 40);
+    doc.autoTable(content);
+    doc.save(new Date().toLocaleDateString()+"_ledger_report.pdf")
+  }
+
+
   useEffect(() => {
     accountServices.getAllLedger()
       .then(data => setLedger(data))
@@ -99,7 +103,7 @@ function Ledger({ searchLedgerEntry }) {
               </div>
 
               <div className="right">
-                <div className="icon__section">
+                <div className="icon__section" onClick={() => window.print()}>
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
                     width="15.555"
@@ -119,7 +123,7 @@ function Ledger({ searchLedgerEntry }) {
 
                   <h4>Print</h4>
                 </div>
-                <div className="icon__section">
+                <CSVLink data={ledger} filename={new Date().toLocaleDateString() + "_Ledger.csv"} className="icon__section">
                   <svg
                     id="surface1"
                     xmlns="http://www.w3.org/2000/svg"
@@ -199,8 +203,8 @@ function Ledger({ searchLedgerEntry }) {
                     />
                   </svg>
                   <h4>Export Excel</h4>
-                </div>
-                <div className="icon__section" onClick={downloadPdf}>
+                </CSVLink>
+                <div className="icon__section" onClick={exportPDF}>
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
                     width="11.916"
@@ -273,52 +277,6 @@ function Ledger({ searchLedgerEntry }) {
                     placeholderText="DD/MM/YYYY"
                   />
                 </div>
-
-                <div className="checkbox__fiels">
-                  <div className="check__field">
-                    <input
-                      type="checkbox"
-                      name="debitor"
-                      id=""
-                      checked={filterValue.debitor}
-                      onChange={handleCheckBoxFilter}
-                    />
-                    <h4>Debitors</h4>
-                  </div>
-
-                  <div className="check__field">
-                    <input
-                      type="checkbox"
-                      name="creditor"
-                      id=""
-                      checked={filterValue.creditor}
-                      onChange={handleCheckBoxFilter}
-                    />
-                    <h4>Creditors</h4>
-                  </div>
-
-                  <div className="check__field">
-                    <input
-                      type="checkbox"
-                      name="bank"
-                      id=""
-                      checked={filterValue.bank}
-                      onChange={handleCheckBoxFilter}
-                    />
-                    <h4>Bank</h4>
-                  </div>
-
-                  <div className="check__field">
-                    <input
-                      type="checkbox"
-                      name=""
-                      id=""
-                      checked={filterValue.others}
-                      onChange={handleCheckBoxFilter}
-                    />
-                    <h4>Other</h4>
-                  </div>
-                </div>
               </div>
 
               <div className="bottom__input__section">
@@ -358,7 +316,7 @@ function Ledger({ searchLedgerEntry }) {
                     ledger.map((item, index) => (
                       <tr key={index}>
                         <td>{item.EntryNo}</td>
-                        <td>{new Date(item.EntryDate).toLocaleDateString}</td>
+                        <td>{new Date(item.EntryDate).toLocaleDateString()}</td>
                         <td colspan={"2"}>{item.AccountName}</td>
 
                         <td>{item.Debit}</td>

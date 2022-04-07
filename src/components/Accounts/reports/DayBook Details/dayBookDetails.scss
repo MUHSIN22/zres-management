@@ -302,3 +302,11 @@
     }
   }
 }
+
+@media print{
+  .DayBookDetails{
+    .top__Section{
+      display: none;
+    }
+  }
+}

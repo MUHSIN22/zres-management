@@ -8,6 +8,7 @@ import "react-datepicker/dist/react-datepicker.css";
 import FailSnackbars from "../../../basic components/failSnackBar";
 import SucessSnackbars from "../../../basic components/sucessSidePopup";
 import { accountServices } from "../../../../Services/AccountsServices";
+import { toast, ToastContainer } from "material-react-toastify";
 function Journals() {
   const dataJournal = {
     JEntryDate: "",
@@ -45,8 +46,8 @@ function Journals() {
   const [journels,setJournels] = useState([])
   const [journelEditData,setJournelEditData] = useState([]);
   const [newData,setNewData] = useState({
-    jCredit: 0,
-    jDebit: 0,
+    JCredit: 0,
+    JDebit: 0,
     CreditAccountId: null,
     DebitAccountId: null,
     JEntryDate: null,
@@ -88,7 +89,17 @@ function Journals() {
 
   const handleSave = (e) =>{
     e.preventDefault();
-    console.log(newData);
+    accountServices.uploadJournel(newData)
+    .then((res) => {
+      if(!res.error){
+        toast.success('Successfully added!')
+        handleClearALL()
+      }else{
+        toast.error('Insertion Failed')
+      }
+    }).catch(err => {
+      toast.error('Insertion Failed')
+    })
   }
   const handleUpdate = (event) => {
     event.preventDefault();
@@ -143,6 +154,7 @@ function Journals() {
 
   return (
     <>
+       <ToastContainer/>
       {failSnackbar && (
         <FailSnackbars
           MessageToPass={messageToPass}
@@ -308,7 +320,7 @@ function Journals() {
                                   Pic Account Type
                                 </option>
                                 {dropDown?.map((list) => (
-                                  <option value={list.Text}>
+                                  <option value={list.Value}>
                                     {list.Text}
                                   </option>
                                 ))}
@@ -347,7 +359,7 @@ function Journals() {
                             <td>
                               <input
                                 required
-                                name="jDebit"
+                                name="JDebit"
                                 value={newData.JDebit}
                                 onChange={handleDataInput}
                                 style={{
@@ -364,7 +376,7 @@ function Journals() {
                             <td>
                               <input
                                 required
-                                name="jCredit"
+                                name="JCredit"
                                 value={newData.JCredit}
                                 onChange={handleDataInput}
                                 style={{
@@ -388,8 +400,8 @@ function Journals() {
                         <td style={{ border: "none" }}></td>
                         <td style={{ border: "none" }}></td>
                         <td style={{ border: "none" }}></td>
-                        <td>{newData.jDebit}</td>
-                        <td>{newData.jCredit}</td>
+                        <td>{newData.JDebit}</td>
+                        <td>{newData.JCredit}</td>
                       </tr>
                     </tfoot>
                   </table>

@@ -4,134 +4,8 @@ import Prints from "./Prints/Prints";
 import DatePicker from "react-datepicker";
 import moment from "moment";
 import { accountServices } from "../../../../Services/AccountsServices";
-const Data = [
-  {
-    date: "05/12/2021",
-    fieldDate: [
-      {
-        name: "Opening Balance",
-
-        type: "",
-        Recipet: 1450000,
-        payment: "",
-      },
-
-      {
-        name: "Purchase",
-
-        type: "Purchase",
-        Recipet: 458000,
-        payment: "",
-      },
-
-      {
-        name: "Cash Purchase",
-
-        type: "Purchase",
-        Recipet: "",
-        payment: 458000,
-      },
-
-      {
-        name: "Sale",
-
-        type: "Sale",
-        Recipet: "",
-        payment: 8793,
-      },
-
-      {
-        name: "Cash Sale",
-
-        type: "Sale",
-        Recipet: 8793,
-        payment: "",
-      },
-
-      {
-        name: "Clossing Balance",
-
-        type: "",
-        Recipet: "",
-        payment: "145000",
-      },
-    ],
-  },
-
-  {
-    date: "04/12/2021",
-    fieldDate: [
-      {
-        name: "Opening Balance",
-
-        type: "",
-        Recipet: 1450000,
-        payment: "",
-      },
-
-      {
-        name: "Metro Super Market",
-
-        type: "",
-        Recipet: "",
-        payment: 8000,
-      },
-
-      {
-        name: "JV-1/Cash",
-
-        type: "Journal",
-        Recipet: "",
-        payment: 458000,
-      },
-
-      {
-        name: "Cash",
-
-        type: "Sale",
-        Recipet: 80000,
-        payment: "",
-      },
-
-      {
-        name: "JV-1/Metro Super Market",
-
-        type: "Journal",
-        Recipet: "",
-        payment: "",
-      },
-
-      {
-        name: "Clossing Balance",
-
-        type: "",
-        Recipet: "",
-        payment: "145000",
-      },
-    ],
-  },
-
-  {
-    date: "03/12/2021",
-    fieldDate: [
-      {
-        name: "Opening Balance",
-
-        type: "",
-        Recipet: 1450000,
-        payment: "",
-      },
-
-      {
-        name: "Clossing Balance",
-
-        type: "",
-        Recipet: "",
-        payment: "145000",
-      },
-    ],
-  },
-];
+import {exportPDF} from '../../../../Services/PDFServices'
+import { CSVLink } from "react-csv";
 
 function DayBookDetails() {
   const [dayBook, setDayBook] = useState([])
@@ -146,16 +20,37 @@ function DayBookDetails() {
     setToDate(null);
   };
 
+  const downloadPdf = () => {
+    const data = dayBook.map((item,index) => [
+      new Date(item.Date).toLocaleDateString(),
+      item.AccName,
+      item.AccType,
+      item.Reciept,
+      item.Payment
+    ])
+    const headers = ['Date',"Account Name","Account Type","Reciept","Payment"]
+    exportPDF(headers,'Daybook Report',data);
+  }
+
   const handleToDate = (date) => {
     setToDate(date);
   };
+
+  const handleFilterSearch = () => {
+    if(fromDate && toDate){
+      let from = new Date(fromDate).toISOString()
+      let to = new Date(toDate).toISOString()
+      accountServices.getFilteredDayBook(from,to)
+        .then(res => setDayBook(res))
+        .catch(err => console.log(err))
+    }
+  }
 
   // selecting row
 
   // const[rowClick,setRowClick]
 
   useEffect(() => {
-    console.log("ABC");
     accountServices.getAllDayBook()
       .then(res => { setDayBook(res); console.log(res); })
       .catch(err => console.log(err))
@@ -178,7 +73,7 @@ function DayBookDetails() {
               <div className="right">
                 <div
                   className="icon__section"
-                  onClick={() => closePrintActive(true)}
+                  onClick={() => window.print()}
                 >
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
@@ -199,7 +94,7 @@ function DayBookDetails() {
 
                   <h4>Print</h4>
                 </div>
-                <div className="icon__section">
+                <CSVLink data={dayBook} filename={new Date().toLocaleDateString() + "_daybook.csv"} className="icon__section">
                   <svg
                     id="surface1"
                     xmlns="http://www.w3.org/2000/svg"
@@ -279,8 +174,8 @@ function DayBookDetails() {
                     />
                   </svg>
                   <h4>Export Excel</h4>
-                </div>
-                <div className="icon__section">
+                </CSVLink>
+                <div onClick={downloadPdf} className="icon__section">
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
                     width="11.916"
@@ -356,7 +251,7 @@ function DayBookDetails() {
               </div>
 
               <div className="bottom__input__section">
-                <div className="serch__box">
+                <div className="serch__box" onClick={handleFilterSearch}>
                   <h4>Search</h4>
                 </div>
               </div>

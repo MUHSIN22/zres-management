@@ -1,53 +1,43 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
+import { CSVLink } from "react-csv";
+import { accountServices } from "../../../../Services/AccountsServices";
+import { exportPDF } from "../../../../Services/PDFServices";
 import "./balanceSheet.scss";
 import Prints from "./Prints/Prints";
 
-const Date = [
-  {
-    SINO: "1",
-
-    productCode: 541,
-    Amound: 10000,
-
-    productName: "sugar",
-    stock: 50,
-  },
-
-  {
-    SINO: "2",
-
-    productCode: 341,
-    Amound: 10000,
-
-    productName: "oil",
-    stock: 10,
-  },
-
-  {
-    SINO: "3",
-
-    productCode: 241,
-    Amound: 100000,
-
-    productName: "Potato",
-    stock: 30,
-  },
-
-  {
-    SINO: "4",
-
-    productCode: 341,
-    Amound: 10000,
-
-    productName: "Onion",
-    stock: 10,
-  },
-];
 
 function BalanceSheet() {
   const [clickedTr, SetClickedTr] = useState("");
   const [printActive, closePrintActive] = useState(false);
+  const [data,setData] = useState([]);
+  const [fromDate,setFromDate] = useState();
+  const [toDate,setToDate] = useState();
+  
+  const downloadPdf = () => {
+    const headers = ['Account Name','Asset','Liability'];
+    const d = data.map((item) => [
+      item.AccountName,
+      item.Asset,
+      item.Liability
+    ])
+    const title = new Date().toLocaleDateString() + 'Balance sheet'
+    exportPDF(headers,title,d);
+  }
 
+  const handleFilterSearch = () => {
+    if(fromDate && toDate){
+      console.log("here");
+      accountServices.getFilteredBalancesheet(fromDate,toDate)
+        .then(res => setData(res))
+        .catch(err => console.log(err))
+    }
+  }
+
+  useEffect(() => {
+    accountServices.getAllBalancesheet()
+      .then(res => setData(res))
+      .catch(err => console.log(err))
+  },[])
   // selecting row
 
   // const[rowClick,setRowClick]
@@ -55,19 +45,18 @@ function BalanceSheet() {
   return (
     <>
       {printActive && <Prints closePrintActive={closePrintActive} />}
-
       {!clickedTr && (
-        <div className="BalanceSheet">
+        <div className="ProfitAndLose">
           <div className="top__Section">
             <div className="headder__Section">
               <div className="left">
-                <h3>Balance Sheet</h3>
+                <h3>Balance sheet</h3>
               </div>
 
               <div className="right">
                 <div
                   className="icon__section"
-                  onClick={() => closePrintActive(true)}
+                  onClick={() => window.print()}
                 >
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
@@ -88,7 +77,7 @@ function BalanceSheet() {
 
                   <h4>Print</h4>
                 </div>
-                <div className="icon__section">
+                <CSVLink data={data} filename={new Date().toLocaleDateString() + "_balancesheet.csv"} className="icon__section">
                   <svg
                     id="surface1"
                     xmlns="http://www.w3.org/2000/svg"
@@ -168,8 +157,8 @@ function BalanceSheet() {
                     />
                   </svg>
                   <h4>Export Excel</h4>
-                </div>
-                <div className="icon__section">
+                </CSVLink>
+                <div className="icon__section" onClick={downloadPdf}>
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
                     width="11.916"
@@ -222,17 +211,17 @@ function BalanceSheet() {
               <div className="input__Section">
                 <div className="input__field">
                   <h4>From Date</h4>
-                  <input type="date" name="" id="" />
+                  <input type="date" name="" id="" onChange={(e)=> setFromDate(new Date(e.target.value).toISOString())}/>
                 </div>
 
                 <div className="input__field">
                   <h4>To Date</h4>
-                  <input type="date" name="" id="" />
+                  <input type="date" name="" id="" onChange={(e)=> setToDate(new Date(e.target.value).toISOString())}/>
                 </div>
               </div>
 
               <div className="bottom__input__section">
-                <div className="serch__box">
+                <div className="serch__box" onClick={handleFilterSearch}>
                   <h4>Search</h4>
                 </div>
               </div>
@@ -244,166 +233,21 @@ function BalanceSheet() {
                 <thead>
                   <tr>
                     <th>Acc Name</th>
-                    <th colspan="2">Assets</th>
-                    <th colspan="2">Liability</th>
+                    <th>Asset</th>
+                    <th>Liability</th>
                   </tr>
                 </thead>
                 <tbody>
-                  <tr>
-                    <td style={{ fontWeight: "bold" }}>Capital Account</td>
-                    <td></td>
-                    <td></td>
-                    <td>0</td>
-                    <td>0</td>
-                  </tr>
-
-                  <tr>
-                    <td>Capital </td>
-                    <td></td>
-                    <td></td>
-                    <td>150000</td>
-                    <td>0.00</td>
-                  </tr>
-
-                  <tr>
-                    <td style={{ fontWeight: "bold" }}>Loan(Liability) </td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                  </tr>
-
-                  <tr>
-                    <td style={{ fontWeight: "bold" }}>Current Liability</td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                  </tr>
-
-                  <tr>
-                    <td style={{ fontWeight: "bold" }}>
-                      Profit and Loss Account{" "}
-                    </td>
-                    <td></td>
-                    <td></td>
-                    <td>0.00</td>
-                    <td>8750</td>
-                  </tr>
-
-                  <tr>
-                    <td>Oppening Balance</td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                  </tr>
-
-                  <tr>
-                    <td>Current Periods</td>
-                    <td></td>
-                    <td></td>
-                    <td>87930</td>
-                    <td>0.00</td>
-                  </tr>
-
-                  <tr>
-                    <td
-                      style={{
-                        fontWeight: "600",
-                        fontSize: "18px",
-                        color: "red",
-                        backgroundColor: "#c7c6d7",
-                      }}
-                    >
-                      Total
-                    </td>
-                    <td style={{ backgroundColor: "#c7c6d7" }}></td>
-                    <td style={{ backgroundColor: "#c7c6d7" }}></td>
-                    <td style={{ backgroundColor: "#c7c6d7" }}></td>
-                    <td
-                      style={{
-                        fontWeight: "600",
-                        fontSize: "18px",
-                        color: "red",
-                        backgroundColor: "#c7c6d7",
-                      }}
-                    >
-                      158739
-                    </td>
-                  </tr>
-
-                  <tr>
-                    <td>Current Assets</td>
-                    <td>0.00</td>
-                    <td>158000</td>
-                    <td></td>
-                    <td></td>
-                  </tr>
-
-                  <tr>
-                    <td>Closing Stock</td>
-                    <td>4500</td>
-                    <td>0.00</td>
-                    <td></td>
-                    <td></td>
-                  </tr>
-
-                  <tr>
-                    <td>Cash in hand</td>
-                    <td>78000</td>
-                    <td>0.000</td>
-                    <td></td>
-                    <td></td>
-                  </tr>
-
-                  <tr>
-                    <td>Bank Account</td>
-                    <td>750000</td>
-                    <td>0.000</td>
-                    <td></td>
-                    <td></td>
-                  </tr>
-
-                  <tr style={{ backgroundColor: "#c7c6d7" }}>
-                    <td
-                      style={{
-                        fontWeight: "600",
-                        fontSize: "18px",
-                        color: "red",
-                        backgroundColor: "#c7c6d7",
-                      }}
-                    >
-                      Total
-                    </td>
-                    <td
-                      style={{
-                        fontWeight: "600",
-                        fontSize: "18px",
-                        color: "red",
-                        backgroundColor: "#c7c6d7",
-                      }}
-                    >
-                      {" "}
-                      158739
-                    </td>
-                    <td style={{ backgroundColor: "#c7c6d7" }}></td>
-                    <td style={{ backgroundColor: "#c7c6d7" }}></td>
-                    <td style={{ backgroundColor: "#c7c6d7" }}></td>
-                  </tr>
+                  {
+                    data.map((item,index) => (
+                      <tr key={index}>
+                        <td>{item.AccountName}</td>
+                        <td>{item.Asset}</td>
+                        <td>{item.Liability}</td>
+                      </tr>
+                    ))
+                  }
                 </tbody>
-
-                <tfoot>
-                  <tr>
-                    <td></td>
-                    <td style={{ fontWeight: "bold" }} colspan="2">
-                      150000
-                    </td>
-                    <td style={{ fontWeight: "bold" }} colspan="2">
-                      120000
-                    </td>
-                  </tr>
-                </tfoot>
               </table>
             </div>
           </div>

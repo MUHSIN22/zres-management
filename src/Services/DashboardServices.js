@@ -3,8 +3,7 @@ export const dashboardServices = {
     // Sales
     getSalesData : () => {
         return new Promise((resolve,reject) => {
-            console.log(BASE_URL);
-            fetch(`${BASE_URL}/DashBoard/GetSalesDashBoard?CMPid=1`)
+            fetch(`${BASE_URL}DashBoard/GetSalesDashBoard?CMPid=1`)
             .then(res => res.json())
             .then(data => resolve(data))
             .catch(err => reject(err))
@@ -14,7 +13,7 @@ export const dashboardServices = {
     // Marketing Data
     getMarketingData: () => {
         return new Promise((resolve,reject) => {
-            fetch(`${BASE_URL}/DashBoard/GetMarketingDashBoard?CMPid=1`)
+            fetch(`${BASE_URL}DashBoard/GetMarketingDashBoard?CMPid=1`)
             .then(res => res.json())
             .then(data => resolve(data))
             .catch(err => reject(err))
