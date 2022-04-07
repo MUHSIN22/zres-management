@@ -1,14 +1,15 @@
 import React, { useEffect, useState } from "react";
 import "./waitingForCollection.scss";
 import DummyData from "./dummydata";
+import axios from "axios";
 import { DataGrid } from "@mui/x-data-grid";
 
 const columns = [
   { field: "id", headerName: "ID", width: 90 },
   {
-    field: "OrderNumber",
+    field: "OrderNo",
     headerName: "Order Number",
-    width: 250,
+    width: 150,
     editable: true,
   },
   {
@@ -53,7 +54,7 @@ const columns = [
 ];
 
 function WaitingForCollection({ setCollected, collected }) {
-  const [tableData, setTableData] = useState(DummyData);
+  const [tableData, setTableData] = useState();
   const [selectedRow, setSelectedRow] = useState([]);
 
   // const dataToDiaplayInTable = () => {
@@ -70,7 +71,25 @@ function WaitingForCollection({ setCollected, collected }) {
   const options = {
     filterType: "checkbox",
   };
-
+  useEffect(() => {
+    axios
+      .get("https://zres.clubsoft.co.in/DeliveryManager/TakeAwayWaitingForCollection?CMPid=1")
+      .then((req) => {
+        const data = req.data.map((data) => {
+          return {
+            id: data.OrderID,
+            OrderNo:"#"+ data.OrderNo,
+            OrderTakenAt:data.OrderTakenAt,
+            ElapsedTime:data.ElapsedTime,
+            Driver:data.Driver,
+            Location:data.DeliveryArea,
+            Amount:data.Amount,
+            Status:data.Status
+          };
+        });
+        setTableData(data);
+      });
+  }, []);
   const handleCollectedData = () => {
     if (selectedRow.length === 0) {
       console.log("There is no selected data to move to collected list");

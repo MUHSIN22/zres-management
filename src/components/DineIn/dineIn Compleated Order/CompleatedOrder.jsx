@@ -1,31 +1,15 @@
-import React from "react";
+import axios from "axios";
+import React, { useEffect, useState } from "react";
 import "./compleatedOrder.scss";
 function CompleatedOrder() {
-  const data = [
-    {
-      tableNo: 1,
-      id: 1,
-      orderNo: "#4324",
-      status: "done Soon",
-      diningFor: "2hrs",
-    },
-    {
-      tableNo: 2,
-      id: 2,
-      orderNo: "#3324",
-      status: "Running Order",
-      diningFor: "1hrs",
-    },
-
-    {
-      tableNo: 3,
-      id: 3,
-      orderNo: "#1324",
-      status: "done Soon",
-      diningFor: "2hrs",
-    },
-  ];
-
+  const [data, setData] = useState()
+  useEffect(() => {
+    axios
+      .get("https://zres.clubsoft.co.in/DineIn/CompletedOrders?CMPid=1")
+      .then((res) => {
+        setData(res.data);
+      });
+  }, [])
   return (
     <div className="CompleatedOrder">
       <div className="runningOrder__headder">
@@ -46,17 +30,17 @@ function CompleatedOrder() {
             </tr>
           </thead>
           <tbody>
-            {data.map((d) => (
+            {data && data.map((data) => (
               <tr>
-                <td data-label="Order Number">{d.tableNo}</td>
+                <td data-label="Order Number">{data.TableNumber}</td>
                 <td data-label="Order Taken At">
-                  {d.orderNo} <h6>Burger</h6>
+                  {data.OrderNumber} <h6>Burger</h6>
                 </td>
-                <td data-label="Elapsed Time">OMR 15.00</td>
+                <td data-label="Elapsed Time">{data.Amount}</td>
                 <td data-label="Delivery Area">
                   {" "}
                   <a href="#" className="button ">
-                    Paid
+                   {data.Status==="COMPLETED" ? "paid":""}
                   </a>
                 </td>
                 <td data-label="Amount">About 2 Hrs</td>
@@ -75,7 +59,7 @@ function CompleatedOrder() {
           </thead>
           <tbody>
             <tr>
-              <td data-label="Order Number">1</td>
+              <td data-label="Order Number">{data && data.length}</td>
             </tr>
           </tbody>
         </table>

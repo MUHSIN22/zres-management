@@ -1,18 +1,25 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
+import axios from "axios";
 import "./newOrder.scss";
+
 function NewOrder() {
   const [detailsClicked, setDetailsClicked] = useState(false);
-  const list = [
-    { ordername: "cheeeseDurger", qty: "2" },
-    { ordername: "jerry", qty: "2" },
-    { ordername: "pizza", qty: "3" },
-    { ordername: "coke", qty: "3" },
-  ];
-  const half = Math.ceil(list.length / 2);
-  const firstHalf = list.splice(0, half);
-  const secondHalf = list.splice(-half);
-
   const [readMore, setReadMore] = useState(false);
+  const [newOrderData, setNewOrderData] = useState([]);
+  const [orderNoData,setOrderNoData] = useState()
+  useEffect(() => {
+    axios
+      .get(
+        "https://zres.clubsoft.co.in/DeliveryManager/GetAllNewOrders?CMPid=1"
+      )
+      .then((res) => {
+        setNewOrderData(res.data);
+      });
+  }, []);
+  const moreDetails = (id) =>{
+    setDetailsClicked(!detailsClicked)
+    setOrderNoData(id)
+  }
 
   return (
     <div className="TableSection">
@@ -20,7 +27,7 @@ function NewOrder() {
         <thead>
           <tr>
             <th className="orderNuber__th">Order Number</th>
-            <th>Order Taken At</th>
+            <th>Qty</th>
             <th>Elapsed Time</th>
             <th>Delivery Area</th>
             <th>Amount</th>
@@ -28,40 +35,37 @@ function NewOrder() {
           </tr>
         </thead>
         <tbody>
-          <tr>
-            <td data-label="Order Number">
-              #145S -{" "}
-              {firstHalf.map((items) => (
-                <>
-                  {"       "}
-                  {items.ordername} X {items.qty}
-                </>
-              ))}
-              {readMore &&
-                secondHalf.map((items) => (
-                  <>
-                    {"       "}
-                    {items.ordername} X {items.qty}
-                  </>
-                ))}
-              <a href="#" onClick={() => setDetailsClicked(!detailsClicked)}>
-                {" "}
-                {!readMore ? "Click for more details..." : "click to read less"}
-              </a>
-            </td>
-            <td data-label="Order Taken At">08.25 AM</td>
-            <td data-label="Elapsed Time" className="elapsedTime">
-              03:01:30
-            </td>
-            <td data-label="Delivery Area">14 KK , Oman , Market Road</td>
-            <td data-label="Amount">OMR 13.000</td>
-            <td data-label="">
-              {" "}
-              <a href="#" className="button">
-                Ready ?
-              </a>
-            </td>
-          </tr>
+          {newOrderData.length > 0 &&
+            newOrderData.map((data) => {
+              return (
+                <tr>
+                  <td data-label="Order Number">
+                    # {data.OrderNo} , {data.ItemName}
+                    <a
+                      href="#"
+                      onClick={() => moreDetails(data.OrderNo) }
+                    >
+                      {" "}
+                      {!readMore
+                        ? "Click for more details..."
+                        : "click to read less"}
+                    </a>
+                  </td>
+                  <td data-label="Order Taken At">{data.Quantity}</td>
+                  <td data-label="Elapsed Time" className="elapsedTime">
+                    {data.ElapsedTime}
+                  </td>
+                  <td data-label="Delivery Area">{data.DeliveryArea}</td>
+                  <td data-label="Amount">OMR{" "+data.Amount}.00</td>
+                  <td data-label="">
+                    {" "}
+                    <a href="#" className="button">
+                      Ready ?
+                    </a>
+                  </td>
+                </tr>
+              );
+            })}
           <tr className="HiddenMainTr">
             <td colspan="8">
               {detailsClicked && (
@@ -77,22 +81,26 @@ function NewOrder() {
                       </tr>
                     </thead>
                     <tbody>
-                      <tr>
-                        <td data-label="Order No">#145S</td>
-                        <td data-label="Amount">13.000</td>
-                        <td
-                          data-label="Order Performance"
-                          className="diff__time__Cycle"
-                        >
-                          <div className="time__gap__sections">
-                            {list.map((items) => (
-                              <h5>{items.ordername}</h5>
-                            ))}
-                          </div>
-                        </td>
-                        <td data-label="Total Time ">35 Mins</td>
-                        <td data-label="Status"></td>
-                      </tr>
+                      {newOrderData.filter(data=>{
+                        return data.OrderNo === orderNoData
+                      })
+                      .map((data) => {
+                        return(
+                        <tr>
+                          <td data-label="Order No">#{data.OrderNo}</td>
+                          <td data-label="Amount">OMR{" "+data.Amount}.00</td>
+                          <td
+                            data-label="Order Performance"
+                            className="diff__time__Cycle"
+                          >
+                            <div className="time__gap__sections">
+                              <h5>{data.ItemName}</h5>
+                            </div>
+                          </td>
+                          <td data-label="Total Time ">{data.ElapsedTime} Mins</td>
+                          <td data-label="Status"></td>
+                        </tr>);
+                      })}
                     </tbody>
                   </table>
                 </>
@@ -106,3 +114,7 @@ function NewOrder() {
 }
 
 export default NewOrder;
+
+/* Pending 
+
+*/

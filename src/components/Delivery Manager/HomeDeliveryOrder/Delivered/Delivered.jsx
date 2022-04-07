@@ -1,17 +1,30 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import "./delivered.scss";
 import Select from "react-select";
+import axios from "axios";
 function Delivered() {
   const [detailsClicked, setDetailsClicked] = useState(false);
+  const [drivers, setDrivers] = useState([]);
+  const [statusData, setStatusData] = useState([]);
 
-  const options = [
-    { label: "Mohan", value: "Mohan" },
-    { label: "Ravi", value: "Ravi" },
-    { label: "James", value: "James" },
-    { label: "Karthik", value: "Karthik" },
-    { label: "Roni", value: "Roni" },
-    { label: "Sam", value: "Sam" },
-  ];
+  useEffect(() => {
+    axios
+      .get("https://zres.clubsoft.co.in/DeliveryManager/GetDriver?CMPid=1")
+      .then((req) => {
+        const data = req.data.map((data) => {
+          return {
+            label: data.Text,
+            value: data.Value,
+          };
+        });
+        setDrivers(data);
+      });
+    axios
+      .get("https://zres.clubsoft.co.in/DeliveryManager/DelivetStatus?CMPid=1")
+      .then((req) => {
+        setStatusData(req.data);
+      });
+  }, []);
 
   const list = [
     { ordername: "cheeeseDurger", qty: "2" },
@@ -25,22 +38,20 @@ function Delivered() {
 
   const [readMore, setReadMore] = useState(false);
 
-  console.log(firstHalf, "second half", secondHalf);
-
   const [selected, setSelected] = useState([]);
   return (
     <>
       <div className="delivered">
         <div className="top__section">
           <div className="selectDriver__details">
-            <Select options={options} placeholder="All Drivers" />
+            <Select options={drivers} placeholder="All Drivers" />
           </div>
           <div className="AverageDetails">
             <div className="sections">
-              <h5>Average Delivery Time :</h5> <h4>Less than a minutes</h4>
+             <h5>Average Delivery Time : </h5> {statusData.length>0 &&<h4> Less than a {statusData[0].AverageDeLiveryTime} minutes</h4>}
             </div>
             <div className="sections">
-              <h5>Total Amount :</h5> <h4>13.000 SGD</h4>
+               <h5>Total Amount :</h5>{statusData.length>0 && <h4>{statusData[0].Amount} SGD</h4> }
             </div>
           </div>
         </div>
@@ -60,60 +71,51 @@ function Delivered() {
                 </tr>
               </thead>
               <tbody>
-                <tr>
-                  <td data-label="Order Number">
-                    #145S -{" "}
-                    {firstHalf.map((items) => (
-                      <>
-                        {"       "}
-                        {items.ordername} X {items.qty}
-                      </>
-                    ))}
-                    {readMore &&
-                      secondHalf.map((items) => (
-                        <>
-                          {"       "}
-                          {items.ordername} X {items.qty}
-                        </>
-                      ))}
-                    <a href="#" onClick={() => setReadMore(!readMore)}>
-                      {" "}
-                      {!readMore
-                        ? "Click for more details..."
-                        : "click to read less"}
-                    </a>
-                  </td>
-                  <td data-label="Order Taken At">08.25 AM</td>
-                  <td data-label="Elapsed Time" className="elapsedTime">
-                    03:01:30
-                  </td>
-                  <td data-label="Driver">UN-Assigned</td>
-                  <td data-label="Location">14 KK , Oman , Market Road</td>
-                  <td data-label="Amount">OMR 13.000</td>
-                  <td>
-                    <h5 style={{ color: "green" }}>Delivered</h5>
-                    <h5 style={{ color: "red" }}>Not Delivered</h5>
-                  </td>
-                  <td data-label="#">
-                    {detailsClicked === false && (
-                      <button
-                        className="button"
-                        onClick={() => setDetailsClicked(true)}
-                      >
-                        Show Details
-                      </button>
-                    )}
-                    {detailsClicked === true && (
-                      <a
-                        href="#"
-                        className="button button__show__less"
-                        onClick={() => setDetailsClicked(false)}
-                      >
-                        Hide Details
-                      </a>
-                    )}
-                  </td>
-                </tr>
+                {statusData.map((data) => {
+                  return (
+                    <tr>
+                      <td data-label="Order Number">
+                        #{data.OrderNo} -{" "}
+                        <a href="#" onClick={() => setReadMore(!readMore)}>
+                          {" "}
+                          {!readMore
+                            ? "Click for more details..."
+                            : "click to read less"}
+                        </a>
+                      </td>
+                      <td data-label="Order Taken At">{data.OrderTakenAt}</td>
+                      <td data-label="Elapsed Time" className="elapsedTime">
+                        {data.ElapsedTime}
+                      </td>
+                      <td data-label="Driver">{data.DriverName}</td>
+                      <td data-label="Location">{data.DeliveryArea}</td>
+                      <td data-label="Amount">OMR {data.Amount}</td>
+                      <td>
+                        <h5 style={{ color: "green" }}>{data.Status}</h5>
+                        {/* <h5 style={{ color: "red" }}>Not Delivered</h5> */}
+                      </td>
+                      <td data-label="#">
+                        {detailsClicked === false && (
+                          <button
+                            className="button"
+                            onClick={() => setDetailsClicked(true)}
+                          >
+                            Show Details
+                          </button>
+                        )}
+                        {detailsClicked === true && (
+                          <a
+                            href="#"
+                            className="button button__show__less"
+                            onClick={() => setDetailsClicked(false)}
+                          >
+                            Hide Details
+                          </a>
+                        )}
+                      </td>
+                    </tr>
+                  );
+                })}
                 <tr className="HiddenMainTr">
                   <td colspan="8">
                     {detailsClicked && (
