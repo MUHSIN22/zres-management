@@ -65,11 +65,11 @@
     }
     .options__section {
       width: 60%;
-
+      
       display: flex;
       align-items: center;
       justify-content: center;
-
+      
       .option {
         cursor: pointer;
         width: calc(90% / 3);
@@ -77,14 +77,22 @@
         display: flex;
         align-items: center;
         justify-content: center;
-
+        
         border-radius: 5px;
+        a{
+          color: inherit;
+          text-decoration: none;
+        }
         h5 {
           font-size: 11px;
         }
         &.active {
           background-color: #040153;
           color: #fff;
+          a{
+            color: inherit;
+            text-decoration: none;
+          }
           h5 {
             font-size: 12px;
           }

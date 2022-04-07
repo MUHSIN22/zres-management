@@ -47,6 +47,10 @@ import NewOrder from "../Delivery Manager/HomeDeliveryOrder/newOrder/NewOrder";
 import WaitingForPicup from '../Delivery Manager/HomeDeliveryOrder/waitingForPicup/WaitingForPicup'
 import Delivered from '../Delivery Manager/HomeDeliveryOrder/Delivered/Delivered'
 import DeliveryInProgress from '../Delivery Manager/HomeDeliveryOrder/DeliverInProgress/DeliveryInProgress'
+import TakeAwayOrders from "../Delivery Manager/TakeAwayOrders/TakeAwayOrders";
+import WaitingForCollection from "../Delivery Manager/TakeAwayOrders/waitingForCollection/WaitingForCollection";
+import Collected from "../Delivery Manager/TakeAwayOrders/collected/Collected";
+import FutureOrder from "../Delivery Manager/FutureOrder/FutureOrder";
 
 function MainPage() {
   const navigate = useNavigate();
@@ -449,6 +453,11 @@ function MainPage() {
                 <Route path="collection-in-progress" element={<DeliveryInProgress />}/>
                 <Route path="delivery-status" element={<Delivered/>}/>
               </Route>
+              <Route path="take-away-order" element={<TakeAwayOrders/>}>
+                <Route path="" element={<WaitingForCollection/>}/>
+                <Route path="collected" element={<Collected/>}/>
+              </Route>
+              <Route path="future-order" element={<FutureOrder/>}/>
             </Route>
             <Route path="/inventory" element={<Inventory />} />
             <Route path="/dinein" element={<DineIn />} />

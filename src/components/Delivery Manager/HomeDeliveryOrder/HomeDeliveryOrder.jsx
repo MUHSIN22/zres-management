@@ -5,7 +5,6 @@ function HomeDeliveryOrder({ clickedSubCategory, selectedNav }) {
   const [path,setPath] = useState()
   const location = useLocation()
   useEffect(() => {
-    console.log(location.pathname);
     if(location.pathname==="/mainPage/delivery-manager/delivery-status"){
       setPath("deliveryStatus")
     }else if(location.pathname==="/mainPage/delivery-manager"){

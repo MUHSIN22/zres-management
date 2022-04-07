@@ -1,8 +1,8 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import MenuIcon from "@mui/icons-material/Menu";
 import CloseIcon from "@mui/icons-material/Close";
 import "./deliveryManagerNav.scss";
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 
 function DeliveryManagerNavbar({
   setSelectedNav,
@@ -10,7 +10,20 @@ function DeliveryManagerNavbar({
   handlePlaceAnOrder,
 }) {
   const [menuIcon, setMenuIcon] = useState(false);
+  const [path, setPath] = useState();
+  const location = useLocation()
 
+  useEffect(() => {
+    console.log(location);
+    if(location.pathname==="/mainPage/delivery-manager/future-order"){
+      setPath("future")
+    }else if(location.pathname==="/mainPage/delivery-manager"){
+      setPath("home")
+    }else{
+      setPath("takeAway")
+    }
+  }, [location])
+  
   return (
     <>
       {}
@@ -26,38 +39,51 @@ function DeliveryManagerNavbar({
           >
             <div
               className={
-                "option " + (selectedNav === "homeDeliveryOrder" && "active ")
+                "option " + (path === "home" && "active ")
               }
-              onClick={() => {
-                setSelectedNav("homeDeliveryOrder");
-                setMenuIcon(false);
-              }}
             >
               <Link to="">
-              <h5>Home Delivery Orders</h5>
+                <h5
+                  onClick={() => {
+                    setSelectedNav("homeDeliveryOrder");
+                    setMenuIcon(false);
+                  }}
+                >
+                  Home Delivery Orders
+                </h5>
               </Link>
             </div>
             <div
               className={
-                "option " + (selectedNav === "takeAwayOrder" && "active ")
+                "option " + (path === "takeAway" && "active ")
               }
-              onClick={() => {
-                setSelectedNav("takeAwayOrder");
-                setMenuIcon(false);
-              }}
             >
-              <h5>Take Away Orders</h5>
+              <Link to="take-away-order">
+                <h5
+                  onClick={() => {
+                    setSelectedNav("takeAwayOrder");
+                    setMenuIcon(false);
+                  }}
+                >
+                  Take Away Orders
+                </h5>
+              </Link>
             </div>
             <div
               className={
-                "option " + (selectedNav === "FutureOrder" && "active ")
+                "option " + (path === "future" && "active ")
               }
-              onClick={() => {
-                setSelectedNav("FutureOrder");
-                setMenuIcon(false);
-              }}
             >
-              <h5>Future Orders</h5>
+              <Link to="future-order">
+                <h5
+                  onClick={() => {
+                    setSelectedNav("FutureOrder");
+                    setMenuIcon(false);
+                  }}
+                >
+                  Future Orders
+                </h5>
+              </Link>
             </div>
           </div>
 
