@@ -1,8 +1,7 @@
 import React, { useEffect, useState } from "react";
 import "./StockReport.scss";
-import { DataGrid } from "@mui/x-data-grid";
-import DummyData from "../../../../Delivery Manager/HomeDeliveryOrder/DeliverInProgress/dummydata";
-
+import { exportPDF } from "../../../../../Services/PDFServices.js";
+import { CSVLink } from "react-csv";
 import PrintIcon from "@mui/icons-material/Print";
 import Excel from "../../../../../assets/img/excel.png";
 import Pdf from "../../../../../assets/img/pdf.png";
@@ -22,13 +21,24 @@ function StockReport() {
   const [productdropdown,setProductdropdown] = useState([])
   const [categorydropdown,setCategorydropdown] = useState([])
 
-
  const  stockReportFilter = (from,to,Cid,Pid)=>{
   if(from && to && Cid && Pid){
     inventoryServices.getStockreportFilter(from,to,Cid,Pid)
     .then(data=>{ setData(data)})
   }
  }
+
+ const downloadPdf = () => {
+  const headers = ['Serialno','Product Code','Product Name','Stock'];
+  const d = data.map((item,index) => [
+    index+1,
+    item.productCode,
+    item.ProductName,
+    item.ActualStock
+  ])
+  const title = new Date().toLocaleDateString() + 'Stock Report'
+  exportPDF(headers,title,d);
+}
 
 useEffect(() => {
 inventoryServices.getStockreport()
@@ -40,6 +50,7 @@ walkinServices.getAllcategories()
 }, [])
 
   return (
+    
     <>
       {clickedTr && <ReportSingleProduct SetClickedTr={SetClickedTr} />}
 
@@ -52,7 +63,7 @@ walkinServices.getAllcategories()
               </div>
 
               <div className="right">
-                <div className="icon__section">
+                <div className="icon__section"  onClick={() => window.print()}>
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
                     width="15.555"
@@ -71,8 +82,9 @@ walkinServices.getAllcategories()
                   </svg>
 
                   <h4>Print</h4>
+
                 </div>
-                <div className="icon__section">
+                <CSVLink data={data} filename={new Date().toLocaleDateString() + "_stockReport.csv"} className="icon__section">
                   <svg
                     id="surface1"
                     xmlns="http://www.w3.org/2000/svg"
@@ -152,7 +164,7 @@ walkinServices.getAllcategories()
                     />
                   </svg>
                   <h4>Export Excel</h4>
-                </div>
+                  </CSVLink>
                 <div className="icon__section">
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
@@ -198,7 +210,7 @@ walkinServices.getAllcategories()
                     </g>
                   </svg>
 
-                  <h4>Export Pdf</h4>
+                  <h4 onClick={downloadPdf} >Export Pdf</h4>
                 </div>
               </div>
             </div>

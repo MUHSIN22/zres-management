@@ -297,8 +297,13 @@
         }
       }
     }
+  }
+}
 
-    .bottom__Section {
+@media print {
+  .BankBook {
+    .top__Section {
+      display: none;
     }
   }
 }

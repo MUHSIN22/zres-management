@@ -4,6 +4,8 @@ import { inventoryServices } from "../../../../../Services/InventoryServices";
 import { walkinServices } from "../../../../../Services/WalkinServices";
 import ClossingStockPrint from "./clossing stock print/ClossingStockPrint";
 import "./stockCost.scss";
+import { CSVLink } from "react-csv";
+import { exportPDF } from "../../../../../Services/PDFServices";
 
 
 const StockCost = React.forwardRef((props, ref) => {
@@ -11,7 +13,6 @@ const StockCost = React.forwardRef((props, ref) => {
   const [data,setData] = useState([])
   const [productdropdown,setProductdropdown] = useState([])
   const [categorydropdown,setCategorydropdown] = useState([])
-  const [sendingtoPrint, setSendingToPrint] = useState(false);
   const [todate,setTodate] = useState('')
   const [fromdate,setFromdate] = useState('')
   const [productid,setProductid] = useState('')
@@ -32,12 +33,23 @@ const StockCost = React.forwardRef((props, ref) => {
   const  stockCostFilter = (from,to,Cid,Pid)=>{
   if(from && to && Cid && Pid){
     inventoryServices.getStockcostFilter(from,to,Cid,Pid)
-    .then(data=>{ setData(data);console.log('triggered')})
+    .then(data=>{ setData(data)})
     
   }
  }
 
-
+ const downloadPdf = () => {
+  const headers = ['SINo','Product Name',	'Batch No',	'Purchase Amount','Stock'];
+  const d = data.map((item,index) => [
+    index+1,
+    item.ProductName,
+    item.BatchNo,
+    item.CostOfSale,
+    item.ActualStock
+  ])
+  const title = new Date().toLocaleDateString() + ' stock cost'
+  exportPDF(headers,title,d);
+}
   useEffect(() => {
     
   inventoryServices.getStockcost()
@@ -52,12 +64,6 @@ const StockCost = React.forwardRef((props, ref) => {
   return (
     <>
       <div className="StockCost">
-        {sendingtoPrint && (
-          <div className="print__report__Section">
-            <ClossingStockPrint setSendingToPrint={setSendingToPrint} />
-          </div>
-        )}
-
         <div className="top__Section">
           <div className="headder__Section">
             <div className="left">
@@ -67,7 +73,7 @@ const StockCost = React.forwardRef((props, ref) => {
             <div className="right">
               <div
                 className="icon__section"
-                onClick={() => setSendingToPrint(true)}
+              
               >
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
@@ -117,7 +123,7 @@ const StockCost = React.forwardRef((props, ref) => {
                 <h4>Closing Stock Print</h4>
               </div>
 
-              <div className="icon__section">
+              <div className="icon__section"   onClick={() => window.print()}>
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
                   width="15.555"
@@ -137,7 +143,7 @@ const StockCost = React.forwardRef((props, ref) => {
 
                 <h4>Print</h4>
               </div>
-              <div className="icon__section">
+              <CSVLink data={data} filename={new Date().toLocaleDateString() + "_Stockcost.csv"} className="icon__section">
                 <svg
                   id="surface1"
                   xmlns="http://www.w3.org/2000/svg"
@@ -217,8 +223,8 @@ const StockCost = React.forwardRef((props, ref) => {
                   />
                 </svg>
                 <h4>Export Excel</h4>
-              </div>
-              <div className="icon__section">
+                </CSVLink>
+              <div onClick={downloadPdf} className="icon__section">
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
                   width="11.916"

@@ -1,14 +1,15 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import "./deliveryInProgress.scss";
 import { DataGrid } from "@mui/x-data-grid";
 import DummyData from "./dummydata";
+import axios from "axios";
 
 const columns = [
   { field: "id", headerName: "ID", width: 90 },
   {
-    field: "OrderNumber",
+    field: "OrderNo",
     headerName: "Order Number",
-    width: 250,
+    width: 150,
     editable: true,
   },
   {
@@ -46,14 +47,13 @@ const columns = [
   {
     field: "Status",
     headerName: "Status",
-
     width: 210,
     editable: true,
   },
 ];
 
 function DeliveryInProgress() {
-  const [tableData, setTableData] = useState(DummyData);
+  const [tableData, setTableData] = useState();
   const [selectedRow, setSelectedRow] = useState([]);
 
   const list = [
@@ -65,8 +65,31 @@ function DeliveryInProgress() {
   const half = Math.ceil(list.length / 2);
   const firstHalf = list.splice(0, half);
   const secondHalf = list.splice(-half);
-
   const [readMore, setReadMore] = useState(false);
+
+  useEffect(() => {
+    axios
+      .get(
+        "https://zres.clubsoft.co.in/DeliveryManager/DeliveryInProgress?CMPid=1"
+      )
+      .then((req) => {
+        const data = req.data.map((data) => {
+          return {
+            id: data.OrderID,
+            OrderNo: data.OrderNo,
+            OrderTakenAt:data.OrderTakenAt,
+            ElapsedTime:data.ElapsedTime,
+            Driver:data.Driver,
+            Location:data.DeliveryArea,
+            Amount:data.Amount,
+            Status:data.Status
+          };
+        });
+        setTableData(data);
+      });
+  }, []);
+
+
   return (
     <div className="deliveryInProgress" style={{ height: 350, width: "100%" }}>
       <DataGrid

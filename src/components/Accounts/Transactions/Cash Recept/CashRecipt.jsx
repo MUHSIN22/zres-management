@@ -6,6 +6,7 @@ import SucessSnackbars from "../../../basic components/sucessSidePopup";
 import { accountServices } from "../../../../Services/AccountsServices";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
+import { toast } from "material-react-toastify";
 const ADDCASHRECIPT = {
   EntryNo: "",
   EntryDate: "",
@@ -57,8 +58,8 @@ function CashRecipt() {
   const [journels,setJournels] = useState([])
   const [journelEditData,setJournelEditData] = useState([]);
   const [newData,setNewData] = useState({
-    jCredit: 0,
-    jDebit: 0,
+    JCredit: 0,
+    JDebit: 0,
     CreditAccountId: null,
     DebitAccountId: null,
     JEntryDate: null,
@@ -99,7 +100,17 @@ function CashRecipt() {
 
   const handleSave = (e) =>{
     e.preventDefault();
-    console.log(newData);
+    accountServices.uploadReciept(newData)
+    .then((res) => {
+      if(!res.error){
+        toast.success('Successfully added!')
+        handleClearALL()
+      }else{
+        toast.error('Insertion Failed')
+      }
+    }).catch(err => {
+      toast.error('Insertion Failed')
+    })
   }
   const handleUpdate = (event) => {
     event.preventDefault();
@@ -362,7 +373,7 @@ function CashRecipt() {
                             <td>
                               <input
                                 required
-                                name="jDebit"
+                                name="JDebit"
                                 value={newData.JDebit}
                                 onChange={handleDataInput}
                                 style={{
@@ -379,7 +390,7 @@ function CashRecipt() {
                             <td>
                               <input
                                 required
-                                name="jCredit"
+                                name="JCredit"
                                 value={newData.JCredit}
                                 onChange={handleDataInput}
                                 style={{
@@ -403,8 +414,8 @@ function CashRecipt() {
                         <td style={{ border: "none" }}></td>
                         <td style={{ border: "none" }}></td>
                         <td style={{ border: "none" }}></td>
-                        <td>{newData.jDebit}</td>
-                        <td>{newData.jCredit}</td>
+                        <td>{newData.JDebit}</td>
+                        <td>{newData.JCredit}</td>
                       </tr>
                     </tfoot>
                   </table>

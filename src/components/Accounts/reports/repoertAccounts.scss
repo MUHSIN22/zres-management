@@ -108,3 +108,11 @@
     }
   }
 }
+
+@media print {
+  .ReportsAccount{
+    .top__category__section{
+      display: none;
+    }
+  }
+}

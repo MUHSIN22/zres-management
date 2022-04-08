@@ -2,6 +2,8 @@ import React, { useEffect, useState } from "react";
 import "./cashBook.scss";
 import Prints from "./Prints/Prints";
 import { accountServices } from '../../../../Services/AccountsServices'
+import { exportPDF } from "../../../../Services/PDFServices";
+import { CSVLink } from "react-csv";
 const Data = [
   {
     SINO: "1",
@@ -63,6 +65,20 @@ function CashBook() {
     }
   }
 
+  const downloadPdf = () => {
+    const data = cashBook.map((item,index) => [
+      index+1,
+      new Date(item.Date).toLocaleDateString(),
+      item.RefNo,
+      item.Particulars,
+      item.Reciept,
+      item.Payment,
+      item.Balance
+    ])
+    const headers = ["SINO","DATE","REF NO","Particular","Reciept","Payment","Balance"]
+    exportPDF(headers,'Cashbook Report',data);
+  }
+
   useEffect(() => {
     let tp = 0, tr = 0;
     accountServices.getAllCashBook()
@@ -94,7 +110,7 @@ function CashBook() {
               <div className="right">
                 <div
                   className="icon__section"
-                  onClick={() => closePrintActive(true)}
+                  onClick={() => window.print()}
                 >
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
@@ -115,7 +131,7 @@ function CashBook() {
 
                   <h4>Print</h4>
                 </div>
-                <div className="icon__section">
+                <CSVLink data={cashBook} filename={new Date().toLocaleDateString() + '_cashbook.csv'} className="icon__section">
                   <svg
                     id="surface1"
                     xmlns="http://www.w3.org/2000/svg"
@@ -195,8 +211,8 @@ function CashBook() {
                     />
                   </svg>
                   <h4>Export Excel</h4>
-                </div>
-                <div className="icon__section">
+                </CSVLink>
+                <div onClick={downloadPdf} className="icon__section">
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
                     width="11.916"

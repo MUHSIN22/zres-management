@@ -4,7 +4,13 @@ import ArrowForwardIosIcon from "@mui/icons-material/ArrowForwardIos";
 import ArrowBackIosIcon from "@mui/icons-material/ArrowBackIos";
 import Crm from "../CRM/Crm";
 import DeliveryManager from "../Delivery Manager/DeliveryManager";
-import { useLocation, useNavigate, Routes, Route, Link } from "react-router-dom";
+import {
+  useLocation,
+  useNavigate,
+  Routes,
+  Route,
+  Link,
+} from "react-router-dom";
 import Inventory from "../Inventory/Inventory";
 import Accounts from "../Accounts/Accounts";
 import DashBoard from "../DashBoad/DashBoard";
@@ -51,6 +57,15 @@ import StockReport from "../Inventory/Transaction Manager/Reports/StockReport/St
 import StockCost from "../Inventory/Transaction Manager/Reports/Stock Cost/StockCost";
 import ClossingStockReport from "../Inventory/Transaction Manager/Reports/clossing Srock Report/ClossingStockReport";
 import GpStatement from "../Inventory/Transaction Manager/Gp statement/GpStatement";
+import HomeDeliveryOrder from "../Delivery Manager/HomeDeliveryOrder/HomeDeliveryOrder";
+import NewOrder from "../Delivery Manager/HomeDeliveryOrder/newOrder/NewOrder";
+import WaitingForPicup from '../Delivery Manager/HomeDeliveryOrder/waitingForPicup/WaitingForPicup'
+import Delivered from '../Delivery Manager/HomeDeliveryOrder/Delivered/Delivered'
+import DeliveryInProgress from '../Delivery Manager/HomeDeliveryOrder/DeliverInProgress/DeliveryInProgress'
+import TakeAwayOrders from "../Delivery Manager/TakeAwayOrders/TakeAwayOrders";
+import WaitingForCollection from "../Delivery Manager/TakeAwayOrders/waitingForCollection/WaitingForCollection";
+import Collected from "../Delivery Manager/TakeAwayOrders/collected/Collected";
+import FutureOrder from "../Delivery Manager/FutureOrder/FutureOrder";
 
 function MainPage() {
   const navigate = useNavigate();
@@ -127,7 +142,7 @@ function MainPage() {
             }
             onClick={() => {
               SetClicked("Dashboard");
-              navigate("/mainPage/dashboard/sales")
+              navigate("/mainPage/dashboard/sales");
             }}
           >
             <svg
@@ -153,8 +168,8 @@ function MainPage() {
               "detail__section " + (clicked === "WalkIn" && "selected__Section")
             }
             onClick={() => {
-              SetClicked("WalkIn")
-              navigate("/mainPage/walkin")
+              SetClicked("WalkIn");
+              navigate("/mainPage/walkin");
             }}
           >
             <svg
@@ -179,8 +194,8 @@ function MainPage() {
               "detail__section " + (clicked === "DineIn" && "selected__Section")
             }
             onClick={() => {
-              SetClicked("DineIn")
-              navigate("/mainPage/dinein")
+              SetClicked("DineIn");
+              navigate("/mainPage/dinein");
             }}
           >
             <svg
@@ -208,8 +223,8 @@ function MainPage() {
               "detail__section " + (clicked === "CRM" && "selected__Section")
             }
             onClick={() => {
-              SetClicked("CRM")
-              navigate("/mainPage/crm")
+              SetClicked("CRM");
+              navigate("/mainPage/crm");
             }}
           >
             <svg
@@ -272,8 +287,8 @@ function MainPage() {
                 "selected__Section deliveryManagerSelected")
             }
             onClick={() => {
-              SetClicked("DeliveryManager")
-              navigate("/mainPage/delivery-manager")
+              SetClicked("DeliveryManager");
+              navigate("/mainPage/delivery-manager");
             }}
           >
             <svg
@@ -335,7 +350,6 @@ function MainPage() {
             onClick={() => {
               SetClicked("Inventory");
               setInventoryClick(!InventoryClick);
-
             }}
           >
             <svg
@@ -406,10 +420,14 @@ function MainPage() {
                 <Link to="/mainPage/accounts/master/head">Master</Link>
               </li>
               <li>
-                <Link to="/mainPage/accounts/transactions/journals">Transactions</Link>
+                <Link to="/mainPage/accounts/transactions/journals">
+                  Transactions
+                </Link>
               </li>
               <li>
-                <Link to="/mainPage/accounts/chart-of-accounts">Chart of Account</Link>
+                <Link to="/mainPage/accounts/chart-of-accounts">
+                  Chart of Account
+                </Link>
               </li>
               <li>
                 <Link to="/mainPage/accounts/reports/ledger">Reports</Link>
@@ -443,7 +461,6 @@ function MainPage() {
             </g>
           </svg>
           <h5>Logout</h5>
-
         </div>
       </div>
 
@@ -482,7 +499,20 @@ function MainPage() {
                 <Route path="" element={<StockReport />}/>
               </Route>
             </Route>
-
+            <Route path="/delivery-manager" element={<DeliveryManager />}>
+              <Route path="" element={<HomeDeliveryOrder />}>
+                <Route path="" element={<NewOrder/>}/>
+                <Route path="waiting-for-pickup" element={<WaitingForPicup/>}/>
+                <Route path="collection-in-progress" element={<DeliveryInProgress />}/>
+                <Route path="delivery-status" element={<Delivered/>}/>
+              </Route>
+              <Route path="take-away-order" element={<TakeAwayOrders/>}>
+                <Route path="" element={<WaitingForCollection/>}/>
+                <Route path="collected" element={<Collected/>}/>
+              </Route>
+              <Route path="future-order" element={<FutureOrder/>}/>
+            </Route>
+            <Route path="/inventory" element={<Inventory />} />
             <Route path="/dinein" element={<DineIn />} />
             <Route path="/accounts" element={<Accounts />}>
               <Route path="master" element={<AccountMaster />}>
@@ -490,29 +520,32 @@ function MainPage() {
                 <Route path="group" element={<AccountGroup />} />
               </Route>
               <Route path="reports" element={<ReportsAccount />}>
-                <Route path="ledger" element={<Ledger/>}/>
-                <Route path="cash-book" element={<CashBook/>}/>
-                <Route path="bank-book" element={<BankBook/>}/>
-                <Route path="cash-flow" element={<CashFlow/>}/>
-                <Route path="balance-sheet" element={<BalanceSheet/>}/>
-                <Route path="profit-and-loss-account" element={<ProfitAndLose/>}/>
-                <Route path="daybook" element={<DayBookDetails/>}/>
-                <Route path="trial-balance" element={<TrialBalance/>}/>
+                <Route path="ledger" element={<Ledger />} />
+                <Route path="cash-book" element={<CashBook />} />
+                <Route path="bank-book" element={<BankBook />} />
+                <Route path="cash-flow" element={<CashFlow />} />
+                <Route path="balance-sheet" element={<BalanceSheet />} />
+                <Route
+                  path="profit-and-loss-account"
+                  element={<ProfitAndLose />}
+                />
+                <Route path="daybook" element={<DayBookDetails />} />
+                <Route path="trial-balance" element={<TrialBalance />} />
               </Route>
-              <Route path="transactions" element={ <AccountTransaction /> }>
-                <Route path="journals" element={<Journals/>}/>
-                <Route path="debit-note" element={<DebitNote/>}/>
-                <Route path="contra" element={<Contra/>}/>
-                <Route path="supplier-payment" element={<SupplyerPayment/>}/>
-                <Route path="cash-receipt" element={<CashRecipt/>}/>
-                <Route path="cash-payment" element={<CashPayment/>}/>
-                <Route path="opening-balance" element={<OpeningBalance/>}/>
-                <Route path="credit-note" element={<CreditNote/>}/>
+              <Route path="transactions" element={<AccountTransaction />}>
+                <Route path="journals" element={<Journals />} />
+                <Route path="debit-note" element={<DebitNote />} />
+                <Route path="contra" element={<Contra />} />
+                <Route path="supplier-payment" element={<SupplyerPayment />} />
+                <Route path="cash-receipt" element={<CashRecipt />} />
+                <Route path="cash-payment" element={<CashPayment />} />
+                <Route path="opening-balance" element={<OpeningBalance />} />
+                <Route path="credit-note" element={<CreditNote />} />
               </Route>
-              <Route path="chart-of-accounts" element={<ChartOfAccountMain />}/>
-              <Route path="reports" element={<ReportsAccount />} />
-              <Route path="transactions" element={<AccountTransaction />} />
-              <Route path="chart-of-accounts" element={<ChartOfAccountMain />} />
+              <Route
+                path="chart-of-accounts"
+                element={<ChartOfAccountMain />}
+              />
             </Route>
           </Routes>
         </div>

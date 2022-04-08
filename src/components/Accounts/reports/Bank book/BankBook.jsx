@@ -2,6 +2,8 @@ import React, { useEffect, useState } from "react";
 import { accountServices } from "../../../../Services/AccountsServices";
 import "./bankbook.scss";
 import Prints from "./Prints/Prints";
+import {exportPDF} from '../../../../Services/PDFServices';
+import { CSVLink } from "react-csv";
 const Data = [
   {
     SINO: "1",
@@ -71,6 +73,20 @@ function BankBook() {
     .catch(err => console.log(err))
   }
 
+  const downloadPdf = () => {
+    const data = bankBook.map((item,index) => [
+      index+1,
+      new Date(item.Date).toLocaleDateString(),
+      item.RefNo,
+      item.Particulars,
+      item.Reciept,
+      item.Payment,
+      item.Balance
+    ])
+    const headers = ["SINO","DATE","REF NO","Particular","Reciept","Payment","Balance"]
+    exportPDF(headers,'Bankbook Report',data);
+  }
+
 
   useEffect(() => {
     let tp=0,tr=0;
@@ -102,7 +118,7 @@ function BankBook() {
               <div className="right">
                 <div
                   className="icon__section"
-                  onClick={() => closePrintActive(true)}
+                  onClick={() => window.print()}
                 >
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
@@ -123,7 +139,7 @@ function BankBook() {
 
                   <h4>Print</h4>
                 </div>
-                <div className="icon__section">
+                <CSVLink data={bankBook} filename={new Date().toLocaleDateString() + "_bankbook.csv"} className="icon__section">
                   <svg
                     id="surface1"
                     xmlns="http://www.w3.org/2000/svg"
@@ -203,8 +219,8 @@ function BankBook() {
                     />
                   </svg>
                   <h4>Export Excel</h4>
-                </div>
-                <div className="icon__section">
+                </CSVLink>
+                <div onClick={downloadPdf} className="icon__section">
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
                     width="11.916"

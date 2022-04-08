@@ -1,52 +1,41 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import "./profitandLoss.scss";
 import Prints from "./Prints/Prints";
-const Date = [
-  {
-    SINO: "1",
+import { accountServices } from "../../../../Services/AccountsServices";
+import { exportPDF } from "../../../../Services/PDFServices";
+import { CSVLink } from "react-csv";
 
-    productCode: 541,
-    Amound: 10000,
-
-    productName: "sugar",
-    stock: 50,
-  },
-
-  {
-    SINO: "2",
-
-    productCode: 341,
-    Amound: 10000,
-
-    productName: "oil",
-    stock: 10,
-  },
-
-  {
-    SINO: "3",
-
-    productCode: 241,
-    Amound: 100000,
-
-    productName: "Potato",
-    stock: 30,
-  },
-
-  {
-    SINO: "4",
-
-    productCode: 341,
-    Amound: 10000,
-
-    productName: "Onion",
-    stock: 10,
-  },
-];
 
 function ProfitAndLose() {
   const [clickedTr, SetClickedTr] = useState("");
   const [printActive, closePrintActive] = useState(false);
+  const [data,setData] = useState([])
+  const [fromDate,setFromDate] = useState();
+  const [toDate,setToDate] = useState();
 
+  const downloadPdf = () => {
+    const headers = ['Account Name','Expense','Revenue'];
+    const d = data.map((item) => [
+      item.AccountName,
+      item.Expense,
+      item.Revenue
+    ])
+    const title = new Date().toLocaleDateString() + 'Profit_and_lose'
+    exportPDF(headers,title,d);
+  }
+
+  const handleFilterSearch = () => {
+    console.log(fromDate,toDate);
+    accountServices.getFilteredProfitAndLose(fromDate,toDate)
+      .then(res => setData(res))
+      .catch(err => console.log(err))
+  }
+
+  useEffect(()=> {
+    accountServices.getProfitAndLose()
+      .then(res => setData(res))
+      .catch(err => console.log(err))
+  },[])
   // selecting row
 
   // const[rowClick,setRowClick]
@@ -65,7 +54,7 @@ function ProfitAndLose() {
               <div className="right">
                 <div
                   className="icon__section"
-                  onClick={() => closePrintActive(true)}
+                  onClick={() => window.print()}
                 >
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
@@ -86,7 +75,7 @@ function ProfitAndLose() {
 
                   <h4>Print</h4>
                 </div>
-                <div className="icon__section">
+                <CSVLink data={data} filename={new Date().toDateString() + "PROFIT AND LOSE.csv"} className="icon__section">
                   <svg
                     id="surface1"
                     xmlns="http://www.w3.org/2000/svg"
@@ -166,8 +155,8 @@ function ProfitAndLose() {
                     />
                   </svg>
                   <h4>Export Excel</h4>
-                </div>
-                <div className="icon__section">
+                </CSVLink>
+                <div className="icon__section" onClick={downloadPdf}>
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
                     width="11.916"
@@ -220,17 +209,17 @@ function ProfitAndLose() {
               <div className="input__Section">
                 <div className="input__field">
                   <h4>From Date</h4>
-                  <input type="date" name="" id="" />
+                  <input type="date" name="" id="" onChange={(e)=> setFromDate(new Date(e.target.value).toISOString())}/>
                 </div>
 
                 <div className="input__field">
                   <h4>To Date</h4>
-                  <input type="date" name="" id="" />
+                  <input type="date" name="" id="" onChange={(e)=> setToDate(new Date(e.target.value).toISOString())}/>
                 </div>
               </div>
 
               <div className="bottom__input__section">
-                <div className="serch__box">
+                <div className="serch__box" onClick={handleFilterSearch}>
                   <h4>Search</h4>
                 </div>
               </div>
@@ -247,63 +236,16 @@ function ProfitAndLose() {
                   </tr>
                 </thead>
                 <tbody>
-                  <tr>
-                    <td>Opening Stock</td>
-                    <td></td>
-                    <td></td>
-                  </tr>
-
-                  <tr>
-                    <td>Purchase Amount</td>
-                    <td>4580</td>
-                    <td>0.00</td>
-                  </tr>
-
-                  <tr>
-                    <td>Gross Profit c/o</td>
-                    <td style={{ borderBottom: "1px solid #040153" }}>8732</td>
-                    <td>0.00</td>
-                  </tr>
-                  {/* total */}
-                  <tr>
-                    <td></td>
-                    <td style={{ fontWeight: "bold" }}>13370.0</td>
-                    <td></td>
-                  </tr>
-
-                  <tr>
-                    <td>Sales Account</td>
-                    <td>0.00</td>
-                    <td>8793.00</td>
-                  </tr>
-
-                  <tr>
-                    <td>Clossing Stock</td>
-                    <td>0.00</td>
-                    <td style={{ borderBottom: "1px solid #040153" }}>
-                      4580.00
-                    </td>
-                  </tr>
-                  {/* total */}
-                  <tr>
-                    <td></td>
-                    <td></td>
-                    <td style={{ fontWeight: "bold" }}>8793.00</td>
-                  </tr>
+                  {
+                    data.map((item,index) => (
+                      <tr key={index}>
+                        <td>{item.AccountName}</td>
+                        <td>{item.Expense}</td>
+                        <td>{item.Revenue}</td>
+                      </tr>
+                    ))
+                  }
                 </tbody>
-                <tfoot>
-                  <tr>
-                    <td>Net Profit</td>
-                    <td>8793.00</td>
-                    <td></td>
-                  </tr>
-
-                  <tr>
-                    <td>Gross Profit b/f</td>
-                    <td></td>
-                    <td>8793.00</td>
-                  </tr>
-                </tfoot>
               </table>
             </div>
           </div>

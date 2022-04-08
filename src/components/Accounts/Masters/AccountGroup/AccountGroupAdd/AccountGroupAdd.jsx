@@ -4,6 +4,8 @@ import SucessfullMag from "../../../../Inventory/Transaction Manager/Reports/Sto
 import FailSnackbars from "../../../../basic components/failSnackBar";
 import SucessSnackbars from "../../../../basic components/sucessSidePopup";
 import { accountServices } from "../../../../../Services/AccountsServices";
+import { toast, ToastContainer } from "material-react-toastify";
+import 'material-react-toastify/dist/ReactToastify.css';
 function AccountGroupAdd({
   setAddNewBtn,
   editTableSelectedID,
@@ -38,7 +40,11 @@ function AccountGroupAdd({
   const submitFormHandler = (e) => {
     e.preventDefault();
     accountServices.uploadAccountGroupData(dataToSend)
-    .then(res => console.log(res))
+    .then(res => {
+      setDataToSend(data);
+      setAddNewBtn(false);
+      setMainTableView(true);
+    })
     .catch(err => console.log(err))
   };
 
@@ -130,6 +136,8 @@ function AccountGroupAdd({
           </form>
         </div>
       </div>
+
+      <ToastContainer/>
     </>
   );
 }

@@ -289,3 +289,11 @@
     }
   }
 }
+
+@media print {
+  .CashBook{
+    .top__Section{
+      display: none;
+    }
+  }
+}

@@ -4,15 +4,13 @@ import "./runningOrder.scss";
 function RunningOrder() {
   const [data, setData] = useState()
   useEffect(() => {
+
     axios
       .get("https://zres.clubsoft.co.in/DineIn/RunningOrders?CMPid=1")
       .then((res) => {
         setData(res.data);
       });
   }, [])
-  
-  
-
   return (
     <div className="RunningOrder">
       <div className="runningOrder__headder">
@@ -25,9 +23,8 @@ function RunningOrder() {
             <tr>
               <th className="orderNuber__th">Table No</th>
               <th>Order No</th>
-              <th>Amound</th>
+              <th>Amount</th>
               <th>Status</th>
-              <th>Dining For</th>
               <th></th>
               <th></th>
             </tr>
@@ -53,7 +50,6 @@ function RunningOrder() {
                     {data.Status}
                   </a>
                 </td>
-                <td data-label="Amount">About 2 Hrs</td>
                 <td data-label="" colSpan={"2"}>
                   {data.Status === "done Soon" && (
                     <>

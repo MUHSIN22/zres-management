@@ -6,6 +6,8 @@ import SucessfullMag from "../../../../Inventory/Transaction Manager/Reports/Sto
 
 import FailSnackbars from "../../../../basic components/failSnackBar";
 import SucessSnackbars from "../../../../basic components/sucessSidePopup";
+import { accountServices } from "../../../../../Services/AccountsServices";
+import { toast, ToastContainer } from "material-react-toastify";
 function AccountHeadAdd({
   setAddNewBtn,
   setMainTableView,
@@ -41,8 +43,20 @@ function AccountHeadAdd({
 
   const submitFormHandler = (e) => {
     e.preventDefault();
+    console.log(dataToSend);
+    accountServices.uploadAccountHeadData(dataToSend)
+      .then(res => {
+        toast.success("Added successfully")
+        setAddNewBtn(false)
+        setMainTableView(true)
+      })
   };
 
+  useEffect(() => {
+    accountServices.getAccountHeadDropdown()
+      .then(res => setDropdownList(res))
+      .catch(err => console.log(err))
+  },[])
   const handleDeletefunctionss = () => {};
 
   return (
@@ -184,7 +198,7 @@ function AccountHeadAdd({
                   </button>
                 </>
               ) : (
-                <button type="submit">save</button>
+                <button type="submit" >save</button>
               )}
 
               <button
@@ -199,6 +213,8 @@ function AccountHeadAdd({
           </form>
         </div>
       </div>
+
+      <ToastContainer/>
     </>
   );
 }

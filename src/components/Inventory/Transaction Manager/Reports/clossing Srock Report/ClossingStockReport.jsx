@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from "react";
 import { inventoryServices } from "../../../../../Services/InventoryServices";
+import { exportPDF } from "../../../../../Services/PDFServices";
 import "./clossingStockReport.scss";
-
+import { CSVLink } from "react-csv";
 
 
 function ClossingStockReport() {
@@ -23,6 +24,24 @@ function ClossingStockReport() {
           setData(data)
         }).catch(err => console.log(err))
     }
+  }
+
+  const downloadPdf = () => {
+    const headers = ['SINo'	,'Starting Date','Ending Date'	,'Product Name',	'Closing Stock',	'Actual Stock',	'Difference',	'Opening Stock'	,'Stock Taken By'	,'Approved By'];
+    const d = data.map((datas,index) => [
+      index+1,
+     datas.StartingDate,
+     datas.EndingDate,
+     datas.ProductName,
+     datas.ClosingStock,
+     datas.ActualStock,
+     datas.Difference,
+     datas.openigStock,
+     datas.stockTakenBY,
+     datas.approved
+    ])
+    const title = new Date().toLocaleDateString() + 'closing stock report'
+    exportPDF(headers,title,d);
   }
 
   useEffect(() => {
@@ -60,7 +79,7 @@ function ClossingStockReport() {
 
               <h4>Print</h4>
             </div>
-            <div className="icon__section">
+            <CSVLink data={data} filename={new Date().toLocaleDateString() + "_closingStockReport.csv"} className="icon__section">
               <svg
                 id="surface1"
                 xmlns="http://www.w3.org/2000/svg"
@@ -140,8 +159,8 @@ function ClossingStockReport() {
                 />
               </svg>
               <h4>Export Excel</h4>
-            </div>
-            <div className="icon__section">
+        </CSVLink>
+            <div  onClick={downloadPdf} className="icon__section">
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 width="11.916"

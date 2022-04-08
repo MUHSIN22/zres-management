@@ -61,7 +61,7 @@ function AccountHead() {
                   />
                 </g>
               </svg>
-              <h5>New</h5>
+              <h5 onClick={()=> setAddNewBtn(true)}>New</h5>
             </div>
             {/* <div className="different__option">
               <svg

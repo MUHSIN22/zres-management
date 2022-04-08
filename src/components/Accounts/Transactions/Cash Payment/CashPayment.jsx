@@ -6,6 +6,7 @@ import { accountServices } from "../../../../Services/AccountsServices";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import "./cashPayment.scss";
+import { toast } from "material-react-toastify";
 function CashPayment() {
   const dataJournal = {
     JEntryDate: "",
@@ -44,8 +45,8 @@ function CashPayment() {
   const [journels,setJournels] = useState([])
   const [journelEditData,setJournelEditData] = useState([]);
   const [newData,setNewData] = useState({
-    jCredit: 0,
-    jDebit: 0,
+    JCredit: 0,
+    JDebit: 0,
     CreditAccountId: null,
     DebitAccountId: null,
     JEntryDate: null,
@@ -86,7 +87,17 @@ function CashPayment() {
 
   const handleSave = (e) =>{
     e.preventDefault();
-    console.log(newData);
+    accountServices.uploadPayment(newData)
+    .then((res) => {
+      if(!res.error){
+        toast.success('Successfully added!')
+        handleClearALL()
+      }else{
+        toast.error('Insertion Failed')
+      }
+    }).catch(err => {
+      toast.error('Insertion Failed')
+    })
   }
   const handleUpdate = (event) => {
     event.preventDefault();
@@ -349,7 +360,7 @@ function CashPayment() {
                             <td>
                               <input
                                 required
-                                name="jDebit"
+                                name="JDebit"
                                 value={newData.JDebit}
                                 onChange={handleDataInput}
                                 style={{
@@ -366,7 +377,7 @@ function CashPayment() {
                             <td>
                               <input
                                 required
-                                name="jCredit"
+                                name="JCredit"
                                 value={newData.JCredit}
                                 onChange={handleDataInput}
                                 style={{
@@ -390,8 +401,8 @@ function CashPayment() {
                         <td style={{ border: "none" }}></td>
                         <td style={{ border: "none" }}></td>
                         <td style={{ border: "none" }}></td>
-                        <td>{newData.jDebit}</td>
-                        <td>{newData.jCredit}</td>
+                        <td>{newData.JDebit}</td>
+                        <td>{newData.JCredit}</td>
                       </tr>
                     </tfoot>
                   </table>

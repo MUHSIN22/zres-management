@@ -18,6 +18,9 @@ export const accountServices = {
         return new Promise((resolve,reject) => {
             fetch(`${BASE_URL}AccountGroup`,{
                 method: 'POST',
+                headers:{
+                    'Content-Type': 'application/json'
+                },
                 body: JSON.stringify(data)
             })
             .then(res => res.json())
@@ -27,6 +30,20 @@ export const accountServices = {
     },
 
     // Account Head
+    uploadAccountHeadData : (data) => {
+        return new Promise((resolve,reject) => {
+            fetch(`${BASE_URL}AccountHead`,{
+                method: 'POST',
+                headers:{
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(data)
+            })
+            .then(res => res.json())
+            .then(res => resolve(res))
+            .catch(err => reject(err))
+        })
+    },
     getAccountHeadData : () => {
         return new Promise((resolve,reject) => {
             fetch(`${BASE_URL}AccountHead?CMPid=1`)
@@ -37,6 +54,14 @@ export const accountServices = {
             .catch(err => {
                 reject(err)
             })
+        })
+    },
+    getAccountHeadDropdown : () => {
+        return new Promise((resolve,reject) => {
+            fetch(`${BASE_URL}AccountHead/GetAccountGroupName?CMPid=1`)
+            .then(res => res.json())
+            .then(data => resolve(data))
+            .catch(err => reject(err))
         })
     },
 
@@ -151,6 +176,20 @@ export const accountServices = {
             .catch(err => reject(err))
         })
     },
+    uploadJournel : (data) => {
+        return new Promise((resolve,reject) => {
+            fetch(`${BASE_URL}Journal?CMPid=1`,{
+                method: "POST",
+                headers: {
+                    'Content-Type':"application/json"
+                },
+                body: JSON.stringify(data)
+            })
+            .then(res => res.json())
+            .then(data => resolve(data))
+            .catch(err => reject(err))
+        })
+    },
 
     //-----------------Reports
     //>>>>>>>>>>>>>>>>Ledger
@@ -170,6 +209,15 @@ export const accountServices = {
             .catch(err => reject(err))
         })
     },
+    getFilteredLedger: (id,from,to) => {
+        return new Promise((resolve,reject) => {
+            fetch(`${BASE_URL}Ledger/search?Account=${id}&fromdate=${from}&todate=${to}&CMPid=1`)
+                .then(res => res.json())
+                .then(data => resolve(data))
+                .catch(err => reject(err))
+        })
+    },
+
     // >>Cash flow
     getAllCashFlow : () => {
         return new Promise((resolve,reject) => {
@@ -249,6 +297,20 @@ export const accountServices = {
             .catch(err => console.log(err))
         })
     },
+    uploadContra : (data) => {
+        return new Promise((resolve,reject) => {
+            fetch(`${BASE_URL}Contra?CMPid=1`,{
+                method: "POST",
+                headers: {
+                    'Content-Type':"application/json"
+                },
+                body: JSON.stringify(data)
+            })
+            .then(res => res.json())
+            .then(data => resolve(data))
+            .catch(err => reject(err))
+        })
+    },
 
     // Reciept 
     getAllReciept : () => {
@@ -281,6 +343,20 @@ export const accountServices = {
             .then(res => res.json())
             .then(data => resolve(data))
             .catch(err => reject(err));
+        })
+    },
+    uploadReciept : (data) => {
+        return new Promise((resolve,reject) => {
+            fetch(`${BASE_URL}Reciepts?CMPid=1`,{
+                method: "POST",
+                headers: {
+                    'Content-Type':"application/json"
+                },
+                body: JSON.stringify(data)
+            })
+            .then(res => res.json())
+            .then(data => resolve(data))
+            .catch(err => reject(err))
         })
     },
 
@@ -317,6 +393,20 @@ export const accountServices = {
             .catch(err => reject(err));
         })
     },
+    uploadPayment : (data) => {
+        return new Promise((resolve,reject) => {
+            fetch(`${BASE_URL}Payments?CMPid=1`,{
+                method: "POST",
+                headers: {
+                    'Content-Type':"application/json"
+                },
+                body: JSON.stringify(data)
+            })
+            .then(res => res.json())
+            .then(data => resolve(data))
+            .catch(err => reject(err))
+        })
+    },
 
     // Daybook
     getAllDayBook : () => {
@@ -333,6 +423,42 @@ export const accountServices = {
             .then(res => res.json())
             .then(data => resolve(data))
             .catch(err => reject(err))
+        })
+    },
+
+    // Profit and lose
+    getProfitAndLose : () => {
+        return new Promise((resolve,reject) => {
+            fetch(`${BASE_URL}ProfitAndLoss?CMPid=1`)
+            .then(res => res.json())
+            .then(data => resolve(data))
+            .catch(err => reject(err))
+        })
+    },
+    getFilteredProfitAndLose : (from,to) => {
+        return new Promise((resolve,reject) => {
+            fetch(`${BASE_URL}ProfitAndLoss/search?fromdate=${from}&todate=${to}&CMPid=1`)
+                .then(res => res.json())
+                .then(data => resolve(data))
+                .catch(err => reject(err))
+        })
+    },
+
+    // Balance sheet
+    getAllBalancesheet : () => {
+        return new Promise((resolve,reject) => {
+            fetch(`${BASE_URL}BalanceSheet/GetAllBalanceSheet?CMPid=1`)
+            .then(res => res.json())
+            .then(data => resolve(data))
+            .catch(err => reject(err));
+        })
+    },
+    getFilteredBalancesheet : (from,to) => {
+        return new Promise((resolve,reject) => {
+            fetch(`${BASE_URL}BalanceSheet/search?fromdate=${from}&todate=${to}&CMPid=1`)
+                .then(res => res.json())
+                .then(data => resolve(data))
+                .catch(err => reject(err))
         })
     }
 }

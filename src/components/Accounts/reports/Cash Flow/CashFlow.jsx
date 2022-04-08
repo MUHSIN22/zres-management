@@ -1,7 +1,10 @@
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useRef, useState } from "react";
+import { CSVLink } from "react-csv";
 import { accountServices } from "../../../../Services/AccountsServices";
+import { exportPDF } from "../../../../Services/PDFServices";
 import "./cashflow.scss";
 import Prints from "./Prints/Prints";
+import {useReactToPrint} from 'react-to-print';
 
 const Data = [
   {
@@ -51,6 +54,7 @@ function CashFlow() {
   const [cashFlow, setCashFlow] = useState([])
   const [fromDate,setFromDate] = useState(null)
   const [toDate,setToDate] = useState(null)
+  const tableRef = useRef();
  
   const handleFilter = () => {
     if(fromDate && toDate){
@@ -60,11 +64,30 @@ function CashFlow() {
     }
   }
 
+  const downloadPdf = () => {
+    const data = cashFlow.map((item,index) => [
+      new Date(item.BDate).toLocaleDateString(),
+      item.OpeningBalance,
+      item.ClosingBalance,
+      item.BDifference,
+    ])
+    const headers = ["DATE","Opening","Closing","Difference"]
+    exportPDF(headers,'Cashflow Report',data);
+  }
+
+  const table = useCallback(() =>{
+    return tableRef.current
+  },[tableRef.current])
+
   useEffect(() => {
     accountServices.getAllCashFlow()
       .then(data => setCashFlow(data))
       .catch(err => console.log(err))
   }, [])
+
+  const printTable = () => {
+    window.print()
+  }
   // selecting row
 
   // const[rowClick,setRowClick]
@@ -84,7 +107,7 @@ function CashFlow() {
               <div className="right">
                 <div
                   className="icon__section"
-                  onClick={() => closePrintActive(true)}
+                  onClick={printTable}
                 >
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
@@ -105,7 +128,7 @@ function CashFlow() {
 
                   <h4>Print</h4>
                 </div>
-                <div className="icon__section">
+                <CSVLink data={cashFlow} filename={new Date().toLocaleDateString() + "_cashflow.csv"} className="icon__section">
                   <svg
                     id="surface1"
                     xmlns="http://www.w3.org/2000/svg"
@@ -185,8 +208,8 @@ function CashFlow() {
                     />
                   </svg>
                   <h4>Export Excel</h4>
-                </div>
-                <div className="icon__section">
+                </CSVLink>
+                <div className="icon__section" onClick={downloadPdf}>
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
                     width="11.916"
@@ -255,8 +278,8 @@ function CashFlow() {
               </div>
             </div>
           </div>
-          <div className="bottom__Section">
-            <div className="table__sections">
+          <div className="bottom__Section" style={{color:'red'}} ref={tableRef}>
+            <div className="table__sections" >
               <table className="table">
                 <thead>
                   <tr>

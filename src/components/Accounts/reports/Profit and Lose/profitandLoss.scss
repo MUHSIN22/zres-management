@@ -288,3 +288,12 @@
     }
   }
 }
+
+@media print{
+  .ProfitAndLose {
+    width: 100%;
+  }
+    .top__Section {
+      display: none;
+    }
+}
