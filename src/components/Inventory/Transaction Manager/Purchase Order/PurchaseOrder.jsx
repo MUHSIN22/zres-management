@@ -1,7 +1,8 @@
-import React from "react";
+import React, { useEffect } from "react";
 import "./PurchaseOrder.scss";
 import { useState } from "react";
 import PurchaseDetailsAdd from "./addPurchaseOrder/AddPurchaseOrder";
+import { inventoryServices } from "../../../../Services/InventoryServices";
 
 const Date = [
   {
@@ -51,13 +52,19 @@ function PurchaseOrder() {
 
   const [fromDate, setFromDate] = useState("");
   const [toDate, setToDate] = useState("");
-
+  const [data, setData] = useState([])
   const [clickedTr, SetClickedTr] = useState("");
 
   const DateFilter = () => {
     var FromdateSplit = fromDate.split("/");
     var toDateSplit = toDate.split("/");
   };
+
+  useEffect(() => {
+    inventoryServices.getPurchaseorder()
+    .then(data => { setData(data) })
+    .catch(err => console.log(err))
+  }, [])
 
   return (
     <>
@@ -184,11 +191,11 @@ function PurchaseOrder() {
                   </tr>
                 </thead>
                 <tbody>
-                  {Date.map((datas) => (
+                  {data && data.map((datas,index) => (
                     <tr
-                      keys={datas.id}
-                      className={clickedTr === datas.SINO && "selectedTr "}
-                      onClick={() => SetClickedTr(datas.SINO)}
+                      keys={index+1}
+                      className={clickedTr === index+1 && "selectedTr "}
+                      onClick={() => SetClickedTr(index+1)}
                     >
                       <td>
                         <input type="checkbox" name="" id="" />
@@ -198,7 +205,7 @@ function PurchaseOrder() {
                           datas.ReturnType === "Expiry Return" && "Canceled "
                         }
                       >
-                        {datas.SINO}
+                        {index+1}
                       </td>
                       <td
                         className={
@@ -212,29 +219,30 @@ function PurchaseOrder() {
                           datas.ReturnType === "Expiry Return" && "Canceled "
                         }
                       >
-                        {datas.RtnDate}
+                        {datas.GetSupplier}
                       </td>
                       <td
                         className={
                           datas.ReturnType === "Expiry Return" && "Canceled "
                         }
                       >
-                        {datas.InvNo}
+                        {datas.Qty}
                       </td>
                       <td
                         className={
                           datas.ReturnType === "Expiry Return" && "Canceled "
                         }
                       >
-                        {datas.InvDate}
+                        {datas.Amount}
                       </td>
                       <td
                         className={
                           datas.ReturnType === "Expiry Return" && "Canceled "
                         }
                       >
-                        {datas.Amound}
+                        {datas.Status}
                       </td>
+                      
                     </tr>
                   ))}
                 </tbody>

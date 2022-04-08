@@ -6,6 +6,7 @@ import AddCircleIcon from "@mui/icons-material/AddCircle";
 import CloseOutlinedIcon from "@mui/icons-material/CloseOutlined";
 import AddBoxOutlinedIcon from "@mui/icons-material/AddBoxOutlined";
 import SucessfullMag from "../../../Transaction Manager/Reports/Stock Cost/clossing stock print/SucessfullMessage/SucessfullMag";
+import { data } from "jquery";
 
 const thumbsContainer = {
   display: "flex",
@@ -58,7 +59,9 @@ function AddProducts({
     price: "",
     image: "",
     menuName: "",
-    sizeaNDpRICE: [],
+    category:"",
+    status:"",
+    sizeandprice: [],
     imageFile: null,
   };
   const [menuCode, setMenucode] = useState("");
@@ -68,6 +71,7 @@ function AddProducts({
   const [image, setImage] = useState("");
   const [addSucessfully, setAddSucessfully] = useState(false);
   const [sizesetting, setSizeSetting] = useState(false);
+  const [categoryname, setCategoryname] = useState("");
   // const [OptionDataSelected, setOptionDataSelected] = useState(optionselection);
   const [dataToSend, setDataToSend] = useState(Data);
   const [diffSizeSelectionStored, setDiffSizeSelectionStored] = useState([]);
@@ -152,11 +156,20 @@ function AddProducts({
   useEffect(() => {
     if (editProduct) {
       const HandleUpdateProductsFeild = () => {
-        SetMenuName(updatableProducts.ItemName);
-        setMenucode(updatableProducts.MenuID)
-        setPrice(updatableProducts.ItemPrice);
-        setImage(updatableProducts.Image);
+        // SetMenuName(updatableProducts.ItemName);
+        // setMenucode(updatableProducts.MenuID)
+        // setPrice(updatableProducts.ItemPrice);
+        // setImage(updatableProducts.Image);
+        // setCategoryname(updatableProducts.CategoryName);
         setActiveBlock(updatableProducts.Status);
+        Data.menuCode= updatableProducts.MenuID
+        Data.menuName= updatableProducts.ItemName
+        Data.price= updatableProducts.ItemPrice
+        Data.menuCode= updatableProducts.MenuID
+        Data.image= updatableProducts.Image
+        Data.category= updatableProducts.CategoryName
+        Data.status= updatableProducts.IsActive
+
       };
       HandleUpdateProductsFeild();
     } else {
@@ -194,7 +207,7 @@ function AddProducts({
                   <input
                     type="number"
                     name="menuCode"
-                    value={editProduct ?menuCode :dataToSend.menuCode}
+                    value={dataToSend.menuCode}
                     onChange={handleAddCategoryToSend}
                   />
                 </div>
@@ -203,9 +216,18 @@ function AddProducts({
                   <input
                     type="text"
                     name="menuName"
-                    value={editProduct ?menuName :dataToSend.menuName}
+                    value={dataToSend.menuName}
                     onChange={handleAddCategoryToSend}
+                    
                   />
+                </div>
+                <div className="input__Sections">
+                  <h5>Category Name</h5>
+                  <input type="text"
+                  name="category"
+                  value={dataToSend.category}
+                  onChange={handleAddCategoryToSend}
+                   />
                 </div>
                 <div className="input__Sections priceInput">
                   <h5>Price</h5>
@@ -213,9 +235,10 @@ function AddProducts({
                   <input
                     type="number"
                     name="price"
-                    value={editProduct ? price :dataToSend.price}
+                    value={dataToSend.price}
                     onChange={handleAddCategoryToSend}
                   />
+                   
                   <AddBoxOutlinedIcon
                     onClick={() => setSizeSetting(!sizesetting)}
                   />
@@ -281,7 +304,10 @@ function AddProducts({
                       type="checkbox"
                       name=""
                       id=""
-                      checked={activeBlock === "active"}
+                      checked={dataToSend.status === true}
+                      value={dataToSend.status}
+                      onChange={handleAddCategoryToSend}
+
                     />
                     <h5>Active</h5>
                   </div>
@@ -291,7 +317,9 @@ function AddProducts({
                       type="checkbox"
                       name=""
                       id=""
-                      checked={activeBlock === "block"}
+                      checked={editProduct && dataToSend.status === false}
+                      value={dataToSend.status}
+                      onChange={handleAddCategoryToSend}
                     />
                     <h5>Block</h5>
                   </div>

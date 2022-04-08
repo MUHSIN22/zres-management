@@ -1,30 +1,35 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
+import { inventoryServices } from "../../../../../Services/InventoryServices";
 import "./clossingStockReport.scss";
 
-const Date = [
-  {
-    SINO: "1",
 
-    productCode: 541,
-    Amound: 10000,
-
-    productName: "sugar",
-    stock: 50,
-    startingDate: "22/11/2021",
-    endingDate: "03/12/2021",
-    clossingStock: "5",
-    ActualStock: "5",
-    Difference: 0,
-    openigStock: "5",
-    stockTakenBY: "casher",
-    approved: "admin",
-  },
-];
 
 function ClossingStockReport() {
+
+  const [data, setData] = useState([])
+  const [todate, setTodate] = useState('')
+  const [fromdate, setFromdate] = useState('')
+  const [productid, setProductid] = useState('')
+  const [productdropdown, setProductdropdown] = useState([])
+
   const handlePrintFunction = () => {
     window.print();
   };
+
+  const stockClosingFilter = (from, to, pid) => {
+    if (from && to  && pid) {
+      inventoryServices.getStockClosingFilter(from, to,pid)
+        .then(data => {
+          setData(data)
+        }).catch(err => console.log(err))
+    }
+  }
+
+  useEffect(() => {
+    inventoryServices.getClosestock()
+      .then(data => { setData(data); setProductdropdown(data) })
+  }, [])
+
 
   return (
     <div className="ClossingStockReport">
@@ -189,26 +194,27 @@ function ClossingStockReport() {
           <div className="input__Section">
             <div className="input__field">
               <h4>From Date</h4>
-              <input type="date" name="" id="" />
+              <input onChange={(event) => { setFromdate(event.target.value) }} value={fromdate} type="date" name="" id="" />
             </div>
 
             <div className="input__field">
               <h4>To Date</h4>
-              <input type="date" name="" id="" />
+              <input onChange={(event) => { setTodate(event.target.value) }} value={todate} type="date" name="" id="" />
             </div>
 
             <div className="input__field">
               <h4>Product Name</h4>
-              <select name="" id="">
-                {Date.map((items) => (
-                  <option value={items.productName}>{items.productName}</option>
+              <select onChange={(e) => { setProductid(e.target.value) }} name="" id="">
+                <option selected="true" disabled="disabled">Select Product</option>
+                {productdropdown && productdropdown.map((items) => (
+                  <option value={items.Cid}>{items.ProductName}</option>
                 ))}
               </select>
             </div>
           </div>
 
           <div className="bottom__input__section">
-            <div className="serch__box">
+            <div onClick={() => { stockClosingFilter(fromdate,todate,productid) }} className="serch__box">
               <h4>Search</h4>
             </div>
           </div>
@@ -232,20 +238,20 @@ function ClossingStockReport() {
               </tr>
             </thead>
             <tbody>
-              {Date.map((datas) => (
-                <tr keys={datas.id}>
-                  <td data-label="SINo">{datas.SINO}</td>
-                  <td data-label="Starting Date">{datas.startingDate}</td>
-                  <td data-label="Ending Date">{datas.endingDate}</td>
-                  <td data-label="Product Name">{datas.productName}</td>
-                  <td data-label="Closing Stock">{datas.clossingStock}</td>
+              {data[0] ? data.map((datas,index) => (
+                <tr keys={index+1}>
+                  <td data-label="SINo">{index+1}</td>
+                  <td data-label="Starting Date">{datas.StartingDate}</td>
+                  <td data-label="Ending Date">{datas.EndingDate}</td>
+                  <td data-label="Product Name">{datas.ProductName}</td>
+                  <td data-label="Closing Stock">{datas.ClosingStock}</td>
                   <td data-label="Actual Stock">{datas.ActualStock}</td>
                   <td data-label="Difference">{datas.Difference}</td>
                   <td data-label="Opening Stock">{datas.openigStock}</td>
                   <td data-label="Stock Taken By">{datas.stockTakenBY}</td>
                   <td data-label="Approved By">{datas.approved}</td>
                 </tr>
-              ))}
+              )):"No data found"}
             </tbody>
 
             <tfoot>

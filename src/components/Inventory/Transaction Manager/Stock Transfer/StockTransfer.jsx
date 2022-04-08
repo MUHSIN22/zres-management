@@ -1,7 +1,8 @@
-import React from "react";
+import React, { useEffect } from "react";
 import "./stockTransfer.scss";
 import { useState } from "react";
 import StockTransferAdd from "./StockTransferAdd/StockTransferAdd";
+import { inventoryServices } from "../../../../Services/InventoryServices";
 
 const Date = [
   {
@@ -48,7 +49,7 @@ const Date = [
 function StockTransfer() {
   const [addNewBtn, setAddNewBtn] = useState(false);
   const [mainTableView, setMainTableView] = useState(true);
-
+  const [data, setData] = useState([])
   const [fromDate, setFromDate] = useState("");
   const [toDate, setToDate] = useState("");
 
@@ -59,6 +60,12 @@ function StockTransfer() {
     var toDateSplit = toDate.split("/");
   };
 
+  useEffect(() => {
+    inventoryServices.getstocktransferrequest()
+    .then((data) => {
+      setData(data)
+    })
+  },[])
   return (
     <>
       {addNewBtn && (
@@ -213,11 +220,11 @@ function StockTransfer() {
                   </tr>
                 </thead>
                 <tbody>
-                  {Date.map((datas) => (
+                  {data && data.map((datas,index) => (
                     <tr
-                      keys={datas.id}
-                      className={clickedTr === datas.SINO && "selectedTr "}
-                      onClick={() => SetClickedTr(datas.SINO)}
+                      keys={index+1}
+                      className={clickedTr === index+1 && "selectedTr "}
+                      onClick={() => SetClickedTr(index+1)}
                     >
                       <td>
                         <input type="checkbox" name="" id="" />
@@ -227,7 +234,7 @@ function StockTransfer() {
                           datas.ReturnType === "Expiry Return" && "Canceled "
                         }
                       >
-                        {datas.SINO}
+                        {index+1}
                       </td>
                       <td
                         className={
@@ -262,21 +269,21 @@ function StockTransfer() {
                           datas.ReturnType === "Expiry Return" && "Canceled "
                         }
                       >
-                        {datas.Amound}
+                        {datas.NetAmount}
                       </td>
                       <td
                         className={
                           datas.ReturnType === "Expiry Return" && "Canceled "
                         }
                       >
-                        {datas.Amound}
+                        {datas.Total}
                       </td>
                       <td
                         className={
                           datas.ReturnType === "Expiry Return" && "Canceled "
                         }
                       >
-                        {datas.Amound}
+                        {datas.IsApprove}
                       </td>
                       <td
                         className={

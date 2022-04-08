@@ -20,11 +20,7 @@ function MenuManagement() {
     selCategory[0].name
   );
 
-  useEffect(() => {
-    
-    setSelCategory(masterCategiry);
-    setClickedSubCategory(masterCategiry[0].name);
-  }, []);
+ 
 
   return (
     <div className="MenuManagement">

@@ -1,80 +1,94 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import AccountBoxIcon from "@mui/icons-material/AccountBox";
 import AddIcon from "@mui/icons-material/Add";
 import "./customerProfileSection.scss";
-function CustomerProfileSection() {
+import { crmServices } from "../../../../Services/CrmServices";
+import { Link } from "react-router-dom";
+function CustomerProfileSection({ number }) {
+  const [customer, setCustomer] = useState([])
+
+  useEffect(() => {
+    crmServices.getAllcustomer()
+      .then(data => { setCustomer(data) })
+  }, [])
+
   return (
     <>
       <div className="top__left">
-        <div className="top__left__headder">
-    
-    
-          <div className="hedder__left">
-            <div className="accoount__profile_pic">
-              <AccountBoxIcon />
-              <svg className="svg__top__icon"
-                xmlns="http://www.w3.org/2000/svg"
-                width="44"
-                height="30"
-                viewBox="0 0 44 30"
-              >
-                <g id="surface1" transform="translate(-2 -9)">
-                  <path
-                    id="Path_3045"
-                    data-name="Path 3045"
-                    d="M46,36a3,3,0,0,1-3,3H5a3,3,0,0,1-3-3V12A3,3,0,0,1,5,9H43a3,3,0,0,1,3,3Z"
-                    fill="#31cdd2"
-                  />
-                  <path
-                    id="Path_3046"
-                    data-name="Path 3046"
-                    d="M28,33H38v2H28Z"
-                    fill="#1976d2"
-                  />
-                  <path
-                    id="Path_3047"
-                    data-name="Path 3047"
-                    d="M28,29H42v2H28Z"
-                    fill="#1976d2"
-                  />
-                  <path
-                    id="Path_3048"
-                    data-name="Path 3048"
-                    d="M16.5,14,20,20.5l7,1-5,5L23,34l-6.5-3.5L10,34l1-7.5-5-5,7-1Z"
-                    fill="#ffea00"
-                  />
-                </g>
-              </svg>
+        {customer && customer.filter(customer => customer.Phone === number)
+        .map((customer) =>(
+          <div className="top__left__headder">
+
+            <div className="hedder__left">
+              <div className="accoount__profile_pic">
+                <AccountBoxIcon />
+                <svg className="svg__top__icon"
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="44"
+                  height="30"
+                  viewBox="0 0 44 30"
+                >
+                  <g id="surface1" transform="translate(-2 -9)">
+                    <path
+                      id="Path_3045"
+                      data-name="Path 3045"
+                      d="M46,36a3,3,0,0,1-3,3H5a3,3,0,0,1-3-3V12A3,3,0,0,1,5,9H43a3,3,0,0,1,3,3Z"
+                      fill="#31cdd2"
+                    />
+                    <path
+                      id="Path_3046"
+                      data-name="Path 3046"
+                      d="M28,33H38v2H28Z"
+                      fill="#1976d2"
+                    />
+                    <path
+                      id="Path_3047"
+                      data-name="Path 3047"
+                      d="M28,29H42v2H28Z"
+                      fill="#1976d2"
+                    />
+                    <path
+                      id="Path_3048"
+                      data-name="Path 3048"
+                      d="M16.5,14,20,20.5l7,1-5,5L23,34l-6.5-3.5L10,34l1-7.5-5-5,7-1Z"
+                      fill="#ffea00"
+                    />
+                  </g>
+                </svg>
+              </div>
+              <div>
+
+              </div>
+              <div className="name__section">
+                <h4>{customer.CName}</h4>
+                <p>Not {customer.CName} ?</p>
+              </div>
+            <Link to="/mainPage/crm/addCustomer">
+              <div className="create__new__acc">
+                <h5>Create New Customer</h5>
+              </div>
+              </Link>
             </div>
 
-            <div className="name__section">
-              <h4>Anju</h4>
-              <p>Not Anju ?</p>
+            <div className="headder__right">
+              <p>Phone Number</p>
+              <h4>{customer.Phone}</h4>
+              <p>Alt.number : {customer.AlternativePhone}</p>
             </div>
 
-            <div className="create__new__acc">
-              <h5>Create New Customer</h5>
-            </div>
-
-          </div>
-
-          <div className="headder__right">
-            <p>Phone Number</p>
-            <h4>9074967460</h4>
-            <p>Alt.number : 88916602112</p>
-          </div>
-
-        </div>
+          </div>))}
 
         <hr className="hr_headder" />
 
         <div className="top__left__mid">
-         
+
           <div className="main__section">
             <h5>There is no address created for this customer.</h5>
+           <Link to="/mainPage/crm/addCustomer">
             <button>
-              <h4>Add Address</h4>
+              Add Address
             </button>
+            </Link>
           </div>
 
           <hr />
@@ -104,7 +118,7 @@ function CustomerProfileSection() {
               </div>
             </div>
           </div>
-          
+
         </div>
       </div>
     </>

@@ -5,13 +5,13 @@ import CusomerInsight from "./customerInsightSection/CusomerInsight";
 import RunningOrder from "./runningOrder/RunningOrder";
 import PastOrder from "./pastOrder/PastOrder";
 
-function SingleCustomerDetails() {
+function SingleCustomerDetails({number}) {
   return (
     <div className="singleCustomer__details">
 
       {/* main components */}
       <div className="headder__top__section">
-        <CustomerProfileSection />
+        <CustomerProfileSection number={number}/>
         <CusomerInsight />
       </div>
       <RunningOrder />

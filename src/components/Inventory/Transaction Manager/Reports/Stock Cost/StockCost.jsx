@@ -1,54 +1,54 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { useState } from "react";
+import { inventoryServices } from "../../../../../Services/InventoryServices";
+import { walkinServices } from "../../../../../Services/WalkinServices";
 import ClossingStockPrint from "./clossing stock print/ClossingStockPrint";
 import "./stockCost.scss";
-const Date = [
-  {
-    SINO: "1",
 
-    productCode: 541,
-    Amound: 10000,
-
-    productName: "sugar",
-    stock: 50,
-  },
-
-  {
-    SINO: "2",
-
-    productCode: 341,
-    Amound: 10000,
-
-    productName: "oil",
-    stock: 10,
-  },
-
-  {
-    SINO: "3",
-
-    productCode: 241,
-    Amound: 100000,
-
-    productName: "Potato",
-    stock: 30,
-  },
-
-  {
-    SINO: "4",
-
-    productCode: 341,
-    Amound: 10000,
-
-    productName: "Onion",
-    stock: 10,
-  },
-];
 
 const StockCost = React.forwardRef((props, ref) => {
   const [clickedTr, SetClickedTr] = useState("");
-
+  const [data,setData] = useState([])
+  const [productdropdown,setProductdropdown] = useState([])
+  const [categorydropdown,setCategorydropdown] = useState([])
   const [sendingtoPrint, setSendingToPrint] = useState(false);
+  const [todate,setTodate] = useState('')
+  const [fromdate,setFromdate] = useState('')
+  const [productid,setProductid] = useState('')
+  const [categoryid,setCategoryid] = useState('')
 
+  const count = data.length;
+ let costtotal = data.reduce(
+   
+    (price, item) => price + count * item.CostOfSale,
+    0
+  );
+  let saletotal = data.reduce(
+   
+    (price, item) => price + count * item.SalesPrice,
+    0
+  );
+  
+  const  stockCostFilter = (from,to,Cid,Pid)=>{
+  if(from && to && Cid && Pid){
+    inventoryServices.getStockcostFilter(from,to,Cid,Pid)
+    .then(data=>{ setData(data);console.log('triggered')})
+    
+  }
+ }
+
+
+  useEffect(() => {
+    
+  inventoryServices.getStockcost()
+  .then(data => {
+    setData(data); setProductdropdown(data)
+  })
+
+  walkinServices.getAllcategories()
+  .then(data => {setCategorydropdown(data)})
+  }, [])
+  
   return (
     <>
       <div className="StockCost">
@@ -269,17 +269,24 @@ const StockCost = React.forwardRef((props, ref) => {
           </div>
           <div className="bottom__section">
             <div className="input__Section">
-              <div className="input__field">
-                <h4>Date</h4>
-                <input type="date" name="" id="" />
-              </div>
+            <div className="input__field">
+                  <h4>From Date</h4>
+                  <input onChange={(event)=>{setFromdate(event.target.value)}} value={fromdate} type="date" name="" id="" />
+                </div>
+
+                <div className="input__field">
+                  <h4>To Date</h4>
+                  <input onChange={(event)=>{setTodate(event.target.value)}} value={todate} type="date" name="" id="" />
+                </div>
+
 
               <div className="input__field">
                 <h4>Product Name</h4>
-                <select name="" id="">
-                  {Date.map((items) => (
-                    <option value={items.productName}>
-                      {items.productName}
+                <select onChange={(e)=>{setProductid(e.target.value)}} name="" id="">
+                <option selected="true" disabled="disabled">Select Product</option>
+                  {productdropdown && productdropdown.map((items) => (
+                    <option value={items.Cid}>
+                      {items.ProductName}
                     </option>
                   ))}
                 </select>
@@ -289,21 +296,18 @@ const StockCost = React.forwardRef((props, ref) => {
             <div className="bottom__input__section">
               <div className="input__field">
                 <h4>Category</h4>
-                <select name="" id="">
-                  <option value=""></option>
-                  <option value=""></option>
+                <select onChange={(e)=>{setCategoryid(e.target.value)}} name="" id="">
+                <option selected="true" disabled="disabled">Select Category</option>
+                {categorydropdown && categorydropdown.map((items) => (
+                    <option value={items.MenuGroupId}>
+                      {items.MenuGroupName}
+                    </option>
+                  ))}
                 </select>
               </div>
 
-              <div className="checkbox__fiels">
-                <div className="check__field">
-                  <input type="checkbox" name="" id="" />
-                  <h4>Details</h4>
-                </div>
-              </div>
-
-              <div className="serch__box">
-                <h4>Search</h4>
+              <div onClick={()=>{stockCostFilter(fromdate,todate,productid,categoryid)}} className="serch__box">
+                <h4 >Search</h4>
               </div>
             </div>
           </div>
@@ -317,33 +321,31 @@ const StockCost = React.forwardRef((props, ref) => {
                   <th colspan="2">Product Name</th>
                   <th>Batch No</th>
                   <th>Purchase Amount</th>
-                  <th>Sales Amount</th>
                   <th>Stock</th>
                 </tr>
               </thead>
               <tbody>
-                {Date.map((datas) => (
+                {data[0] ? data.map((datas,index) => (
                   <tr
-                    keys={datas.id}
-                    className={clickedTr === datas.SINO && "selectedTr "}
-                    onClick={() => SetClickedTr(datas.SINO)}
+                    keys={index+1}
+                    className={clickedTr === index+1 && "selectedTr "}
+                    onClick={() => SetClickedTr(index+1)}
                   >
-                    <td>{datas.SINO}</td>
-                    <td colspan="2">{datas.productName}</td>
-                    <td>1254</td>
-                    <td>452</td>
-                    <td>500</td>
-                    <td>{datas.stock}</td>
+                    <td>{index+1}</td>
+                    <td colspan="2">{datas.ProductName}</td>
+                    <td>{datas.BatchNo}</td>
+                    <td>{datas.CostOfSale}</td>
+                    <td>{datas.ActualStock}</td>
                   </tr>
-                ))}
+                )):"No data found"}
               </tbody>
               <tfoot>
                 <tr>
                   <td></td>
                   <td colspan="2"></td>
                   <td></td>
-                  <td style={{ backgroundColor: "#C0C0C0" }}>1752</td>
-                  <td style={{ backgroundColor: "#C0C0C0" }}>2100</td>
+                  <td style={{ backgroundColor: "#C0C0C0" }}>{costtotal}</td>
+                  <td style={{ backgroundColor: "#C0C0C0" }}>{saletotal}</td>
                   <td></td>
                 </tr>
               </tfoot>

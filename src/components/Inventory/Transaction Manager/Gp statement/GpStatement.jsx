@@ -1,78 +1,33 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
+import { inventoryServices } from "../../../../Services/InventoryServices";
 import "./gpStatement.scss";
 
-const Date = [
-  {
-    SINO: "1",
-
-    Date: "01 jan 21",
-
-    MRP: 210,
-
-    SalesPrics: 200,
-
-    CostOfSale: 80,
-
-    GrossProfit: 100,
-
-    GrossProfitPer: "60",
-  },
-
-  {
-    SINO: "2",
-
-    Date: "01 jan 21",
-
-    MRP: 210,
-
-    SalesPrics: 200,
-
-    CostOfSale: 80,
-
-    GrossProfit: 100,
-
-    GrossProfitPer: "60",
-  },
-
-  {
-    SINO: "2",
-
-    Date: "01 jan 21",
-
-    MRP: 210,
-
-    SalesPrics: 200,
-
-    CostOfSale: 80,
-
-    GrossProfit: 100,
-
-    GrossProfitPer: "60",
-  },
-];
 
 function GpStatement() {
   const [addNewBtn, setAddNewBtn] = useState(false);
   const [mainTableView, setMainTableView] = useState(true);
-
+  const [data,setData] = useState([])
   const [fromDate, setFromDate] = useState("");
   const [toDate, setToDate] = useState("");
 
   const [clickedTr, SetClickedTr] = useState("");
 
-  const DateFilter = () => {
-    var FromdateSplit = fromDate.split("/");
-    var toDateSplit = toDate.split("/");
-  };
+  const stockStatementFilter = (from,to)=>{
+    if(from && to){
+      inventoryServices.getStockStatementFilter(from,to)
+      .then(data=>{ setData(data);})
+      
+    }
+   }
+
+  useEffect(() => {
+  inventoryServices.getGpstatement()
+  .then(data =>{ setData(data)})
+  }, [])
+  
   return (
     <>
-      {/* {addNewBtn && (
-        <PurchaseReturnAdd
-          setAddNewBtn={setAddNewBtn}
-          setMainTableView={setMainTableView}
-        />
-      )} */}
-
+   
       {mainTableView && (
         <div className="GpStatement">
           {/* ADD NEW SECTION START */}
@@ -105,15 +60,7 @@ function GpStatement() {
                 />
               </div>
 
-              <div className="sales__Type">
-                <h5>Sale Type</h5>
-                <select name="" id="">
-                  <option value=""></option>
-                  <option value=""></option>
-                </select>
-              </div>
-
-              <div className="search__Section">
+              <div onClick={()=>{stockStatementFilter(fromDate,toDate)}}className="search__Section">
                 <button>Search</button>
               </div>
             </div>
@@ -124,6 +71,7 @@ function GpStatement() {
                     <th>SINo</th>
                     <th>Date</th>
                     <th>MRP</th>
+                    <th>ItemName</th>
                     <th>Sales Price</th>
                     <th>Cost of Sales</th>
                     <th>Gross Profit</th>
@@ -131,27 +79,27 @@ function GpStatement() {
                   </tr>
                 </thead>
                 <tbody>
-                  {Date.map((datas) => (
+                  {data[0] ? data.map((datas,index) => (
                     <tr
-                      keys={datas.id}
-                      className={clickedTr === datas.SINO && "selectedTr "}
-                      onClick={() => SetClickedTr(datas.SINO)}
+                      keys={index+1}
+                      className={clickedTr === index+1 && "selectedTr "}
+                      onClick={() => SetClickedTr(index+1)}
                     >
-                      <td>{datas.SINO}</td>
+                      <td>{index+1}</td>
 
                       <td>{datas.Date}</td>
 
-                      <td>{datas.MRP}</td>
-
-                      <td>{datas.SalesPrics}</td>
+                      <td>{datas.Rate}</td>
+                      <td>{datas.ItemName}</td>
+                      <td>{datas.SalesPrice}</td>
 
                       <td>{datas.CostOfSale}</td>
 
                       <td>{datas.GrossProfit}</td>
 
-                      <td>{datas.GrossProfitPer}</td>
+                      <td>{datas.GPpercentage}</td>
                     </tr>
-                  ))}
+                  )):"No data found"}
                 </tbody>
                 <tfoot>
                   <tr>

@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import { Link, Outlet } from "react-router-dom";
 import GpStatement from "../Transaction Manager/Gp statement/GpStatement";
 import ClossingStockReport from "../Transaction Manager/Reports/clossing Srock Report/ClossingStockReport";
 import StockCost from "../Transaction Manager/Reports/Stock Cost/StockCost";
@@ -46,38 +47,58 @@ function ReportSection() {
       <div className="top__category__section">
         {/*top category section  */}
         <div className="hedder__category">
-          <div
-            className={
-              "option__box " + (subCategoryCss === "firstValue" && "firstvalue")
-            }
-            onClick={() => {
-              setSubCategoryCss("firstValue");
-              setClickedSubCategory(selCategory[0].name);
-            }}
-          >
-            <h5>{selCategory[0].name}</h5>
-          </div>
-
-          {selCategory
-            .filter((data) => data.id !== 0)
-            .map((cat) => (
-              <div
-                key={cat.id}
-                className={
-                  categoryID === cat.id
-                    ? "option__box " +
-                      (subCategoryCss === "restValue" && "restValue ")
-                    : "option__box "
-                }
-                onClick={() => {
-                  setSubCategoryCss("restValue");
-                  setCategoryID(cat.id);
-                  setClickedSubCategory(cat.name);
-                }}
-              >
-                <h5>{cat.name}</h5>
-              </div>
-            ))}
+          <Link to="/mainPage/inventory/reports/stock-report">
+            <div
+              className={
+                "option__box " + (subCategoryCss === "firstValue" && "firstvalue")
+              }
+              onClick={() => {
+                setSubCategoryCss("firstValue");
+                setClickedSubCategory(selCategory[0].name);
+              }}
+            >
+              <h5>{selCategory[0].name}</h5>
+            </div>
+          </Link>
+          <Link to="/mainPage/inventory/reports/stock-cost">
+            <div
+              className={
+                "option__box " + (subCategoryCss === "firstValue" && "firstvalue")
+              }
+              onClick={() => {
+                setSubCategoryCss("firstValue");
+                setClickedSubCategory(selCategory[0].name);
+              }}
+            >
+              <h5>{selCategory[1].name}</h5>
+            </div>
+          </Link>
+          <Link to="/mainPage/inventory/reports/closing-stock-report">
+            <div
+              className={
+                "option__box " + (subCategoryCss === "firstValue" && "firstvalue")
+              }
+              onClick={() => {
+                setSubCategoryCss("firstValue");
+                setClickedSubCategory(selCategory[0].name);
+              }}
+            >
+              <h5>{selCategory[2].name}</h5>
+            </div>
+          </Link>
+          <Link to="/mainPage/inventory/reports/statement">
+            <div
+              className={
+                "option__box " + (subCategoryCss === "firstValue" && "firstvalue")
+              }
+              onClick={() => {
+                setSubCategoryCss("firstValue");
+                setClickedSubCategory(selCategory[0].name);
+              }}
+            >
+              <h5>{selCategory[3].name}</h5>
+            </div>
+          </Link>
 
           <div className="line_passer"></div>
         </div>
@@ -86,12 +107,7 @@ function ReportSection() {
       {/* PRODUCT MASTER SECTION */}
 
       <div className="master__body__section">
-        {clickedSubCategory === "Stock Report" && <StockReport />}
-        {clickedSubCategory === "Stock Cost" && <StockCost />}
-        {clickedSubCategory === "Closing Stock Report" && (
-          <ClossingStockReport />
-        )}
-        {clickedSubCategory === "GP Statement" && <GpStatement />}
+        <Outlet />
       </div>
     </div>
   );

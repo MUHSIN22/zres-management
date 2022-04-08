@@ -1,7 +1,8 @@
-import React from "react";
+import React, { useEffect } from "react";
 import "./goodsReturn.scss";
 import { useState } from "react";
 import AddGoodsReport from "./Add Goods Report/AddGoodsReport";
+import { inventoryServices } from "../../../../Services/InventoryServices";
 const Date = [
   {
     SINO: "1",
@@ -47,7 +48,7 @@ const Date = [
 function GoodsReport() {
   const [addNewBtn, setAddNewBtn] = useState(false);
   const [mainTableView, setMainTableView] = useState(true);
-
+  const [data, setData] = useState([])
   const [fromDate, setFromDate] = useState("");
   const [toDate, setToDate] = useState("");
 
@@ -58,6 +59,11 @@ function GoodsReport() {
     var toDateSplit = toDate.split("/");
   };
 
+  useEffect(() => {
+inventoryServices.getGoodreciept()
+.then(data => { setData(data) })
+.catch(err => console.log(err))
+  },[])
   return (
     <>
       {addNewBtn && (
@@ -214,102 +220,102 @@ function GoodsReport() {
                   </tr>
                 </thead>
                 <tbody>
-                  {Date.map((datas) => (
+                  {data && data.map((datas,index) => (
                     <tr
-                      keys={datas.id}
-                      className={clickedTr === datas.SINO && "selectedTr "}
-                      onClick={() => SetClickedTr(datas.SINO)}
+                      keys={index+1}
+                      className={clickedTr === index+1 && "selectedTr "}
+                      onClick={() => SetClickedTr(index+1)}
                     >
                       <td
                         className={
                           datas.ReturnType === "Expiry Return" && "Canceled "
                         }
                       >
-                        {datas.SINO}
+                        {index+1}
                       </td>
                       <td
                         className={
                           datas.ReturnType === "Expiry Return" && "Canceled "
                         }
                       >
-                        {datas.RtnNo}
+                        {datas.RefNo}
                       </td>
                       <td
                         className={
                           datas.ReturnType === "Expiry Return" && "Canceled "
                         }
                       >
-                        {datas.RtnDate}
+                        {datas.RefDate}
                       </td>
                       <td
                         className={
                           datas.ReturnType === "Expiry Return" && "Canceled "
                         }
                       >
-                        {datas.InvNo}
+                        {datas.TransNo}
                       </td>
                       <td
                         className={
                           datas.ReturnType === "Expiry Return" && "Canceled "
                         }
                       >
-                        {datas.InvDate}
+                        {datas.TransDate}
                       </td>
                       <td
                         className={
                           datas.ReturnType === "Expiry Return" && "Canceled "
                         }
                       >
-                        {datas.Amound}
+                        {datas.BrachId}
                       </td>
                       <td
                         className={
                           datas.ReturnType === "Expiry Return" && "Canceled "
                         }
                       >
-                        {datas.Amound}
+                        {datas.GrossAmount}
                       </td>
                       <td
                         className={
                           datas.ReturnType === "Expiry Return" && "Canceled "
                         }
                       >
-                        {datas.Amound}
+                        {datas.TotalTax}
                       </td>
                       <td
                         className={
                           datas.ReturnType === "Expiry Return" && "Canceled "
                         }
                       >
-                        {datas.Amound}
+                        {datas.NetAmount}
                       </td>
                       <td
                         className={
                           datas.ReturnType === "Expiry Return" && "Canceled "
                         }
                       >
-                        {datas.Amound}
+                        {datas.TotalProduct}
                       </td>
                       <td
                         className={
                           datas.ReturnType === "Expiry Return" && "Canceled "
                         }
                       >
-                        {datas.Amound}
+                        {datas.Status}
                       </td>
                       <td
                         className={
                           datas.ReturnType === "Expiry Return" && "Canceled "
                         }
                       >
-                        {datas.Amound}
+                        {datas.CreditAmount}
                       </td>
                       <td
                         className={
                           datas.ReturnType === "Expiry Return" && "Canceled "
                         }
                       >
-                        {datas.Amound}
+                        {datas.CreatedBy}
                       </td>
                     </tr>
                   ))}

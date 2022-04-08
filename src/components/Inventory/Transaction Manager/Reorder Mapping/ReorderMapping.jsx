@@ -2,6 +2,7 @@ import React from "react";
 import "./reorderMapping.scss";
 import { useState } from "react";
 import { useEffect } from "react";
+import { inventoryServices } from "../../../../Services/InventoryServices";
 
 const Date = [
   {
@@ -50,7 +51,7 @@ const Date = [
 function ReorderMapping() {
   const [addNewBtn, setAddNewBtn] = useState(false);
   const [mainTableView, setMainTableView] = useState(true);
-
+  const [data, setData] = useState([])
   const [fromDate, setFromDate] = useState("");
   const [toDate, setToDate] = useState("");
 
@@ -62,25 +63,20 @@ function ReorderMapping() {
   };
 
   const [datatoMap, setDatatoMap] = useState([]);
-  useEffect(() => {
-    setDatatoMap(
-      Date.map((d) => {
-        return {
-          id: d.id,
-          select: false,
-          SINO: d.SINO,
-          RtnNo: d.RtnNo,
-          RtnDate: d.RtnDate,
-          InvNo: d.InvNo,
-          InvDate: d.InvDate,
-          Amound: d.Amound,
-          Supplier: d.Supplier,
-          ReturnType: d.ReturnType,
-          UserName: d.UserName,
-        };
-      })
-    );
-  }, []);
+
+  const filteredData = (from,to)=>{
+    if(from && to)  
+    inventoryServices.getReorderFiltereddata()
+    .then(data=>{
+      setData(data)
+    }).catch(err => console.log(err))
+  }
+
+   useEffect(() => {
+inventoryServices.getReordermapping()
+.then(data => { setData(data) })
+.catch(err => console.log(err))
+  },[])
 
   return (
     <>
@@ -179,39 +175,39 @@ function ReorderMapping() {
                   </tr>
                 </thead>
                 <tbody>
-                  {datatoMap.map((datas) => (
+                  {data && data.map((datas,index) => (
                     <tr
-                      keys={datas.id}
-                      className={clickedTr === datas.SINO && "selectedTr "}
-                      onClick={() => SetClickedTr(datas.SINO)}
+                      keys={index+1}
+                      className={clickedTr === index+1 && "selectedTr "}
+                      onClick={() => SetClickedTr(index+1)}
                     >
                       <td
                         className={
                           datas.ReturnType === "Expiry Return" && "Canceled "
                         }
                       >
-                        {datas.SINO}
+                        {index+1}
                       </td>
                       <td
                         className={
                           datas.ReturnType === "Expiry Return" && "Canceled "
                         }
                       >
-                        {datas.RtnNo}
+                        {datas.ProductName}
                       </td>
                       <td
                         className={
                           datas.ReturnType === "Expiry Return" && "Canceled "
                         }
                       >
-                        {datas.RtnDate}
+                        {datas.SupplierName}
                       </td>
                       <td
                         className={
                           datas.ReturnType === "Expiry Return" && "Canceled "
                         }
                       >
-                        {datas.InvNo}
+                        {datas.OpeningQty}
                       </td>
                       <td
                         className={
@@ -232,7 +228,7 @@ function ReorderMapping() {
                           datas.ReturnType === "Expiry Return" && "Canceled "
                         }
                       >
-                        {datas.Amound}
+                        {datas.Stock}
                       </td>
                       <td
                         className={
@@ -246,21 +242,21 @@ function ReorderMapping() {
                           datas.ReturnType === "Expiry Return" && "Canceled "
                         }
                       >
-                        {datas.Amound}
+                        {datas.Unit}
                       </td>
                       <td
                         className={
                           datas.ReturnType === "Expiry Return" && "Canceled "
                         }
                       >
-                        {datas.Amound}
+                        {datas.MinReOrdeROrderLevel}
                       </td>
                       <td
                         className={
                           datas.ReturnType === "Expiry Return" && "Canceled "
                         }
                       >
-                        {datas.Amound}
+                        {datas.MaxReOrderLevel}
                       </td>
 
                       <td
@@ -272,7 +268,7 @@ function ReorderMapping() {
                           type="checkbox"
                           name=""
                           id=""
-                          checked={datas.select}
+                          checked={datas.Selection}
                           onChange={(event) => {
                             let checked = event.target.checked;
 

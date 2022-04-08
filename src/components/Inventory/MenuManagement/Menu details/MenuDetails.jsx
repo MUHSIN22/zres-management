@@ -320,7 +320,7 @@ function MenuDetails() {
 
                         <td colSpan="2">{datas.ItemName}</td>
 
-                        <td>{datas.MenuGroupName === null ? 'No Data in APi': datas.MenuGroupName}</td>
+                        <td>{datas.CategoryName === null ? 'No Data in APi': datas.CategoryName}</td>
 
                         <td>{datas.ItemPrice}</td>
 
@@ -329,7 +329,7 @@ function MenuDetails() {
                             <div className="sections">
                               <h5>Active</h5>
                               <Checkbox
-                                checked={datas.Status === "active"}
+                                checked={datas.IsActive === true}
                                 {...label}
                                 color="success"
                               />
@@ -338,7 +338,7 @@ function MenuDetails() {
                               <h5>Block</h5>
                               <Checkbox
                                 {...label}
-                                checked={datas.Status === "block"}
+                                checked={datas.IsActive === false}
                                 sx={{
                                   color: red[800],
                                   "&.Mui-checked": {

@@ -1,5 +1,6 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { useState } from "react";
+import { inventoryServices } from "../../../../Services/InventoryServices";
 import AddStockAdjustment from "./addStockAdjustable/AddStockAdjustment";
 import EditableUpdatablePage from "./editableUpdatablePage/EditableUpdatablePage";
 import "./stockAdjustment.scss";
@@ -51,12 +52,18 @@ const Date = [
 function StockAdjustment() {
   const [addNewBtn, setAddNewBtn] = useState(false);
   const [mainTableView, setMainTableView] = useState(true);
-
+  const [data, setData] = useState([])
   const [editableUpdatable, setEditableUpdatable] = useState(false);
   const [dataStoredForEditableUpdatable, setDataStoredForEditableUpdatable] =
     useState([]);
 
   const [clickedTr, SetClickedTr] = useState("");
+
+  useEffect(() => {
+    inventoryServices.getStockadjustment()
+      .then(data => { setData(data) })
+      .catch(err => console.log(err))
+  }, [])
 
   return (
     <>
@@ -175,18 +182,18 @@ function StockAdjustment() {
                   </tr>
                 </thead>
                 <tbody>
-                  {Date.map((datas) => (
+                  {data && data.map((datas,index) => (
                     <tr
-                      keys={datas.id}
-                      className={clickedTr === datas.SINO && "selectedTr "}
+                      keys={index+1}
+                      className={clickedTr === index+1 && "selectedTr "}
                       onClick={() => {
-                        SetClickedTr(datas.SINO);
+                        SetClickedTr(index+1);
                         setDataStoredForEditableUpdatable(datas);
                         setEditableUpdatable(true);
                         setMainTableView(false);
                       }}
                     >
-                      <td>{datas.SINO}</td>
+                      <td>{index+1}</td>
                       <td>{datas.RefNo}</td>
                       <td>{datas.Date}</td>
                       <td>{datas.TotalProduct}</td>

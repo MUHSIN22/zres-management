@@ -1,9 +1,23 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { MultiSelect } from "react-multi-select-component";
+import { crmServices } from "../../../../../Services/CrmServices";
+import SmsSuccess from "../SmsSuccess/SmsSuccess";
 import "./bulk.scss";
 
 function Bulk() {
-  const options = [
+
+
+  const [selected, setSelected] = useState([]);
+  const [success, Setsuccess] = useState(false)
+  const [customer, setCustomer] = useState([]);
+  
+  useEffect(() => {
+    crmServices.getAllcustomer()
+      .then(data => {setCustomer(data)})
+  }, [])
+
+
+    const options = [
     { label: "Mohan", value: "Mohan" },
     { label: "Ravi", value: "Ravi" },
     { label: "James", value: "James" },
@@ -11,13 +25,16 @@ function Bulk() {
     { label: "Roni", value: "Roni" },
     { label: "Sam", value: "Sam" },
   ];
-  const [selected, setSelected] = useState([]);
   return (
     <>
       <div className="message__section__hedder_BULK">
         <h3>Bulk Message</h3>
       </div>
       <div className="message__section__body__bulk">
+      {
+          success && <SmsSuccess />
+
+        }
         <form action="">
           <div className="form__input_section">
             <MultiSelect
@@ -40,7 +57,8 @@ to opt out."
           </div>
           <div className="form__button">
             <button>Cancel</button>
-            <button>Send To All</button>
+            <button type="submit" onClick={(event)=>{Setsuccess(true
+              );event.preventDefault()}}>Send To All</button>
           </div>
         </form>
       </div>

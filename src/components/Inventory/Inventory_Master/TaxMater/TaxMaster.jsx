@@ -1,12 +1,21 @@
 import React, { useEffect, useState } from "react";
+import { inventoryServices } from "../../../../Services/InventoryServices";
 import AddNewTax from "./AddnewTax/AddNewTax";
 import "./taxMaster.scss";
 
 function TaxMaster() {
   const [addNewBtn, setAddNewBtn] = useState(false);
   const [mainTableView, setMainTableView] = useState(true);
-
+  const [data, setData] = useState([])
   const [editTax, setEditTax] = useState();
+  const [dropdown, setDropdown] = useState([])
+
+  useEffect(() => {
+    inventoryServices.getTaxmaster()
+      .then(data => { setData(data) }).catch(err => {
+        console.error(err);
+      })
+  }, [])
 
   return (
     <div className="TaxMater">
@@ -50,7 +59,8 @@ function TaxMaster() {
               </svg>
               <h5>New</h5>
             </div>
-            <div className="different__option">
+            <div onClick={()=>{inventoryServices.getTaxtypedropdown()
+              .then(data => { setDropdown(data) })}} className="different__option">
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 width="32.5"
@@ -103,13 +113,14 @@ function TaxMaster() {
                   </tr>
                 </thead>
                 <tbody>
-                  <tr>
-                    <td>index</td>
-                    <td>TaxCode</td>
-                    <td>TypeName</td>
-                    <td>TaxPercentage</td>
-                    <td>true</td>
-                  </tr>
+                  {data && data.map((tax,index) => (
+                    <tr>
+                      <td>{index+1}</td>
+                      <td>{tax.TaxCode}</td>
+                      <td>{tax.TypeName === null ? 'No data in api' : tax.TypeName}</td>
+                      <td>{tax.TaxPercentage}</td>
+                      <td>{tax.Taxable === true ? "yes" : "No"}</td>
+                    </tr>))}
                 </tbody>
               </table>
             </div>
