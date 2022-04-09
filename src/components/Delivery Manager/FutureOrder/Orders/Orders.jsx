@@ -1,4 +1,5 @@
-import React, { useState } from "react";
+import axios from "axios";
+import React, { useEffect, useState } from "react";
 import "./Orders.scss";
 
 function Orders() {
@@ -13,6 +14,17 @@ function Orders() {
   const secondHalf = list.splice(-half);
 
   const [readMore, setReadMore] = useState(false);
+  const [orderData, setOrderData] = useState([]);
+
+  useEffect(() => {
+    axios
+    .get(
+      "https://zres.clubsoft.co.in/DeliveryManager/FutureOrders?CMPid=1"
+    )
+    .then((req) => {
+      setOrderData(req.data)
+    })
+  }, [])
   return (
     <div className="Orders">
       <table className="table">
@@ -28,128 +40,36 @@ function Orders() {
           </tr>
         </thead>
         <tbody>
-          <tr>
+          {
+            orderData.map(data=>(
+            <tr>
             <td data-label="Order Number">
-              #145S -{" "}
-              {firstHalf.map((items) => (
-                <>
+              #{data.OrderNo} -{" "}
                   {"       "}
-                  {items.ordername} X {items.qty}
-                </>
-              ))}
-              {readMore &&
-                secondHalf.map((items) => (
-                  <>
-                    {"       "}
-                    {items.ordername} X {items.qty}
-                  </>
-                ))}
-              <a href="#" onClick={() => setReadMore(!readMore)}>
-                {" "}
-                {!readMore ? "Click for more details..." : "click to read less"}
-              </a>
+                  {data.ItemName} 
             </td>
 
-            <td data-label="Order Taken At">08.25 AM</td>
+            <td data-label="Order Taken At">{data.OrderTakenAt}</td>
 
             <td data-label="Remaining Time" className="elapsedTime">
-              9 days 5hrs
+              {data.ReminingTime} hrs
             </td>
 
-            <td data-label="Driver">UN-Assigned</td>
+            <td data-label="Driver">{data.Driver}</td>
 
-            <td data-label="Location">14 KK , Oman , Market Road</td>
+            <td data-label="Location">{data.DeliveryArea}</td>
 
-            <td data-label="Amount">OMR 13.000</td>
+            <td data-label="Amount">OMR {data.Amount}</td>
 
             <td data-label="Status" className="elapsedTime">
               <a href="#" className="button">
-                In Progress
+                {data.Status}
               </a>
             </td>
           </tr>
+          ))}
 
-          <tr>
-            <td data-label="Order Number">
-              #145S -{" "}
-              {firstHalf.map((items) => (
-                <>
-                  {"       "}
-                  {items.ordername} X {items.qty}
-                </>
-              ))}
-              {readMore &&
-                secondHalf.map((items) => (
-                  <>
-                    {"       "}
-                    {items.ordername} X {items.qty}
-                  </>
-                ))}
-              <a href="#" onClick={() => setReadMore(!readMore)}>
-                {" "}
-                {!readMore ? "Click for more details..." : "click to read less"}
-              </a>
-            </td>
-
-            <td data-label="Order Taken At">08.25 AM</td>
-
-            <td data-label="Remaining Time" className="elapsedTime">
-              9 days 5hrs
-            </td>
-
-            <td data-label="Driver">UN-Assigned</td>
-
-            <td data-label="Location">14 KK , Oman , Market Road</td>
-
-            <td data-label="Amount">OMR 13.000</td>
-
-            <td data-label="Status" className="elapsedTime">
-              <a href="#" className="button">
-                In Progress
-              </a>
-            </td>
-          </tr>
-
-          <tr>
-            <td data-label="Order Number">
-              #145S -{" "}
-              {firstHalf.map((items) => (
-                <>
-                  {"       "}
-                  {items.ordername} X {items.qty}
-                </>
-              ))}
-              {readMore &&
-                secondHalf.map((items) => (
-                  <>
-                    {"       "}
-                    {items.ordername} X {items.qty}
-                  </>
-                ))}
-              <a href="#" onClick={() => setReadMore(!readMore)}>
-                {" "}
-                {!readMore ? "Click for more details..." : "click to read less"}
-              </a>
-            </td>
-
-            <td data-label="Order Taken At">08.25 AM</td>
-
-            <td data-label="Remaining Time" className="elapsedTime">
-              9 days 5hrs
-            </td>
-
-            <td data-label="Driver">UN-Assigned</td>
-
-            <td data-label="Location">14 KK , Oman , Market Road</td>
-
-            <td data-label="Amount">OMR 13.000</td>
-
-            <td data-label="Status" className="elapsedTime">
-              <a href="#" className="button">
-                In Progress
-              </a>
-            </td>
-          </tr>
+         
         </tbody>
       </table>
     </div>

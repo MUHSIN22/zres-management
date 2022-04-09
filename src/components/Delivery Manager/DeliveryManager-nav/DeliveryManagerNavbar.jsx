@@ -14,13 +14,15 @@ function DeliveryManagerNavbar({
   const location = useLocation()
 
   useEffect(() => {
-    console.log(location);
-    if(location.pathname==="/mainPage/delivery-manager/future-order"){
+    const myArray = location.pathname.split("/");
+    console.log(myArray.includes("take-away-order"));
+    if(myArray.includes("future-order")){
       setPath("future")
-    }else if(location.pathname==="/mainPage/delivery-manager"){
-      setPath("home")
-    }else{
+    }
+    else if(myArray.includes("take-away-order")){
       setPath("takeAway")
+    }else {
+      setPath("home")
     }
   }, [location])
   
