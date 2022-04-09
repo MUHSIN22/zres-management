@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { useState } from "react";
 import ImportPo from "./import PO/ImportPo";
 import "./purchaseDetails.scss";
@@ -7,6 +7,7 @@ import DatePicker from "react-datepicker";
 import moment from "moment";
 import "react-datepicker/dist/react-datepicker.css";
 import NumberFormat from "react-number-format";
+import { inventoryServices } from "../../../../Services/InventoryServices";
 
 const Data = [
   {
@@ -60,7 +61,7 @@ function PurchaseDetails() {
   const [addNewBtn, setAddNewBtn] = useState(false);
   const [mainTableView, setMainTableView] = useState(true);
   const [importPo, setImportPo] = useState(false);
-
+  const [data, setData] = useState([])
   const [clickedTr, SetClickedTr] = useState("");
 
   const handleStartDate = (date) => {
@@ -74,6 +75,12 @@ function PurchaseDetails() {
 
   console.log(moment(startDate).format("DD/MM/yyyy"));
 
+  useEffect(() => {
+    inventoryServices.getTransactionproductdeatails()
+      .then(data => {
+        setData(data)
+      }).catch(err => console.log(err))
+  }, [])
   return (
     <>
       {addNewBtn && (
@@ -232,7 +239,7 @@ function PurchaseDetails() {
                   </tr>
                 </thead>
                 <tbody>
-                  {Data.map((datas) => (
+                  {data && data.map((datas,index) => (
                     <tr
                       keys={datas.id}
                       className={clickedTr === datas.SINO && "selectedTr "}
@@ -241,33 +248,33 @@ function PurchaseDetails() {
                       <td
                         className={datas.Status === "canceled" && "Canceled "}
                       >
-                        {datas.SINO}
+                        {index+1}
                       </td>
                       <td
                         className={datas.Status === "canceled" && "Canceled "}
                       >
-                        {datas.ArrNo}
+                        {datas.ArrivalNo}
                       </td>
                       <td
                         className={datas.Status === "canceled" && "Canceled "}
                       >
-                        {datas.ArrDate}
+                        {datas.ArrivalDate}
                       </td>
                       <td
                         className={datas.Status === "canceled" && "Canceled "}
                       >
-                        {datas.InvNo}
+                        {datas.InvoiceNo}
                       </td>
                       <td
                         className={datas.Status === "canceled" && "Canceled "}
                       >
-                        {datas.InvDate}
+                        {datas.InvoiceDate}
                       </td>
                       <td
                         className={datas.Status === "canceled" && "Canceled "}
                       >
                         <NumberFormat
-                          value={datas.Amound}
+                          value={datas.PaidAmount}
                           displayType={"text"}
                           thousandSeparator={true}
                         />
@@ -275,22 +282,22 @@ function PurchaseDetails() {
                       <td
                         className={datas.Status === "canceled" && "Canceled "}
                       >
-                        {datas.Supplier}
+                        {datas.supplierName === null ? 'No data available' : datas.supplierName }
                       </td>
                       <td
                         className={datas.Status === "canceled" && "Canceled "}
                       >
-                        {datas.TotalProduct}
+                        {datas.ProductsTotal}
                       </td>
                       <td
                         className={datas.Status === "canceled" && "Canceled "}
                       >
-                        {datas.Status}
+                        {datas.Status === null | '' ? 'No data available' : datas.Status}
                       </td>
                       <td
                         className={datas.Status === "canceled" && "Canceled "}
                       >
-                        {datas.UserName}
+                        {datas.supplierName === null | '' ? 'No supplier available' : datas.SupplierName}
                       </td>
                     </tr>
                   ))}

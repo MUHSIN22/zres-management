@@ -1,64 +1,56 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import "./StockReport.scss";
-import { DataGrid } from "@mui/x-data-grid";
-import DummyData from "../../../../Delivery Manager/HomeDeliveryOrder/DeliverInProgress/dummydata";
-
+import { exportPDF } from "../../../../../Services/PDFServices.js";
+import { CSVLink } from "react-csv";
 import PrintIcon from "@mui/icons-material/Print";
 import Excel from "../../../../../assets/img/excel.png";
 import Pdf from "../../../../../assets/img/pdf.png";
 import ReportSingleProduct from "./report Single Product/ReportSingleProduct";
 import Printer from "../../../printer/Printer";
+import { inventoryServices } from "../../../../../Services/InventoryServices";
+import { walkinServices } from "../../../../../Services/WalkinServices";
 
-const Date = [
-  {
-    SINO: "1",
-
-    productCode: 541,
-    Amound: 10000,
-
-    productName: "sugar",
-    stock: 50,
-  },
-
-  {
-    SINO: "2",
-
-    productCode: 341,
-    Amound: 10000,
-
-    productName: "oil",
-    stock: 10,
-  },
-
-  {
-    SINO: "3",
-
-    productCode: 241,
-    Amound: 100000,
-
-    productName: "Potato",
-    stock: 30,
-  },
-
-  {
-    SINO: "4",
-
-    productCode: 341,
-    Amound: 10000,
-
-    productName: "Onion",
-    stock: 10,
-  },
-];
 
 function StockReport() {
   const [clickedTr, SetClickedTr] = useState("");
+  const [data,setData] = useState([])
+  const [todate,setTodate] = useState('')
+  const [fromdate,setFromdate] = useState('')
+  const [productid,setProductid] = useState('')
+  const [categoryid,setCategoryid] = useState('')
+  const [productdropdown,setProductdropdown] = useState([])
+  const [categorydropdown,setCategorydropdown] = useState([])
 
-  // selecting row
+ const  stockReportFilter = (from,to,Cid,Pid)=>{
+  if(from && to && Cid && Pid){
+    inventoryServices.getStockreportFilter(from,to,Cid,Pid)
+    .then(data=>{ setData(data)})
+  }
+ }
 
-  // const[rowClick,setRowClick]
+ const downloadPdf = () => {
+  const headers = ['Serialno','Product Code','Product Name','Stock'];
+  const d = data.map((item,index) => [
+    index+1,
+    item.productCode,
+    item.ProductName,
+    item.ActualStock
+  ])
+  const title = new Date().toLocaleDateString() + 'Stock Report'
+  exportPDF(headers,title,d);
+}
+
+useEffect(() => {
+inventoryServices.getStockreport()
+.then(data =>{setData(data);setProductdropdown(data)})
+
+walkinServices.getAllcategories()
+.then(data =>{ setCategorydropdown(data)})
+
+}, [])
 
   return (
+    
     <>
       {clickedTr && <ReportSingleProduct SetClickedTr={SetClickedTr} />}
 
@@ -71,7 +63,7 @@ function StockReport() {
               </div>
 
               <div className="right">
-                <div className="icon__section">
+                <div className="icon__section"  onClick={() => window.print()}>
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
                     width="15.555"
@@ -90,8 +82,9 @@ function StockReport() {
                   </svg>
 
                   <h4>Print</h4>
+
                 </div>
-                <div className="icon__section">
+                <CSVLink data={data} filename={new Date().toLocaleDateString() + "_stockReport.csv"} className="icon__section">
                   <svg
                     id="surface1"
                     xmlns="http://www.w3.org/2000/svg"
@@ -171,7 +164,7 @@ function StockReport() {
                     />
                   </svg>
                   <h4>Export Excel</h4>
-                </div>
+                  </CSVLink>
                 <div className="icon__section">
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
@@ -217,7 +210,7 @@ function StockReport() {
                     </g>
                   </svg>
 
-                  <h4>Export Pdf</h4>
+                  <h4 onClick={downloadPdf} >Export Pdf</h4>
                 </div>
               </div>
             </div>
@@ -225,20 +218,21 @@ function StockReport() {
               <div className="input__Section">
                 <div className="input__field">
                   <h4>From Date</h4>
-                  <input type="date" name="" id="" />
+                  <input onChange={(event)=>{setFromdate(event.target.value)}} value={fromdate} type="date" name="" id="" />
                 </div>
 
                 <div className="input__field">
                   <h4>To Date</h4>
-                  <input type="date" name="" id="" />
+                  <input onChange={(event)=>{setTodate(event.target.value)}} value={todate} type="date" name="" id="" />
                 </div>
 
                 <div className="input__field">
                   <h4>Product Name</h4>
-                  <select name="" id="">
-                    {Date.map((items) => (
-                      <option value={items.productName}>
-                        {items.productName}
+                  <select onChange={(e)=>{setProductid(e.target.value)}} name="" id="">
+                  <option selected="true" disabled="disabled">Select Product</option>
+                    {productdropdown && productdropdown.map((items) => (
+                      <option  value={items.Cid} >
+                        {items.ProductName}
                       </option>
                     ))}
                   </select>
@@ -248,35 +242,17 @@ function StockReport() {
               <div className="bottom__input__section">
                 <div className="input__field">
                   <h4>Category</h4>
-                  <select name="" id="">
-                    <option value=""></option>
-                    <option value=""></option>
+                  <select onChange={(e)=>{setCategoryid(e.target.value)}}   name="" id="">
+                 <option selected="true" disabled="disabled">Select Category</option>
+                  {categorydropdown && categorydropdown.map((items) => (
+                      <option value={items.MenuGroupId} >
+                        
+                        {items.MenuGroupName}
+                      </option>
+                    ))}
                   </select>
                 </div>
-
-                <div className="checkbox__fiels">
-                  <div className="check__field">
-                    <input type="checkbox" name="" id="" />
-                    <h4>Batch wise</h4>
-                  </div>
-
-                  <div className="check__field">
-                    <input type="checkbox" name="" id="" />
-                    <h4>Zero Balance</h4>
-                  </div>
-
-                  <div className="check__field">
-                    <input type="checkbox" name="" id="" />
-                    <h4>Zero Transaction</h4>
-                  </div>
-
-                  <div className="check__field">
-                    <input type="checkbox" name="" id="" />
-                    <h4>Zero Stock Only</h4>
-                  </div>
-                </div>
-
-                <div className="serch__box">
+                <div onClick={()=>{stockReportFilter(fromdate,todate,productid,categoryid)}} className="serch__box">
                   <h4>Search</h4>
                 </div>
               </div>
@@ -297,21 +273,21 @@ function StockReport() {
                   </tr>
                 </thead>
                 <tbody>
-                  {Date.map((datas) => (
+                  {data[0] ? data.map((datas,index) => (
                     <tr
-                      keys={datas.id}
-                      className={clickedTr === datas.SINO && "selectedTr "}
-                      onClick={() => SetClickedTr(datas.SINO)}
+                      keys={index+1}
+                      className={clickedTr === index+1 && "selectedTr "}
+                      onClick={() => SetClickedTr(index+1)}
                     >
-                      <td>{datas.SINO}</td>
+                      <td>{index+1}</td>
                       <td>{datas.productCode}</td>
-                      <td colspan="2">{datas.productName}</td>
-                      <td>{datas.stock}</td>
+                      <td colspan="2">{datas.ProductName}</td>
+                      <td>{datas.ActualStock}</td>
                       <td>
                         <input type="checkbox" name="" id="" />
                       </td>
                     </tr>
-                  ))}
+                  )): "No data Found"}
                 </tbody>
               </table>
             </div>

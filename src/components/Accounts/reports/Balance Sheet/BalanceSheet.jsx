@@ -10,6 +10,7 @@ function BalanceSheet() {
   const [clickedTr, SetClickedTr] = useState("");
   const [printActive, closePrintActive] = useState(false);
   const [data,setData] = useState([]);
+  
   const [fromDate,setFromDate] = useState();
   const [toDate,setToDate] = useState();
   

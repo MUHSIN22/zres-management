@@ -1,6 +1,7 @@
-import React from "react";
+import React, { useEffect } from "react";
 import "./salesReturn.scss";
 import { useState } from "react";
+import { inventoryServices } from "../../../../Services/InventoryServices";
 
 const Date = [
   {
@@ -54,7 +55,7 @@ function SalesReturn() {
 
   const [fromDate, setFromDate] = useState("");
   const [toDate, setToDate] = useState("");
-
+  const [data, setData] = useState([])
   const [clickedTr, SetClickedTr] = useState("");
 
   const DateFilter = () => {
@@ -62,6 +63,11 @@ function SalesReturn() {
     var toDateSplit = toDate.split("/");
   };
 
+  useEffect(() => {
+    inventoryServices.getSalesreturn()
+      .then(data => { setData(data) })
+      .catch(err => console.log(err))
+  }, [])
   return (
     <>
       {/* {addNewBtn && (
@@ -196,18 +202,18 @@ function SalesReturn() {
                   </tr>
                 </thead>
                 <tbody>
-                  {Date.map((datas) => (
+                  {data && data.map((datas,index) => (
                     <tr
-                      keys={datas.id}
-                      className={clickedTr === datas.SINO && "selectedTr "}
-                      onClick={() => SetClickedTr(datas.SINO)}
+                      keys={index+1}
+                      className={clickedTr === index+1 && "selectedTr "}
+                      onClick={() => SetClickedTr(index+1)}
                     >
                       <td
                         className={
                           datas.ReturnType === "Expiry Return" && "Canceled "
                         }
                       >
-                        {datas.SINO}
+                        {index+1}
                       </td>
 
                       <td

@@ -44,14 +44,19 @@ import DayBookDetails from "../Accounts/reports/DayBook Details/DayBookDetails";
 import TrialBalance from "../Accounts/reports/Trial Balance/TrialBalance";
 import AddCustomer from "../CRM/addCustomer/AddCustomer";
 import CustomerDetails from "../CRM/customerDetails/CustomerDetails";
-import { Sms } from "@material-ui/icons";
 import CrmFront from "../CRM/CrmFront";
-import PersonalisedMain from "../CRM/sms/SmsSections/Personalized/PersonalisedMain"
 import Master from '../CRM/../Inventory/Inventory_Master/Master'
 import TransactionMaster from '../CRM/../Inventory/Transaction Manager/TransactionMaster'
 import MenuManagement from "../Inventory/MenuManagement/MenuManagement";
 import RecipeManagement from "../Inventory/recipe management/RecipeManagement";
 import ReportSection from "../Inventory/ReportsSection/ReportSection";
+import Sms from "../CRM/sms/Sms";
+import Personalized from "../CRM/sms/SmsSections/Personalized/Personalized";
+import Bulk from "../CRM/sms/SmsSections/Bulk/Bulk";
+import StockReport from "../Inventory/Transaction Manager/Reports/StockReport/StockReport";
+import StockCost from "../Inventory/Transaction Manager/Reports/Stock Cost/StockCost";
+import ClossingStockReport from "../Inventory/Transaction Manager/Reports/clossing Srock Report/ClossingStockReport";
+import GpStatement from "../Inventory/Transaction Manager/Gp statement/GpStatement";
 import HomeDeliveryOrder from "../Delivery Manager/HomeDeliveryOrder/HomeDeliveryOrder";
 import NewOrder from "../Delivery Manager/HomeDeliveryOrder/newOrder/NewOrder";
 import WaitingForPicup from '../Delivery Manager/HomeDeliveryOrder/waitingForPicup/WaitingForPicup'
@@ -473,8 +478,8 @@ function MainPage() {
             <Route path="/crm" element={<Crm />} >
               <Route path="addCustomer" element={<AddCustomer />} />
               <Route path="sms" element={<Sms />} >
-                <Route path="personalised" element={<PersonalisedMain />} />
-                <Route path="bulk" element={<Sms />} />
+                <Route path="personalised" element={<Personalized />} />
+                <Route path="bulk" element={<Bulk/>} />
               </Route>
               <Route path="customerDetail" element={<CustomerDetails />} />
               <Route path="" element={<CrmFront />} />
@@ -486,7 +491,13 @@ function MainPage() {
               <Route path="transactions" element={<TransactionMaster />} />
               <Route path="menu-management" element={<MenuManagement />} />
               <Route path="receipe-management" element={<RecipeManagement />} />
-              <Route path="reports" element={<ReportSection />} />
+              <Route path="reports" element={<ReportSection />} >
+                <Route path="stock-report" element={<StockReport />}/>
+                <Route path="stock-cost" element={<StockCost />}/>
+                <Route path="closing-stock-report" element={<ClossingStockReport />}/>
+                <Route path="statement" element={<GpStatement />}/>
+                <Route path="" element={<StockReport />}/>
+              </Route>
             </Route>
             <Route path="/delivery-manager" element={<DeliveryManager />}>
               <Route path="" element={<HomeDeliveryOrder />}>

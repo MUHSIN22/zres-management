@@ -255,14 +255,10 @@ function Walkin({ dataToSendToWlkinPage }) {
       setChangeQtyPopup(false);
     }
   };
-  const getallMenu = async () => {
-    const res = await fetch('https://zres.clubsoft.co.in/WalkIn/GetAllMenuGroup?CMPid=1')
-    const menu = await res.json()
-    setAllmenu(menu)
-  }
-
+  
   useEffect(() => {
-    getallMenu()
+    walkinServices.getAllcategories()
+    .then(data=>{ setAllmenu(data)})
 
   }, [])
 
@@ -827,7 +823,7 @@ function Walkin({ dataToSendToWlkinPage }) {
                         {" "}
                         {switchOn && (
                           <img
-                            src="https://pngimg.com/uploads/burger_sandwich/burger_sandwich_PNG4114.png"
+                            src={`https://zres.clubsoft.co.in/${mainCat.Image}`}
                             alt=""
                           />
                         )}

@@ -1,12 +1,21 @@
 import "./productMaster.scss";
 import React, { useEffect, useState } from "react";
 import AddNew from "./addNew/AddNew";
+import { inventoryServices } from "../../../../Services/InventoryServices";
 
 function ProductMaster() {
   const [addNewBtn, setAddNewBtn] = useState(false);
   const [mainTableView, setMainTableView] = useState(true);
   const [selectedTr, setSelectedTr] = useState({});
   const [editOption, setEditOption] = useState(false);
+  const [data,setData] = useState([])
+
+  useEffect(() => {
+    inventoryServices.getProductdetails()
+    .then(data =>{
+      setData(data)
+    }).catch(err => console.log(err))
+  },[])
 
   return (
     <div className="productMaster">
@@ -125,20 +134,23 @@ function ProductMaster() {
                   </tr>
                 </thead>
                 <tbody>
-                  <tr style={{ cursor: "pointer" }}>
-                    <td>12</td>
+                  {data && data.map((product,index)=> (
+
+                 
+                  <tr  key={product.ProdctId} style={{ cursor: "pointer" }}>
+                    <td >{index + 1 }</td>
                     <td>4</td>
-                    <td>PName</td>
-                    <td>HSNCode</td>
-                    <td>category</td>
+                    <td>{product.PName}</td>
+                    <td>{product.HSNCode}</td>
+                    <td>{product.GroupName ? product.GroupName : 'no Data in api'  }</td>
                     <td>kg</td>
-                    <td>1</td>
-                    <td>12</td>
-                    <td>MaxStockLevel</td>
-                    <td>Discount</td>
-                    <td>CreatedBy</td>
-                    <td>RackNo</td>
-                  </tr>
+                    <td>{product.Taxid}</td>
+                    <td>{product.ReorderLevel}</td>
+                    <td>{product.MaxStockLevel}</td>
+                    <td>{product.Discount}</td>
+                    <td>{product.CreatedBy}</td>
+                    <td>{product.RackNo}</td>
+                  </tr> ))}
                 </tbody>
               </table>
             </div>

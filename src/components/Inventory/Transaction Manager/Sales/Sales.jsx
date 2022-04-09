@@ -1,5 +1,6 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { useState } from "react";
+import { inventoryServices } from "../../../../Services/InventoryServices";
 import "./sales.scss";
 
 const Date = [
@@ -20,7 +21,7 @@ const Date = [
 
     NetAmt: "980",
 
-    status: "",
+    Status: "",
 
     UserName: "vivek",
   },
@@ -54,13 +55,19 @@ function Sales() {
 
   const [fromDate, setFromDate] = useState("");
   const [toDate, setToDate] = useState("");
-
+  const [data, setData] = useState([])
   const [clickedTr, SetClickedTr] = useState("");
 
   const DateFilter = () => {
     var FromdateSplit = fromDate.split("/");
     var toDateSplit = toDate.split("/");
   };
+
+  useEffect(() => {
+    inventoryServices.getSales()
+      .then(data => { setData(data) })
+      .catch(err => console.log(err))
+  }, [])
   return (
     <>
       {/* {addNewBtn && (
@@ -194,24 +201,24 @@ function Sales() {
                     <th>User Name</th>
                   </tr>
                 </thead>
-                <tbody>
-                  {Date.map((datas) => (
+                <tbody> 
+                  {data && data.map((datas,index) => (
                     <tr
-                      keys={datas.id}
-                      className={clickedTr === datas.SINO && "selectedTr "}
-                      onClick={() => SetClickedTr(datas.SINO)}
+                      keys={index+1}
+                      className={clickedTr === datas.index+1 && "selectedTr "}
+                      onClick={() => SetClickedTr(datas.index+1)}
                     >
                       <td
                         className={
                           datas.ReturnType === "Expiry Return" && "Canceled "
                         }
                       >
-                        {datas.SINO}
+                        {index+1}
                       </td>
 
                       <td
                         className={
-                          datas.status === "Expiry Return" && "Canceled "
+                          datas.Status === "Expiry Return" && "Canceled "
                         }
                       >
                         {datas.BillNo}
@@ -219,7 +226,7 @@ function Sales() {
 
                       <td
                         className={
-                          datas.status === "Expiry Return" && "Canceled "
+                          datas.Status === "Expiry Return" && "Canceled "
                         }
                       >
                         {datas.BillDate}
@@ -227,15 +234,15 @@ function Sales() {
 
                       <td
                         className={
-                          datas.status === "Expiry Return" && "Canceled "
+                          datas.Status === "Expiry Return" && "Canceled "
                         }
                       >
-                        {datas.CustName}
+                        {datas.customerName}
                       </td>
 
                       <td
                         className={
-                          datas.status === "Expiry Return" && "Canceled "
+                          datas.Status === "Expiry Return" && "Canceled "
                         }
                       >
                         {datas.Payment}
@@ -243,15 +250,15 @@ function Sales() {
 
                       <td
                         className={
-                          datas.status === "Expiry Return" && "Canceled "
+                          datas.Status === "Expiry Return" && "Canceled "
                         }
                       >
-                        {datas.GrossAmt}
+                        {datas.GrossAmount}
                       </td>
 
                       <td
                         className={
-                          datas.status === "Expiry Return" && "Canceled "
+                          datas.Status === "Expiry Return" && "Canceled "
                         }
                       >
                         {datas.Discount}
@@ -259,7 +266,7 @@ function Sales() {
 
                       <td
                         className={
-                          datas.status === "Expiry Return" && "Canceled "
+                          datas.Status === "Expiry Return" && "Canceled "
                         }
                       >
                         {datas.NetAmt}
@@ -267,15 +274,15 @@ function Sales() {
 
                       <td
                         className={
-                          datas.status === "Expiry Return" && "Canceled "
+                          datas.Status === "Expiry Return" && "Canceled "
                         }
                       >
-                        {datas.status}
+                        {datas.Status}
                       </td>
 
                       <td
                         className={
-                          datas.status === "Expiry Return" && "Canceled "
+                          datas.Status === "Expiry Return" && "Canceled "
                         }
                       >
                         {datas.UserName}

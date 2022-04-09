@@ -1,30 +1,54 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
+import { inventoryServices } from "../../../../../Services/InventoryServices";
+import { exportPDF } from "../../../../../Services/PDFServices";
 import "./clossingStockReport.scss";
+import { CSVLink } from "react-csv";
 
-const Date = [
-  {
-    SINO: "1",
-
-    productCode: 541,
-    Amound: 10000,
-
-    productName: "sugar",
-    stock: 50,
-    startingDate: "22/11/2021",
-    endingDate: "03/12/2021",
-    clossingStock: "5",
-    ActualStock: "5",
-    Difference: 0,
-    openigStock: "5",
-    stockTakenBY: "casher",
-    approved: "admin",
-  },
-];
 
 function ClossingStockReport() {
+
+  const [data, setData] = useState([])
+  const [todate, setTodate] = useState('')
+  const [fromdate, setFromdate] = useState('')
+  const [productid, setProductid] = useState('')
+  const [productdropdown, setProductdropdown] = useState([])
+
   const handlePrintFunction = () => {
     window.print();
   };
+
+  const stockClosingFilter = (from, to, pid) => {
+    if (from && to  && pid) {
+      inventoryServices.getStockClosingFilter(from, to,pid)
+        .then(data => {
+          setData(data)
+        }).catch(err => console.log(err))
+    }
+  }
+
+  const downloadPdf = () => {
+    const headers = ['SINo'	,'Starting Date','Ending Date'	,'Product Name',	'Closing Stock',	'Actual Stock',	'Difference',	'Opening Stock'	,'Stock Taken By'	,'Approved By'];
+    const d = data.map((datas,index) => [
+      index+1,
+     datas.StartingDate,
+     datas.EndingDate,
+     datas.ProductName,
+     datas.ClosingStock,
+     datas.ActualStock,
+     datas.Difference,
+     datas.openigStock,
+     datas.stockTakenBY,
+     datas.approved
+    ])
+    const title = new Date().toLocaleDateString() + 'closing stock report'
+    exportPDF(headers,title,d);
+  }
+
+  useEffect(() => {
+    inventoryServices.getClosestock()
+      .then(data => { setData(data); setProductdropdown(data) })
+  }, [])
+
 
   return (
     <div className="ClossingStockReport">
@@ -55,7 +79,7 @@ function ClossingStockReport() {
 
               <h4>Print</h4>
             </div>
-            <div className="icon__section">
+            <CSVLink data={data} filename={new Date().toLocaleDateString() + "_closingStockReport.csv"} className="icon__section">
               <svg
                 id="surface1"
                 xmlns="http://www.w3.org/2000/svg"
@@ -135,8 +159,8 @@ function ClossingStockReport() {
                 />
               </svg>
               <h4>Export Excel</h4>
-            </div>
-            <div className="icon__section">
+        </CSVLink>
+            <div  onClick={downloadPdf} className="icon__section">
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 width="11.916"
@@ -189,26 +213,27 @@ function ClossingStockReport() {
           <div className="input__Section">
             <div className="input__field">
               <h4>From Date</h4>
-              <input type="date" name="" id="" />
+              <input onChange={(event) => { setFromdate(event.target.value) }} value={fromdate} type="date" name="" id="" />
             </div>
 
             <div className="input__field">
               <h4>To Date</h4>
-              <input type="date" name="" id="" />
+              <input onChange={(event) => { setTodate(event.target.value) }} value={todate} type="date" name="" id="" />
             </div>
 
             <div className="input__field">
               <h4>Product Name</h4>
-              <select name="" id="">
-                {Date.map((items) => (
-                  <option value={items.productName}>{items.productName}</option>
+              <select onChange={(e) => { setProductid(e.target.value) }} name="" id="">
+                <option selected="true" disabled="disabled">Select Product</option>
+                {productdropdown && productdropdown.map((items) => (
+                  <option value={items.Cid}>{items.ProductName}</option>
                 ))}
               </select>
             </div>
           </div>
 
           <div className="bottom__input__section">
-            <div className="serch__box">
+            <div onClick={() => { stockClosingFilter(fromdate,todate,productid) }} className="serch__box">
               <h4>Search</h4>
             </div>
           </div>
@@ -232,20 +257,20 @@ function ClossingStockReport() {
               </tr>
             </thead>
             <tbody>
-              {Date.map((datas) => (
-                <tr keys={datas.id}>
-                  <td data-label="SINo">{datas.SINO}</td>
-                  <td data-label="Starting Date">{datas.startingDate}</td>
-                  <td data-label="Ending Date">{datas.endingDate}</td>
-                  <td data-label="Product Name">{datas.productName}</td>
-                  <td data-label="Closing Stock">{datas.clossingStock}</td>
+              {data[0] ? data.map((datas,index) => (
+                <tr keys={index+1}>
+                  <td data-label="SINo">{index+1}</td>
+                  <td data-label="Starting Date">{datas.StartingDate}</td>
+                  <td data-label="Ending Date">{datas.EndingDate}</td>
+                  <td data-label="Product Name">{datas.ProductName}</td>
+                  <td data-label="Closing Stock">{datas.ClosingStock}</td>
                   <td data-label="Actual Stock">{datas.ActualStock}</td>
                   <td data-label="Difference">{datas.Difference}</td>
                   <td data-label="Opening Stock">{datas.openigStock}</td>
                   <td data-label="Stock Taken By">{datas.stockTakenBY}</td>
                   <td data-label="Approved By">{datas.approved}</td>
                 </tr>
-              ))}
+              )):"No data found"}
             </tbody>
 
             <tfoot>

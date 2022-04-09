@@ -1,4 +1,5 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
+import { inventoryServices } from "../../../../Services/InventoryServices";
 import AddNewMeasurement from "./Addnew/AddNewMeasurement";
 import "./measurementDetails.scss";
 
@@ -6,10 +7,16 @@ function MesurementDetails() {
   const [addNewBtn, setAddNewBtn] = useState(false);
   const [mainTableView, setMainTableView] = useState(true);
   const [dataFromServer, setDataFromServer] = useState([]);
-
+  const [data, setData] = useState([])
   const [editMesure, setEditMeasure] = useState();
 
-  console.log("mesurementUnits data ", dataFromServer);
+  useEffect(() => {
+    inventoryServices.getMeasurementdeatails()
+      .then(data => { setData(data) })
+      .catch(err => { console.log(err) });
+
+  }, [])
+
   return (
     <div className="MeasurementDetails">
       {/* sucess message for add btn */}
@@ -104,19 +111,14 @@ function MesurementDetails() {
                   </tr>
                 </thead>
                 <tbody>
-                  <tr>
-                    <td>1</td>
-                    <td>100</td>
-                    <td>kg</td>
-                    <td>Discription</td>
-                  </tr>
-
-                  <tr>
-                    <td>1</td>
-                    <td>100</td>
-                    <td>kg</td>
-                    <td>Discription</td>
-                  </tr>
+                  {data && data.map((measurement) => (
+                    <tr key={measurement.UOMid}>
+                      <td>{measurement.UOMid}</td>
+                      <td>{measurement.Unit}</td>
+                      <td>{measurement.Symbol}</td>
+                      <td>{measurement.Discription}</td>
+                    </tr>
+                  ))}
                 </tbody>
               </table>
             </div>

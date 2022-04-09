@@ -7,6 +7,9 @@ import PhoneNumber from "./dummyData";
 import { Link } from "react-router-dom";
 import SingleCustomerDetails from "./singleCustomerDetails/SingleCustomerDetails";
 import LoadingScreen from "../loadingScreen/LoadingScreen";
+import  {crmServices} from "../../Services/CrmServices"
+
+
 
 function CrmFront({ setSmsCategory }) {
   const [smsClick, setSmsClick] = useState(false);
@@ -15,8 +18,9 @@ function CrmFront({ setSmsCategory }) {
   const [avilable, setNotAvilable] = useState(false);
   const [userFound, setUserFound] = useState(false);
   const [Loading, setLoading] = useState(true);
+  const [customer,setCustomer]= useState([]);
 
-  const DummyData = PhoneNumber;
+
 
   useEffect(() => {
     if (number === "") {
@@ -28,11 +32,13 @@ function CrmFront({ setSmsCategory }) {
   useEffect(() => {
     setNotAvilable(false);
     setUserFound(false);
+    crmServices.getAllcustomer()
+    .then(data =>{setCustomer(data)})
   }, [number]);
 
   const handleSearch = () => {
-    if (DummyData.find((data) => data.number === number)) {
-      const SearchData = DummyData.filter((dta) => dta.number === number);
+    if (customer.find((data) => data.Phone === number)) {
+      const SearchData = customer.filter((dta) => dta.Phone === number);
       setSearchStoredData(SearchData);
       setUserFound(true);
     } else {
@@ -187,7 +193,7 @@ function CrmFront({ setSmsCategory }) {
         </div>
 
         <div className="result">
-          {userFound && <SingleCustomerDetails />}
+          {userFound && <SingleCustomerDetails  number={number}/>}
 
           {!userFound && avilable && (
             <div className="noResultfound__and__addCustomer">
@@ -198,7 +204,7 @@ function CrmFront({ setSmsCategory }) {
               </p>
               <div className="Create__new_customer__button">
                 <AccountBoxIcon />
-                <Link to="/addCustomer">
+                <Link to="/mainPage/crm/addCustomer">
                   <h4>New Customer</h4>
                 </Link>
               </div>

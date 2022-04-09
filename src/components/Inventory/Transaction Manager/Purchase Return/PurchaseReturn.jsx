@@ -1,7 +1,8 @@
-import React from "react";
+import React, { useEffect } from "react";
 import "./purchaseReturn.scss";
 import { useState } from "react";
 import PurchaseReturnAdd from "./PurchaseReturnAdd/PurchaseReturnAdd";
+import { inventoryServices } from "../../../../Services/InventoryServices";
 
 const Date = [
   {
@@ -53,12 +54,17 @@ function PurchaseReturn() {
   const [toDate, setToDate] = useState("");
 
   const [clickedTr, SetClickedTr] = useState("");
-
+  const [data,setData] = useState([])
   const DateFilter = () => {
     var FromdateSplit = fromDate.split("/");
     var toDateSplit = toDate.split("/");
   };
 
+  useEffect(() => {
+    inventoryServices.getPurchasereturn()
+    .then(data => { setData(data)})
+    .catch(err => console.log(err))
+  },[])
   return (
     <>
       {addNewBtn && (
@@ -184,67 +190,67 @@ function PurchaseReturn() {
                   </tr>
                 </thead>
                 <tbody>
-                  {Date.map((datas) => (
+                  {data && data.map((datas,index) => (
                     <tr
-                      keys={datas.id}
-                      className={clickedTr === datas.SINO && "selectedTr "}
-                      onClick={() => SetClickedTr(datas.SINO)}
+                      keys={datas.PRid}
+                      className={clickedTr === datas.index+1 && "selectedTr "}
+                      onClick={() => SetClickedTr(datas.index+1)}
                     >
                       <td
                         className={
                           datas.ReturnType === "Expiry Return" && "Canceled "
                         }
                       >
-                        {datas.SINO}
+                        {index+1}
                       </td>
                       <td
                         className={
                           datas.ReturnType === "Expiry Return" && "Canceled "
                         }
                       >
-                        {datas.RtnNo}
+                        {datas.ReturnNo}
                       </td>
                       <td
                         className={
                           datas.ReturnType === "Expiry Return" && "Canceled "
                         }
                       >
-                        {datas.RtnDate}
+                        {datas.ReturnDate}
                       </td>
                       <td
                         className={
                           datas.ReturnType === "Expiry Return" && "Canceled "
                         }
                       >
-                        {datas.InvNo}
+                        {datas.InvoiceNo}
                       </td>
                       <td
                         className={
                           datas.ReturnType === "Expiry Return" && "Canceled "
                         }
                       >
-                        {datas.InvDate}
+                        {datas.InvoiceDate}
                       </td>
                       <td
                         className={
                           datas.ReturnType === "Expiry Return" && "Canceled "
                         }
                       >
-                        {datas.Amound}
+                        {datas.GrandTotal}
                       </td>
                       <td
                         className={
                           datas.ReturnType === "Expiry Return" && "Canceled "
                         }
                       >
-                        {datas.Supplier}
+                        {datas.supplierName === null | '' ? 'No data available' : datas.supplierName}
                       </td>
                       <td
                         className={
                           datas.ReturnType === "Expiry Return" && "Canceled "
                         }
                       >
-                        {datas.ReturnType}
+                        {datas.ReturnType === null | '' ? 'No data available' : datas.ReturnType}
                       </td>
 
                       <td
@@ -252,7 +258,7 @@ function PurchaseReturn() {
                           datas.ReturnType === "Expiry Return" && "Canceled "
                         }
                       >
-                        {datas.UserName}
+                        {datas.UserName === null | '' ? 'No data available' : datas.UserName}
                       </td>
                     </tr>
                   ))}

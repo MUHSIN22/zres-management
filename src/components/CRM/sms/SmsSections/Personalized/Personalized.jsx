@@ -1,6 +1,9 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import "./personalized.scss";
 import Select from "react-select";
+import SmsSuccess from "../SmsSuccess/SmsSuccess"
+import SmsFailed from "../SmsFailed/SmsFailed.js"
+import { crmServices } from "../../../../../Services/CrmServices";
 
 const options = [
   { label: "Mohan", value: "Mohan" },
@@ -11,16 +14,44 @@ const options = [
   { label: "Sam", value: "Sam" },
 ];
 function Personalized() {
-  const [selected, setSelected] = useState([]);
+  const [customer, setCustomer] = useState([]);
+  const [success, Setsuccess] = useState(false)
+  const [failed, Setfailed] = useState(false)
+ 
+  const handleSubmit = (event) => {
+    event.preventDefault()
+    Setsuccess(true)
+  }
+
+  useEffect(() => {
+    crmServices.getAllcustomer()
+      .then(data => {setCustomer(data)})
+  }, [])
+
   return (
     <>
       <div className="message__section__hedder_PERSONALIZED">
         <h3>Personalized Message</h3>
       </div>
       <div className="message__section__body__personalized">
-        <form action="">
+        {
+          success && <SmsSuccess />
+
+        }
+        {
+          failed && <SmsFailed />
+        }
+        <form onSubmit="return false" action="">
           <div className="form__input_pesonalize newforms">
-            <Select options={options} />
+
+            <select >
+            <option selected="true" disabled="disabled">Select The Customer</option>
+              {customer && customer.map((customers) => (
+                
+                <option value={customers.CName} >{customers.CName}</option>
+              ))
+              }
+            </select>
             <input
               className="form__input__section__personalize"
               type="text"
@@ -42,8 +73,8 @@ function Personalized() {
             ></textarea>
           </div>
           <div className="form__button">
-            <button>Cancel</button>
-            <button>Send</button>
+            <button onClick={() => { Setfailed(true) }} >Cancel</button>
+            <button onClick={handleSubmit} type="submit" >Send</button>
           </div>
         </form>
       </div>
