@@ -444,6 +444,24 @@ export const accountServices = {
         })
     },
 
+    // Trialbalance
+    getAllTrailBalance : () => {
+        return new Promise((resolve,reject) => {
+            fetch(`${BASE_URL}TrialBalance?CMPid=1`)
+                .then(res => res.json())
+                .then(data => resolve(data))
+                .catch(err => reject(err))
+        })
+    },
+    getFilteredTrialBalance : (from,to) => {
+        return new Promise((resolve,reject) => {
+            fetch(`${BASE_URL}TrialBalance/search?fromdate=${from}&todate=${to}&CMPid=1`)
+                .then(res => res.json())
+                .then(data => resolve(data))
+                .catch(err => reject(err))
+        })
+    },
+
     // Balance sheet
     getAllBalancesheet : () => {
         return new Promise((resolve,reject) => {

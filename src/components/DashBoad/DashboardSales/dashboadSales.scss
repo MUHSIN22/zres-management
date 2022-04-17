@@ -334,6 +334,21 @@
   }
   .staff-wise-report{
     grid-area: staff-wise-report;
+    ol{
+      width: 100%;
+      padding: 2rem;
+    }
+    .list-wrapper{
+      display: flex;
+      align-items: center;
+    }
+    h6{
+      font-size: 0.9rem;
+      &:last-child{
+        margin-left: auto;
+      }
+    }
+    
   }
   .cancelled-orders{
     grid-area: cancelled-orders;

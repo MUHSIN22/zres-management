@@ -5,6 +5,9 @@ import Prints from "./Prints/Prints";
 import DatePicker from "react-datepicker";
 import moment from "moment";
 import "react-datepicker/dist/react-datepicker.css";
+import { accountServices } from "../../../../Services/AccountsServices";
+import { exportPDF } from "../../../../Services/PDFServices";
+import { CSVLink } from "react-csv";
 
 const valuesToSend = {
   fromDate: "",
@@ -19,6 +22,11 @@ function TrialBalance({ filterData, searchLedgerEntry }) {
   const [dataFromServer, setDataFromServer] = useState([]);
   const [filterValue, setFilterValue] = useState(valuesToSend);
   const [loading, setloading] = useState(false);
+  const [asset, setAsset] = useState([]);
+  const [liablity, setLiability] = useState([]);
+  const [income, setIncome] = useState([]);
+  const [expense, setExpense] = useState([]);
+  const [allData,setAllData] = useState([]);
 
   // selecting row
 
@@ -40,7 +48,15 @@ function TrialBalance({ filterData, searchLedgerEntry }) {
     settoDate(date);
   };
 
-  const handleFilterByData = () => {};
+  const handleFilterByData = () => { 
+    let from = new Date(fromDate).toISOString();
+    let to = new Date(toDate).toISOString();
+    accountServices.getFilteredTrialBalance(from,to)
+      .then(data => {
+        setAllData(data);
+        categorizeData(data);
+      })
+  };
 
   const [debitTotal, setDebitTotal] = useState(0);
   const [creditTotal, setCreditTotal] = useState(0);
@@ -57,17 +73,45 @@ function TrialBalance({ filterData, searchLedgerEntry }) {
     setCreditTotal(Credit);
   };
 
+
+  const downloadPdf = () => {
+    const data = allData.map((item,index) => [
+      item.AccountGroupName,
+      item.Debit,
+      item.Credit
+    ])
+    const headers = ["Account Name","Debit","Credit"]
+    exportPDF(headers,'Trialbalance Report',data);
+  }
+
   useEffect(() => {
-    if (filterData?.length === 0) {
-      setloading(true);
-      console.log("loadingg.........................");
-    } else if (filterData?.length > 0) {
-      setloading(false);
-      console.log("loading compleated");
-      setDataFromServer(filterData);
-    } else {
-    }
-  }, [filterData]);
+    accountServices.getAllTrailBalance()
+      .then(data => {
+        setAllData(data)
+        categorizeData(data);
+      }).catch(err => {
+        console.log(err);
+      })
+      console.log(liablity);
+  }, []);
+
+  const categorizeData = (data) => {
+    let lblty = data.filter((item) => item.GroupAbbr === "LIABILITY")
+    let ast = data.filter(item => item.GroupAbbr === "ASSET");
+    let exp = data.filter(item => item.GroupAbbr === "EXPENSE");
+    let icnm = data.filter(item => item.GroupAbbr === "ASSET");
+    let crTotal = 0, dbTotal = 0;
+    data.forEach(item => {
+      crTotal += item.Credit;
+      dbTotal += item.Debit;
+    })
+    setCreditTotal(crTotal);
+    setDebitTotal(dbTotal);
+    setLiability(lblty);
+    setAsset(ast);
+    setExpense(exp);
+    setIncome(icnm);
+  }
 
   return (
     <>
@@ -82,7 +126,7 @@ function TrialBalance({ filterData, searchLedgerEntry }) {
               </div>
 
               <div className="right">
-                <div className="icon__section" onClick={printData}>
+                <div className="icon__section" onClick={() => window.print()}>
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
                     width="15.555"
@@ -102,7 +146,7 @@ function TrialBalance({ filterData, searchLedgerEntry }) {
 
                   <h4>Print</h4>
                 </div>
-                <div className="icon__section">
+                <CSVLink data={allData} className="icon__section">
                   <svg
                     id="surface1"
                     xmlns="http://www.w3.org/2000/svg"
@@ -182,7 +226,7 @@ function TrialBalance({ filterData, searchLedgerEntry }) {
                     />
                   </svg>
                   <h4>Export Excel</h4>
-                </div>
+                </CSVLink>
                 <div className="icon__section">
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
@@ -228,7 +272,7 @@ function TrialBalance({ filterData, searchLedgerEntry }) {
                     </g>
                   </svg>
 
-                  <h4>Export Pdf</h4>
+                  <h4 onClick={downloadPdf}>Export Pdf</h4>
                 </div>
               </div>
             </div>
@@ -284,19 +328,23 @@ function TrialBalance({ filterData, searchLedgerEntry }) {
                     <td></td>
                   </tr>
 
-                  <tr>
-                    <td
-                      style={{
-                        textAlign: "left",
+                  {
+                    liablity.map((item, index) => (
+                      <tr key={index}>
+                        <td
+                          style={{
+                            textAlign: "left",
 
-                        paddingLeft: "50px",
-                      }}
-                    >
-                      AccountGroupName
-                    </td>
-                    <td>Debit</td>
-                    <td>Credit</td>
-                  </tr>
+                            paddingLeft: "50px",
+                          }}
+                        >
+                          {item.AccountGroupName}
+                        </td>
+                        <td>{item.Debit}</td>
+                        <td>{item.Credit}</td>
+                      </tr>
+                    ))
+                  }
 
                   <tr>
                     <td style={{ textAlign: "left", fontWeight: "bold" }}>
@@ -305,20 +353,24 @@ function TrialBalance({ filterData, searchLedgerEntry }) {
                     <td></td>
                     <td></td>
                   </tr>
+                  {
+                    asset.map((item, index) => (
+                      <tr key={index}>
+                        <td
+                          style={{
+                            textAlign: "left",
 
-                  <tr>
-                    <td
-                      style={{
-                        textAlign: "left",
-
-                        paddingLeft: "50px",
-                      }}
-                    >
-                      AccountGroupName
-                    </td>
-                    <td>Debit</td>
-                    <td>Credit</td>
-                  </tr>
+                            paddingLeft: "50px",
+                          }}
+                        >
+                          {item.AccountGroupName}
+                        </td>
+                        <td>{item.Debit}</td>
+                        <td>{item.Credit}</td>
+                      </tr>
+                    ))
+                  }
+                  
 
                   <tr>
                     <td style={{ textAlign: "left", fontWeight: "bold" }}>
@@ -328,41 +380,49 @@ function TrialBalance({ filterData, searchLedgerEntry }) {
                     <td></td>
                   </tr>
 
-                  <tr>
-                    <td
-                      style={{
-                        textAlign: "left",
+                  {
+                    income.map((item, index) => (
+                      <tr key={index}>
+                        <td
+                          style={{
+                            textAlign: "left",
 
-                        paddingLeft: "50px",
-                      }}
-                    >
-                      AccountGroupName
-                    </td>
-                    <td>Debit</td>
-                    <td>Credit</td>
-                  </tr>
+                            paddingLeft: "50px",
+                          }}
+                        >
+                          {item.AccountGroupName}
+                        </td>
+                        <td>{item.Debit}</td>
+                        <td>{item.Credit}</td>
+                      </tr>
+                    ))
+                  }
 
                   <tr>
                     <td style={{ textAlign: "left", fontWeight: "bold" }}>
-                      Expence
+                      Expense
                     </td>
                     <td></td>
                     <td></td>
                   </tr>
 
-                  <tr>
-                    <td
-                      style={{
-                        textAlign: "left",
+                  {
+                    expense.map((item, index) => (
+                      <tr key={index}>
+                        <td
+                          style={{
+                            textAlign: "left",
 
-                        paddingLeft: "50px",
-                      }}
-                    >
-                      AccountGroupName
-                    </td>
-                    <td>Debit</td>
-                    <td>Credit</td>
-                  </tr>
+                            paddingLeft: "50px",
+                          }}
+                        >
+                          {item.AccountGroupName}
+                        </td>
+                        <td>{item.Debit}</td>
+                        <td>{item.Credit}</td>
+                      </tr>
+                    ))
+                  }
                 </tbody>
                 <tfoot>
                   <tr>

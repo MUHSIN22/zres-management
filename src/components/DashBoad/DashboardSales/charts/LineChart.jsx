@@ -10,38 +10,7 @@ import {
   ResponsiveContainer,
 } from "recharts";
 
-const data = [
-  {
-    name: "2021-12-24",
-    Date: 500,
-  },
-  {
-    name: "2021-12-23",
-    Date: 300,
-  },
-  {
-    name: "2021-12-23",
-    Date: 200,
-  },
-  {
-    name: "2021-12-21",
-    Date: 100,
-  },
-  {
-    name: "2021-12-20",
-    Date: 50,
-  },
-  {
-    name: "2021-12-19",
-    Date: 20,
-  },
-  {
-    name: "2021-12-18",
-    Date: 0,
-  },
-];
-
-function LineChartSection() {
+function LineChartSection({data}) {
   const [screenSize, getDimension] = useState({
     dynamicWidth: window.innerWidth,
     dynamicHeight: window.innerHeight,
@@ -88,7 +57,7 @@ function LineChartSection() {
           }}
         >
           <CartesianGrid horizontal="true" vertical="" />
-          <XAxis dataKey="name" tick={{ fill: "#040153" }} />
+          <XAxis dataKey="Date" tick={{ fill: "#040153" }} />
           <YAxis tick={{ fill: "#040153" }} stroke="#fff" />
           <Tooltip
             contentStyle={{
@@ -100,7 +69,7 @@ function LineChartSection() {
           <Legend />
           <Line
             type="monotone"
-            dataKey="Date"
+            dataKey="TotalSale"
             stroke="#040153"
             activeDot={{ r: 8 }}
           />

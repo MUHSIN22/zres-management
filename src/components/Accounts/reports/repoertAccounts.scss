@@ -110,6 +110,9 @@
 }
 
 @media print {
+  html{
+    overflow: none !important;
+  }
   .ReportsAccount{
     .top__category__section{
       display: none;

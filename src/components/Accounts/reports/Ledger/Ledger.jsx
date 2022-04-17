@@ -88,9 +88,6 @@ function Ledger({ searchLedgerEntry }) {
     .then(data => setDropdownList(data))
     .catch(err => console.log(err))
   }, [])
-  const downloadPdf = () => {
-
-  }
   return (
     <>
       {clickedTr && <AccountLedger SetClickedTr={SetClickedTr} />}

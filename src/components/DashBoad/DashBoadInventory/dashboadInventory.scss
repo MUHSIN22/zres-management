@@ -5,6 +5,22 @@
     height: 420px;
     margin-top: 15px;
 
+    .detail__sections {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 100%;
+      height: 50%;
+      flex-direction: column;
+      color: #040153;
+
+      img {
+        width: 50px;
+      }
+      h2 {
+        font-size: 20px;
+      }
+    }
     .left__section__wrapper {
       width: 100%;
       height: 100%;
@@ -74,6 +90,23 @@
       color: #040153;
       margin-top: 20px;
       font-size: 20px;
+    }
+
+    .detail__sections {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 100%;
+      height: 50%;
+      flex-direction: column;
+      color: #040153;
+
+      img {
+        width: 50px;
+      }
+      h2 {
+        font-size: 20px;
+      }
     }
 
     hr {
