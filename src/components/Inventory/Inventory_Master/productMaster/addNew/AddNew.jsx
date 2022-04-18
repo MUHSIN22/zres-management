@@ -6,6 +6,8 @@ import SucessfullMag from "../../../Transaction Manager/Reports/Stock Cost/closs
 
 import SucessSnackbars from "../../../../basic components/sucessSidePopup";
 import FailSnackbars from "../../../../basic components/failSnackBar";
+import { inventoryServices } from "../../../../../Services/InventoryServices";
+import { walkinServices } from "../../../../../Services/WalkinServices";
 //  >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 
 // DRAG IMAGE SECTION
@@ -51,37 +53,18 @@ function AddNew({
   addNewBtn,
   setEditOption,
 }) {
-  const datas = {
-    InvtGid: 2,
-    ProductCode: null,
-    HsnCode: null,
-    PName: "",
-    Cid: null,
-    UOMid: null,
-    CreatedBy: "ATHUL",
-    RackNo: null,
-    MaxStockLevel: null,
-    ReorderLevel: null,
-    ShortName: "",
-    Discount: null,
-    Image: "",
-    Taxid: null,
-    MeasureSymbol: null,
-    GroupName: null,
-    Percentage: null,
-    UserID: 1,
-    CMPid: 1,
-    MenuBlocked: null,
-  };
+
 
   const [files, setFiles] = useState([]);
-  const [DataToSend, setDataToSend] = useState(datas);
+  const [DataToSend, setDataToSend] = useState('');
   const [sucessfullMsg, setSucessfullmsg] = useState(false);
   const [snackbarSucess, setSnackbarSucess] = useState(false);
   const [snackbarFail, setSnackBarFail] = useState(false);
   const [catregoryDropdown, setCategoryDropdown] = useState([]);
   const [unitList, setUnitList] = useState([]);
   const [taxList, setTaxList] = useState([]);
+  const [groupname,setGroupname] = useState([]);
+  console.log(DataToSend)
 
   const ShowPreview = (e) => {
     if (e.target.files && e.target.files[0]) {
@@ -91,13 +74,15 @@ function AddNew({
         setDataToSend({
           ...DataToSend,
 
-          Image:
-            "https://media.istockphoto.com/photos/green-grape-isolated-on-white-background-picture-id489520104?k=20&m=489520104&s=612x612&w=0&h=n1_B8jn9fb4dQibPhkXftNpjKA4Rvrjp_ttgj6sq5jY=",
+          imageFile: ImageFile,
+          image: x.target.result,
         });
       };
       reader.readAsDataURL(ImageFile);
     }
   };
+  
+
 
   const { getRootProps, getInputProps } = useDropzone({
     maxFiles: 1,
@@ -120,12 +105,39 @@ function AddNew({
     </div>
   ));
 
+  const handleAddProductmaster = (data)=>{
+    inventoryServices.postProductmaster(data)
+    console.log(data)
+  }
+
   useEffect(
     () => () => {
       files.forEach((file) => URL.revokeObjectURL(file.preview));
-    },
+     
+    }
+    ,
     [files]
   );
+
+useEffect(() => {
+  walkinServices.getAllcategories().then((res) => {
+    setCategoryDropdown(res)
+  }).catch((err) => { console.log(err) })
+
+  inventoryServices.getTaxtypedropdown().then((res) => {
+    setTaxList(res)
+}).catch((err) => { console.log(err) })
+
+inventoryServices.getInventorygroupname()
+.then(data =>{
+  setGroupname(data)
+    }).catch(err => console.log(err))
+
+  inventoryServices.getInventoryunitlist().then((res) => {  
+    setUnitList(res)
+  })
+},[])
+
 
   const handleAddDataToSend = (evt) => {
     const name = evt.target.value;
@@ -167,6 +179,22 @@ function AddNew({
             <div className="top__secton">
               <div className="lef__Side__form">
                 <div className="input__Sections">
+                <h5>GroupName</h5>
+                  <select
+                    name="groupID"
+                    id="groupID"
+                    required
+                    onChange={handleAddDataToSend}
+                    value={DataToSend.groupID}
+                  >
+                    <option value="" disabled selected>
+                      Choose GroupName
+                    </option>
+                    {groupname && groupname.map((item) => (
+                    <option name="Cid" value={item.Value} >{item.Text}</option>))}
+                  </select>
+                </div>
+                <div className="input__Sections">
                   <h5>Product Code</h5>
                   <input
                     type="number"
@@ -200,7 +228,7 @@ function AddNew({
                   <h5>Category</h5>
                   <select
                     name="Cid"
-                    id=""
+                    id="Cid"
                     required
                     onChange={handleAddDataToSend}
                     value={DataToSend.Cid}
@@ -208,7 +236,8 @@ function AddNew({
                     <option value="" disabled selected>
                       Choose Category
                     </option>
-                    <option value="">q</option>
+                    {catregoryDropdown && catregoryDropdown.map((item) => (
+                    <option name="Cid" value={item.MenuGroupId} >{item.MenuGroupName}</option>))}
                   </select>
                 </div>
                 <div className="input__Sections">
@@ -246,7 +275,7 @@ function AddNew({
                 <div className="input__Sections">
                   <h5>Unit</h5>
                   <select
-                    name=""
+                    name="Unit"
                     id=""
                     onChange={handleAddDataToSend}
                     value={DataToSend.UOMid}
@@ -254,7 +283,7 @@ function AddNew({
                     <option value="" disabled selected>
                       Choose Unit
                     </option>
-                    {unitList?.map((cate) => (
+                    {unitList && unitList.map((cate) => (
                       <option value={cate.Value}>{cate.Text}</option>
                     ))}
                   </select>
@@ -263,7 +292,7 @@ function AddNew({
                 <div className="input__Sections">
                   <h5>Tax</h5>
                   <select
-                    name=""
+                    name="Taxid"
                     id=""
                     onChange={handleAddDataToSend}
                     value={DataToSend.Taxid}
@@ -271,7 +300,10 @@ function AddNew({
                     <option value="" disabled selected>
                       Choose Tax
                     </option>
-                    <option value="">1</option>
+                    {taxList && taxList.map((tax) => (
+                      
+
+                    <option value={tax.Typeid}>{tax.Name}</option> ))}
                   </select>
                 </div>
 
@@ -346,7 +378,7 @@ function AddNew({
               </div>
             </div>
             <div className="bottom__btn__section">
-              {addNewBtn && <button type="submit">save</button>}
+              {addNewBtn && <button onClick={()=>handleAddProductmaster(DataToSend)} type="submit">save</button>}
 
               {editOption && <button type="submit">Update</button>}
             </div>

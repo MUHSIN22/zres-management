@@ -3,47 +3,7 @@ import "./goodsReturn.scss";
 import { useState } from "react";
 import AddGoodsReport from "./Add Goods Report/AddGoodsReport";
 import { inventoryServices } from "../../../../Services/InventoryServices";
-const Date = [
-  {
-    SINO: "1",
 
-    RtnNo: "1",
-
-    RtnDate: "25/11/2021",
-
-    InvNo: "10212",
-
-    InvDate: "25/11/2021",
-
-    Amound: 10000,
-
-    Supplier: "Ram",
-
-    ReturnType: "Direct Return",
-
-    UserName: "vivek",
-  },
-
-  {
-    SINO: "2",
-
-    RtnNo: "2",
-
-    RtnDate: "25/11/2021",
-
-    InvNo: "10212",
-
-    InvDate: "25/11/2021",
-
-    Amound: 10000,
-
-    Supplier: "Ram",
-
-    ReturnType: "Expiry Return",
-
-    UserName: "vivek",
-  },
-];
 
 function GoodsReport() {
   const [addNewBtn, setAddNewBtn] = useState(false);
@@ -51,19 +11,27 @@ function GoodsReport() {
   const [data, setData] = useState([])
   const [fromDate, setFromDate] = useState("");
   const [toDate, setToDate] = useState("");
-
+  const [category, setCategory] = useState([])
   const [clickedTr, SetClickedTr] = useState("");
+  const [branchdata,setBranchdata] = useState("")
 
-  const DateFilter = () => {
-    var FromdateSplit = fromDate.split("/");
-    var toDateSplit = toDate.split("/");
-  };
+  const goodReportFilter = (from,to,branch)=>{
+    if(from && to && branch){
+      inventoryServices.getGoodrecieptFilter(from,to,branch).then(res=>{
+        setData(res)
+    })
+  }
+  }
 
   useEffect(() => {
-inventoryServices.getGoodreciept()
-.then(data => { setData(data) })
-.catch(err => console.log(err))
-  },[])
+    inventoryServices.getGoodreciept()
+      .then(data => { setData(data) })
+      .catch(err => console.log(err))
+
+    inventoryServices.getAllbranchess()
+      .then(data => { setCategory(data) })
+      .catch(err => console.log(err))
+  }, [])
   return (
     <>
       {addNewBtn && (
@@ -191,12 +159,14 @@ inventoryServices.getGoodreciept()
 
               <div className="input__Section">
                 <h5>Branch</h5>
-                <select name="" id="">
-                  <option value=""></option>
+                <select onChange={(e)=>setBranchdata(e.target.value)} name="" id="">
+                  <option disabled="true" selected>select branch</option>
+                  {category && category.map((category) => (
+                    <option value={category.BranchId}>{category.BName}</option>))}
                 </select>
               </div>
 
-              <div className="search__Section">
+              <div onClick={()=> goodReportFilter(fromDate,toDate,branchdata)}  className="search__Section">
                 <button>Search</button>
               </div>
             </div>
@@ -220,18 +190,18 @@ inventoryServices.getGoodreciept()
                   </tr>
                 </thead>
                 <tbody>
-                  {data && data.map((datas,index) => (
+                  {data[0] ? data.map((datas, index) => (
                     <tr
-                      keys={index+1}
-                      className={clickedTr === index+1 && "selectedTr "}
-                      onClick={() => SetClickedTr(index+1)}
+                      keys={index + 1}
+                      className={clickedTr === index + 1 && "selectedTr "}
+                      onClick={() => SetClickedTr(index + 1)}
                     >
                       <td
                         className={
                           datas.ReturnType === "Expiry Return" && "Canceled "
                         }
                       >
-                        {index+1}
+                        {index + 1}
                       </td>
                       <td
                         className={
@@ -318,7 +288,7 @@ inventoryServices.getGoodreciept()
                         {datas.CreatedBy}
                       </td>
                     </tr>
-                  ))}
+                  )):"No data found"}
                 </tbody>
               </table>
             </div>

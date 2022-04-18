@@ -77,11 +77,15 @@ function AddProducts({
   const [diffSizeSelectionStored, setDiffSizeSelectionStored] = useState([]);
   const handleAddCategoryToSend = (e) => {
     const value = e.target.value;
+    const checkbox = e.target.checked;
     setDataToSend({
       ...dataToSend,
       [e.target.name]: value,
+      Active:checkbox
     });
   };
+
+ 
 
   const handlesizeSelectionData = () => {
     setDiffSizeSelectionStored([...diffSizeSelectionStored, dataToSend]);
@@ -97,7 +101,7 @@ function AddProducts({
     if (e.target.files && e.target.files[0]) {
       let ImageFile = e.target.files[0];
       const reader = new FileReader();
-
+      
       reader.onload = (x) => {
         setDataToSend({
           ...dataToSend,
@@ -302,10 +306,9 @@ function AddProducts({
                   <div className="sections">
                     <input
                       type="checkbox"
-                      name=""
+                      name="Active"
                       id=""
-                      checked={dataToSend.status === true}
-                      value={dataToSend.status}
+                      checked={editProduct ? dataToSend.status === true : null}
                       onChange={handleAddCategoryToSend}
 
                     />
@@ -315,11 +318,10 @@ function AddProducts({
                   <div className="sections">
                     <input
                       type="checkbox"
-                      name=""
-                      id=""
-                      checked={editProduct && dataToSend.status === false}
-                      value={dataToSend.status}
-                      onChange={handleAddCategoryToSend}
+                      name="block"
+                      id="block"
+                      checked={editProduct ? dataToSend.status === false :null}
+                      
                     />
                     <h5>Block</h5>
                   </div>
@@ -327,7 +329,7 @@ function AddProducts({
                 <div className="drop__image__section">
                   <section className="container">
                     <div {...getRootProps({ className: "dropzone" })}>
-                      <input {...getInputProps()} onChange={ImagePreview} />
+                      <input {...getInputProps()}  onChange={ImagePreview} />
 
                       {addProducts && (
                         <>
@@ -353,7 +355,7 @@ function AddProducts({
                         </>
                       )}
 
-                      {editProduct && <img src={dataToSend.image} alt="" />}
+                      {editProduct && <img src={`data:image/png;base64,${dataToSend.image}`} alt="" />}
                     </div>
                     <aside className="assside__section">
                       {" "}
@@ -361,6 +363,7 @@ function AddProducts({
                         <img
                           style={{ width: "100px" }}
                           src={dataToSend?.image}
+                          
                         ></img>
                       </aside>
                     </aside>

@@ -82,14 +82,14 @@ function CustomerProfileSection({ number }) {
 
         <div className="top__left__mid">
 
-          <div className="main__section">
+          {customer.Address&&customer.Place === '' && <div className="main__section">
             <h5>There is no address created for this customer.</h5>
            <Link to="/mainPage/crm/addCustomer">
             <button>
               Add Address
             </button>
             </Link>
-          </div>
+          </div>}
 
           <hr />
 

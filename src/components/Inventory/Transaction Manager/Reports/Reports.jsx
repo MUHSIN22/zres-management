@@ -12,10 +12,6 @@ function Reports() {
 
   return (
     <div className="Reports">
-      {selectedOption === "Stock Report" && <StockReport />}
-      {selectedOption === "Stock Cost" && <StockCost />}
-      {selectedOption === "Clossing Stock Report" && <ClossingStockReport />}
-
       {!selectedOption && (
         <div className="ovelayer__Section">
           <div class="content__wrapper__section">

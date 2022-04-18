@@ -5,6 +5,7 @@ import "./addnewMesurement.scss";
 
 import SucessSnackbars from "../../../../basic components/sucessSidePopup";
 import FailSnackbars from "../../../../basic components/failSnackBar";
+import { inventoryServices } from "../../../../../Services/InventoryServices";
 function AddNewMeasurement({
   setAddNewBtn,
 
@@ -23,12 +24,15 @@ function AddNewMeasurement({
   const [snackbarSucess, setSnackbarSucess] = useState(false);
   const [snackbarFail, setSnackBarFail] = useState(false);
 
-  const [DataToSend, setDataToSend] = useState(data);
+  const [DataToSend, setDataToSend] = useState('');
 
   const [addSucessfull, setAddSucessfull] = useState(false);
 
-  const handleSubmit = (e) => {
+  console.log(DataToSend)
+  const handleSubmit = (e,data) => {
     e.preventDefault();
+    inventoryServices.postMeasurement(data)
+    console.log(data)
   };
 
   const handleAddDataToSend = (evt) => {
@@ -57,7 +61,7 @@ function AddNewMeasurement({
         </div>
 
         <div className="inner__Section">
-          <form action="" onSubmit={(e) => handleSubmit(e)}>
+          <form action="" onSubmit={(e) => handleSubmit(e,DataToSend)}>
             <div className="top__secton">
               <div className="lef__Side__form">
                 <div className="input__Sections">

@@ -6,6 +6,9 @@ import RemoveCircleOutlineOutlinedIcon from "@mui/icons-material/RemoveCircleOut
 
 import SucessSnackbars from "../../../basic components/sucessSidePopup";
 import FailSnackbars from "../../../basic components/failSnackBar";
+import { walkinServices } from "../../../../Services/WalkinServices";
+import { inventoryServices } from "../../../../Services/InventoryServices";
+import { data } from "jquery";
 const thumbsContainer = {
   display: "flex",
   flexDirection: "row",
@@ -52,24 +55,12 @@ function CategoryMaster({ fetchCategory, categoryList, createCategory }) {
   const [snackbarFail, setSnackBarFail] = useState(false);
 
   const [catregoryDropdown, setCategoryDropdown] = useState([]);
+  const [category, Setcategory] = useState([])
+ const [taxdropdown,setTaxdropdown] = useState([]);
 
-  const datas = {
-    // categoryCode: "",
 
-    Cid: 1,
-    CategoryCode: 1,
-    Name: "",
-    Type: null,
-    Taxid: null,
-    Image: "",
-    Discount: 0,
-    Percentage: null,
-    UserID: 1,
-    CMPid: 1,
-    Photo: null,
-  };
-
-  const [dataToSend, setDataToSend] = useState(datas);
+  const [dataToSend, setDataToSend] = useState('');
+console.log(dataToSend)
 
   const handleAddCategoryToSend = (e) => {
     const value = e.target.value;
@@ -119,17 +110,32 @@ function CategoryMaster({ fetchCategory, categoryList, createCategory }) {
     </div>
   ));
 
-  useEffect(
-    () => () => {
-      files.forEach((file) => URL.revokeObjectURL(file.preview));
-    },
-    [files]
-  );
+    const submitcategoryMaster = (data) => {
+      inventoryServices.postCategorymaster(data)
+      console.log(data);
+      
+    }
+
+
+  const getCategory=()=>{
+    walkinServices.getAllcategories()
+      .then((res) => {
+        Setcategory(res);
+      }).catch((err) => {console.log(err)});
+  
+}
+
+
+  useEffect(() => {
+    files.forEach((file) => URL.revokeObjectURL(file.preview));
+  }, [files])
 
   const handleChange = (e) => {
     const target = e.target;
     if (target.checked) {
       setSelectedRadio(target.value);
+      inventoryServices.getTaxtypedropdown()
+      .then((data) => setTaxdropdown(data))
     }
   };
 
@@ -207,7 +213,7 @@ function CategoryMaster({ fetchCategory, categoryList, createCategory }) {
                 </div>
               </div>
             </>
-          )}
+          )} 
           {sucessUpdatePopup && (
             <div className="sucess__poppup">
               <div className="headder__Section">
@@ -240,7 +246,7 @@ function CategoryMaster({ fetchCategory, categoryList, createCategory }) {
             <div className="top__sections">
               {!categoryMoreClicked && (
                 <AddCircleOutlineOutlinedIcon
-                  onClick={() => setCategoryMoreClicked(true)}
+                  onClick={() =>{ setCategoryMoreClicked(true); getCategory()}}
                 />
               )}
 
@@ -255,40 +261,47 @@ function CategoryMaster({ fetchCategory, categoryList, createCategory }) {
 
             {categoryMoreClicked && (
               <>
-                <div className="category__content">
-                  <div className="svg__cat__Section">
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      width="20.5"
-                      height="20.5"
-                      viewBox="0 0 14.5 13.5"
-                    >
-                      <line
-                        id="Line_157"
-                        data-name="Line 157"
-                        y2="13"
-                        transform="translate(0.5)"
-                        fill="none"
-                        stroke="#040153"
-                        stroke-width="1"
-                      />
-                      <line
-                        id="Line_158"
-                        data-name="Line 158"
-                        x1="14"
-                        transform="translate(0.5 13)"
-                        fill="none"
-                        stroke="#040153"
-                        stroke-width="1"
-                      />
-                    </svg>
-                  </div>
+                
+                {category.map((category)=>(
 
-                  <div className="category__name">
-                    <h5>Fruits</h5>
-                  </div>
-                </div>
+                  <div className="category__content">
+                    <div className="svg__cat__Section">
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        width="20.5"
+                        height="20.5"
+                        viewBox="0 0 14.5 13.5"
+                      >
+                        <line
+                          id="Line_157"
+                          data-name="Line 157"
+                          y2="13"
+                          transform="translate(0.5)"
+                          fill="none"
+                          stroke="#040153"
+                          stroke-width="1"
+                        />
+                        <line
+                          id="Line_158"
+                          data-name="Line 158"
+                          x1="14"
+                          transform="translate(0.5 13)"
+                          fill="none"
+                          stroke="#040153"
+                          stroke-width="1"
+                        />
+                      </svg>
+                    </div>
+
+                    <div className="category__name">
+                      <h5>{category.MenuGroupName}</h5>
+
+                    </div>
+
+                  </div>))}
+
               </>
+
             )}
           </div>
           <div className="right__side__Section">
@@ -372,9 +385,9 @@ function CategoryMaster({ fetchCategory, categoryList, createCategory }) {
                       onChange={handleChange}
                       checked={selectedRadio == "Discount"}
                     />
-                      <label for="html">Discount</label>
+                    <label for="html">Discount</label>
                   </div>
-                   {" "}
+                  {" "}
                   <div className="radio__Section">
                     <input
                       type="radio"
@@ -384,7 +397,7 @@ function CategoryMaster({ fetchCategory, categoryList, createCategory }) {
                       value="Tax"
                       checked={selectedRadio == "Tax"}
                     />
-                      <label for="Discount">Tax</label>
+                    <label for="Discount">Tax</label>
                   </div>
                   <br />
                 </div>
@@ -395,7 +408,7 @@ function CategoryMaster({ fetchCategory, categoryList, createCategory }) {
                   {selectedRadio === "Tax" && (
                     <div className="input_Sections">
                       <h3>Choose tax from combo</h3>
-
+                    
                       <select
                         style={{
                           width: "50%",
@@ -414,8 +427,8 @@ function CategoryMaster({ fetchCategory, categoryList, createCategory }) {
                         <option value="" disabled selected>
                           Select Tax{" "}
                         </option>
-                        {catregoryDropdown.map((data) => (
-                          <option value={data.Value}>{data.Text}</option>
+                        {taxdropdown.map((data) => (
+                          <option value={data.Typeid}>{data.Name}</option>
                         ))}
                       </select>
                     </div>
@@ -438,7 +451,7 @@ function CategoryMaster({ fetchCategory, categoryList, createCategory }) {
                 </div>
 
                 <div className="button__Section">
-                  <button
+                  <button onClick={()=>submitcategoryMaster(dataToSend)}
                     type="submit"
                     style={{
                       backgroundColor: "#040153",

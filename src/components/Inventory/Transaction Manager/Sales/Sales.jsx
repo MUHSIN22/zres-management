@@ -3,70 +3,38 @@ import { useState } from "react";
 import { inventoryServices } from "../../../../Services/InventoryServices";
 import "./sales.scss";
 
-const Date = [
-  {
-    SINO: "1",
 
-    BillNo: "1",
-
-    BillDate: "25/11/2021",
-
-    CustName: "Anju M",
-
-    Payment: "Cash",
-
-    GrossAmt: 1000,
-
-    Discount: "20.00",
-
-    NetAmt: "980",
-
-    Status: "",
-
-    UserName: "vivek",
-  },
-
-  {
-    SINO: "2",
-
-    BillNo: "1",
-
-    BillDate: "25/11/2021",
-
-    CustName: "Rohan",
-
-    Payment: "Cash",
-
-    GrossAmt: 1000,
-
-    Discount: "20.00",
-
-    NetAmt: "980",
-
-    status: "",
-
-    UserName: "vivek",
-  },
-];
 
 function Sales() {
   const [addNewBtn, setAddNewBtn] = useState(false);
   const [mainTableView, setMainTableView] = useState(true);
-
+  const [ordertype,setOrdertype] = useState([])
   const [fromDate, setFromDate] = useState("");
   const [toDate, setToDate] = useState("");
   const [data, setData] = useState([])
   const [clickedTr, SetClickedTr] = useState("");
-
+  const [ordertypedata,setOrdertypedata] = useState([])
   const DateFilter = () => {
     var FromdateSplit = fromDate.split("/");
     var toDateSplit = toDate.split("/");
   };
 
+  const salesFilter = (from,to,saleorder)=>{
+    if(from && to && saleorder){
+    inventoryServices.getSalesFilter(from,to,saleorder).then(res=>{
+      console.log(res)
+      setData(res)
+    })
+  }
+  }
+
   useEffect(() => {
     inventoryServices.getSales()
       .then(data => { setData(data) })
       .catch(err => console.log(err))
+    inventoryServices.getsaleOrdertype()
+    .then(data => { setOrdertype(data) })
+    .catch(err => console.log(err))
   }, [])
   return (
     <>
@@ -175,13 +143,15 @@ function Sales() {
 
               <div className="sales__Type">
                 <h5>Sale Type</h5>
-                <select name="" id="">
-                  <option value=""></option>
-                  <option value=""></option>
+                <select onChange={(e)=>setOrdertypedata(e.target.value)} name="" id="">
+                  <option disabled="true" selected>Select order type</option>
+                  {ordertype && ordertype.map((item) => (
+                  <option value={item.Value}>{item.Text}</option>
+                  ))}
                 </select>
               </div>
 
-              <div className="search__Section">
+              <div onClick={()=>salesFilter(fromDate,toDate,ordertypedata)} className="search__Section">
                 <button>Search</button>
               </div>
             </div>
@@ -202,7 +172,7 @@ function Sales() {
                   </tr>
                 </thead>
                 <tbody> 
-                  {data && data.map((datas,index) => (
+                  {data[0] ? data.map((datas,index) => (
                     <tr
                       keys={index+1}
                       className={clickedTr === datas.index+1 && "selectedTr "}
@@ -237,7 +207,7 @@ function Sales() {
                           datas.Status === "Expiry Return" && "Canceled "
                         }
                       >
-                        {datas.customerName}
+                        {datas.CustomerName}
                       </td>
 
                       <td
@@ -245,7 +215,7 @@ function Sales() {
                           datas.Status === "Expiry Return" && "Canceled "
                         }
                       >
-                        {datas.Payment}
+                        {datas.PaymentTypes}
                       </td>
 
                       <td
@@ -261,7 +231,7 @@ function Sales() {
                           datas.Status === "Expiry Return" && "Canceled "
                         }
                       >
-                        {datas.Discount}
+                        {datas.TotalDiscount}
                       </td>
 
                       <td
@@ -269,7 +239,7 @@ function Sales() {
                           datas.Status === "Expiry Return" && "Canceled "
                         }
                       >
-                        {datas.NetAmt}
+                        {datas.NetAmount}
                       </td>
 
                       <td
@@ -288,7 +258,7 @@ function Sales() {
                         {datas.UserName}
                       </td>
                     </tr>
-                  ))}
+                  )):"No data found"}
                 </tbody>
               </table>
             </div>

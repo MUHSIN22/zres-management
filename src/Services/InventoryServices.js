@@ -142,7 +142,7 @@ export const inventoryServices = {
                 .catch(err => reject(err))
         })
     },
-  
+
     getstocktransferrequest: () => {
         return new Promise((resolve, reject) => {
             fetch(`${BASE_URL}StkTransferRequest?CMPid=1`)
@@ -160,65 +160,264 @@ export const inventoryServices = {
                 .catch(err => reject(err))
         })
     },
-    getGoodreciept :()=>{
+    getGoodreciept: () => {
         return new Promise((resolve, reject) => {
             fetch(`${BASE_URL}GoodsReceipt?CMPid=1`)
-            .then(res => res.json())
-            .then(data => { resolve(data) })
-            .catch(err => reject(err))
+                .then(res => res.json())
+                .then(data => { resolve(data) })
+                .catch(err => reject(err))
         })
     },
 
-    getReordermapping:()=>{
+    getReordermapping: () => {
         return new Promise((resolve, reject) => {
             fetch(`${BASE_URL}ReOrderMapping?CMPid=1`)
-            .then(res => res.json())
-            .then(data => { resolve(data) })
-            .catch(err => reject(err))
+                .then(res => res.json())
+                .then(data => { resolve(data) })
+                .catch(err => reject(err))
         })
     },
 
-    getReorderFiltereddata : (from,to)=>{
-        return new Promise((resolve, reject) => {
-            fetch(`${BASE_URL}ReOrderMapping/SearchByDate?fromdate=${from}&todate=${to}&Cid=2&ProdctId=2&CMPid=1`)
-            .then(res => res.json())
-            .then(data => { resolve(data) })
-            .catch(err => reject(err))
-        })
-    },
 
-    getStockreportFilter : (from,to,Cid,Pid) => {
+    getStockreportFilter: (from, to, Cid, Pid) => {
         return new Promise((resolve, reject) => {
             fetch(`${BASE_URL}StockReport/stockReportSearchByDate?fromdate=${from}&todate=${to}&Cid=${Cid}&ProdctId=${Pid}&CMPid=1`)
-            .then(res => res.json())
-            .then(data => { resolve(data) })
-            .catch(err => reject(err))
+                .then(res => res.json())
+                .then(data => { resolve(data) })
+                .catch(err => reject(err))
         })
     },
-    getStockcostFilter : (from,to,Cid,Pid)=>{
+    getStockcostFilter: (from, to, Cid, Pid) => {
         return new Promise((resolve, reject) => {
             fetch(`${BASE_URL}StockReport/StockCostSearchByDate?fromdate=${from}&todate=${to}&Cid=${Cid}&ProdctId=${Pid}&CMPid=1`)
-            .then(res => res.json())
-            .then(data => { resolve(data) })
-            .catch(err => reject(err))
+                .then(res => res.json())
+                .then(data => { resolve(data) })
+                .catch(err => reject(err))
         })
     },
 
-    getStockClosingFilter :(from,to,Pid) =>{
+    getStockClosingFilter: (from, to, Pid) => {
         return new Promise((resolve, reject) => {
             fetch(`${BASE_URL}StockReport/ClosingStockSearchByDate?fromdate=${from}&todate=${to}&ProdctId=${Pid}&CMPid=1`)
-            .then(res => res.json())
-            .then(data => { resolve(data) })
-            .catch(err => reject(err))
+                .then(res => res.json())
+                .then(data => { resolve(data) })
+                .catch(err => reject(err))
         })
     },
-    getStockStatementFilter :(from,to)=>{
+    getStockStatementFilter: (from, to) => {
         return new Promise((resolve, reject) => {
             fetch(`${BASE_URL}StockReport/GPStatementSearchByDate?CMPid=1&fromdate=${from}&todate=${to}&CMPid=1`)
-            .then(res => res.json())
-            .then(data => { resolve(data) })
-            .catch(err => reject(err))
+                .then(res => res.json())
+                .then(data => { resolve(data) })
+                .catch(err => reject(err))
         })
-    }
+    },
 
-} 
+    getTransactionproductdeatailsFilter: (from, to) => {
+        return new Promise((resolve, reject) => {
+            fetch(`${BASE_URL}Purchase/SearchByDate?FromDate=${from}&ToDate=${to}&CMPid=1`)
+                .then(res => res.json())
+                .then(data => { resolve(data) })
+                .catch(err => reject(err))
+        })
+    },
+    getPurchasereturnFilter: (from, to) => {
+        return new Promise((resolve, reject) => {
+            fetch(`${BASE_URL}PurchaseReturn/SearchByDate?FromDate=${from}&ToDate=${to}&CMPid=1`)
+                .then(res => res.json())
+                .then(data => { resolve(data) })
+                .catch(err => reject(err))
+        })
+    },
+
+    getSalesFilter: (from, to, sale) => {
+        return new Promise((resolve, reject) => {
+            fetch(`${BASE_URL}Sales/SearchByDate?FromDate=${from}&ToDate=${to}&CMPid=1&OrderTypeID=${sale}`)
+                .then(res => res.json())
+                .then(data => { resolve(data) })
+                .catch(err => reject(err))
+        })
+    },
+
+    getSalesreturnFilter: (from, to, sale) => {
+        return new Promise((resolve, reject) => {
+            fetch(`${BASE_URL}SalesReturn/SearchByDate?FromDate=${from}&ToDate=${to}&CMPid=1&OrderTypeID=${sale}`)
+                .then(res => res.json())
+                .then(data => { resolve(data) })
+                .catch(err => reject(err))
+        })
+    },
+    getStockadjustmentFilter: (from, to) => {
+        return new Promise((resolve, reject) => {
+            fetch(`${BASE_URL}StockAdjust/SearchByDate?FromDate=${from}&ToDate=${to}&CMPid=1`)
+                .then(res => res.json())
+                .then(data => { resolve(data) })
+                .catch(err => reject(err))
+        })
+    },
+    getPurchaseorderFilter: (from, to) => {
+        return new Promise((resolve, reject) => {
+            fetch(`${BASE_URL}PurchaseOrder/SearchByDate?FromDate=${from}&ToDate=${to}&CMPid=1`)
+                .then(res => res.json())
+                .then(data => { resolve(data) })
+                .catch(err => reject(err))
+        })
+    },
+    getStocktransferFilter: (from, to, branchID) => {
+        return new Promise((resolve, reject) => {
+            fetch(`${BASE_URL}StkTransferRequest/SearchByDate?FromDate=${from}&ToDate=${to}}&BrachId=${branchID}&CMPid=1`)
+                .then(res => res.json())
+                .then(data => { resolve(data) })
+                .catch(err => reject(err))
+        })
+    },
+    getGoodrecieptFilter: (from, to, BranchID) => {
+        return new Promise((resolve, reject) => {
+            fetch(`${BASE_URL}GoodsReceipt/SearchByDate?FromDate=${from}&ToDate=${to}&BrachId=${BranchID}&CMPid=1`)
+                .then(res => res.json())
+                .then(data => { resolve(data) })
+                .catch(err => reject(err))
+        })
+    },
+    getReorderFiltereddata: (from, to, productID) => {
+        return new Promise((resolve, reject) => {
+            fetch(`${BASE_URL}ReOrderMapping/SearchByDate?fromdate=${from}&todate=${to}&Cid=2&ProdctId=${productID}&CMPid=1`)
+                .then(res => res.json())
+                .then(data => { resolve(data) })
+                .catch(err => reject(err))
+        })
+    },
+    getAllbranchess: () => {
+        return new Promise((resolve, reject) => {
+            fetch(`${BASE_URL}Branch/GetAllBranch/?CMPid=1`)
+                .then(res => res.json())
+                .then(data => { resolve(data) })
+                .catch(err => reject(err))
+        })
+    },
+
+    getsaleOrdertype: () => {
+        return new Promise((resolve, reject) => {
+            fetch(`${BASE_URL}Sales/OrderType?CMPid=1`)
+                .then(res => res.json())
+                .then(data => { resolve(data) })
+                .catch(err => reject(err))
+        })
+    },
+
+    postCategorymaster: (data) => {
+        return new Promise((resolve, reject) => {
+            fetch(`${BASE_URL}Category?CMPid=1`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    CategoryCode: data.categoryCode,
+                    Name: data.name,
+                    Taxid: data.Taxid,
+                    Image: data.Image,
+                    Discount: data.Discount,
+                    Percentage: null,
+                    UserID: 4,
+                    CMPid: 1
+                })
+            })
+                .then(res => res.json())
+                .then(data => { resolve(data) })
+                .catch(err => reject(err))
+        })
+    },
+    postProductmaster: (data) => {
+        return new Promise((resolve, reject) => {
+            fetch(`${BASE_URL}INVT_Product?CMPid=1`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    InvtGid:data.groupID,
+                    ProductCode: data.ProductCode,
+                    PName: data.PName,
+                    Cid: data.Cid,
+                    UOMid: data.Unit,
+                    RackNo: data.RackNo,
+                    CreatedBy:"AAA",
+                    MaxStockLevel: data.MaxStockLevel,
+                    ReorderLevel: data.ReorderLevel,
+                    ShortName: data.ShortName,
+                    Discount: data.Discount,
+                    Image: data.image,
+                    Taxid: data.Taxid,
+                    HSNCode: data.HSNCode,
+                    UserID: 1,
+                    CMPid: 1,
+                    MenuBlocked:data.MenuBlocked,
+                })
+            })
+                .then(res => res.json())
+                .then(data => { resolve(data) })
+                .catch(err => reject(err))
+        }
+        )},
+        postMeasurement  : (data)=>{
+            return new Promise((resolve,reject) => {
+                fetch(`${BASE_URL}UOM?CMPid=1`,{
+                    method:'POST',
+                    headers:{ 'Content-Type':'application/json'},
+                    body:JSON.stringify({
+                        Unit:data.Unit,
+                        Symbol:data.Symbol,
+                        Discription:data.Discription,
+                        UOMDescription:data.Unit,
+                        UserID:1,
+                    })
+                })
+                .then(res => res.json())
+                .then(data => { resolve(data) })
+                .catch(err => reject(err))
+            }
+                 )
+        },
+
+        postTaxmaster: (data) => {
+            return new Promise((resolve, reject) => {
+                fetch(`${BASE_URL}Tax?CMPid=1`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        TaxCode: data.TaxCode,
+                        TaxPercentage: data.TaxPercentage,
+                        Taxable: data.Taxable,
+                        TypeOfTax: data.TypeOfTax,
+                        UserID: 1,
+                        CMPid: 1
+                    })
+                })
+                    .then(res => res.json())
+                    .then(data => { resolve(data) })
+                    .catch(err => reject(err))
+            })
+        },
+        
+        getInventorygroupname : ()=>{
+            return new Promise((resolve, reject) => {
+                fetch(`${BASE_URL}INVT_Product/GetInventoryGroupName?CMPid=1`)
+                    .then(res => res.json())
+                    .then(data => { resolve(data) })
+                    .catch(err => reject(err))
+            })
+        },
+
+        getInventoryunitlist : ()=>{
+            return new Promise((resolve, reject) => {
+                fetch(`${BASE_URL}INVT_Product/GetUnit?CMPid=1`)
+                .then(res => res.json())
+                .then(data => { resolve(data) })
+                .catch(err => reject(err))
+            })
+        }
+
+}
