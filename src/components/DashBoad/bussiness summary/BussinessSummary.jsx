@@ -3,9 +3,19 @@ import { dashboardServices } from "../../../Services/DashboardServices";
 import "./businessSummary.scss";
 function BussinessSummary() {
   const [data, setData] = useState();
-  
+  const [fromDate,setFromDate] = useState();
+  const [toDate,setToDate] = useState();
+
+  const handleFilter = () => {
+    dashboardServices.getBussinessSummary(fromDate,toDate)
+    .then(res => {
+      setData(res)
+    })
+    .catch(err => console.log(err))
+  }
+
   useEffect(() => {
-    dashboardServices.getBussinessSummary()
+    dashboardServices.getBussinessSummary(new Date(),new Date())
       .then(res => {
         setData(res)
       })
@@ -22,13 +32,13 @@ function BussinessSummary() {
           <div className="hedderr__nav__sections">
             <div className="date__area__section">
               <div className="date__section">
-                <p>From Date</p> <input type="date" name="" id="" />
+                <p>From Date</p> <input type="date" name="" onChange={(e) => {setFromDate(e.target.value)}} id="" />
               </div>
               <div className="date__section">
-                <p>To Date</p> <input type="date" name="" id="" />
+                <p>To Date</p> <input type="date" onChange={(e) => {setToDate(e.target.value)}} name="" id="" />
               </div>
 
-              <button>Filter</button>
+              <button onClick={handleFilter}>Filter</button>
             </div>
 
             <div className="printed__area__section">
@@ -196,7 +206,6 @@ function BussinessSummary() {
                     <thead>
                       <tr>
                         <th>Void</th>
-                        <th>Qty</th>
                         <th>Value</th>
                       </tr>
                     </thead>
@@ -205,7 +214,6 @@ function BussinessSummary() {
                         data.Void.map((item, index) => (
                           <tr>
                             <td>{item.data}</td>
-                            <td>need this</td>
                             <td>{item.value}</td>
                           </tr>
                         ))
@@ -215,7 +223,6 @@ function BussinessSummary() {
                     <tfoot>
                       <tr style={{ borderTop: "2px solid #040153" }}>
                         <td>Net Sales</td>
-                        <td></td>
                         <td>0.000</td>
                       </tr>
                     </tfoot>
@@ -379,25 +386,6 @@ function BussinessSummary() {
                             ))
                           }
 
-                        </tbody>
-                      </table>
-                    </div>
-
-                    <div className="table__right__bottom">
-                      <table className="table">
-                        <thead>
-                          <tr>
-                            <th>Order Type</th>
-                            <th>Qty</th>
-                            <th>Value</th>
-                          </tr>
-                        </thead>
-                        <tbody>
-                          <tr>
-                            <td>Total</td>
-                            <td>1</td>
-                            <td style={{ color: "red" }}>46.00</td>
-                          </tr>
                         </tbody>
                       </table>
                     </div>

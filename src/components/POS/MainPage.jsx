@@ -74,12 +74,14 @@ function MainPage() {
   const [ShrinkNav, setShrikNav] = useState(true);
   const datafromProp = location.state?.detail;
   const [InventoryClick, setInventoryClick] = useState(false);
+  const [paths,setPaths] = useState([]);
   // for path locations
   useEffect(() => {
     if (datafromProp) {
       SetClicked(datafromProp);
     }
-  }, [datafromProp]);
+    setPaths(window.location.pathname.split('/'));
+  }, [datafromProp,clicked]);
 
   const handleBackBtn = () => {
     navigate("./optionSection");
@@ -138,7 +140,7 @@ function MainPage() {
           <div
             className={
               "detail__section " +
-              (clicked === "Dashboard" && "selected__Section")
+              (paths.includes('dashboard') && "selected__Section")
             }
             onClick={() => {
               SetClicked("Dashboard");
@@ -165,7 +167,7 @@ function MainPage() {
           </div>
           <div
             className={
-              "detail__section " + (clicked === "WalkIn" && "selected__Section")
+              "detail__section " + (paths.includes("walkin")&& "selected__Section")
             }
             onClick={() => {
               SetClicked("WalkIn");
@@ -191,7 +193,7 @@ function MainPage() {
 
           <div
             className={
-              "detail__section " + (clicked === "DineIn" && "selected__Section")
+              "detail__section " + (paths.includes("dinein") && "selected__Section")
             }
             onClick={() => {
               SetClicked("DineIn");
@@ -220,7 +222,7 @@ function MainPage() {
 
           <div
             className={
-              "detail__section " + (clicked === "CRM" && "selected__Section")
+              "detail__section " + (paths.includes("crm") && "selected__Section")
             }
             onClick={() => {
               SetClicked("CRM");
@@ -283,7 +285,7 @@ function MainPage() {
           <div
             className={
               "detail__section " +
-              (clicked === "DeliveryManager" &&
+              (paths.includes('delivery-manager') &&
                 "selected__Section deliveryManagerSelected")
             }
             onClick={() => {
@@ -345,7 +347,7 @@ function MainPage() {
           <div
             className={
               "account-btn detail__section " +
-              (clicked === "Inventory" && "selected__Section")
+              (paths.includes("inventory") && "selected__Section")
             }
             onClick={() => {
               SetClicked("Inventory");
@@ -368,19 +370,19 @@ function MainPage() {
 
             <h5>Inventory</h5>
             <ul className="accounts-list">
-              <li>
+              <li onClick={() => SetClicked("e")}>
                 <Link to="/mainPage/inventory/masters">Master</Link>
               </li>
-              <li>
+              <li onClick={() => SetClicked("f")}>
                 <Link to="/mainPage/inventory/transactions">Transactions</Link>
               </li>
-              <li>
+              <li onClick={() => SetClicked("g")}>
                 <Link to="/mainPage/inventory/menu-management">Menu Management</Link>
               </li>
-              <li>
+              <li onClick={() => SetClicked("h")}>
                 <Link to="/mainPage/inventory/receipe-management">Reciepe Management</Link>
               </li>
-              <li>
+              <li onClick={() => SetClicked("i")}>
                 <Link to="/mainPage/inventory/reports">Reports</Link>
               </li>
             </ul>
@@ -390,7 +392,7 @@ function MainPage() {
             className={
               "account-btn " +
               "detail__section " +
-              (clicked === "Accounts" && "selected__Section")
+              (paths.includes('accounts') && "selected__Section")
             }
             onClick={() => {
               SetClicked("Accounts");
@@ -416,20 +418,20 @@ function MainPage() {
 
             <h5>Accounts</h5>
             <ul className="accounts-list">
-              <li>
-                <Link to="/mainPage/accounts/master/head">Master</Link>
+              <li onClick={() => SetClicked("a")}>
+                <Link to="/mainPage/accounts/master/head" >Master</Link>
               </li>
-              <li>
-                <Link to="/mainPage/accounts/transactions/journals">
+              <li onClick={() => SetClicked("b")}>
+                <Link to="/mainPage/accounts/transactions/journals" >
                   Transactions
                 </Link>
               </li>
-              <li>
+              <li onClick={() => SetClicked("c")}>
                 <Link to="/mainPage/accounts/chart-of-accounts">
                   Chart of Account
                 </Link>
               </li>
-              <li>
+              <li onClick={() => SetClicked("d")}> 
                 <Link to="/mainPage/accounts/reports/ledger">Reports</Link>
               </li>
             </ul>

@@ -1,4 +1,5 @@
 import React from "react";
+import { Link } from "react-router-dom";
 import "./menuBar.scss";
 function MenuBar({ setSelectedMainOption }) {
   return (
@@ -25,7 +26,7 @@ function MenuBar({ setSelectedMainOption }) {
         <h3>Accounts</h3>
       </div>
 
-      <div className="sections" onClick={() => setSelectedMainOption("Orders")}>
+      <Link to="/kdcCloud/orders" className="sections" onClick={() => setSelectedMainOption("Orders")}>
         <svg
           xmlns="http://www.w3.org/2000/svg"
           width="38.519"
@@ -44,7 +45,7 @@ function MenuBar({ setSelectedMainOption }) {
         </svg>
 
         <h3>Orders</h3>
-      </div>
+      </Link>
 
       <div
         className="sections"

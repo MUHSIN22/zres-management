@@ -25,7 +25,7 @@ export const dashboardServices = {
     // Marketing Data
     getMarketingData: () => {
         return new Promise((resolve,reject) => {
-            fetch(`${BASE_URL}DashBoard/GetMarketingDashBoard?CMPid=1`)
+            fetch(`${BASE_URL}DashBoard/GetMarketingDashBoard?CMPid=1&FromDate=2020-01-01&ToDate=2121-01-01`)
             .then(res => res.json())
             .then(data => resolve(data))
             .catch(err => reject(err))
@@ -55,9 +55,11 @@ export const dashboardServices = {
     },
 
     // Bussiness summary
-    getBussinessSummary : () =>{ 
+    getBussinessSummary : (fromDate,toDate) =>{ 
+        let from = new Date(fromDate).toISOString();
+        let to = new Date(toDate).toISOString();
         return new Promise((resolve,reject) => {
-            fetch(`${BASE_URL}DashBoard/GetBusinessSummaryDashBoard?CMPid=1&FromDate=2020-01-01&ToDate=2121-01-01`)
+            fetch(`${BASE_URL}DashBoard/GetBusinessSummaryDashBoard?CMPid=1&FromDate=${from}&ToDate=${to}`)
                 .then(res => res.json())
                 .then(data => resolve(data))
                 .catch(err => reject(err))

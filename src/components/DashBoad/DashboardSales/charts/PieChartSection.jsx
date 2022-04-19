@@ -1,18 +1,17 @@
 import React from "react";
 import { PieChart, Pie, Legend, Tooltip, ResponsiveContainer } from "recharts";
-function PieChartSection() {
-  const data01 = [{ name: "Group A", value: 50 }];
-
+function PieChartSection({data}) {
   return (
     <div
       style={{ backgroundColor: "#fff", padding: "10px", borderRadius: "15px" }}
     >
-      <ResponsiveContainer width="100%" aspect={1}>
+      
+        <ResponsiveContainer width="100%" aspect={1}>
         <PieChart width={200} height={50}>
           <Pie
             dataKey="value"
             isAnimationActive={false}
-            data={data01}
+            data={data}
             cx="50%"
             cy="50%"
             outerRadius={50}
@@ -23,6 +22,7 @@ function PieChartSection() {
           <Tooltip />
         </PieChart>
       </ResponsiveContainer>
+      
     </div>
   );
 }

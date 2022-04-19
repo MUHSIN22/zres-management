@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { Outlet, Route, Routes } from "react-router-dom";
 import KdcNavbar from "./KDC Navbar/KdcNavbar";
 import KdcOrder from "./KDC Order/KdcOrder";
 import "./kdcCloud.scss";
@@ -24,8 +25,7 @@ function KdcCoud() {
             selectedNavMidOption={selectedNavMidOption}
           />
         )}
-
-        {selectedMainOption === "Orders" && <KdcOrder />}
+        <Outlet/>
       </div>
     </div>
   );
