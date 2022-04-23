@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { Fragment, useEffect, useState } from "react";
 import { kdcServices } from "../../../Services/kdcServices";
 import "./kdcOrder.scss";
 import ProductDetailMenuBar from "./Product Detail menuBar/ProductDetailMenuBar";
@@ -11,81 +11,22 @@ function KdcOrder() {
   const [orders, setOrders] = useState([])
   const status = ['COOKING', 'PENDING', 'PRIORITY', 'DONE'];
 
+  const handleStartBtn = (orderId) => {
+    kdcServices.startOrder(orderId)
+      .then(res => {
+        console.log(res);
+      })
+  } 
 
-  let data = [
-    {
-      category: "Appetizer",
-      items : [
-        {
-          name: 'abc',
-          quantity: 1
-        },
-        {
-          name: 'abc',
-          quantity: 1
-        },
-        {
-          name: 'abc',
-          quantity: 1
-        },
-      ]
-    },
-    {
-      category: "Appetizer",
-      items : [
-        {
-          name: 'abc',
-          quantity: 1
-        },
-        {
-          name: 'abc',
-          quantity: 1
-        },
-        {
-          name: 'abc',
-          quantity: 1
-        },
-      ]
-    },
-    {
-      category: "Appetizer",
-      items : [
-        {
-          name: 'abc',
-          quantity: 1
-        },
-        {
-          name: 'abc',
-          quantity: 1
-        },
-        {
-          name: 'abc',
-          quantity: 1
-        },
-      ]
-    },
-    {
-      category: "Appetizer",
-      items : [
-        {
-          name: 'abc',
-          quantity: 1
-        },
-        {
-          name: 'abc',
-          quantity: 1
-        },
-        {
-          name: 'abc',
-          quantity: 1
-        },
-      ]
-    },
-  ]
+  const getFilteredOrder = (status) => {
+    kdcServices.getOrderByStatus(status)
+      .then(res => setOrders(res))
+      .catch(err => console.log(err))
+  }
 
   useEffect(() => {
     kdcServices.getAllOrders()
-      .then(res => setOrders(res))
+      .then(res => {setOrders(res);console.log(res);})
       .catch(err => console.log(err))
   }, [])
 
@@ -102,11 +43,9 @@ function KdcOrder() {
         orders &&
         <div className="top__Section">
           {orders.map((item, index) => (
-            <>
-              {
-                status.includes(item.Status) &&
+            <Fragment key={index}>
+              
                 <div
-                  key={index}
                   className={
                     "differnt__oder__list " +
                     (item.Status === "PRIORITY" ? "order-card-priority " : (item.Status === "PENDING") ? "order-card-pending " : (item.Status === "COOKING") ? 'order-card-cooking ' : '') +
@@ -122,14 +61,9 @@ function KdcOrder() {
 
                   {selectedId === index && pressItem !== false && (
                     <div className="overLayer__section">
-                      <button className="startBtn">Start</button>
-                      <button
-                        onClick={() => {
-                          handleDoneBtn();
-                        }}
-                      >
-                        Done
-                      </button>
+                      <button className="startBtn" onClick={() => handleStartBtn(item.OrderID)}>Start</button>
+                      <button onClick={() => handleDoneBtn()}>Done</button>
+                      <button className="startBtn priorityBtn">Priority</button>
                     </div>
                   )}
 
@@ -141,8 +75,8 @@ function KdcOrder() {
 
                   <div className="inner__details__section">
                     <div className="infosections">
-                      <p>18:27</p>
-                      <p>Tom S</p>
+                      <p>{new Date(item.OrderDate).toLocaleTimeString()}</p>
+                      <p>{item.CustomerName}</p>
                     </div>
 
                     <div className="infosections">
@@ -150,7 +84,7 @@ function KdcOrder() {
                       <p>#{item.OrderID}</p>
                     </div>
 
-                    <p className="served__by">Served by Jerry(Server)</p>
+                    <p className="served__by">Served by {item.Server}(Server)</p>
                   </div>
 
                   <div className="product__info__section">
@@ -211,29 +145,29 @@ function KdcOrder() {
                     </div>
                   </div>
                 </div>
-              }
-            </>
+              
+            </Fragment>
           ))}
         </div>
       }
 
       <div className="bottom__section">
-        <button>
+        <button onClick={()=>getFilteredOrder("PRIORITY")}>
           {" "}
           <h5>Priority</h5>
         </button>
-        <button style={{ backgroundColor: "#009751" }}>
+        <button onClick={()=>getFilteredOrder("DONE")} style={{ backgroundColor: "#009751" }}>
           <h5>Done</h5>
         </button>
-        <button style={{ backgroundColor: "#E1870E" }}>
+        <button onClick={()=>getFilteredOrder("COOKING")} style={{ backgroundColor: "#E1870E" }}>
           <h5>Cooking</h5>
         </button>
-        <button style={{ backgroundColor: "#858181" }}>
+        <button onClick={()=>getFilteredOrder("PENDING")} style={{ backgroundColor: "#858181" }}>
           <h5>Pending</h5>
         </button>
-        <button style={{ backgroundColor: "#31CDD2" }}>
+        {/* <button  style={{ backgroundColor: "#31CDD2" }}>
           <h5>Print</h5>
-        </button>
+        </button> */}
       </div>
     </div>
   );

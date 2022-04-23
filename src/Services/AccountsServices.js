@@ -478,5 +478,15 @@ export const accountServices = {
                 .then(data => resolve(data))
                 .catch(err => reject(err))
         })
+    },
+    
+    // Chart of accounts
+    getChartOfAccounts : () => {
+        return new Promise((resolve,reject) => {
+            fetch(`${BASE_URL}ChartOfAccounts?CMPid=1`)
+                .then(res => res.json())
+                .then(data => resolve(data))
+                .catch(err => reject(err))
+        })
     }
 }

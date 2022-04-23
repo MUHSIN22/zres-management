@@ -3,12 +3,17 @@ import { Helmet } from "react-helmet";
 import "./chartOfAccount.scss";
 import Prints from "./Prints/Prints";
 import Sketch from "./chartofAccountjs";
+import { accountServices } from "../../../Services/AccountsServices";
 
 function ChartOfAcccount() {
   const [printActive, closePrintActive] = useState(false);
+  const [charts, setCharts] = useState([]);
 
   useEffect(() => {
     Sketch();
+    accountServices.getChartOfAccounts()
+      .then(data => { setCharts(data); console.log(data); })
+      .catch(err => console.log(err))
   }, []);
 
   return (
@@ -186,16 +191,19 @@ function ChartOfAcccount() {
                   <h5>Acc Name</h5>
                   <h5>Balance</h5>
                 </div>
-                <ul id="tree1" class="tree ">
-                  <li>
-                    <a href="#">Assets</a>
-                    <ul>
-                      <li>
-                        <a href="#" className="innerHead">
-                          Cash and Cash Equipment
-                        </a>
+
+                {/* {
+                  charts.map((item, index) => ( */}
+                    <ul id="tree1" class="tree ">
+                      <li >
+                        <a href="#">Assets</a>
                         <ul>
-                          {/* <li>
+                          <li>
+                            <a href="#" className="innerHead">
+                              Cash and Cash Equipment
+                            </a>
+                            <ul>
+                              {/* <li>
                             <a href="#">for again mapping use this</a>
                             <ul>
                               <li>
@@ -210,59 +218,139 @@ function ChartOfAcccount() {
                             </ul>
                             </li> */}
 
-                          <div className="li__section">
-                            <li>Cash on Hand</li>
-                            <h5>500000</h5>
-                          </div>
+                              <div className="li__section">
+                                <li>Cash on Hand</li>
+                                <h5>500000</h5>
+                              </div>
 
-                          <div className="li__section">
-                            <li>SBI Bank</li>
-                            <h5>500000</h5>
-                          </div>
-                        </ul>
-                      </li>
+                              <div className="li__section">
+                                <li>SBI Bank</li>
+                                <h5>500000</h5>
+                              </div>
+                            </ul>
+                          </li>
 
-                      <li>
-                        <a className="innerHead" href="#">
-                          Sundry Debitor
-                        </a>
-                        <ul>
-                          <div className="li__section">
-                            <li>Dr Rajan Tomas</li>
-                            <h5>500000</h5>
-                          </div>
-                        </ul>
-                      </li>
+                          <li>
+                            <a className="innerHead" href="#">
+                              Sundry Debitor
+                            </a>
+                            <ul>
+                              <div className="li__section">
+                                <li>Dr Rajan Tomas</li>
+                                <h5>500000</h5>
+                              </div>
+                            </ul>
+                          </li>
 
-                      <li>
-                        <a className="innerHead" href="#">
-                          Inventory
-                        </a>
-                        <ul>
-                          <div className="li__section">
-                            <li>Stock</li>
-                            <h5>8000</h5>
-                          </div>
+                          <li>
+                            <a className="innerHead" href="#">
+                              Inventory
+                            </a>
+                            <ul>
+                              <div className="li__section">
+                                <li>Stock</li>
+                                <h5>8000</h5>
+                              </div>
 
-                          <div className="li__section">
-                            <li>Office</li>
-                            <h5>50000</h5>
-                          </div>
-                        </ul>
-                      </li>
+                              <div className="li__section">
+                                <li>Office</li>
+                                <h5>50000</h5>
+                              </div>
+                            </ul>
+                          </li>
 
-                      <li>
-                        <a className="innerHead" href="#">
-                          Fixed Asset
-                        </a>
-                        <ul>
-                          <li>Cost Of Furniture</li>
-                          <li>Cost of Office Equipment</li>
+                          <li>
+                            <a className="innerHead" href="#">
+                              Fixed Asset
+                            </a>
+                            <ul>
+                              <li>Cost Of Furniture</li>
+                              <li>Cost of Office Equipment</li>
+                            </ul>
+                          </li>
                         </ul>
                       </li>
                     </ul>
-                  </li>
-                </ul>
+                    <ul id="tree2" class="tree ">
+                      <li >
+                        <a href="#">Assets</a>
+                        <ul>
+                          <li>
+                            <a href="#" className="innerHead">
+                              Cash and Cash Equipment
+                            </a>
+                            <ul>
+                              {/* <li>
+                            <a href="#">for again mapping use this</a>
+                            <ul>
+                              <li>
+                                <a href="#">Report1</a>
+                              </li>
+                              <li>
+                                <a href="#">Report2</a>
+                              </li>
+                              <li>
+                                <a href="#">Report3</a>
+                              </li>
+                            </ul>
+                            </li> */}
+
+                              <div className="li__section">
+                                <li>Cash on Hand</li>
+                                <h5>500000</h5>
+                              </div>
+
+                              <div className="li__section">
+                                <li>SBI Bank</li>
+                                <h5>500000</h5>
+                              </div>
+                            </ul>
+                          </li>
+
+                          <li>
+                            <a className="innerHead" href="#">
+                              Sundry Debitor
+                            </a>
+                            <ul>
+                              <div className="li__section">
+                                <li>Dr Rajan Tomas</li>
+                                <h5>500000</h5>
+                              </div>
+                            </ul>
+                          </li>
+
+                          <li>
+                            <a className="innerHead" href="#">
+                              Inventory
+                            </a>
+                            <ul>
+                              <div className="li__section">
+                                <li>Stock</li>
+                                <h5>8000</h5>
+                              </div>
+
+                              <div className="li__section">
+                                <li>Office</li>
+                                <h5>50000</h5>
+                              </div>
+                            </ul>
+                          </li>
+
+                          <li>
+                            <a className="innerHead" href="#">
+                              Fixed Asset
+                            </a>
+                            <ul>
+                              <li>Cost Of Furniture</li>
+                              <li>Cost of Office Equipment</li>
+                            </ul>
+                          </li>
+                        </ul>
+                      </li>
+                    </ul>
+                  {/* )) */}
+                {/* } */}
+
               </div>
             </td>
           </tr>
