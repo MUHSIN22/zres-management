@@ -40,7 +40,7 @@ function PurchaseDetailsAdd({ setAddNewBtn, setMainTableView }) {
   const [invDate, setInventoryDate] = useState(null);
   const [arrivalDate, setArivalDate] = useState(null);
   const [expiryDate, setExpiryDate] = useState(null);
-  const [Mainvalues, setMainValues] = useState(mainData);
+  const [Mainvalues, setMainValues] = useState('');
   const [subData, setSubdata] = useState(innerTable);
   const [dataInTable, setDataInTable] = useState([]);
   const convertDate = moment(expiryDate).format("DD-MM-YYYY");
@@ -73,19 +73,19 @@ function PurchaseDetailsAdd({ setAddNewBtn, setMainTableView }) {
   };
 
   const handleAddDataToTable = (evt) => {
-    const name = evt.target.value;
+    const value = evt.target.value;
     setSubdata({
       ...subData,
-      [evt.target.name]: name,
+      [evt.target.name]: value,
       Expiry: convertDate,
     });
   };
 
   const handleMainData = (evt) => {
-    const name = evt.target.value;
+    const value = evt.target.value;
     setMainValues({
-      ...Mainvalues,
-      [evt.target.name]: name,
+      ...Mainvalues,      
+      [evt.target.name]: value,
       PaymentType: paymentTypeChecked,
       InvoiceDate: convertedinvoiceDate,
       ArrivalDate: convertedArivalDate,
@@ -130,7 +130,7 @@ function PurchaseDetailsAdd({ setAddNewBtn, setMainTableView }) {
     //   );
     // }
   };
-
+console.log(mainData)
   return (
     <>
       {snackbarSucess && (
@@ -223,9 +223,8 @@ function PurchaseDetailsAdd({ setAddNewBtn, setMainTableView }) {
               <h5>Supplier</h5>
 
               <select
-                name=""
                 id=""
-                name="supplierid"
+                name= "supplierid"
                 value={Mainvalues.supplierid}
                 onChange={handleMainData}
                 required
