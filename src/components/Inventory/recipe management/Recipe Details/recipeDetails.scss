@@ -154,19 +154,24 @@
             width: 100%;
             display: flex;
             align-items: center;
-            justify-content: center;
+            // justify-content: center;
 
             flex-wrap: wrap;
-            .image__and__details__section__wrapper {
+            a{
+              color: inherit;
+              text-decoration: none;
               width: calc(100% / 5);
               height: 180px;
-              border-bottom: 2px solid #040153;
-              border-top-left-radius: 10px;
-              border-top-right-radius: 10px;
               margin-left: 10px;
               margin-right: 10px;
               margin-top: 15px;
               margin-bottom: 15px;
+
+            }
+            .image__and__details__section__wrapper {
+              border-bottom: 2px solid #040153;
+              border-top-left-radius: 10px;
+              border-top-right-radius: 10px;
               .image__container {
                 width: 90%;
                 height: 120px;

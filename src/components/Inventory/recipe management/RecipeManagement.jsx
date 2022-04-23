@@ -1,36 +1,46 @@
 import React, { useEffect, useState } from "react";
-import RecipeDetails from "./Recipe Details/RecipeDetails";
+import { Outlet,useLocation,useNavigate } from "react-router-dom";
 import "./recipeManagement.scss";
-import RecipeInventory from "./Recipie Inventory/RecipeInventory";
-import RecipieView from "./Recipie View/RecipieView";
-const masterCategiry = [
-  {
-    id: 0,
-    name: "Recipe",
-  },
-  {
-    id: 2,
-    name: "Recipe View",
-  },
-  {
-    id: 3,
-    name: "Recipe Inventory",
-  },
-];
+// const masterCategiry = [
+//   {
+//     id: 0,
+//     name: "Recipe",
+//   },
+//   {
+//     id: 2,
+//     name: "Recipe View",
+//   },
+//   {
+//     id: 3,
+//     name: "Recipe Inventory",
+//   },
+// ];
 
 function RecipeManagement() {
   const [categoryID, setCategoryID] = useState("");
   const [subCategoryCss, setSubCategoryCss] = useState("firstValue");
-  const [selCategory, setSelCategory] = useState(masterCategiry);
+  const [path,setPath]=useState("")
+  // const [selCategory, setSelCategory] = useState(masterCategiry);
 
-  const [clickedSubCategory, setClickedSubCategory] = useState(
-    selCategory[0].name
-  );
+  // const [clickedSubCategory, setClickedSubCategory] = useState(
+  //   // selCategory[0].name
+  // );
 
-  useEffect(() => {
-    setSelCategory(masterCategiry);
-    setClickedSubCategory(masterCategiry[0].name);
-  }, []);
+  // useEffect(() => {
+  //   setSelCategory(masterCategiry);
+  //   setClickedSubCategory(masterCategiry[0].name);
+  // }, []);
+  const location = useLocation()
+  const navigate = useNavigate();
+  useEffect(()=>{
+    if(location.pathname==="/mainPage/inventory/receipe-management"){
+      setPath(1)
+    }else if(location.pathname==="/mainPage/inventory/receipe-management/inventory"){
+      setPath(3)
+    }else{
+      setPath(2)
+    }
+  },[location])
   return (
     <div className="RecipeManagement">
       <div className="top__category__section">
@@ -38,36 +48,32 @@ function RecipeManagement() {
         <div className="hedder__category">
           <div
             className={
-              "option__box " + (subCategoryCss === "firstValue" && "firstvalue")
+              "option__box " + (path===1&& "firstvalue")
             }
-            onClick={() => {
-              setSubCategoryCss("firstValue");
-              setClickedSubCategory(selCategory[0].name);
-            }}
+            onClick={()=>navigate("")}
           >
-            <h5>{selCategory[0].name}</h5>
+            <h5>Recipe</h5>
           </div>
-
-          {selCategory
-            .filter((data) => data.id !== 0)
-            .map((cat) => (
-              <div
-                key={cat.id}
+          <div
                 className={
-                  categoryID === cat.id
-                    ? "option__box " +
-                      (subCategoryCss === "restValue" && "restValue ")
-                    : "option__box "
+                  // categoryID === cat.id
+                  "option__box " +
+                      (path === 2 && "restValue ")
                 }
-                onClick={() => {
-                  setSubCategoryCss("restValue");
-                  setCategoryID(cat.id);
-                  setClickedSubCategory(cat.name);
-                }}
+                onClick={()=>navigate("recipe-view/1-24")}
               >
-                <h5>{cat.name}</h5>
+                <h5>Recipe View</h5>
               </div>
-            ))}
+              <div
+                className={
+                  // categoryID === cat.id
+                  "option__box " +
+                      (path === 3 && "restValue ")
+                    }
+                    onClick={()=>navigate("inventory")}
+              >
+                <h5>Recipe Inventory</h5>
+              </div>
 
           <div className="line_passer"></div>
         </div>
@@ -75,11 +81,12 @@ function RecipeManagement() {
 
       {/* PRODUCT MASTER SECTION */}
 
-      <div className="master__body__section">
+      {/* <div className="master__body__section">
         {clickedSubCategory === "Recipe" && <RecipeDetails />}
         {clickedSubCategory === "Recipe View" && <RecipieView />}
         {clickedSubCategory === "Recipe Inventory" && <RecipeInventory />}
-      </div>
+      </div> */}
+      <Outlet/>
     </div>
   );
 }

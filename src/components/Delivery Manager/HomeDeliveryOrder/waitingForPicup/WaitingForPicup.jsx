@@ -17,7 +17,7 @@ function WaitingForPicup() {
 
   useEffect(() => {
     axios
-      .get("https://zres.clubsoft.co.in/DeliveryManager/GetDriver?CMPid=1")
+      .get(`${process.env.REACT_APP_BASE_URL}/DeliveryManager/GetDriver?CMPid=1`)
       .then((req) => {
         setDrivers(req.data);
       });
@@ -25,7 +25,7 @@ function WaitingForPicup() {
   useEffect(() => {
     axios
       .get(
-        "https://zres.clubsoft.co.in/DeliveryManager/GetAllPickUpOrders?CMPid=1"
+        `${process.env.REACT_APP_BASE_URL}/DeliveryManager/GetAllPickUpOrders?CMPid=1`
       )
       .then((req) => {
         setPicupData(req.data);

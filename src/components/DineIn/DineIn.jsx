@@ -38,7 +38,7 @@ function DineIn({ SetClicked }) {
   const [dataToWalkin, setDatatoWalkin] = useState(false);
   const pageNumber = [];
   const [currentPage, setCurrentPage] = useState(1);
-  const [postPerPage, setPostPerPage] = useState(12);
+  const [postPerPage, setPostPerPage] = useState(5);
   const indexOfLastPost = currentPage * postPerPage;
   const indexOfFirstPost = indexOfLastPost - postPerPage;
   const [totalTablesLength, setTotalTablesLength] = useState(0);
@@ -48,23 +48,32 @@ function DineIn({ SetClicked }) {
   const [allTableData, setAllTableData] = useState({});
   const [allTableAvailability, setAllTableAvailability] = useState({});
   const [getTableAvailability, setGetTableAvailability] = useState({});
+  const [firstIndexPagination,setFirstIndexPagination] = useState(0);
+  const [lastIndexPagination,setLastIndexPagination] = useState(4);
+  const [loading,setLoading] = useState(false)
 
-  for (let i = 1; i <= Math.ceil(10 / postPerPage); i++) {
-    pageNumber.push(i);
+  for (let i = 1; i <= Math.ceil(totalTablesLength  / postPerPage); i++) {
+    pageNumber.push(i); 
   }
- useEffect(() => {
+ useEffect(() => {  
+   setLoading(true)
+   const firstNumber = 5*(currentPage-1)
+   const lastNumber = (currentPage*5)-1
     axios
-      .get("https://zres.clubsoft.co.in/DineIn/GetAllTablesInDine?CMPid=1")
+      .get(`${process.env.REACT_APP_BASE_URL}/DineIn/GetAllTablesInDine?CMPid=1`)
       .then((res) => {
-        setGetAllTableData(res.data);
+        const filteredData = res.data.filter((data,index)=>{
+          return index >= firstNumber && index <= lastNumber  
+        })
+        setGetAllTableData(filteredData);
         setTotalTablesLength(res.data.length);
-        setAllTableData(res.data);
+        setAllTableData(filteredData);
+        setLoading(false )
       });
-  }, []);
-
+  }, [currentPage]);
   useEffect(() => {
     axios
-      .get("https://zres.clubsoft.co.in/DineIn/GetAvailableTables?CMPid=1")
+      .get(`${process.env.REACT_APP_BASE_URL}/DineIn/GetAvailableTables?CMPid=1`)
       .then((res) => {
         setGetTableAvailability(res.data);
         setAllTableAvailability(res.data);
@@ -107,25 +116,25 @@ function DineIn({ SetClicked }) {
     }
   };
   const filterHandlerForArea = (area) => {
-    if (allTableData.length > 0) {
+    // if (allTableData.length > 0) {
       if (area !== "all") {
         const newTableData = allTableData.filter((data) => {
-          return data.DineInArea === area;
+          return data.DineInAreaName === area;
         });
         setGetAllTableData(newTableData);
       } else {
         setGetAllTableData(allTableData);
       }
-    }
+    // }
     if (allTableAvailability.length > 0) {
       if (area !== "all") {
         const newAvailabilityData = allTableAvailability.filter((data) => {
-          return data.DineInArea === area;
+          return data.DineInAreaName === area;
         });
         setGetTableAvailability(newAvailabilityData);
       } else {
         setGetTableAvailability(allTableAvailability);
-      }
+      } 
     }
   };
 
@@ -141,7 +150,6 @@ function DineIn({ SetClicked }) {
         }
       })[0].TableStatus;
     }
-
     if (shape === "Round") {
       switch (seat) {
         case 2:
@@ -387,7 +395,9 @@ function DineIn({ SetClicked }) {
                 {mainTableArea && (
                   <>
                     <div className="dine__table__wrapper">
-                      {getAllTableData.length > 0 &&
+                      {
+                        loading ? <h1>loading...</h1>:
+                        getAllTableData.length > 0 &&
                         getAllTableData.map((data) => (
                           <div
                             className="dine__in__table"

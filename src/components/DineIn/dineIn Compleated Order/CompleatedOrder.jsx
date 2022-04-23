@@ -5,7 +5,7 @@ function CompleatedOrder() {
   const [data, setData] = useState()
   useEffect(() => {
     axios
-      .get("https://zres.clubsoft.co.in/DineIn/CompletedOrders?CMPid=1")
+      .get(`${process.env.REACT_APP_BASE_URL}/DineIn/CompletedOrders?CMPid=1`)
       .then((res) => {
         setData(res.data);
       });

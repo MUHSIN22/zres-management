@@ -70,7 +70,7 @@ function DeliveryInProgress() {
   useEffect(() => {
     axios
       .get(
-        "https://zres.clubsoft.co.in/DeliveryManager/DeliveryInProgress?CMPid=1"
+        `${process.env.REACT_APP_BASE_URL}/DeliveryManager/DeliveryInProgress?CMPid=`
       )
       .then((req) => {
         const data = req.data.map((data) => {
