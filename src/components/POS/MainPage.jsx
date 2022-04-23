@@ -66,6 +66,9 @@ import TakeAwayOrders from "../Delivery Manager/TakeAwayOrders/TakeAwayOrders";
 import WaitingForCollection from "../Delivery Manager/TakeAwayOrders/waitingForCollection/WaitingForCollection";
 import Collected from "../Delivery Manager/TakeAwayOrders/collected/Collected";
 import FutureOrder from "../Delivery Manager/FutureOrder/FutureOrder";
+import RecipieView from "../Inventory/recipe management/Recipie View/RecipieView";
+import RecipeDetails from "../Inventory/recipe management/Recipe Details/RecipeDetails";
+import RecipeInventory from "../Inventory/recipe management/Recipie Inventory/RecipeInventory";
 
 function MainPage() {
   const navigate = useNavigate();
@@ -490,7 +493,11 @@ function MainPage() {
               <Route path="masters" element={<Master />} />
               <Route path="transactions" element={<TransactionMaster />} />
               <Route path="menu-management" element={<MenuManagement />} />
-              <Route path="receipe-management" element={<RecipeManagement />} />
+              <Route path="receipe-management" element={<RecipeManagement />} >
+                <Route path="" element={<RecipeDetails/>}/>
+                <Route path="recipe-view/:id" element={<RecipieView/>}/>
+                <Route path="inventory" element={<RecipeInventory/>}/>
+              </Route>
               <Route path="reports" element={<ReportSection />} >
                 <Route path="stock-report" element={<StockReport />}/>
                 <Route path="stock-cost" element={<StockCost />}/>

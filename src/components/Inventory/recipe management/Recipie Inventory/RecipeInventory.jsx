@@ -16,6 +16,7 @@ import CloseIcon from "@mui/icons-material/Close";
 import TinyMceRichText from "./tynymce/TinyMceRichText";
 import NewRatting from "./ratting/NewRatting";
 import { Editor } from "@tinymce/tinymce-react";
+import axios from "axios";
 
 const ITEM_HEIGHT = 38;
 const ITEM_PADDING_TOP = 8;
@@ -27,6 +28,31 @@ const MenuProps = {
     },
   },
 };
+
+
+// {
+//   Recipe:{
+//  "MenuID":9,
+//  "RCGroupId":1,
+//  "Preprations":"fdhfbdsh",
+//  "PreprationTime":"ertsrytu",
+//  "CookTime":"10mnts",
+//  "CookingTemp":"100",
+//  "ToolId":1,
+//  "Image":"dghsa",
+//  "CMPid":1,
+//  "UserID":1,
+//  "DairyFree":1,
+//  "GlutenFree":1,
+//  "Vegtarian":1,
+//  "LowCarb":1,
+//  "highFat":1
+//  },
+//  receipeDetails:[
+//      {"ProdctId":4,"Qty":4,"UOMid":1},
+//      {"ProdctId":8,"Qty":5,"UOMid":1}
+//  ]
+//  }
 
 const names = [
   "Oliver Hansen",
@@ -96,8 +122,9 @@ const datakeyValue = {
 };
 
 function RecipeInventory() {
-  const [toolid, settoolid] = React.useState([]);
+  const [toolid, settoolid] = useState([]);
   const [RichTextContent, setRichTextContent] = useState("");
+  const [recipeCategory, setRecipeCategory] = useState([]);
   const handleChange = (event) => {
     const {
       target: { value },
@@ -108,59 +135,100 @@ function RecipeInventory() {
     );
   };
 
+  useEffect(() => {
+    axios
+      .get(
+        "https://zres.clubsoft.co.in/RCGroup?CMPid=1"
+      )
+      .then((res) => {
+        console.log(res.data);
+        setRecipeCategory(res.data);
+      });
+  }, [])
+
   // ingredient select section
 
   const [selectIngredient, setSelectIngredient] = useState("");
   const [ingredientInput, setIngredientInput] = useState("");
   const [selectUnit, setSelectUnit] = useState("");
   const [newArray, setNewArray] = useState([]);
+  const [recipeDataIng , setRecipeDataIng] = useState([])
 
   const onAddnewRecipeIngredient = () => {
     setNewArray([
       ...newArray,
       {
-        id: newArray.length,
+        ProdctId: newArray.length + 1,
         selectIngredient: selectIngredient,
         ingredientInput: ingredientInput,
         selectUnit: selectUnit,
+       
       },
     ]);
+    setRecipeDataIng(
+      [
+        ...recipeDataINg
+      ]
+    )
     setSelectIngredient("");
-
-    setIngredientInput("");
     setSelectUnit("");
+    setIngredientInput("");
   };
+  console.log(newArray);
   const [difficulty, setDifficulty] = useState(0);
   const [prepration, setPrepration] = useState("");
   const [Mainvalues, setMainValues] = useState(datakeyValue);
+  const [recipeGroup , setRecipeGroup] = useState(0)
+  const [prepTime , setPrepTime] = useState("")
+  const [cookTime , setCookTime] = useState("")
+  const [dairyFree , setDairyFree] = useState(0)
+  const [glutenFree , setGlutenFree] = useState(0)
+  const [vegtarian , setVegtarian] = useState(0)
+  const [lowCarb , setLowCarb] = useState(0)
+  const [highFat , setHighFat] = useState(0)
+  const [cookTemp , setCookTemp] = useState("")
   const [formSubmitiing, setFormSubmitting] = useState(false);
-  const handleMainData = (evt) => {
-    const name = evt.target.value;
-
-    setMainValues({
-      ...Mainvalues,
-      [evt.target.name]: name,
-      Ingredients: newArray,
-      ToolId: toolid,
-      difficulty: difficulty,
-      Preprations: prepration,
-    });
+  const handleMainData = () => {
+    
   };
-
+  
   const editorRef = useRef(null);
   const handleFormSubmitSelction = (e) => {
     e.preventDefault();
+    
     if (editorRef.current) {
       const richValue = editorRef.current.getContent();
       setPrepration(richValue);
-
-      if (Mainvalues.Preprations === "") {
-        window.alert("Preperation empty");
-      } else {
-        window.alert("saved sucess");
-        console.log("MAIN VALUE", Mainvalues);
-      }
-    }
+      
+      // if (Mainvalues.Preprations === "") {
+        //   window.alert("Preperation empty");
+        // } else {
+          //   window.alert("saved sucess");
+          //   console.log("MAIN VALUE", Mainvalues);
+          // }
+        }
+        const data = {
+          Recipe:{
+            MenuID: 0,
+            RCGroupId: parseInt(recipeGroup),
+            Preprations:prepration,
+            PreprationTime:prepTime,
+            CookTime:cookTime,
+            CookingTemp:cookTemp,
+            ToolId:0,
+            CMPid:0,
+            UserID:0,
+            DairyFree:dairyFree,
+            GlutenFree:glutenFree,
+            Vegtarian:vegtarian,
+            LowCarb:lowCarb,
+            highFat:highFat
+          },
+          receipeDetails:[
+           
+          ],
+        }
+        console.log(data,"data")
   };
 
   const handleCheckboxSection = (evt) => {
@@ -189,7 +257,6 @@ function RecipeInventory() {
       reader.readAsDataURL(ImageFile);
     }
   };
-
   const { getRootProps, getInputProps } = useDropzone({
     maxFiles: 1,
     accept: "image/*",
@@ -203,7 +270,6 @@ function RecipeInventory() {
       );
     },
   });
-
   const thumbs = files.map((file) => (
     <div style={thumb} key={file.name}>
       <div style={thumbInner}>
@@ -219,7 +285,6 @@ function RecipeInventory() {
     [files]
   );
 
-  console.log("THE RECIPIE ", Mainvalues);
   return (
     <div className="RecipeInventory">
       <div className="top__section">
@@ -241,12 +306,21 @@ function RecipeInventory() {
                     <select
                       name="recipegroupid"
                       id=""
-                      value={Mainvalues.recipegroupid}
-                      onChange={handleMainData}
+                      value={recipeGroup}
+                      onChange={(e)=>setRecipeGroup(e.target.value)}
                     >
-                      <option value="" selected disabled>
-                        Select Recipe Group
-                      </option>
+                      {
+                        recipeCategory.length>0?
+                        recipeCategory.map(data => (
+                          <option value={data.RCGroupId} >
+                            {data.GroupName}
+                          </option>
+                        )):
+                        <option value="" selected disabled>
+                            Loading..
+                        </option>
+                      }
+
                     </select>
                   </div>
 
@@ -267,8 +341,8 @@ function RecipeInventory() {
                       type="text"
                       name="PreprationTime"
                       id=""
-                      value={Mainvalues.PreprationTime}
-                      onChange={handleMainData}
+                      value={prepTime}
+                      onChange={(e)=>setPrepTime(e.target.value)}
                     />
                   </div>
                   <div className="input__holder">
@@ -277,8 +351,8 @@ function RecipeInventory() {
                       type="text"
                       name="CookTime"
                       id=""
-                      value={Mainvalues.CookTime}
-                      onChange={handleMainData}
+                      value={cookTime}
+                      onChange={(e)=>setCookTime(e.target.value)}
                     />
                   </div>
 
@@ -288,8 +362,8 @@ function RecipeInventory() {
                       type="text"
                       name="CookingTemp"
                       id=""
-                      value={Mainvalues.CookingTemp}
-                      onChange={handleMainData}
+                      value={cookTemp}
+                      onChange={(e)=>setCookTemp(e.target.value)}
                     />
                   </div>
 
@@ -339,8 +413,14 @@ function RecipeInventory() {
                         sx={{ "& .MuiSvgIcon-root": { fontSize: 28 } }}
                         name="DairyFree"
                         id=""
-                        checked={Mainvalues.DairyFree}
-                        onChange={handleCheckboxSection}
+                        // checked={dairyFree}
+                        onChange={(e)=>{
+                          if(e.target.checked===true){
+                            setDairyFree(1)
+                          }else{
+                            setDairyFree(0)
+                          }
+                        }}
                       />
                       <h4>Dairy free</h4>
                     </div>
@@ -350,8 +430,14 @@ function RecipeInventory() {
                         sx={{ "& .MuiSvgIcon-root": { fontSize: 28 } }}
                         name="GlutenFree"
                         id=""
-                        checked={Mainvalues.GlutenFree}
-                        onChange={handleCheckboxSection}
+                        // checked={glutenFree}
+                        onChange={(e)=>{
+                          if(e.target.checked===true){
+                            setGlutenFree(1)
+                          }else{
+                            setGlutenFree(0)
+                          }
+                        }}
                       />
                       <h4>Gluten free</h4>
                     </div>
@@ -361,8 +447,14 @@ function RecipeInventory() {
                         sx={{ "& .MuiSvgIcon-root": { fontSize: 28 } }}
                         name="Vegtarian"
                         id=""
-                        checked={Mainvalues.Vegtarian}
-                        onChange={handleCheckboxSection}
+                        // checked={vegtarian}
+                        onChange={(e)=>{
+                          if(e.target.checked===true){
+                            setVegtarian(1)
+                          }else{
+                            setVegtarian(0)
+                          }
+                        }}
                       />
                       <h4>Vegitarian</h4>
                     </div>
@@ -372,8 +464,14 @@ function RecipeInventory() {
                         sx={{ "& .MuiSvgIcon-root": { fontSize: 28 } }}
                         name="LowCarb"
                         id=""
-                        checked={Mainvalues.LowCarb}
-                        onChange={handleCheckboxSection}
+                        // checked={lowCarb}
+                        onChange={(e)=>{
+                          if(e.target.checked===true){
+                            setLowCarb(1)
+                          }else{
+                            setLowCarb(0)
+                          }
+                        }}
                       />
                       <h4>Low carb</h4>
                     </div>
@@ -383,8 +481,14 @@ function RecipeInventory() {
                         sx={{ "& .MuiSvgIcon-root": { fontSize: 28 } }}
                         name="highFat"
                         id=""
-                        checked={Mainvalues.highFat}
-                        onChange={handleCheckboxSection}
+                        // checked={highFat}
+                        onChange={(e)=>{
+                          if(e.target.checked===true){
+                            setHighFat(1)
+                          }else{
+                            setHighFat(0)
+                          }
+                        }}
                       />
                       <h4>High fat</h4>
                     </div>
@@ -446,7 +550,7 @@ function RecipeInventory() {
                       </select>
 
                       <input
-                        type="text"
+                        type="number" 
                         value={ingredientInput}
                         onChange={(e) => setIngredientInput(e.target.value)}
                       />
@@ -458,7 +562,8 @@ function RecipeInventory() {
                         value={selectUnit}
                         onChange={(e) => setSelectUnit(e.target.value)}
                       >
-                        <option value="kg">kg</option>
+                        <option >unit</option>
+                        <option value="kg" >kg</option>
                         <option value="liter">liter</option>
                         <option value="ml">ml</option>
                         <option value="gram">gram</option>

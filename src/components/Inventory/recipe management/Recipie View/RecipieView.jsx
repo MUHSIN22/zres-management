@@ -1,14 +1,31 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import "./recipieView.scss";
 import Pagination from "@mui/material/Pagination";
-
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
-
-import Slider from "react-slick";
 import ImageSlider from "./imageslider/ImageSlider";
+import { useParams } from "react-router-dom";
+import axios from "axios";
 
 function RecipieView() {
+  const [data, setData] = useState({})
+  const location = useParams()
+  useEffect(() => {
+    const [groupId, menuId] = location.id.split('-')
+    console.log(menuId, groupId);
+    axios
+      .get(
+        `https://zres.clubsoft.co.in/WalkIn/GetAllMenuItemByMenuGroupID?MenuGroupID=${groupId}&CMPid=1`
+      )
+      .then((res) => {
+        const filteredData = res.data.filter(data => {
+          return data.MenuID === parseInt(menuId)
+        })
+        setData(filteredData[0])
+        console.log(data);
+      });
+  }, [])
+
   return (
     <div className="RecipieView">
       <div className="RecipieView__headder__Section">
@@ -20,29 +37,29 @@ function RecipieView() {
           <div className="image__section__wrapper">
             <div className="left__wrapper">
               <div className="recipe__name">
-                <h2>Sushi</h2>
+                <h2>{data.ItemName}</h2>
               </div>
               <img
-                src="https://i0.wp.com/post.healthline.com/wp-content/uploads/2021/09/sushi-sashimi-1296x728-header.jpg?w=1155&h=1528"
-                alt=""
+                src={`data:image/png;base64,${data.Image}`}
+                alt={data.ItemName}
               />
 
               <div className="background__div"></div>
             </div>
             <div className="right__wrapper">
-              <div className="pagination__section">
+              {/* <div className="pagination__section">
                 <Pagination count={10} variant="outlined" shape="rounded" />
-              </div>
+              </div> */}
 
-              <div className="RecipieView__image__slider">
+              {/* <div className="RecipieView__image__slider">
                 <ImageSlider />
-              </div>
+              </div> */}
 
               <div className="image__section__container">
                 <div className="background__div"></div>
                 <img
-                  src="https://www.kikkoman.eu/fileadmin/_processed_/b/f/csm_WEB_Tamago_Sushi_e086a9f158.jpg"
-                  alt=""
+                  src={`data:image/png;base64,${data.Image}`}
+                  alt={data.ItemName}
                 />
               </div>
             </div>

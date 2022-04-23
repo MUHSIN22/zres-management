@@ -15,6 +15,7 @@ import AddIcon from "@mui/icons-material/Add";
 import RichTextEditor from "../../Recipie Inventory/richtext editor/RichTextEditor";
 import TinyMceRichText from "../../Recipie Inventory/tynymce/TinyMceRichText";
 import { Editor } from "@tinymce/tinymce-react";
+import axios from "axios";
 const ITEM_HEIGHT = 38;
 const ITEM_PADDING_TOP = 8;
 const MenuProps = {
@@ -73,29 +74,83 @@ const img = {
   height: "100%",
 };
 
-const datakeyValue = {
-  RecipeID: "",
-  recipegroupid: "",
-  RecipeName: "",
-  PreprationTime: "",
-  CookTime: "",
-  CookingTemp: "",
-  ToolId: [],
-  DairyFree: false,
-  GlutenFree: false,
-  Vegtarian: false,
-  LowCarb: false,
-  highFat: false,
-  Ingredients: [],
-  image: "",
-  imageFile: null,
-  difficulty: 0,
-  Preprations: "",
-};
+const mainStructure = {
+  Recipe: {
+    MenuID: -1,
+    RCGroupId: 1,
+    Preprations: "fdhfbdsh",
+    PreprationTime: "ertsrytu",
+    CookTime: "10mnts",
+    CookingTemp: "100",
+    ToolId: 1,
+    CMPid: 1,
+    UserID: 1,
+    DairyFree: 1,
+    GlutenFree: 1,
+    Vegtarian: 1,
+    LowCarb: 1,
+    highFat: 1
+  },
+  receipeDetails: [
+    { "ProdctId": 4, "Qty": 4, "UOMid": 1 },
+    { "ProdctId": 8, "Qty": 5, "UOMid": 1 }
+  ]
+}
+const recipeStructure = {
+    MenuID: -1,
+    RCGroupId: -1,
+    Preprations: "",
+    PreprationTime: "",
+    CookTime: "",
+    CookingTemp: "",
+    ToolId: 1,
+    CMPid: 1,
+    UserID: 1,
+    DairyFree: 0,
+    GlutenFree: 0,
+    Vegtarian: 0,
+    LowCarb: 0,
+    highFat: 0
+  }
+// {
+//   Recipe:{
+//  "MenuID":9,
+//  "RCGroupId":1,
+//  "Preprations":"fdhfbdsh",
+//  "PreprationTime":"ertsrytu",
+//  "CookTime":"10mnts",
+//  "CookingTemp":"100",
+//  "ToolId":1,
+//  "CMPid":1,
+//  "UserID":1,
+//  "DairyFree":1,
+//  "GlutenFree":1,
+//  "Vegtarian":1,
+//  "LowCarb":1,
+//  "highFat":1
+//  },
+//  receipeDetails:[
+//      {"ProdctId":4,"Qty":4,"UOMid":1},
+//      {"ProdctId":8,"Qty":5,"UOMid":1}
+//  ]
+//  }
 
-function AddRecipie({ setRecipieDataView, setAddProducts }) {
-  const [toolid, settoolid] = React.useState([]);
+
+function AddRecipie({ setRecipieDataView, setAddProducts, recipeCategory }) {
+  const [toolid, settoolid] = useState([]);
   const [RichTextContent, setRichTextContent] = useState("");
+  const [postData, setPostData] = useState({})
+  const [menuID, setMenuID] = useState(-1)
+  const [difficulty, setDifficulty] = useState(0);
+  const [prepration, setPrepration] = useState("");
+  const [Mainvalues, setMainValues] = useState(recipeStructure);
+  const [ingredientList, setIncreadientList] = useState([]);
+  const [enteredIncreadient, setenteredIncreadient] = useState([]);
+  const [formSubmitiing, setFormSubmitting] = useState(false);
+  const [files, setFiles] = useState([]);
+
+
+
 
   const handleChange = (event) => {
     const {
@@ -107,13 +162,6 @@ function AddRecipie({ setRecipieDataView, setAddProducts }) {
     );
   };
 
-  const [difficulty, setDifficulty] = useState(0);
-  const [prepration, setPrepration] = useState("");
-  const [Mainvalues, setMainValues] = useState(datakeyValue);
-  const [formSubmitiing, setFormSubmitting] = useState(false);
-
-  const [files, setFiles] = useState([]);
-
   const label = { inputProps: { "aria-label": "Checkbox demo" } };
   const ImagePreview = (e) => {
     if (e.target.files && e.target.files[0]) {
@@ -123,8 +171,8 @@ function AddRecipie({ setRecipieDataView, setAddProducts }) {
       reader.onload = (x) => {
         setMainValues({
           ...Mainvalues,
-          imageFile: ImageFile,
-          image: x.target.result,
+          Image: ImageFile,
+          // image: x.target.result,
         });
       };
       reader.readAsDataURL(ImageFile);
@@ -160,12 +208,12 @@ function AddRecipie({ setRecipieDataView, setAddProducts }) {
     [files]
   );
 
-  const [enteredIncreadient, setenteredIncreadient] = useState();
-  const [ingredientList, setIncreadientList] = useState([]);
 
   const handleAddincreadients = () => {
-    setIncreadientList([...ingredientList, enteredIncreadient]);
-    setenteredIncreadient("");
+    if (enteredIncreadient.length > 0) {
+      setIncreadientList([...ingredientList,enteredIncreadient]);
+      setenteredIncreadient("");
+    }
   };
 
   const handleCancelBtn = () => {
@@ -173,24 +221,25 @@ function AddRecipie({ setRecipieDataView, setAddProducts }) {
     setAddProducts(false);
   };
 
+  console.log(Mainvalues);
   const handleMainData = (evt) => {
     const name = evt.target.value;
-
     setMainValues({
       ...Mainvalues,
       [evt.target.name]: name,
-      Ingredients: ingredientList,
+      MenuID:menuID,
+      RCGroupId:menuID,
       ToolId: toolid,
-      difficulty: difficulty,
       Preprations: prepration,
+      Ingredients: ingredientList,
     });
-  };
 
+  };
   const handleCheckboxSection = (evt) => {
     const checked = evt.target.checked;
     setMainValues({
-      ...Mainvalues,
-      [evt.target.name]: checked,
+        ...Mainvalues,
+      [evt.target.name]: checked === true ? 1 : 0 ,
     });
   };
 
@@ -266,14 +315,16 @@ function AddRecipie({ setRecipieDataView, setAddProducts }) {
                   }}
                   name="recipegroupid"
                   id=""
-                  value={Mainvalues.recipegroupid}
-                  onChange={handleMainData}
+                  value={menuID}
+                  onChange={(e) => setMenuID(e.target.value)}
                 >
-                  <option value="" selected disabled>
-                    Select Recipe Group
-                  </option>
-                  <option value="1">first option</option>
-                  <option value="2">second Option</option>
+                  {
+                    recipeCategory.length>0 ?
+                    recipeCategory.map((data) => (
+                      <option value={data.MenuGroupID}>{data.GroupName}</option>
+                    )):
+                    <option value="loading">Loaidng...</option>
+                  }
                 </select>
                 <h4>Recipe Group</h4>
               </div>

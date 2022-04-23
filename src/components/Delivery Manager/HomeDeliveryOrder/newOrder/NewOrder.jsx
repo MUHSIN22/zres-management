@@ -10,7 +10,7 @@ function NewOrder() {
   useEffect(() => {
     axios
       .get(
-        "https://zres.clubsoft.co.in/DeliveryManager/GetAllNewOrders?CMPid=1"
+        `${process.env.REACT_APP_BASE_URL}/DeliveryManager/GetAllNewOrders?CMPid=1`
       )
       .then((res) => {
         setNewOrderData(res.data);
@@ -20,7 +20,12 @@ function NewOrder() {
     setDetailsClicked(!detailsClicked)
     setOrderNoData(id)
   }
-
+  const readyButtonHandler = (data) => {
+    axios.post(`${process.env.REACT_APP_BASE_URL}/DeliveryManager/GetAllPickUpOrders?CMPid=1`,data)
+    .then(res=>{
+      console.log(res);
+    })
+  }
   return (
     <div className="TableSection">
       <table className="table">
@@ -59,9 +64,9 @@ function NewOrder() {
                   <td data-label="Amount">OMR{" "+data.Amount}.00</td>
                   <td data-label="">
                     {" "}
-                    <a href="#" className="button">
+                    <div onClick={()=>readyButtonHandler(data)} href="#" className="button">
                       Ready ?
-                    </a>
+                    </div>
                   </td>
                 </tr>
               );

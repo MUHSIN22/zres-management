@@ -1,6 +1,7 @@
 import React from "react";
 
 function TwoSeater({availability}) {
+  console.log(availability,"-> availbty"); 
   return (
     <svg
     className={availability+" svgDinein"}
