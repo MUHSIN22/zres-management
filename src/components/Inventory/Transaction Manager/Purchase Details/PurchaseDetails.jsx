@@ -9,51 +9,6 @@ import "react-datepicker/dist/react-datepicker.css";
 import NumberFormat from "react-number-format";
 import { inventoryServices } from "../../../../Services/InventoryServices";
 
-const Data = [
-  {
-    SINO: "1",
-
-    ArrNo: "1",
-
-    ArrDate: "25/11/2021",
-
-    InvNo: "10212",
-
-    InvDate: "25/11/2021",
-
-    Amound: 10000,
-
-    Supplier: "Ram",
-
-    TotalProduct: 5,
-
-    Status: "",
-
-    UserName: "vivek",
-  },
-
-  {
-    SINO: "2",
-
-    ArrNo: "1",
-
-    ArrDate: "25/10/2022",
-
-    InvNo: "10212",
-
-    InvDate: "25/10/2022",
-
-    Amound: 10000,
-
-    Supplier: "Rohit",
-
-    TotalProduct: 5,
-
-    Status: "canceled",
-
-    UserName: "roy",
-  },
-];
 
 function PurchaseDetails() {
   const [startDate, setStartDate] = useState(null);
@@ -74,6 +29,13 @@ function PurchaseDetails() {
   };
 
   console.log(moment(startDate).format("DD/MM/yyyy"));
+
+const purchaseDeatailsFilter = (from,to)=>{
+  inventoryServices.getTransactionproductdeatailsFilter(from,to).then(data=>{
+    
+    setData(data)
+  })
+}
 
   useEffect(() => {
     inventoryServices.getTransactionproductdeatails()
@@ -218,7 +180,7 @@ function PurchaseDetails() {
                 />
               </div>
 
-              <div className="search__Section">
+              <div onClick={()=>{purchaseDeatailsFilter(startDate,toDate)}} className="search__Section">
                 <button>Search</button>
               </div>
             </div>
@@ -239,7 +201,7 @@ function PurchaseDetails() {
                   </tr>
                 </thead>
                 <tbody>
-                  {data && data.map((datas,index) => (
+                  {data[0] ? data.map((datas,index) => (
                     <tr
                       keys={datas.id}
                       className={clickedTr === datas.SINO && "selectedTr "}
@@ -297,10 +259,10 @@ function PurchaseDetails() {
                       <td
                         className={datas.Status === "canceled" && "Canceled "}
                       >
-                        {datas.supplierName === null | '' ? 'No supplier available' : datas.SupplierName}
+                        {datas.UserName === null | '' ? 'No Username Available' : datas.UserName}
                       </td>
                     </tr>
-                  ))}
+                  )): "No data found"}
                 </tbody>
               </table>
             </div>

@@ -4,47 +4,6 @@ import { useState } from "react";
 import PurchaseDetailsAdd from "./addPurchaseOrder/AddPurchaseOrder";
 import { inventoryServices } from "../../../../Services/InventoryServices";
 
-const Date = [
-  {
-    SINO: "1",
-
-    RtnNo: "1",
-
-    RtnDate: "25/11/2021",
-
-    InvNo: "10212",
-
-    InvDate: "25/11/2021",
-
-    Amound: 10000,
-
-    Supplier: "Ram",
-
-    ReturnType: "Direct Return",
-
-    UserName: "vivek",
-  },
-
-  {
-    SINO: "2",
-
-    RtnNo: "2",
-
-    RtnDate: "25/11/2021",
-
-    InvNo: "10212",
-
-    InvDate: "25/11/2021",
-
-    Amound: 10000,
-
-    Supplier: "Ram",
-
-    ReturnType: "Expiry Return",
-
-    UserName: "vivek",
-  },
-];
 
 function PurchaseOrder() {
   const [addNewBtn, setAddNewBtn] = useState(false);
@@ -59,6 +18,14 @@ function PurchaseOrder() {
     var FromdateSplit = fromDate.split("/");
     var toDateSplit = toDate.split("/");
   };
+
+  const purchaseorderFilter = (from,to)=>{
+    if(from && to){
+    inventoryServices.getPurchaseorderFilter(from,to).then(res=>{
+      setData(res)
+    })
+  }
+  }
 
   useEffect(() => {
     inventoryServices.getPurchaseorder()
@@ -171,7 +138,7 @@ function PurchaseOrder() {
                 />
               </div>
 
-              <div className="search__Section">
+              <div onClick={()=>purchaseorderFilter(fromDate,toDate)} className="search__Section">
                 <button>Search</button>
               </div>
             </div>
@@ -191,7 +158,7 @@ function PurchaseOrder() {
                   </tr>
                 </thead>
                 <tbody>
-                  {data && data.map((datas,index) => (
+                  {data[0] ? data.map((datas,index) => (
                     <tr
                       keys={index+1}
                       className={clickedTr === index+1 && "selectedTr "}
@@ -212,21 +179,21 @@ function PurchaseOrder() {
                           datas.ReturnType === "Expiry Return" && "Canceled "
                         }
                       >
-                        {datas.RtnNo}
+                        {datas.OrderNo}
                       </td>
                       <td
                         className={
                           datas.ReturnType === "Expiry Return" && "Canceled "
                         }
                       >
-                        {datas.GetSupplier}
+                        {datas.Supplier}
                       </td>
                       <td
                         className={
                           datas.ReturnType === "Expiry Return" && "Canceled "
                         }
                       >
-                        {datas.Qty}
+                        {datas.TotalProducts}
                       </td>
                       <td
                         className={
@@ -244,7 +211,7 @@ function PurchaseOrder() {
                       </td>
                       
                     </tr>
-                  ))}
+                  )):"No data found"}
                 </tbody>
               </table>
             </div>

@@ -192,7 +192,7 @@ function CrmFront({ setSmsCategory }) {
           </div>
         </div>
 
-        <div className="result">
+        <div className="result">  
           {userFound && <SingleCustomerDetails  number={number}/>}
 
           {!userFound && avilable && (

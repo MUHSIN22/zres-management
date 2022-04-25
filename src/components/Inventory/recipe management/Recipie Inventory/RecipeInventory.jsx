@@ -167,7 +167,7 @@ function RecipeInventory() {
     ]);
     setRecipeDataIng(
       [
-        ...recipeDataINg
+        ...recipeDataIng
       ]
     )
     setSelectIngredient("");

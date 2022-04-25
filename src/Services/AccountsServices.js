@@ -93,6 +93,15 @@ export const accountServices = {
         })
     },
 
+    getSupplierPaymentList : (supplierId) => {
+        return new Promise((resolve,reject) => {
+            fetch(`${BASE_URL}SupplierPayment/GetPurchaseInSupplierPayment?supplierid=${supplierId}&CMPid=1`)
+                .then(res => res.json())
+                .then(data => resolve(data))
+                .catch(err => reject(err))
+        })
+    },
+
     getSupplierByFilter: (from,to,supplier) => {
         return new Promise((resolve,reject) => {
             fetch(`${BASE_URL}SupplierPayment/search?supplier=${supplier}&fromdate=${from}&todate=${to}&CMPid=1`)

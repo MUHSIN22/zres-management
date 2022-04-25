@@ -9,12 +9,15 @@ function ProductMaster() {
   const [selectedTr, setSelectedTr] = useState({});
   const [editOption, setEditOption] = useState(false);
   const [data,setData] = useState([])
+ 
 
   useEffect(() => {
     inventoryServices.getProductdetails()
     .then(data =>{
       setData(data)
     }).catch(err => console.log(err))
+    
+
   },[])
 
   return (

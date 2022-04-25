@@ -3,70 +3,33 @@ import "./salesReturn.scss";
 import { useState } from "react";
 import { inventoryServices } from "../../../../Services/InventoryServices";
 
-const Date = [
-  {
-    SINO: "1",
-
-    BillNo: "1",
-
-    BillDate: "25/11/2021",
-
-    CustName: "Anju M",
-
-    Payment: "Cash",
-
-    GrossAmt: 1000,
-
-    Discount: "20.00",
-
-    NetAmt: "980",
-
-    status: "",
-
-    UserName: "vivek",
-  },
-
-  {
-    SINO: "1",
-
-    BillNo: "1",
-
-    BillDate: "25/11/2021",
-
-    CustName: "Rohan",
-
-    Payment: "Cash",
-
-    GrossAmt: 1000,
-
-    Discount: "20.00",
-
-    NetAmt: "980",
-
-    status: "",
-
-    UserName: "vivek",
-  },
-];
 
 function SalesReturn() {
   const [addNewBtn, setAddNewBtn] = useState(false);
   const [mainTableView, setMainTableView] = useState(true);
-
+  const [ordertype,setOrdertype] = useState([])
   const [fromDate, setFromDate] = useState("");
   const [toDate, setToDate] = useState("");
   const [data, setData] = useState([])
   const [clickedTr, SetClickedTr] = useState("");
+  const [saletype,Setsaletype] = useState("");
 
-  const DateFilter = () => {
-    var FromdateSplit = fromDate.split("/");
-    var toDateSplit = toDate.split("/");
-  };
+
+  const salesreturnFilter = (from,to,sale)=>{
+if(from && to && sale){
+    inventoryServices.getSalesreturnFilter(from,to,sale).then(res=>{
+      setData(res)
+    })
+  }
+  }
 
   useEffect(() => {
     inventoryServices.getSalesreturn()
       .then(data => { setData(data) })
       .catch(err => console.log(err))
+    inventoryServices.getsaleOrdertype()
+    .then(data => { setOrdertype(data) })
+    .catch(err => console.log(err))
   }, [])
   return (
     <>
@@ -175,13 +138,15 @@ function SalesReturn() {
 
               <div className="sales__Type">
                 <h5>SR Type</h5>
-                <select name="" id="">
-                  <option value=""></option>
-                  <option value=""></option>
+                <select onChange={(e)=>{Setsaletype(e.target.value)}} name="" id="">
+                <option disabled="true" selected>Select order type</option>
+                  {ordertype && ordertype.map((item) => (
+                  <option value={item.Value}>{item.Text}</option>
+                  ))}
                 </select>
               </div>
 
-              <div className="search__Section">
+              <div onClick={()=>salesreturnFilter(fromDate,toDate,saletype)} className="search__Section">
                 <button>Search</button>
               </div>
             </div>
@@ -202,7 +167,7 @@ function SalesReturn() {
                   </tr>
                 </thead>
                 <tbody>
-                  {data && data.map((datas,index) => (
+                  {data[0] ? data.map((datas,index) => (
                     <tr
                       keys={index+1}
                       className={clickedTr === index+1 && "selectedTr "}
@@ -218,7 +183,7 @@ function SalesReturn() {
 
                       <td
                         className={
-                          datas.status === "Expiry Return" && "Canceled "
+                          datas.Status === "Expiry Return" && "Canceled "
                         }
                       >
                         {datas.BillNo}
@@ -226,7 +191,7 @@ function SalesReturn() {
 
                       <td
                         className={
-                          datas.status === "Expiry Return" && "Canceled "
+                          datas.Status === "Expiry Return" && "Canceled "
                         }
                       >
                         {datas.BillDate}
@@ -234,61 +199,61 @@ function SalesReturn() {
 
                       <td
                         className={
-                          datas.status === "Expiry Return" && "Canceled "
+                          datas.Status === "Expiry Return" && "Canceled "
                         }
                       >
-                        {datas.CustName}
+                        {datas.CustomerName}
                       </td>
 
                       <td
                         className={
-                          datas.status === "Expiry Return" && "Canceled "
+                          datas.Status === "Expiry Return" && "Canceled "
                         }
                       >
-                        {datas.Payment}
+                        {datas.PaymentType}
                       </td>
 
                       <td
                         className={
-                          datas.status === "Expiry Return" && "Canceled "
+                          datas.Status === "Expiry Return" && "Canceled "
                         }
                       >
-                        {datas.GrossAmt}
+                        {datas.GrossAmount}
                       </td>
 
                       <td
                         className={
-                          datas.status === "Expiry Return" && "Canceled "
+                          datas.Status === "Expiry Return" && "Canceled "
                         }
                       >
-                        {datas.Discount}
+                        {datas.TotalDiscount}
                       </td>
 
                       <td
                         className={
-                          datas.status === "Expiry Return" && "Canceled "
+                          datas.Status === "Expiry Return" && "Canceled "
                         }
                       >
-                        {datas.NetAmt}
+                        {datas.NetAmount}
                       </td>
 
                       <td
                         className={
-                          datas.status === "Expiry Return" && "Canceled "
+                          datas.Status === "Expiry Return" && "Canceled "
                         }
                       >
-                        {datas.status}
+                        {datas.Status}
                       </td>
 
                       <td
                         className={
-                          datas.status === "Expiry Return" && "Canceled "
+                          datas.Status === "Expiry Return" && "Canceled "
                         }
                       >
                         {datas.UserName}
                       </td>
                     </tr>
-                  ))}
+                  )):"No data found"}
                 </tbody>
               </table>
             </div>

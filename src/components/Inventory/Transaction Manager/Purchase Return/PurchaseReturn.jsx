@@ -4,47 +4,7 @@ import { useState } from "react";
 import PurchaseReturnAdd from "./PurchaseReturnAdd/PurchaseReturnAdd";
 import { inventoryServices } from "../../../../Services/InventoryServices";
 
-const Date = [
-  {
-    SINO: "1",
 
-    RtnNo: "1",
-
-    RtnDate: "25/11/2021",
-
-    InvNo: "10212",
-
-    InvDate: "25/11/2021",
-
-    Amound: 10000,
-
-    Supplier: "Ram",
-
-    ReturnType: "Direct Return",
-
-    UserName: "vivek",
-  },
-
-  {
-    SINO: "1",
-
-    RtnNo: "1",
-
-    RtnDate: "25/11/2021",
-
-    InvNo: "10212",
-
-    InvDate: "25/11/2021",
-
-    Amound: 10000,
-
-    Supplier: "Ram",
-
-    ReturnType: "Expiry Return",
-
-    UserName: "vivek",
-  },
-];
 
 function PurchaseReturn() {
   const [addNewBtn, setAddNewBtn] = useState(false);
@@ -59,6 +19,12 @@ function PurchaseReturn() {
     var FromdateSplit = fromDate.split("/");
     var toDateSplit = toDate.split("/");
   };
+
+  const purchasereturnFilter = (from,to)=>{
+    inventoryServices.getPurchasereturnFilter(from,to).then(data=>{
+      setData(data)
+    }).catch(err => console.log(err))
+  }
 
   useEffect(() => {
     inventoryServices.getPurchasereturn()
@@ -170,7 +136,7 @@ function PurchaseReturn() {
                 />
               </div>
 
-              <div className="search__Section">
+              <div onClick={()=>purchasereturnFilter(fromDate,toDate)} className="search__Section">
                 <button>Search</button>
               </div>
             </div>
@@ -190,7 +156,7 @@ function PurchaseReturn() {
                   </tr>
                 </thead>
                 <tbody>
-                  {data && data.map((datas,index) => (
+                  {data[0] ? data.map((datas,index) => (
                     <tr
                       keys={datas.PRid}
                       className={clickedTr === datas.index+1 && "selectedTr "}
@@ -261,7 +227,7 @@ function PurchaseReturn() {
                         {datas.UserName === null | '' ? 'No data available' : datas.UserName}
                       </td>
                     </tr>
-                  ))}
+                  )):"No data found"}
                 </tbody>
               </table>
             </div>

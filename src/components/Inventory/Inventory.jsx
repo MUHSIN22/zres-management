@@ -23,16 +23,6 @@ function Inventory({ InventoryClick }) {
           </>
         )}
 
-        {/* <div className="Inventory__master">
-      
-      </div> */}
-        <div className="Inventory__transaction">
-          {selectedOption === "Masters" && <Master />}
-          {selectedOption === "Transactions" && <TransactionMaster />}
-          {selectedOption === "Menu Management" && <MenuManagement />}
-          {selectedOption === "Recipe Management" && <RecipeManagement />}
-          {selectedOption === "Reports" && <ReportSection />}
-        </div>
       </div>
     </>
   );

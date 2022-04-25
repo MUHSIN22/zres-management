@@ -69,6 +69,10 @@ import FutureOrder from "../Delivery Manager/FutureOrder/FutureOrder";
 import RecipieView from "../Inventory/recipe management/Recipie View/RecipieView";
 import RecipeDetails from "../Inventory/recipe management/Recipe Details/RecipeDetails";
 import RecipeInventory from "../Inventory/recipe management/Recipie Inventory/RecipeInventory";
+import ProductMaster from "../Inventory/Inventory_Master/productMaster/ProductMaster";
+import CategoryMaster from "../Inventory/Inventory_Master/CategoryMaster/CategoryMaster";
+import MesurementDetails from "../Inventory/Inventory_Master/measurementDetails/MesurementDetails";
+import TaxMaster from "../Inventory/Inventory_Master/TaxMater/TaxMaster";
 
 function MainPage() {
   const navigate = useNavigate();
@@ -492,7 +496,14 @@ function MainPage() {
 
             <Route path="/delivery-manager" element={<DeliveryManager />} />
             <Route path="/inventory" element={<Inventory />} >
-              <Route path="masters" element={<Master />} />
+              <Route path="masters" element={<Master />}>
+                <Route path="ProductMaster" element={<ProductMaster/>} />
+                <Route path="CategoryMaster" element={<CategoryMaster/>} />
+                <Route path="MeasurementDetails" element={<MesurementDetails/>} />
+                <Route path="TaxMasters" element={<TaxMaster/>} />
+                <Route path="" element={<Master/>}/>
+              </Route>
+
               <Route path="transactions" element={<TransactionMaster />} />
               <Route path="menu-management" element={<MenuManagement />} />
               <Route path="receipe-management" element={<RecipeManagement />} >

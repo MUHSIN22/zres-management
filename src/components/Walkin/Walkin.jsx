@@ -823,7 +823,7 @@ function Walkin({ dataToSendToWlkinPage }) {
                         {" "}
                         {switchOn && (
                           <img
-                            src={`https://zres.clubsoft.co.in/${mainCat.Image}`}
+                            src={`data:image/png;base64,${mainCat.Image}`}
                             alt=""
                           />
                         )}
