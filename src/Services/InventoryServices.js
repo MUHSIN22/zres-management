@@ -418,6 +418,30 @@ export const inventoryServices = {
                 .then(data => { resolve(data) })
                 .catch(err => reject(err))
             })
+        },
+        postMenumanagement: (data) => {
+            return new Promise((resolve, reject) => {
+                fetch(`${BASE_URL}MenuManagement?CMPid=1`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        MenuGroupID:data.MenuCode,
+                        ItemName: data.menuName,
+                        ItemPrice: data.price,
+                        IsActive: data.status,
+                        category:data.CategoryName,
+                        size:data.optionSelected,
+                        Image:data.image,
+                        UserID: 1,
+                        CMPid: 1
+                    })
+                })
+                    .then(res => res.json())
+                    .then(data => { resolve(data) })
+                    .catch(err => reject(err))
+            })
         }
 
 }

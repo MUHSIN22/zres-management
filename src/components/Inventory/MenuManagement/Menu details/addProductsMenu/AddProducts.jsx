@@ -81,7 +81,7 @@ function AddProducts({
     setDataToSend({
       ...dataToSend,
       [e.target.name]: value,
-      Active:checkbox
+      status:checkbox
     });
   };
 
@@ -306,7 +306,7 @@ function AddProducts({
                   <div className="sections">
                     <input
                       type="checkbox"
-                      name="Active"
+                      name="status"
                       id=""
                       checked={editProduct ? dataToSend.status === true : null}
                       onChange={handleAddCategoryToSend}
@@ -318,10 +318,9 @@ function AddProducts({
                   <div className="sections">
                     <input
                       type="checkbox"
-                      name="block"
+                      name="status"
                       id="block"
                       checked={editProduct ? dataToSend.status === false :null}
-                      
                     />
                     <h5>Block</h5>
                   </div>
