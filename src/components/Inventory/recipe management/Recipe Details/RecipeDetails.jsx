@@ -134,7 +134,7 @@ function RecipeDetails() {
                   {
                     // menuByCategory
                     menuByCategory.length>0&&loading!=="loading..."?menuByCategory.map(data=>(
-                    <Link to={`recipe-view/${data.MenuGroupID}-${data.MenuID}`} >
+                    <Link to={`recipe-view/${data.MenuID}`} >
                     <div className="image__and__details__section__wrapper">
                       <div className="image__container">
                         <img
