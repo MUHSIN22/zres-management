@@ -112,28 +112,6 @@ const recipeStructure = {
     LowCarb: 0,
     highFat: 0
   }
-// {
-//   Recipe:{
-//  "MenuID":9,
-//  "RCGroupId":1,
-//  "Preprations":"fdhfbdsh",
-//  "PreprationTime":"ertsrytu",
-//  "CookTime":"10mnts",
-//  "CookingTemp":"100",
-//  "ToolId":1,
-//  "CMPid":1,
-//  "UserID":1,
-//  "DairyFree":1,
-//  "GlutenFree":1,
-//  "Vegtarian":1,
-//  "LowCarb":1,
-//  "highFat":1
-//  },
-//  receipeDetails:[
-//      {"ProdctId":4,"Qty":4,"UOMid":1},
-//      {"ProdctId":8,"Qty":5,"UOMid":1}
-//  ]
-//  }
 
 
 function AddRecipie({ setRecipieDataView, setAddProducts, recipeCategory }) {
@@ -148,14 +126,32 @@ function AddRecipie({ setRecipieDataView, setAddProducts, recipeCategory }) {
   const [enteredIncreadient, setenteredIncreadient] = useState([]);
   const [formSubmitiing, setFormSubmitting] = useState(false);
   const [files, setFiles] = useState([]);
+  const [packingType, setPackingType] = useState([]);
+  const [forPacking,setForPacking] =useState([])
+  const [forTools,setForTools] =useState([])
 
 
+  const handleChangeForPacking = (event) => {
+    const dataArray = event.target.value.map(data=>{
+      return {PackingMaterialId:data}
+    })
+    setForPacking(dataArray)
+    const {
+      target: { value },
+    } = event;
+    console.log(value );
+    setPackingType( typeof value === "string" ? value.split(",") : value )
+  };
 
 
   const handleChange = (event) => {
     const {
       target: { value },
     } = event;
+    const dataArray = event.target.value.map(data=>{
+      return {ToolId:data}
+    })
+    setForTools(dataArray)
     settoolid(
       // On autofill we get a stringified value.
       typeof value === "string" ? value.split(",") : value
@@ -438,6 +434,32 @@ function AddRecipie({ setRecipieDataView, setAddProducts, recipeCategory }) {
                 <h4>Cooking Temp</h4>
               </div>
 
+
+              <div className="recipie__name__section">
+                <FormControl sx={{ m: 1, width: "85%" }}>
+                  <InputLabel id="demo-multiple-checkbox-label">
+                    packing type
+                  </InputLabel>
+                  <Select
+                    labelId="demo-multiple-checkbox-label"
+                    id="demo-multiple-checkbox"
+                    multiple
+                    value={packingType}
+                    onChange={handleChangeForPacking}
+                    input={<OutlinedInput label="Tools and utensils" />}
+                    renderValue={(selected) => selected.join(", ")}
+                    MenuProps={MenuProps}
+                  >
+                    {names.map((name,index) => (
+                      <MenuItem key={name} value={index + 1}>
+                        <Checkbox checked={packingType.indexOf(name) > -1} />
+                        <ListItemText primary={name} />
+                      </MenuItem>
+                    ))}
+                  </Select>
+                </FormControl>
+              </div>
+
               <div className="recipie__name__section">
                 <FormControl sx={{ m: 1, width: "85%" }}>
                   <InputLabel id="demo-multiple-checkbox-label">
@@ -453,8 +475,8 @@ function AddRecipie({ setRecipieDataView, setAddProducts, recipeCategory }) {
                     renderValue={(selected) => selected.join(", ")}
                     MenuProps={MenuProps}
                   >
-                    {names.map((name) => (
-                      <MenuItem key={name} value={name}>
+                    {names.map((name,i) => (
+                      <MenuItem key={name} value={i+1}>
                         <Checkbox checked={toolid.indexOf(name) > -1} />
                         <ListItemText primary={name} />
                       </MenuItem>

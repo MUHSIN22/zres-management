@@ -124,25 +124,35 @@ const datakeyValue = {
 function RecipeInventory() {
   const [toolid, settoolid] = useState([]);
   const [packingType, setPackingType] = useState([]);
+  const [forPacking,setForPacking] =useState([])
+  const [forTools,setForTools] =useState([])
   const [RichTextContent, setRichTextContent] = useState("");
   const [recipeCategory, setRecipeCategory] = useState([]);
   const handleChange = (event) => {
     const {
       target: { value },
     } = event;
+    const dataArray = event.target.value.map(data=>{
+      return {ToolId:data}
+    })
+    setForTools(dataArray)
     settoolid(
       // On autofill we get a stringified value.
       typeof value === "string" ? value.split(",") : value
     );
   };
+
+
   const handleChangeForPacking = (event) => {
+    const dataArray = event.target.value.map(data=>{
+      return {PackingMaterialId:data}
+    })
+    setForPacking(dataArray)
     const {
       target: { value },
     } = event;
-    setPackingType(
-      // On autofill we get a stringified value.
-      typeof value === "string" ? value.split(",") : value
-    );
+    console.log(value );
+    setPackingType( typeof value === "string" ? value.split(",") : value )
   };
   useEffect(() => {
     axios
@@ -176,7 +186,7 @@ function RecipeInventory() {
     setRecipeDataIng(
       [
         ...recipeDataIng, {
-          ProdctId: newArray.length + 1,
+          ProdctId: newArray.length + 6,
           Qty: parseInt(ingredientInput),
           UOMid: 0,
         }
@@ -219,45 +229,40 @@ function RecipeInventory() {
   const editorRef = useRef(null);
   const handleFormSubmitSelction = (e) => {
     e.preventDefault();
-
+    if(recipeDataIng.length === 0 || forTools.length === 0 || forPacking.length === 0 ){
+      alert("please enter the details")
+      return
+    }
     if (editorRef.current) {
       const richValue = editorRef.current.getContent();
       setPrepration(richValue);
-
-      // if (Mainvalues.Preprations === "") {
-      //   window.alert("Preperation empty");
-      // } else {
-      //   window.alert("saved sucess");
-      //   console.log("MAIN VALUE", Mainvalues);
-      // }
     }
-    const data = {
-      Recipe: {
-        MenuID: 0,
-        RCGroupId: parseInt(recipeGroup),
-        Preprations: prepration,
-        PreprationTime: prepTime,
-        CookTime: cookTime,
-        CookingTemp: cookTemp,
-        ToolId: 0,
-        CMPid: 0,
-        UserID: 0,
-        DairyFree: dairyFree,
-        GlutenFree: glutenFree,
-        Vegtarian: vegtarian,
-        LowCarb: lowCarb,
-        highFat: highFat
-      },
-      receipeDetails: recipeDataIng,
-      packingMaterials:packingType
+    const jsonData = {
+    "Recipe":{
+    "MenuID":10,
+    "RCGroupId":parseInt(recipeGroup),
+    "Preprations":prepration,
+    "PreprationTime":prepTime,
+    "CookTime":cookTime,
+    "CookingTemp":cookTemp,
+    "CMPid":1,
+    "UserID":1,
+    "DairyFree":dairyFree,
+    "GlutenFree":glutenFree,
+    "Vegtarian":vegtarian,
+    "LowCarb":lowCarb,
+    "highFat":highFat,
+    "Instructions":"fdfg hgh ghjjj",
+    "Nutritions":"nnkjjjjjjjjjjjjjj"
+    },
+    "receipeDetails":recipeDataIng,
+    "tools":forTools, 
+    "packingMaterials":forPacking
     }
-    axios.post('https://zres.clubsoft.co.in/Recipe?CMPid=1',{
-      headers: {
-          'Content-Type': 'application/json',
-      },
-      data
-  })
-    .then(function (response) {
+    
+    axios.post('https://zres.clubsoft.co.in/Recipe', 
+    jsonData
+  ).then(function (response) {
       console.log(response);
     })
     .catch(function (error) {
@@ -416,9 +421,9 @@ function RecipeInventory() {
                         renderValue={(selected) => selected.join(", ")}
                         MenuProps={MenuProps}
                       >
-                        {packingTypeArray.map((name) => (
-                          <MenuItem key={name} value={name}>
-                            <Checkbox checked={packingType.indexOf(name) > -1} />
+                        {packingTypeArray.map((name,index) => (
+                          <MenuItem key={name} value={index+1}>
+                            <Checkbox checked={packingType.indexOf(name) > -1} /> 
                             <ListItemText primary={name} />
                           </MenuItem>
                         ))}
@@ -442,8 +447,8 @@ function RecipeInventory() {
                         renderValue={(selected) => selected.join(", ")}
                         MenuProps={MenuProps}
                       >
-                        {names.map((name) => (
-                          <MenuItem key={name} value={name}>
+                        {names.map((name,index) => (
+                          <MenuItem key={name} value={index+1}>
                             <Checkbox checked={toolid.indexOf(name) > -1} />
                             <ListItemText primary={name} />
                           </MenuItem>
