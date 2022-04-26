@@ -47,6 +47,7 @@ const purchaseDeatailsFilter = (from,to)=>{
     <>
       {addNewBtn && (
         <PurchaseDetailsAdd
+
           setAddNewBtn={setAddNewBtn}
           setMainTableView={setMainTableView}
         />

@@ -5,7 +5,7 @@ import SucessSnackbars from "../../../../basic components/sucessSidePopup";
 import FailSnackbars from "../../../../basic components/failSnackBar";
 import { inventoryServices } from '../../../../../Services/InventoryServices'
 
-function AddNewTax({ setAddNewBtn, setMainTableView, editTax }) {
+function AddNewTax({ setAddNewBtn, setMainTableView, editTax,status,editable }) {
 
 
   // tax category id
@@ -40,6 +40,14 @@ function AddNewTax({ setAddNewBtn, setMainTableView, editTax }) {
       res => {
         setTaxdrop(res)
       })
+if(status){
+  setDataToSend({
+    TaxCode: editable.TaxCode, 
+    Taxable: editable.Taxable, 
+    TaxPercentage:editable.TaxPercentage, 
+    TypeOfTax: editable.TypeName,
+  })
+}
   }, [])
 
 

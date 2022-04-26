@@ -9,7 +9,8 @@ function TaxMaster() {
   const [data, setData] = useState([])
   const [editTax, setEditTax] = useState();
   const [dropdown, setDropdown] = useState([])
-
+  const [editmode, setEditmode] = useState(false);
+  const [ updatableproducts,setUpdatableProducts]= useState([])
  
 
 
@@ -30,6 +31,8 @@ function TaxMaster() {
           setAddNewBtn={setAddNewBtn}
           setMainTableView={setMainTableView}
           editTax={editTax}
+          editable={updatableproducts}
+          status={editmode}
         />
       )}
 
@@ -62,8 +65,8 @@ function TaxMaster() {
               </svg>
               <h5>New</h5>
             </div>
-            <div onClick={()=>{inventoryServices.getTaxtypedropdown()
-              .then(data => { setDropdown(data) })}} className="different__option">
+            <div onClick={()=>{ inventoryServices.getTaxtypedropdown()
+              .then(data => { setDropdown(data) }); editmode ? setEditmode(false): setEditmode(true)}} className="different__option">
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 width="32.5"
@@ -117,7 +120,11 @@ function TaxMaster() {
                 </thead>
                 <tbody>
                   {data && data.map((tax,index) => (
-                    <tr>
+                    <tr onClick={() => { if(editmode){
+                      setAddNewBtn(true);
+                      setMainTableView(false);
+                      setUpdatableProducts(tax)
+                    }}} >
                       <td>{index+1}</td>
                       <td>{tax.TaxCode}</td>
                       <td>{tax.TypeName === null ? 'No data in api' : tax.TypeName}</td>

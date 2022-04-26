@@ -1,7 +1,27 @@
-import React, { useState } from "react";
+import { data } from "jquery";
+import React, { useEffect, useState } from "react";
+import { crmServices } from "../../../../Services/CrmServices";
 import "./pastOrder.scss";
-function PastOrder() {
+function PastOrder({number}) {
   const [pastOrderClick, setPastOrderClick] = useState(false);
+  const [pastOrder, setPastOrder] = useState([]);
+  const [totalorder,setTotalorder] = useState('')
+  const [totalLoyality,setTotalLoyality] = useState([])
+  const [totalAmount,setTotalAmount] = useState([])
+
+  useEffect(() => {
+    if(number.lenth !== 0){
+    crmServices.getPastorders(number)
+    .then(data => {
+      setPastOrder(data);
+    });
+   
+  
+}
+  }, [])
+ 
+
+ 
   return (
     <>
       <div className="past__orders">
@@ -31,7 +51,7 @@ function PastOrder() {
               <table className="table">
                 <thead>
                   <tr>
-                    <th>Order No</th>
+                    <th >Order No</th>
                     <th>Date and Time</th>
                     <th>Type</th>
                     <th>Time Taken</th>
@@ -42,30 +62,22 @@ function PastOrder() {
                     <th>Loyality</th>
                   </tr>
                 </thead>
+               
                 <tbody>
+                {pastOrder && pastOrder.map((order, index) => (
                   <tr>
-                    <td data-label="oder no">#1485</td>
-                    <td data-label="Date and Time">22 Nov 2021 12.50 PM</td>
-                    <td data-label="Type">Call center-take away</td>
-                    <td data-label="Time Taken">0 min</td>
-                    <td data-label="Amount">OMR 100.00</td>
-                    <td data-label="Status">Delivered</td>
-                    <td data-label="Driver">System</td>
-                    <td data-label="Agent">Amal</td>
-                    <td data-label="Loyality">2</td>
-                  </tr>
+                    <td data-label="oder no">{order.OrderNo}</td>
+                    <td data-label="Date and Time">{order.Date}</td>
+                    <td data-label="Type">{order.Ordertype}</td>
+                    <td data-label="Time Taken">{order.ElapsedTime}</td>
+                    <td data-label="Amount">OMR {order.Amount}</td>
+                    <td data-label="Status">{order.Status}</td>
+                    <td data-label="Driver">{order.DriverName}</td>
+                    <td data-label="Agent">{order.Agent}</td>
+                    <td data-label="Loyality">{order.LoyalityPoint}</td>
+                  </tr>))}
 
-                  <tr>
-                    <td data-label="oder no">#1485</td>
-                    <td data-label="Date and Time">22 Nov 2021 12.50 PM</td>
-                    <td data-label="Type">Call center-take away</td>
-                    <td data-label="Time Taken">0 min</td>
-                    <td data-label="Amount">OMR 100.00</td>
-                    <td data-label="Status">Delivered</td>
-                    <td data-label="Driver">System</td>
-                    <td data-label="Agent">Amal</td>
-                    <td data-label="Loyality">2</td>
-                  </tr>
+    
                 </tbody>
               </table>
 
@@ -82,9 +94,9 @@ function PastOrder() {
                   </thead>
                   <tbody>
                     <tr>
-                      <td>2</td>
-                      <td>157.5</td>
-                      <td className="total_amount">730</td>
+                      <td>{totalorder}</td>
+                      <td>{totalLoyality}</td>
+                      <td className="total_amount">{totalAmount}</td>
                     </tr>
                   </tbody>
                 </table>

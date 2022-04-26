@@ -52,6 +52,9 @@ function AddNew({
   editOption,
   addNewBtn,
   setEditOption,
+  status,
+  editable,
+  
 }) {
 
 
@@ -136,7 +139,27 @@ inventoryServices.getInventorygroupname()
   inventoryServices.getInventoryunitlist().then((res) => {  
     setUnitList(res)
   })
+
+  if(status){
+    setDataToSend({
+      groupID:editable.GroupName,
+      ProductCode:editable.ProductCode,
+      PName:editable.PName,
+      HsnCode:editable.HSNCode,
+      RackNo: editable.RackNo,
+      ShortName:editable.ShortName,
+      MenuBlocked:editable.MenuBlocked,
+      Unit:editable.UOMid,
+      Taxid: editable.Taxid,
+      Cid:editable.Cid,
+      image:editable.Image,
+      ReorderLevel: editable.ReorderLevel,
+      MaxStockLevel:editable.MaxStockLevel,
+      Discount:editable.Discount,
+    })
+  }
 },[])
+
 
 
   const handleAddDataToSend = (evt) => {

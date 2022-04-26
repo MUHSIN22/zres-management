@@ -10,8 +10,9 @@ function AddNewMeasurement({
   setAddNewBtn,
 
   setMainTableView,
-
+status,
   editMesure,
+  editable
 }) {
   const data = {
     Unit: "",
@@ -27,6 +28,7 @@ function AddNewMeasurement({
   const [DataToSend, setDataToSend] = useState('');
 
   const [addSucessfull, setAddSucessfull] = useState(false);
+
 
   console.log(DataToSend)
   const handleSubmit = (e,data) => {
@@ -45,6 +47,16 @@ function AddNewMeasurement({
 
   const handleDeletefunctionss = () => {};
 
+  useEffect(() => {
+   if(status){
+      setDataToSend({
+        Unit: editable.Unit, 
+        Symbol: editable.Symbol, 
+        Discription: editable.Discription
+      })
+   }
+  }, [])
+  
   return (
     <>
       {snackbarSucess && <SucessSnackbars />}

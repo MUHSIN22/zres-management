@@ -1,24 +1,24 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import "./purchaseDetailsAdd.scss";
 import DatePicker from "react-datepicker";
 import moment from "moment";
 import "react-datepicker/dist/react-datepicker.css";
 import FailSnackbars from "../../../../basic components/failSnackBar";
 import SucessSnackbars from "../../../../basic components/sucessSidePopup";
-const mainData = {
-  PrchsId: "",
-  ArrivalDate: "",
-  ArrivalNo: "",
-  InvoiceNo: "",
-  InvoiceDate: "",
-  PaymentType: "",
-  supplierid: "",
-  Address: "",
-  GSTNo: "",
-  GrandTotal: "",
-  ProductsTotal: "",
-  Status: "",
-};
+import { inventoryServices } from "../../../../../Services/InventoryServices";
+// const mainData = {
+//   ArrivalDate: "",
+//   ArrivalNo: "",
+//   InvoiceNo: "",
+//   InvoiceDate: "",
+//   PaymentType: "",
+//   supplierid: "",
+//   Address: "",
+//   GSTNo: "",
+//   GrandTotal: "",
+//   ProductsTotal: "",
+//   Status: "",
+// };
 
 const innerTable = {
   HSNCode: "",
@@ -33,23 +33,24 @@ const innerTable = {
   GST: "",
   TAX: "",
   Name: "",
-  productArray: [],
+
 };
 
 function PurchaseDetailsAdd({ setAddNewBtn, setMainTableView }) {
-  const [invDate, setInventoryDate] = useState(null);
-  const [arrivalDate, setArivalDate] = useState(null);
-  const [expiryDate, setExpiryDate] = useState(null);
+  const [invDate, setInventoryDate] = useState('');
+  const [arrivalDate, setArivalDate] = useState('');
+  const [expiryDate, setExpiryDate] = useState('');
   const [Mainvalues, setMainValues] = useState('');
   const [subData, setSubdata] = useState(innerTable);
   const [dataInTable, setDataInTable] = useState([]);
   const convertDate = moment(expiryDate).format("DD-MM-YYYY");
   const convertedArivalDate = moment(arrivalDate).format("DD-MM-YYYY");
   const convertedinvoiceDate = moment(invDate).format("DD-MM-YYYY");
-
+  const [productmaster,setProductMaster] = useState([])
   const [snackbarSucess, setSnackbarSucess] = useState(false);
   const [snackbarFail, setSnackBarFail] = useState(false);
   const [messageToPassToSnackBar, setMessageToPassToSnackBar] = useState("");
+const [supplier,setSupplier]  = useState([])
 
   const handleArrivalDate = (date) => {
     setArivalDate(date);
@@ -63,7 +64,8 @@ function PurchaseDetailsAdd({ setAddNewBtn, setMainTableView }) {
     setExpiryDate(date);
   };
 
-  const [paymentTypeChecked, setPaymentTypeChecked] = useState("cash");
+  const [paymentTypeChecked, setPaymentTypeChecked] = useState(Mainvalues.PaymentType);
+
   const handlePaymentType = (e) => {
     const checked = e.target.checked;
     const name = e.target.value;
@@ -89,19 +91,19 @@ function PurchaseDetailsAdd({ setAddNewBtn, setMainTableView }) {
       PaymentType: paymentTypeChecked,
       InvoiceDate: convertedinvoiceDate,
       ArrivalDate: convertedArivalDate,
-      productArray: dataInTable,
+      productArray: subData,
     });
   };
 
   const mainFormSubmit = (e) => {
-    if (dataInTable.length == 0) {
-      setSnackBarFail(true);
-      setMessageToPassToSnackBar("Please Add Product");
-      return;
-    }
+    // if (dataInTable.length == 0) {
+    //   setSnackBarFail(true);
+    //   setMessageToPassToSnackBar("Please Add Product");
+    //   return;
+    // }
     e.preventDefault();
     window.alert("form submited");
-    console.log("dataToSend", Mainvalues, dataInTable);
+    console.log("dataToSend:>>>", Mainvalues, dataInTable);
   };
 
   const handleDataforTable = (e) => {
@@ -109,6 +111,7 @@ function PurchaseDetailsAdd({ setAddNewBtn, setMainTableView }) {
     setDataInTable([...dataInTable, subData]);
     setSubdata(innerTable);
   };
+  
 
   const handleEditTableData = (data) => {
     // setValues(data);
@@ -116,21 +119,44 @@ function PurchaseDetailsAdd({ setAddNewBtn, setMainTableView }) {
 
   const HandleUpdateData = (e) => {
     e.preventDefault();
-    // const code = values;
-
-    // const ProductExsit = datainTable.find(
-    //   (items) => items.HsnCode === code.HsnCode
-    // );
-
-    // if (ProductExsit) {
-    //   setDatainTable(
-    //     datainTable.map((item) =>
-    //       item.HsnCode === code.HsnCode ? { ...ProductExsit, code } : item
-    //     )
-    //   );
-    // }
   };
-console.log(mainData)
+
+  useEffect(() => {
+    inventoryServices.getSuppliers()
+    .then(res=>{
+      setSupplier(res)
+    })
+    inventoryServices.getProductdetails()
+    .then(data =>{
+      setProductMaster(data)
+    }).catch(err => console.log(err))
+
+  }, [])
+  
+const subdataUpdate = () =>{
+  if(subData.Productsname !== ''){
+    const data =  productmaster.filter(item => item.PName === subData.Productsname)
+    
+    setSubdata({
+      HSNCode: data[0].HSNCode,
+      BatchNo: data[0].RackNo,
+      Qty: data[0].Quantity,
+      Total: "",
+      Expiry: "",
+      ProdctId: "",
+      FreeQty: "",
+      Rate: "",
+      Discount: "",
+      GST: "",
+      TAX: "",
+      Productsname: "",
+    })
+    }
+}
+
+console.log(subData)
+
+
   return (
     <>
       {snackbarSucess && (
@@ -140,7 +166,7 @@ console.log(mainData)
         <FailSnackbars MessageToPass={messageToPassToSnackBar} />
       )}
       <div className="purchaseDetailsAdds">
-        <div className="headderName">
+        <div  className="headderName">
           <h3>Purchase Entry</h3>
         </div>
 
@@ -225,17 +251,15 @@ console.log(mainData)
               <select
                 id=""
                 name= "supplierid"
-                value={Mainvalues.supplierid}
                 onChange={handleMainData}
                 required
               >
-                <option value="" disabled selected>
-                  pic option
-                </option>
+              <option disabled="true" selected>Select Supplier</option>
+                {supplier && supplier.map((item) => (
+                <option value={item.Value} >
+                 {item.Text}
+                </option>))}
 
-                <option value="1">ram</option>
-                <option value="2">revi</option>
-                <option value="3">kishor</option>
               </select>
             </div>
 
@@ -267,14 +291,18 @@ console.log(mainData)
           <form autoComplete="off" onSubmit={(e) => handleDataforTable(e)}>
             <div className="input__area__Section">
               <div className="left__input__areaa sectionss">
-                <input
-                  type="text"
-                  name="Name"
-                  placeholder="Products"
-                  onChange={handleAddDataToTable}
-                  value={subData.Name}
-                  required
-                />
+                <select
+                name="Productsname"
+                placeholder="Products"
+                onChange={handleAddDataToTable}
+                value={subData.Productsname}
+                required
+
+                >
+                  <option disabled="true" selected>Select Product</option>
+                  {productmaster && productmaster.map((item) => ( 
+                    <option onClick={subdataUpdate} value={item.PName}>{item.PName}</option>))}
+                </select>
                 <input
                   type="text"
                   name="HSNCode"
@@ -498,6 +526,7 @@ console.log(mainData)
               onClick={(e) => {
                 mainFormSubmit(e);
                 handleMainData(e);
+                inventoryServices.postPurchasedetails()
               }}
             >
               Save

@@ -36,5 +36,26 @@ export const crmServices = {
             }).then(res => res.json())
             .catch(err => reject(err))
         })
+    },
+    getRunningorders: (mobile) =>{
+        return new Promise((resolve, reject) => {
+            fetch(`${BASE_URL}Customer/GetRunningOrder?CMPid=1&Phone=${mobile}`)
+            .then(res => res.json())
+            .then(data => resolve(data))
+        })
+    },
+    getPastorders: (mobile) =>{
+        return new Promise((resolve,reject)=>{
+            fetch(`${BASE_URL}Customer/GetPastOrders?CMPid=1&Phone=${mobile}`)
+            .then(res => res.json())
+            .then(data => resolve(data))
+        })
+    },
+    getCustomerinsight : (mobile)=>{
+        return new Promise((resolve, reject) => {
+            fetch(`${BASE_URL}Customer/CustomerInsight?CMPid=1&Phone=${mobile}`)
+            .then(res => res.json())
+            .then(data => resolve(data))
+        })
     }
 } 

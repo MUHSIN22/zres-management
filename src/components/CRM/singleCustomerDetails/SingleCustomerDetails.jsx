@@ -12,10 +12,10 @@ function SingleCustomerDetails({number}) {
       {/* main components */}
       <div className="headder__top__section">
         <CustomerProfileSection number={number}/>
-        <CusomerInsight />
+        <CusomerInsight number={number} />
       </div>
-      <RunningOrder />
-      <PastOrder />
+      <RunningOrder number={number} />
+      <PastOrder  number={number}/>
     </div>
   );
 }
