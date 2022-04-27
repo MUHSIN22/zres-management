@@ -9,6 +9,8 @@ function MesurementDetails() {
   const [dataFromServer, setDataFromServer] = useState([]);
   const [data, setData] = useState([])
   const [editMesure, setEditMeasure] = useState();
+  const [editmode,setEditmode] = useState(false);
+  const [updatableproducts,setUpdatableProducts] = useState([])
 
   useEffect(() => {
     inventoryServices.getMeasurementdeatails()
@@ -27,6 +29,8 @@ function MesurementDetails() {
           setAddNewBtn={setAddNewBtn}
           setMainTableView={setMainTableView}
           editMesure={editMesure}
+          editable={updatableproducts}
+          status={editmode}
         />
       )}
 
@@ -59,7 +63,7 @@ function MesurementDetails() {
               </svg>
               <h5>New</h5>
             </div>
-            <div className="different__option">
+            <div onClick={()=>editmode ? setEditmode(false): setEditmode(true)} className="different__option">
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 width="32.5"
@@ -112,7 +116,11 @@ function MesurementDetails() {
                 </thead>
                 <tbody>
                   {data && data.map((measurement) => (
-                    <tr key={measurement.UOMid}>
+                    <tr onClick={() => { if(editmode){
+                      setAddNewBtn(true);
+                      setMainTableView(false);
+                      setUpdatableProducts(measurement);
+                    }}} key={measurement.UOMid}>
                       <td>{measurement.UOMid}</td>
                       <td>{measurement.Unit}</td>
                       <td>{measurement.Symbol}</td>

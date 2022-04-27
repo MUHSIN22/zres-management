@@ -1,6 +1,17 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
+import { crmServices } from "../../../../Services/CrmServices";
 import "./runningOrder.scss";
-function RunningOrder() {
+function RunningOrder({number}) {
+const [ runningOrder, setRunningOrder ] = useState([]);
+
+  useEffect(() => {
+    if(number.lenth !== 0){
+    crmServices.getRunningorders(number)
+    .then(data => {
+      setRunningOrder(data);
+    })}
+  }, [])
+  
   return (
     <>
       {/* show details */}
@@ -26,22 +37,23 @@ function RunningOrder() {
               </tr>
             </thead>
             <tbody>
+              {runningOrder && runningOrder.map((order, index) => (
               <tr>
-                <td data-label="oder no">#1485</td>
-                <td data-label="Date and Time">22 Nov 2021 12.50 PM</td>
-                <td data-label="Waiting time">5 min</td>
-                <td data-label="Amount">OMR 15000.00</td>
-                <td data-label="Status">New</td>
-                <td data-label="Driver"></td>
+                <td data-label="oder no">{order.OrderNo}</td>
+                <td data-label="Date and Time">{order.Date}</td>
+                <td data-label="Waiting time">{order.WaitingTime}</td>
+                <td data-label="Amount">{order.Amount}</td>
+                <td data-label="Status">{order.Status}</td>
+                <td data-label="Driver">{order.Driver}</td>
                 <td data-label="Agent">Amal</td>
                 <td data-label="Source"></td>
-                <td data-label="Loyality">151.5</td>
+                <td data-label="Loyality">{order.LoyalityPoint}</td>
                 <td data-label="#">
                   <a href="#" className="button">
                     Show Details
                   </a>
                 </td>
-              </tr>
+              </tr>))}
             </tbody>
           </table>
         </div>

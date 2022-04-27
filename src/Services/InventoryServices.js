@@ -336,13 +336,13 @@ export const inventoryServices = {
                     'Content-Type': 'application/json'
                 },
                 body: JSON.stringify({
-                    InvtGid:data.groupID,
+                    InvtGid: data.groupID,
                     ProductCode: data.ProductCode,
                     PName: data.PName,
                     Cid: data.Cid,
                     UOMid: data.Unit,
                     RackNo: data.RackNo,
-                    CreatedBy:"AAA",
+                    CreatedBy: "AAA",
                     MaxStockLevel: data.MaxStockLevel,
                     ReorderLevel: data.ReorderLevel,
                     ShortName: data.ShortName,
@@ -352,96 +352,145 @@ export const inventoryServices = {
                     HSNCode: data.HSNCode,
                     UserID: 1,
                     CMPid: 1,
-                    MenuBlocked:data.MenuBlocked,
+                    MenuBlocked: data.MenuBlocked,
                 })
             })
                 .then(res => res.json())
                 .then(data => { resolve(data) })
                 .catch(err => reject(err))
         }
-        )},
-        postMeasurement  : (data)=>{
-            return new Promise((resolve,reject) => {
-                fetch(`${BASE_URL}UOM?CMPid=1`,{
-                    method:'POST',
-                    headers:{ 'Content-Type':'application/json'},
-                    body:JSON.stringify({
-                        Unit:data.Unit,
-                        Symbol:data.Symbol,
-                        Discription:data.Discription,
-                        UOMDescription:data.Unit,
-                        UserID:1,
-                    })
+        )
+    },
+    postMeasurement: (data) => {
+        return new Promise((resolve, reject) => {
+            fetch(`${BASE_URL}UOM?CMPid=1`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    Unit: data.Unit,
+                    Symbol: data.Symbol,
+                    Discription: data.Discription,
+                    UOMDescription: data.Unit,
+                    UserID: 1,
                 })
+            })
                 .then(res => res.json())
                 .then(data => { resolve(data) })
                 .catch(err => reject(err))
-            }
-                 )
-        },
-
-        postTaxmaster: (data) => {
-            return new Promise((resolve, reject) => {
-                fetch(`${BASE_URL}Tax?CMPid=1`, {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify({
-                        TaxCode: data.TaxCode,
-                        TaxPercentage: data.TaxPercentage,
-                        Taxable: data.Taxable,
-                        TypeOfTax: data.TypeOfTax,
-                        UserID: 1,
-                        CMPid: 1
-                    })
-                })
-                    .then(res => res.json())
-                    .then(data => { resolve(data) })
-                    .catch(err => reject(err))
-            })
-        },
-        
-        getInventorygroupname : ()=>{
-            return new Promise((resolve, reject) => {
-                fetch(`${BASE_URL}INVT_Product/GetInventoryGroupName?CMPid=1`)
-                    .then(res => res.json())
-                    .then(data => { resolve(data) })
-                    .catch(err => reject(err))
-            })
-        },
-
-        getInventoryunitlist : ()=>{
-            return new Promise((resolve, reject) => {
-                fetch(`${BASE_URL}INVT_Product/GetUnit?CMPid=1`)
-                .then(res => res.json())
-                .then(data => { resolve(data) })
-                .catch(err => reject(err))
-            })
-        },
-        postMenumanagement: (data) => {
-            return new Promise((resolve, reject) => {
-                fetch(`${BASE_URL}MenuManagement?CMPid=1`, {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify({
-                        MenuGroupID:data.MenuCode,
-                        ItemName: data.menuName,
-                        ItemPrice: data.price,
-                        IsActive: data.status,
-                        category:data.CategoryName,
-                        size:data.optionSelected,
-                        Image:data.image,
-                        UserID: 1,
-                        CMPid: 1
-                    })
-                })
-                    .then(res => res.json())
-                    .then(data => { resolve(data) })
-                    .catch(err => reject(err))
-            })
         }
+        )
+    },
+
+    postTaxmaster: (data) => {
+        return new Promise((resolve, reject) => {
+            fetch(`${BASE_URL}Tax?CMPid=1`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    TaxCode: data.TaxCode,
+                    TaxPercentage: data.TaxPercentage,
+                    Taxable: data.Taxable,
+                    TypeOfTax: data.TypeOfTax,
+                    UserID: 1,
+                    CMPid: 1
+                })
+            })
+                .then(res => res.json())
+                .then(data => { resolve(data) })
+                .catch(err => reject(err))
+        })
+    },
+
+    getInventorygroupname: () => {
+        return new Promise((resolve, reject) => {
+            fetch(`${BASE_URL}INVT_Product/GetInventoryGroupName?CMPid=1`)
+                .then(res => res.json())
+                .then(data => { resolve(data) })
+                .catch(err => reject(err))
+        })
+    },
+
+    getInventoryunitlist: () => {
+        return new Promise((resolve, reject) => {
+            fetch(`${BASE_URL}INVT_Product/GetUnit?CMPid=1`)
+                .then(res => res.json())
+                .then(data => { resolve(data) })
+                .catch(err => reject(err))
+        })
+    },
+    postMenumanagement: (data) => {
+        return new Promise((resolve, reject) => {
+            fetch(`${BASE_URL}MenuManagement?CMPid=1`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    MenuGroupID: data.MenuCode,
+                    ItemName: data.menuName,
+                    ItemPrice: data.price,
+                    IsActive: data.status,
+                    category: data.CategoryName,
+                    size: data.optionSelected,
+                    Image: data.image,
+                    UserID: 1,
+                    CMPid: 1
+                })
+            })
+                .then(res => res.json())
+                .then(data => { resolve(data) })
+                .catch(err => reject(err))
+        })
+    },
+
+    postPurchasedetails: (main, sub) => {
+        return new Promise((resolve, reject) => {
+            fetch(`${BASE_URL}Purchase?CMPid=1`,{
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+                    body: JSON.stringify({
+                        purchase :{
+                        "PrchsId": 1,
+                           "ArrivalDate": "2022-04-08",
+                           "ArrivalNo": 2,
+                           "InvoiceNo": "P12345",
+                           "InvoiceDate": "2-2-2020",
+                           "PaymentType": "CASH",
+                           "supplierid": 1,
+                           "Address": "OMRR",
+                           "GSTNo": 12,
+                           "Status": "COMPLETED",
+                           "GrandTotal": 300.000,
+                           "TotalDiscount": 29.0,
+                           "UserID": 1,
+                           "TotalPurchase": 2,
+                           "CMPid": 1,
+                           "DebitAccountId": 0,
+                           "CreditAccountId": 0,
+                           "FinancialYearID": 0,
+                           "JRefNo": null,
+                           "JNarration": null,
+                           "supplierName": null,
+                           "Total": 0.0,
+                           "IsChecked": false,
+                           "PaidAmount": 0.0,
+                           "journal": null,
+                           "UserName": "merchandiser",
+                           "CreditNote": "Balance500",
+                           "ReturnType": "Direct"
+                       },
+                      purchaseDeatails:[
+                           {"ProdctId":4,"Qty":3,"FreeQty":0,"Rate":10,"HSNCode":"123","BatchNo":"DSD","Expiry":"2022-02-02","GST":12,"TaxParam":"Qty","Taxid":"1","Total":3434,"UserID":1,"CMPid":1}
+                       ]})}) 
+            .then(res => res.json())
+            .then(data => { resolve(data) })
+            .catch(err => reject(err))
+
+        })
+    }
 
 }

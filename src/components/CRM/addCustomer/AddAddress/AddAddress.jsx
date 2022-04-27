@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { Link } from "react-router-dom";
 import { crmServices } from "../../../../Services/CrmServices"; 
 import "./addAddress.scss";
 
@@ -156,9 +157,11 @@ function AddAddress({handleCloseCusetomerAdd,form}) {
         <hr />
         <div className="save__btn">
         <button onClick={handleSubmit} className="save__Btn">Save</button>
+        <Link to="/mainPage/crm" >
         <button className="cancel__Btn" onClick={handleCloseCusetomerAdd}>
           Cancel
         </button>
+        </Link>
       </div>
       </div>
 
