@@ -32,27 +32,22 @@ const MenuProps = {
 
 // {
 //   Recipe:{
-//  "MenuID":9,
-//  "RCGroupId":1,
-//  "Preprations":"fdhfbdsh",
-//  "PreprationTime":"ertsrytu",
-//  "CookTime":"10mnts",
-//  "CookingTemp":"100",
-//  "ToolId":1,
-//  "Image":"dghsa",
-//  "CMPid":1,
-//  "UserID":1,
-//  "DairyFree":1,
-//  "GlutenFree":1,
-//  "Vegtarian":1,
-//  "LowCarb":1,
-//  "highFat":1
-//  },
-//  receipeDetails:[
-//      {"ProdctId":4,"Qty":4,"UOMid":1},
-//      {"ProdctId":8,"Qty":5,"UOMid":1}
-//  ]
-//  }
+//   "MenuID":10,"RCGroupId":1,"Preprations":"fdhfbdsh","PreprationTime":"ertsrytu","CookTime":"10mnts","CookingTemp":"100","CMPid":1,
+//   "UserID":1,"DairyFree":1,"GlutenFree":1,"Vegtarian":1,"LowCarb":1,"highFat":1,"Instructions":"fdfg hgh ghjjj","Nutritions":"nnkjjjjjjjjjjjjjj"
+// },
+// receipeDetails:[
+//   {"ProdctId":4,"Qty":4,"UOMid":1},
+//   {"ProdctId":3,"Qty":5,"UOMid":1}
+// ],
+// tools:[
+//   {"ToolId":1},
+//   {"ToolId":2}
+// ],
+// packingMaterials:[
+//   {"PackingMaterialId":1},
+//   {"PackingMaterialId":2}
+// ]
+// }
 
 const names = [
   "Oliver Hansen",
@@ -66,6 +61,11 @@ const names = [
   "Virginia Andrews",
   "Kelly Snyder",
 ];
+const packingTypeArray = [
+  "type 1",
+  "type 2",
+  "type 3"
+]
 
 const label = { inputProps: { "aria-label": "Checkbox demo" } };
 
@@ -123,25 +123,43 @@ const datakeyValue = {
 
 function RecipeInventory() {
   const [toolid, settoolid] = useState([]);
+  const [packingType, setPackingType] = useState([]);
+  const [forPacking,setForPacking] =useState([])
+  const [forTools,setForTools] =useState([])
   const [RichTextContent, setRichTextContent] = useState("");
   const [recipeCategory, setRecipeCategory] = useState([]);
   const handleChange = (event) => {
     const {
       target: { value },
     } = event;
+    const dataArray = event.target.value.map(data=>{
+      return {ToolId:data}
+    })
+    setForTools(dataArray)
     settoolid(
       // On autofill we get a stringified value.
       typeof value === "string" ? value.split(",") : value
     );
   };
 
+
+  const handleChangeForPacking = (event) => {
+    const dataArray = event.target.value.map(data=>{
+      return {PackingMaterialId:data}
+    })
+    setForPacking(dataArray)
+    const {
+      target: { value },
+    } = event;
+    console.log(value );
+    setPackingType( typeof value === "string" ? value.split(",") : value )
+  };
   useEffect(() => {
     axios
       .get(
         "https://zres.clubsoft.co.in/RCGroup?CMPid=1"
       )
       .then((res) => {
-        console.log(res.data);
         setRecipeCategory(res.data);
       });
   }, [])
@@ -152,7 +170,7 @@ function RecipeInventory() {
   const [ingredientInput, setIngredientInput] = useState("");
   const [selectUnit, setSelectUnit] = useState("");
   const [newArray, setNewArray] = useState([]);
-  const [recipeDataIng , setRecipeDataIng] = useState([])
+  const [recipeDataIng, setRecipeDataIng] = useState([])
 
   const onAddnewRecipeIngredient = () => {
     setNewArray([
@@ -162,73 +180,94 @@ function RecipeInventory() {
         selectIngredient: selectIngredient,
         ingredientInput: ingredientInput,
         selectUnit: selectUnit,
-       
+
       },
     ]);
     setRecipeDataIng(
       [
-        ...recipeDataIng
+        ...recipeDataIng, {
+          ProdctId: newArray.length + 6,
+          Qty: parseInt(ingredientInput),
+          UOMid: 0,
+        }
       ]
     )
     setSelectIngredient("");
     setSelectUnit("");
     setIngredientInput("");
   };
-  console.log(newArray);
+
+  const packingTypes = [
+    {
+      value: "one",
+      name:"one"
+    },
+    {
+      value: "two",
+      name:"two"
+    },
+  ]
+
+
   const [difficulty, setDifficulty] = useState(0);
   const [prepration, setPrepration] = useState("");
   const [Mainvalues, setMainValues] = useState(datakeyValue);
-  const [recipeGroup , setRecipeGroup] = useState(0)
-  const [prepTime , setPrepTime] = useState("")
-  const [cookTime , setCookTime] = useState("")
-  const [dairyFree , setDairyFree] = useState(0)
-  const [glutenFree , setGlutenFree] = useState(0)
-  const [vegtarian , setVegtarian] = useState(0)
-  const [lowCarb , setLowCarb] = useState(0)
-  const [highFat , setHighFat] = useState(0)
-  const [cookTemp , setCookTemp] = useState("")
+  const [recipeGroup, setRecipeGroup] = useState(0)
+  const [prepTime, setPrepTime] = useState("")
+  const [cookTime, setCookTime] = useState("")
+  const [dairyFree, setDairyFree] = useState(0)
+  const [glutenFree, setGlutenFree] = useState(0)
+  const [vegtarian, setVegtarian] = useState(0)
+  const [lowCarb, setLowCarb] = useState(0)
+  const [highFat, setHighFat] = useState(0)
+  const [cookTemp, setCookTemp] = useState("")
   const [formSubmitiing, setFormSubmitting] = useState(false);
   const handleMainData = () => {
-    
+
   };
-  
+
   const editorRef = useRef(null);
   const handleFormSubmitSelction = (e) => {
     e.preventDefault();
-    
+    if(recipeDataIng.length === 0 || forTools.length === 0 || forPacking.length === 0 ){
+      alert("please enter the details")
+      return
+    }
     if (editorRef.current) {
       const richValue = editorRef.current.getContent();
       setPrepration(richValue);
-      
-      // if (Mainvalues.Preprations === "") {
-        //   window.alert("Preperation empty");
-        // } else {
-          //   window.alert("saved sucess");
-          //   console.log("MAIN VALUE", Mainvalues);
-          // }
-        }
-        const data = {
-          Recipe:{
-            MenuID: 0,
-            RCGroupId: parseInt(recipeGroup),
-            Preprations:prepration,
-            PreprationTime:prepTime,
-            CookTime:cookTime,
-            CookingTemp:cookTemp,
-            ToolId:0,
-            CMPid:0,
-            UserID:0,
-            DairyFree:dairyFree,
-            GlutenFree:glutenFree,
-            Vegtarian:vegtarian,
-            LowCarb:lowCarb,
-            highFat:highFat
-          },
-          receipeDetails:[
-           
-          ],
-        }
-        console.log(data,"data")
+    }
+    const jsonData = {
+    "Recipe":{
+    "MenuID":10,
+    "RCGroupId":parseInt(recipeGroup),
+    "Preprations":prepration,
+    "PreprationTime":prepTime,
+    "CookTime":cookTime,
+    "CookingTemp":cookTemp,
+    "CMPid":1,
+    "UserID":1,
+    "DairyFree":dairyFree,
+    "GlutenFree":glutenFree,
+    "Vegtarian":vegtarian,
+    "LowCarb":lowCarb,
+    "highFat":highFat,
+    "Instructions":"fdfg hgh ghjjj",
+    "Nutritions":"nnkjjjjjjjjjjjjjj"
+    },
+    "receipeDetails":recipeDataIng,
+    "tools":forTools, 
+    "packingMaterials":forPacking
+    }
+    
+    axios.post('https://zres.clubsoft.co.in/Recipe', 
+    jsonData
+  ).then(function (response) {
+      console.log(response);
+    })
+    .catch(function (error) {
+      console.log(error);
+    });
   };
 
   const handleCheckboxSection = (evt) => {
@@ -307,30 +346,30 @@ function RecipeInventory() {
                       name="recipegroupid"
                       id=""
                       value={recipeGroup}
-                      onChange={(e)=>setRecipeGroup(e.target.value)}
+                      onChange={(e) => setRecipeGroup(e.target.value)}
                     >
                       {
-                        recipeCategory.length>0?
-                        recipeCategory.map(data => (
-                          <option value={data.RCGroupId} >
-                            {data.GroupName}
-                          </option>
-                        )):
-                        <option value="" selected disabled>
+                        recipeCategory.length > 0 ?
+                          recipeCategory.map(data => (
+                            <option value={data.RCGroupId} >
+                              {data.GroupName}
+                            </option>
+                          )) :
+                          <option value="" selected disabled>
                             Loading..
-                        </option>
+                          </option>
                       }
 
                     </select>
                   </div>
-
+                
+                  
                   <div className="input__holder">
                     <h5>Name of Dish</h5>
                     <input
                       type="text"
                       name="RecipeName"
                       id=""
-                      value={Mainvalues.RecipeName}
                       onChange={handleMainData}
                     />
                   </div>
@@ -342,7 +381,7 @@ function RecipeInventory() {
                       name="PreprationTime"
                       id=""
                       value={prepTime}
-                      onChange={(e)=>setPrepTime(e.target.value)}
+                      onChange={(e) => setPrepTime(e.target.value)}
                     />
                   </div>
                   <div className="input__holder">
@@ -352,7 +391,7 @@ function RecipeInventory() {
                       name="CookTime"
                       id=""
                       value={cookTime}
-                      onChange={(e)=>setCookTime(e.target.value)}
+                      onChange={(e) => setCookTime(e.target.value)}
                     />
                   </div>
 
@@ -363,8 +402,33 @@ function RecipeInventory() {
                       name="CookingTemp"
                       id=""
                       value={cookTemp}
-                      onChange={(e)=>setCookTemp(e.target.value)}
+                      onChange={(e) => setCookTemp(e.target.value)}
                     />
+                  </div>
+                  <div className="input__holder">
+                    <h5>packing details</h5>
+                    <FormControl sx={{ m: 1, width: 255 }}>
+                      <InputLabel id="demo-multiple-checkbox-label">
+                        Packing Details
+                      </InputLabel>
+                      <Select
+                        labelId="demo-multiple-checkbox-label"
+                        id="demo-multiple-checkbox"
+                        multiple
+                        value={packingType}
+                        onChange={handleChangeForPacking}
+                        input={<OutlinedInput label="Packing Type" />}
+                        renderValue={(selected) => selected.join(", ")}
+                        MenuProps={MenuProps}
+                      >
+                        {packingTypeArray.map((name,index) => (
+                          <MenuItem key={name} value={index+1}>
+                            <Checkbox checked={packingType.indexOf(name) > -1} /> 
+                            <ListItemText primary={name} />
+                          </MenuItem>
+                        ))}
+                      </Select>
+                    </FormControl>
                   </div>
 
                   <div className="input__holder">
@@ -383,8 +447,8 @@ function RecipeInventory() {
                         renderValue={(selected) => selected.join(", ")}
                         MenuProps={MenuProps}
                       >
-                        {names.map((name) => (
-                          <MenuItem key={name} value={name}>
+                        {names.map((name,index) => (
+                          <MenuItem key={name} value={index+1}>
                             <Checkbox checked={toolid.indexOf(name) > -1} />
                             <ListItemText primary={name} />
                           </MenuItem>
@@ -414,10 +478,10 @@ function RecipeInventory() {
                         name="DairyFree"
                         id=""
                         // checked={dairyFree}
-                        onChange={(e)=>{
-                          if(e.target.checked===true){
+                        onChange={(e) => {
+                          if (e.target.checked === true) {
                             setDairyFree(1)
-                          }else{
+                          } else {
                             setDairyFree(0)
                           }
                         }}
@@ -431,10 +495,10 @@ function RecipeInventory() {
                         name="GlutenFree"
                         id=""
                         // checked={glutenFree}
-                        onChange={(e)=>{
-                          if(e.target.checked===true){
+                        onChange={(e) => {
+                          if (e.target.checked === true) {
                             setGlutenFree(1)
-                          }else{
+                          } else {
                             setGlutenFree(0)
                           }
                         }}
@@ -448,10 +512,10 @@ function RecipeInventory() {
                         name="Vegtarian"
                         id=""
                         // checked={vegtarian}
-                        onChange={(e)=>{
-                          if(e.target.checked===true){
+                        onChange={(e) => {
+                          if (e.target.checked === true) {
                             setVegtarian(1)
-                          }else{
+                          } else {
                             setVegtarian(0)
                           }
                         }}
@@ -465,10 +529,10 @@ function RecipeInventory() {
                         name="LowCarb"
                         id=""
                         // checked={lowCarb}
-                        onChange={(e)=>{
-                          if(e.target.checked===true){
+                        onChange={(e) => {
+                          if (e.target.checked === true) {
                             setLowCarb(1)
-                          }else{
+                          } else {
                             setLowCarb(0)
                           }
                         }}
@@ -482,10 +546,10 @@ function RecipeInventory() {
                         name="highFat"
                         id=""
                         // checked={highFat}
-                        onChange={(e)=>{
-                          if(e.target.checked===true){
+                        onChange={(e) => {
+                          if (e.target.checked === true) {
                             setHighFat(1)
-                          }else{
+                          } else {
                             setHighFat(0)
                           }
                         }}
@@ -550,7 +614,7 @@ function RecipeInventory() {
                       </select>
 
                       <input
-                        type="number" 
+                        type="number"
                         value={ingredientInput}
                         onChange={(e) => setIngredientInput(e.target.value)}
                       />

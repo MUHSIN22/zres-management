@@ -60,7 +60,7 @@ function RecipeManagement() {
                   "option__box " +
                       (path === 2 && "restValue ")
                 }
-                onClick={()=>navigate("recipe-view/1-24")}
+                onClick={()=>navigate("recipe-view/33")}
               >
                 <h5>Recipe View</h5>
               </div>

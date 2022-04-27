@@ -8,23 +8,29 @@ import { useParams } from "react-router-dom";
 import axios from "axios";
 
 function RecipieView() {
-  const [data, setData] = useState({})
+  const [data, setData] = useState([])
+  const [loading, setLoading] = useState("loding..")
   const location = useParams()
   useEffect(() => {
-    const [groupId, menuId] = location.id.split('-')
-    console.log(menuId, groupId);
+    setLoading("loading...")
+    const menuId = location.id
+    console.log(menuId,"id");
     axios
       .get(
-        `https://zres.clubsoft.co.in/WalkIn/GetAllMenuItemByMenuGroupID?MenuGroupID=${groupId}&CMPid=1`
+        `https://zres.clubsoft.co.in/Recipe/GetPRecipeById?MenuId=${menuId}&CMPid=1`
       )
-      .then((res) => {
-        const filteredData = res.data.filter(data => {
-          return data.MenuID === parseInt(menuId)
-        })
-        setData(filteredData[0])
-        console.log(data);
-      });
-  }, [])
+      .then(res=>{
+        setData(res.data);
+        if(!res.data[0]){
+          setLoading("No data")
+        }
+      })
+  },[])
+  if(!data[0]){
+    return (
+      <h1>{loading}</h1>
+    )
+  }
 
   return (
     <div className="RecipieView">
@@ -37,12 +43,12 @@ function RecipieView() {
           <div className="image__section__wrapper">
             <div className="left__wrapper">
               <div className="recipe__name">
-                <h2>{data.ItemName}</h2>
+               { data[0] && <h2>{data[0].ItemName}</h2>}
               </div>
-              <img
-                src={`data:image/png;base64,${data.Image}`}
-                alt={data.ItemName}
-              />
+              { data[0] &&  <img
+                src={`data:image/png;base64,${data[0].Image}`}
+                alt={data[0].ItemName}
+              />}
 
               <div className="background__div"></div>
             </div>
@@ -57,10 +63,10 @@ function RecipieView() {
 
               <div className="image__section__container">
                 <div className="background__div"></div>
-                <img
-                  src={`data:image/png;base64,${data.Image}`}
-                  alt={data.ItemName}
-                />
+                { data[0] &&  <img
+                src={`data:image/png;base64,${data[0].Image}`}
+                alt={data[0].ItemName}
+              />}
               </div>
             </div>
           </div>
@@ -79,25 +85,17 @@ function RecipieView() {
               </div>
               <div className="section">
                 <h2>Instructions</h2>
-                <p>
-                  Place the seaweed on a bamboo mat, then cover the sheet of
-                  seaweed with an even layer of prepared sushi rice. Smooth
-                  gently with the rice paddle. Layer salmon, cream cheese, and
-                  avocado on the rice, and roll it up tightly. Slice with a
-                  sharp knife, and enjoy with soy sauce.
-                </p>
+               {data[0]&& <p>
+                  {data[0].Instructions}
+                </p>}
               </div>
             </div>
             <div className="bottom__section">
               <div className="section">
                 <h2>Nutrition</h2>
-                <p>
-                  calories: 190kcal, carbohydrates: 11g, protein: 10g, fat: 12g,
-                  saturated fat: 5g, cholesterol: 40mg, sodium: 92mg, fiber: 2g,
-                  sugar: 1g Nutrition is estimated using a food database and is
-                  only intended to be used as a guideline for informational
-                  purposes.
-                </p>
+                {data[0] && <p>
+                  {data[0].Nutritions}
+                </p>}
               </div>
             </div>
           </div>
