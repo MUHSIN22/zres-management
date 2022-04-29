@@ -6,7 +6,7 @@ function RunningOrder() {
   useEffect(() => {
 
     axios
-      .get(`${process.env.REACT_APP_BASE_URL}/DineIn/RunningOrders?CMPid=1`)
+      .get(`${process.env.REACT_APP_BASE_URL}DineIn/RunningOrders?CMPid=1`)
       .then((res) => {
         setData(res.data);
       });

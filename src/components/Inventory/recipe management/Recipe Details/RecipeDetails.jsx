@@ -17,7 +17,7 @@ function RecipeDetails() {
     setLoading("loading...")
     axios
     .get(
-      `https://zres.clubsoft.co.in/WalkIn/GetAllMenuItemByMenuGroupID?MenuGroupID=${id}&CMPid=1`
+      `${process.env.REACT_APP_BASE_URL}WalkIn/GetAllMenuItemByMenuGroupID?MenuGroupID=${id}&CMPid=1`
     )
     .then((res) => {
       setMenuByCategory(res.data);
@@ -31,7 +31,7 @@ function RecipeDetails() {
     console.log("entered.............");
     axios
     .get(
-      `https://zres.clubsoft.co.in/Recipe/SearchDish?CMPid=1&DishSearch=${searchItem}`
+      `${process.env.REACT_APP_BASE_URL}Recipe/SearchDish?CMPid=1&DishSearch=${searchItem}`
     )
     .then((res) => {
       setMenuByCategory(res.data);
@@ -44,7 +44,7 @@ function RecipeDetails() {
   useEffect(() => {
     axios
     .get(
-      "https://zres.clubsoft.co.in/RCGroup?CMPid=1"
+      `${process.env.REACT_APP_BASE_URL}RCGroup?CMPid=1`
     )
     .then((res) => {
       setRecipeCategory(res.data);

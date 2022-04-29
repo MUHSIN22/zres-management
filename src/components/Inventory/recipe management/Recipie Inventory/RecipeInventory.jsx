@@ -157,7 +157,7 @@ function RecipeInventory() {
   useEffect(() => {
     axios
       .get(
-        "https://zres.clubsoft.co.in/RCGroup?CMPid=1"
+        `${process.env.REACT_APP_BASE_URL}RCGroup?CMPid=1`
       )
       .then((res) => {
         setRecipeCategory(res.data);
@@ -260,7 +260,7 @@ function RecipeInventory() {
     "packingMaterials":forPacking
     }
     
-    axios.post('https://zres.clubsoft.co.in/Recipe', 
+    axios.post(`${process.env.REACT_APP_BASE_URL}Recipe`, 
     jsonData
   ).then(function (response) {
       console.log(response);

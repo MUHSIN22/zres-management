@@ -73,7 +73,7 @@ function WaitingForCollection({ setCollected, collected }) {
   };
   useEffect(() => {
     axios
-      .get("https://zres.clubsoft.co.in/DeliveryManager/TakeAwayWaitingForCollection?CMPid=1")
+      .get(`${process.env.REACT_APP_BASE_URL}DeliveryManager/TakeAwayWaitingForCollection?CMPid=1`)
       .then((req) => {
         const data = req.data.map((data) => {
           return {

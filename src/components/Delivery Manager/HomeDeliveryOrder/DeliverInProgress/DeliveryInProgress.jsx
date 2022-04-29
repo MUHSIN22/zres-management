@@ -70,7 +70,7 @@ function DeliveryInProgress() {
   useEffect(() => {
     axios
       .get(
-        `${process.env.REACT_APP_BASE_URL}/DeliveryManager/DeliveryInProgress?CMPid=`
+        `${process.env.REACT_APP_BASE_URL}DeliveryManager/DeliveryInProgress?CMPid=`
       )
       .then((req) => {
         const data = req.data.map((data) => {
