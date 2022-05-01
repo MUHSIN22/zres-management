@@ -1,7 +1,10 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import "./addStockAdjustable.scss";
 import ArrowRightIcon from "@mui/icons-material/ArrowRight";
 import ArrowDropDownIcon from "@mui/icons-material/ArrowDropDown";
+import EditableUpdatablePage from "../editableUpdatablePage/EditableUpdatablePage";
+import { inventoryServices } from "../../../../../Services/InventoryServices";
+import { walkinServices } from "../../../../../Services/WalkinServices";
 
 const datas = [
   {
@@ -53,7 +56,8 @@ const datas = [
 function AddStockAdjustment({ setAddNewBtn, setMainTableView }) {
   const [productMoreOption, setProductsMoreOption] = useState(false);
   const [filterData, SetFiterData] = useState([]);
-
+  const [category, setCategory] = useState([])
+  const [productdropdown, setProductdropdown] = useState([])
   // if the data in dropdown is selected the abovr tr must be removed and ne tr must be added
   const [dropdownarrayClicked, setDropDownArrayClicked] = useState(false);
 
@@ -63,6 +67,16 @@ function AddStockAdjustment({ setAddNewBtn, setMainTableView }) {
   };
 
   console.log("THE FILTERED DATA IS ", filterData);
+
+  useEffect(() => {
+    inventoryServices.getStockcost()
+      .then(data => {
+        setProductdropdown(data)
+      })
+
+    walkinServices.getAllcategories()
+      .then(data => { setCategory(data) })
+  }, [])
 
   return (
     <div className="AddStockAdjustment">
@@ -80,10 +94,10 @@ function AddStockAdjustment({ setAddNewBtn, setMainTableView }) {
             </div>
             <div className="input__sections">
               <h5>Category</h5>
-              <select name="" id="">
-                <option value=""></option>
-                <option value=""></option>
-                <option value=""></option>
+              <select name="CategoryId" id="">
+                <option disabled selected>Select Category</option>
+                {category && category.map((item) => (
+                  <option value=""></option>))}
               </select>
             </div>
           </div>
@@ -95,9 +109,11 @@ function AddStockAdjustment({ setAddNewBtn, setMainTableView }) {
             <div className="input__sections">
               <h5>Product Name</h5>
               <select name="" id="">
-                <option value=""></option>
-                <option value=""></option>
-                <option value=""></option>
+                <option selected="true" disabled="disabled">Select Product</option>
+                {productdropdown && productdropdown.map((items) => (
+                  <option value={items.Cid}>
+                    {items.ProductName}
+                  </option>))}
               </select>
             </div>
           </div>

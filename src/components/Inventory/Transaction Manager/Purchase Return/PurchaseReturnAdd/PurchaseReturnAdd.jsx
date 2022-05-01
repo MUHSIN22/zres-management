@@ -1,8 +1,9 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import "./purchaseReturnAdd.scss";
 import Alert from "@mui/material/Alert";
 import Stack from "@mui/material/Stack";
 import DatePicker from "react-datepicker";
+import { inventoryServices } from "../../../../../Services/InventoryServices";
 
 function PurchaseReturnAdd({ setAddNewBtn, setMainTableView }) {
   const defvalue = {
@@ -48,13 +49,8 @@ function PurchaseReturnAdd({ setAddNewBtn, setMainTableView }) {
   const [subFormErrorHandler, setSubFormErrorHandler] = useState(false);
   const [subFormSucessHandler, setSubFormSucessHandler] = useState(false);
   const [paymetType, setPaymentType] = useState("");
-  const handleAddDataToTable = (evt) => {
-    const name = evt.target.value;
-    setValues({
-      ...values,
-      [evt.target.name]: name,
-    });
-  };
+  const [supplier, setSupplier] = useState([])
+  const [productmaster, setProductMaster] = useState([])
 
   const handleMainDataValue = (evt) => {
     const name = evt.target.value;
@@ -65,11 +61,16 @@ function PurchaseReturnAdd({ setAddNewBtn, setMainTableView }) {
       invDate: invDate,
       paymentType: paymetType,
     });
+    setValues({
+      ...values,
+      [evt.target.name]: name,
+    });
   };
+
 
   const handleValidationSubForm = () => {
     let temp = {};
-    temp.Products = values.Products ? "" : "This Field is Required.";
+    temp.Products = values.ProductsId.length ? 0   : "This Field is Required.";
     temp.HsnCode = values.HsnCode ? "" : "This Field is Required.";
     temp.BatchNo = values.BatchNo ? "" : "This Field is Required.";
     temp.Expiry = values.Expiry ? "" : "This Field is Required.";
@@ -135,6 +136,33 @@ function PurchaseReturnAdd({ setAddNewBtn, setMainTableView }) {
       setPaymentType(e.target.value);
     }
   };
+  console.log(mainDataValue, values)
+
+  const subdataUpdate = () => {
+    if (values.ProductsId !== '' ) {
+      const data = productmaster.filter(item => item.ProdctId == values.ProductsId)
+console.log(data)
+
+      setValues({
+        HsnCode: data[0].HSNCode,
+        BatchNo: data[0].RackNo,
+        Qty: data[0].Quantity,
+        ProdctsId: data[0].ProdctId,
+        Discount: data[0].Discount,
+      })
+    } 
+  }
+
+  useEffect(() => {
+    inventoryServices.getSuppliers()
+      .then(res => {
+        setSupplier(res)
+      })
+    inventoryServices.getProductdetails()
+      .then(data => {
+        setProductMaster(data)
+      }).catch(err => console.log(err))
+  }, [])
 
   return (
     <div className="PurchaseReturnAdd">
@@ -196,7 +224,7 @@ function PurchaseReturnAdd({ setAddNewBtn, setMainTableView }) {
             <div className="radioBtn__Section">
               <h5>Payment Type</h5>
               <div className="radio__sec">
-                 {" "}
+                {" "}
                 <input
                   type="radio"
                   id="css"
@@ -205,7 +233,7 @@ function PurchaseReturnAdd({ setAddNewBtn, setMainTableView }) {
                   value="cash"
                   defaultChecked
                 />
-                  <label for="css">Cash</label>
+                <label for="css">Cash</label>
               </div>
 
               <div className="radio__sec">
@@ -216,13 +244,12 @@ function PurchaseReturnAdd({ setAddNewBtn, setMainTableView }) {
                   onChange={handlePaymentType}
                   value="credit"
                 />
-                  <label for="html">Credit</label>
+                <label for="html">Credit</label>
               </div>
             </div>
 
             <div className="input__Sections">
               <h5>Supplier</h5>
-
               <select
                 id=""
                 name="supplier"
@@ -230,9 +257,12 @@ function PurchaseReturnAdd({ setAddNewBtn, setMainTableView }) {
                 onChange={handleMainDataValue}
                 required
               >
-                <option value="ram">ram</option>
-                <option value="revi">revi</option>
-                <option value="kishor">kishor</option>
+                <option disabled="true" selected>Select Supplier</option>
+                {supplier && supplier.map((item) => (
+                  <option value={item.Value} >
+                    {item.Text}
+                  </option>))}
+
               </select>
             </div>
 
@@ -275,46 +305,51 @@ function PurchaseReturnAdd({ setAddNewBtn, setMainTableView }) {
 
             <div className="input__area__Section">
               <div className="left__input__areaa sectionss">
-                <input
-                  type="text"
-                  name="Products"
+                <select
+                  name="ProductsId"
                   placeholder="Products"
-                  onChange={handleAddDataToTable}
-                  value={values.Products}
-                />
+                  onChange={handleMainDataValue}
+                  value={values.ProductsId}
+                  required
+
+                >
+                  <option disabled="true" selected>Select Product</option>
+                  {productmaster && productmaster.map((item) => (
+                    <option onClick={subdataUpdate} value={item.ProdctId}>{item.PName}</option>))}
+                </select>
                 <input
                   type="text"
                   name="HsnCode"
                   placeholder="HSN Code"
-                  onChange={handleAddDataToTable}
+                  onChange={handleMainDataValue}
                   value={values.HsnCode}
                 />
                 <input
                   type="number"
                   name="BatchNo"
                   placeholder="Batch No"
-                  onChange={handleAddDataToTable}
+                  onChange={handleMainDataValue}
                   value={values.BatchNo}
                 />
                 <input
                   type="date"
                   name="Expiry"
                   placeholder="Expiry"
-                  onChange={handleAddDataToTable}
+                  onChange={handleMainDataValue}
                   value={values.Expiry}
                 />
                 <input
                   type="number"
                   name="Qty"
                   placeholder="Qty"
-                  onChange={handleAddDataToTable}
+                  onChange={handleMainDataValue}
                   value={values.Qty}
                 />
                 <input
                   type="number"
                   name="FreeQty"
                   placeholder="Free Qty"
-                  onChange={handleAddDataToTable}
+                  onChange={handleMainDataValue}
                   value={values.FreeQty}
                 />
               </div>
@@ -323,40 +358,40 @@ function PurchaseReturnAdd({ setAddNewBtn, setMainTableView }) {
                   type="number"
                   name="Rate"
                   placeholder="Rate"
-                  onChange={handleAddDataToTable}
+                  onChange={handleMainDataValue}
                   value={values.Rate}
                 />
                 <input
                   type="number"
-                  name="Disc"
-                  placeholder="Disc"
-                  onChange={handleAddDataToTable}
-                  value={values.Disc}
+                  name="Discount"
+                  placeholder="Discount"
+                  onChange={handleMainDataValue}
+                  value={values.Discount}
                 />
                 <input
                   type="text"
                   name="Gst"
                   placeholder="GST"
-                  onChange={handleAddDataToTable}
+                  onChange={handleMainDataValue}
                   value={values.Gst}
                 />
                 <input
                   type="number"
                   name="TaxParam"
                   placeholder="Tax Param"
-                  onChange={handleAddDataToTable}
+                  onChange={handleMainDataValue}
                   value={values.TaxParam}
                 />
                 <input
                   type="number"
                   name="Total"
                   placeholder="Total"
-                  onChange={handleAddDataToTable}
+                  onChange={handleMainDataValue}
                   value={values.Total}
                 />
                 <div className="button__sectionssss">
                   <button onClick={handleDataforTable}>Add Product</button>
-                  <button onClick={HandleUpdateData}>Update</button>
+                  <button onClick={(e)=>{HandleUpdateData(e);inventoryServices.postProductmaster(values)}}>Update</button>
                 </div>
               </div>
             </div>
@@ -384,7 +419,7 @@ function PurchaseReturnAdd({ setAddNewBtn, setMainTableView }) {
               <tbody>
                 {datainTable.map((data, index) => (
                   <tr key={index} onClick={() => handleEditTableData(data)}>
-                    <td>{data?.Products}</td>
+                    <td>{data?.ProductsId}</td>
                     <td>{data?.HsnCode}</td>
                     <td>{data?.BatchNo}</td>
                     <td>{data?.Expiry}</td>
@@ -520,14 +555,14 @@ function PurchaseReturnAdd({ setAddNewBtn, setMainTableView }) {
           <div className="bottom__btn__section">
             <button
               type="submit"
-              // onClick={() => {
-              //   setAddNewBtn(false);
-              //   setMainTableView(true);
-              // }}
+            // onClick={() => {
+            //   setAddNewBtn(false);
+            //   setMainTableView(true);
+            // }}
             >
               Save
             </button>
-            <button>Print</button>
+            <button onClick={()=>window.print()}>Print</button>
             <button
               onClick={() => {
                 setAddNewBtn(false);

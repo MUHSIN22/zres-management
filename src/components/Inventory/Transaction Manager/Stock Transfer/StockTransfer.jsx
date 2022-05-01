@@ -15,6 +15,8 @@ function StockTransfer() {
   const [branch, setBranch] = useState("")
   const [clickedTr, SetClickedTr] = useState("");
   const [branchdata, setBranchdata] = useState("")
+  const [editmode,setEditmode] = useState(false)
+  const [updatableProducts, setUpdatableProducts] = useState([])
 
   const stockTransferFilter = (from, to, branch) => {
     if (from && to && branch) {
@@ -42,6 +44,8 @@ function StockTransfer() {
         <StockTransferAdd
           setAddNewBtn={setAddNewBtn}
           setMainTableView={setMainTableView}
+          status={editmode}
+          editable={updatableProducts}
         />
       )}
 
@@ -79,7 +83,7 @@ function StockTransfer() {
                 </svg>
                 <h5>New</h5>
               </div>
-              <div className="different__option">
+              <div onClick={()=>{ (editmode) ? setEditmode(false) : setEditmode(true) }} className="different__option">
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
                   width="32.5"
@@ -196,7 +200,11 @@ function StockTransfer() {
                     <tr
                       keys={index + 1}
                       className={clickedTr === index + 1 && "selectedTr "}
-                      onClick={() => SetClickedTr(index + 1)}
+                      onClick={() =>{ SetClickedTr(index + 1); if(editmode){
+                        setAddNewBtn(true);
+                        setMainTableView(false);
+                        setUpdatableProducts(datas)
+                      }}}
                     >
                       <td>
                         <input type="checkbox" name="" id="" />
@@ -275,7 +283,7 @@ function StockTransfer() {
                   )):"No data found"}
                 </tbody>
               </table>
-            </div>
+            </div>  
           </div>
         </div>
       )}

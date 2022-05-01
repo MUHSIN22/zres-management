@@ -46,6 +46,7 @@ if(status){
     Taxable: editable.Taxable, 
     TaxPercentage:editable.TaxPercentage, 
     TypeOfTax: editable.TypeName,
+  
   })
 }
   }, [])

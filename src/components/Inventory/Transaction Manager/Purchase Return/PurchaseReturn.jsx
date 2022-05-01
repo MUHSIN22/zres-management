@@ -12,31 +12,43 @@ function PurchaseReturn() {
 
   const [fromDate, setFromDate] = useState("");
   const [toDate, setToDate] = useState("");
-
+  const [editmode, setEditmode] = useState(false)
+  const [updatableProducts, setUpdatableProducts] = useState([])
   const [clickedTr, SetClickedTr] = useState("");
-  const [data,setData] = useState([])
+  const [total,setTotal] = useState('')
+  const [data, setData] = useState([])
   const DateFilter = () => {
     var FromdateSplit = fromDate.split("/");
     var toDateSplit = toDate.split("/");
   };
 
-  const purchasereturnFilter = (from,to)=>{
-    inventoryServices.getPurchasereturnFilter(from,to).then(data=>{
+  const purchasereturnFilter = (from, to) => {
+    inventoryServices.getPurchasereturnFilter(from, to).then(data => {
       setData(data)
     }).catch(err => console.log(err))
+  }
+  const totalAmount = ()=>{
+    let total = 0
+    data.map(item=>{
+      total = total + item.Amount
+    })
+    setTotal(total)
   }
 
   useEffect(() => {
     inventoryServices.getPurchasereturn()
-    .then(data => { setData(data)})
-    .catch(err => console.log(err))
-  },[])
+      .then(data => { setData(data) })
+      .catch(err => console.log(err));
+      totalAmount()
+  }, [])
   return (
     <>
       {addNewBtn && (
         <PurchaseReturnAdd
           setAddNewBtn={setAddNewBtn}
           setMainTableView={setMainTableView}
+          status={editmode}
+          editable={updatableProducts}
         />
       )}
 
@@ -74,7 +86,7 @@ function PurchaseReturn() {
                 </svg>
                 <h5>New</h5>
               </div>
-              <div className="different__option">
+              <div onClick={() => { (editmode) ? setEditmode(false) : setEditmode(true) }} className="different__option">
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
                   width="32.5"
@@ -136,7 +148,7 @@ function PurchaseReturn() {
                 />
               </div>
 
-              <div onClick={()=>purchasereturnFilter(fromDate,toDate)} className="search__Section">
+              <div onClick={() => purchasereturnFilter(fromDate, toDate)} className="search__Section">
                 <button>Search</button>
               </div>
             </div>
@@ -156,18 +168,21 @@ function PurchaseReturn() {
                   </tr>
                 </thead>
                 <tbody>
-                  {data[0] ? data.map((datas,index) => (
+                  {data[0] ? data.map((datas, index) => (
                     <tr
                       keys={datas.PRid}
-                      className={clickedTr === datas.index+1 && "selectedTr "}
-                      onClick={() => SetClickedTr(datas.index+1)}
+                      className={clickedTr === datas.index + 1 && "selectedTr "}
+                      onClick={() => {
+                        SetClickedTr(datas.index + 1); if (editmode){ setAddNewBtn(true);setMainTableView(false);setUpdatableProducts(datas)}
+                      }}
+
                     >
                       <td
                         className={
                           datas.ReturnType === "Expiry Return" && "Canceled "
                         }
                       >
-                        {index+1}
+                        {index + 1}
                       </td>
                       <td
                         className={
@@ -227,7 +242,7 @@ function PurchaseReturn() {
                         {datas.UserName === null | '' ? 'No data available' : datas.UserName}
                       </td>
                     </tr>
-                  )):"No data found"}
+                  )) : "No data found"}
                 </tbody>
               </table>
             </div>
@@ -242,7 +257,7 @@ function PurchaseReturn() {
                 <h5>Total Amount</h5>
 
                 <div className="amount__holder">
-                  <h5>14000.00</h5>
+                  <h5>{(total.length === 0) ? 0 : total}</h5>
                 </div>
               </div>
             </div>
