@@ -1,3 +1,5 @@
+import { data } from "jquery";
+
 const BASE_URL = process.env.REACT_APP_BASE_URL;
 
 export const inventoryServices = {
@@ -445,52 +447,78 @@ export const inventoryServices = {
         })
     },
 
-    postPurchasedetails: (main, sub) => {
+    postPurchasedetails: (data) => {
         return new Promise((resolve, reject) => {
-            fetch(`${BASE_URL}Purchase?CMPid=1`,{
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-                    body: JSON.stringify({
-                        purchase :{
-                        "PrchsId": 1,
-                           "ArrivalDate": "2022-04-08",
-                           "ArrivalNo": 2,
-                           "InvoiceNo": "P12345",
-                           "InvoiceDate": "2-2-2020",
-                           "PaymentType": "CASH",
-                           "supplierid": 1,
-                           "Address": "OMRR",
-                           "GSTNo": 12,
-                           "Status": "COMPLETED",
-                           "GrandTotal": 300.000,
-                           "TotalDiscount": 29.0,
-                           "UserID": 1,
-                           "TotalPurchase": 2,
-                           "CMPid": 1,
-                           "DebitAccountId": 0,
-                           "CreditAccountId": 0,
-                           "FinancialYearID": 0,
-                           "JRefNo": null,
-                           "JNarration": null,
-                           "supplierName": null,
-                           "Total": 0.0,
-                           "IsChecked": false,
-                           "PaidAmount": 0.0,
-                           "journal": null,
-                           "UserName": "merchandiser",
-                           "CreditNote": "Balance500",
-                           "ReturnType": "Direct"
-                       },
-                      purchaseDeatails:[
-                           {"ProdctId":4,"Qty":3,"FreeQty":0,"Rate":10,"HSNCode":"123","BatchNo":"DSD","Expiry":"2022-02-02","GST":12,"TaxParam":"Qty","Taxid":"1","Total":3434,"UserID":1,"CMPid":1}
-                       ]})}) 
-            .then(res => res.json())
-            .then(data => { resolve(data) })
-            .catch(err => reject(err))
+            fetch(`${BASE_URL}Purchase?CMPid=1`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    purchase: {
+                        "ArrivalDate": data.ArrivalDate,
+                        "ArrivalNo": data.ArrivalNo,
+                        "InvoiceNo": data.InvoiceNo,
+                        "InvoiceDate": data.InvoiceDate,
+                        "PaymentType": data.PaymentType,
+                        "supplierid": data.supplierid,
+                        "Address": data.Address,
+                        "GSTNo": data.GSTNo,
+                        "GrandTotal": data.GrandTotal,
+                        "TotalDiscount": data.Discount,
+                        "CMPid": 1,
+                    },
+
+                    purchaseDeatails: [
+                        { "ProdctId": data.ProdctsId, "Qty": data.Qty, "FreeQty": data.FreeQty, "Rate": data.Rate, "HSNCode": data.HSNCode, "BatchNo": data.BatchNo, "Expiry": data.Expiry, "GST": data.GST, "TaxParam": data.TAX, "Total": data.Total, "UserID": 1, "CMPid": 1 }
+                    ]
+                })
+            })
+                .then(res => res.json())
+                .then(data => { resolve(data) })
+                .catch(err => reject(err))
 
         })
-    }
-
+    },
+    postStockadjustment: (data) => {
+        return new Promise((resolve, reject) => {
+            fetch(`${BASE_URL}StockAdjust?CMPid=1`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(
+                    {
+                        "ProdctId": 2,
+                        "BatchNo": "sads",
+                        "QtyAdd": 1,
+                        "QtyDeduct": 2,
+                        "Stock": 5,
+                        "Expiry": "2020-01-01",
+                        "Amount": 20.0,
+                        "Rate": 12.000,
+                        "DeductAmount": 10.0,
+                        "UserID": 1,
+                        "CMPid": 1,
+                        "RefNo": "vgvgh",
+                        "Todate": "2321-01-10",
+                        "ArrivalDate": "2020-01-01"
+                    }
+                )
+            })
+        })
+    },
+        postPurchaseorder :(data) =>{
+            return new Promise((resolve, reject) =>{
+                fetch(`${BASE_URL}PurchaseOrder?CMPid=1`,{
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        
+                    })
+            })
+        })
+    },
 }

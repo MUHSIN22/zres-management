@@ -46,11 +46,11 @@ function PurchaseDetailsAdd({ setAddNewBtn, setMainTableView }) {
   const convertDate = moment(expiryDate).format("DD-MM-YYYY");
   const convertedArivalDate = moment(arrivalDate).format("DD-MM-YYYY");
   const convertedinvoiceDate = moment(invDate).format("DD-MM-YYYY");
-  const [productmaster,setProductMaster] = useState([])
+  const [productmaster, setProductMaster] = useState([])
   const [snackbarSucess, setSnackbarSucess] = useState(false);
   const [snackbarFail, setSnackBarFail] = useState(false);
   const [messageToPassToSnackBar, setMessageToPassToSnackBar] = useState("");
-const [supplier,setSupplier]  = useState([])
+  const [supplier, setSupplier] = useState([])
 
   const handleArrivalDate = (date) => {
     setArivalDate(date);
@@ -74,26 +74,25 @@ const [supplier,setSupplier]  = useState([])
     }
   };
 
-  const handleAddDataToTable = (evt) => {
+
+
+  const handleMainData = (evt) => {
     const value = evt.target.value;
+    setMainValues({
+      ...Mainvalues,
+      [evt.target.name]: value,
+      PaymentType: paymentTypeChecked,
+      InvoiceDate: convertedinvoiceDate,
+      ArrivalDate: convertedArivalDate,
+      productArray: subData,
+    })
     setSubdata({
       ...subData,
       [evt.target.name]: value,
       Expiry: convertDate,
     });
   };
-
-  const handleMainData = (evt) => {
-    const value = evt.target.value;
-    setMainValues({
-      ...Mainvalues,      
-      [evt.target.name]: value,
-      PaymentType: paymentTypeChecked,
-      InvoiceDate: convertedinvoiceDate,
-      ArrivalDate: convertedArivalDate,
-      productArray: subData,
-    });
-  };
+  
 
   const mainFormSubmit = (e) => {
     // if (dataInTable.length == 0) {
@@ -110,8 +109,10 @@ const [supplier,setSupplier]  = useState([])
     e.preventDefault();
     setDataInTable([...dataInTable, subData]);
     setSubdata(innerTable);
+
   };
-  
+ 
+console.log(Mainvalues)
 
   const handleEditTableData = (data) => {
     // setValues(data);
@@ -121,40 +122,41 @@ const [supplier,setSupplier]  = useState([])
     e.preventDefault();
   };
 
+const uploadPurchaseDetails =(data)=>{
+  inventoryServices.postPurchasedetails(data)
+
+}
+
+
+
   useEffect(() => {
     inventoryServices.getSuppliers()
-    .then(res=>{
-      setSupplier(res)
-    })
+      .then(res => {
+        setSupplier(res)
+      })
     inventoryServices.getProductdetails()
-    .then(data =>{
-      setProductMaster(data)
-    }).catch(err => console.log(err))
+      .then(data => {
+        setProductMaster(data)
+      }).catch(err => console.log(err))
 
   }, [])
   
-const subdataUpdate = () =>{
-  if(subData.Productsname !== ''){
-    const data =  productmaster.filter(item => item.PName === subData.Productsname)
-    
-    setSubdata({
-      HSNCode: data[0].HSNCode,
-      BatchNo: data[0].RackNo,
-      Qty: data[0].Quantity,
-      Total: "",
-      Expiry: "",
-      ProdctId: "",
-      FreeQty: "",
-      Rate: "",
-      Discount: "",
-      GST: "",
-      TAX: "",
-      Productsname: "",
-    })
-    }
-}
+  const subdataUpdate = () => {
+    if (subData.ProductsId !== '' ) {
+      const data = productmaster.filter(item => item.ProdctId == subData.ProductsId)
+console.log(data)
 
-console.log(subData)
+      setSubdata({
+        HSNCode: data[0].HSNCode,
+        BatchNo: data[0].RackNo,
+        Qty: data[0].Quantity,
+        ProdctsId: data[0].ProdctId,
+        Discount: data[0].Discount,
+      })
+    }
+  }
+
+
 
 
   return (
@@ -166,7 +168,7 @@ console.log(subData)
         <FailSnackbars MessageToPass={messageToPassToSnackBar} />
       )}
       <div className="purchaseDetailsAdds">
-        <div  className="headderName">
+        <div className="headderName">
           <h3>Purchase Entry</h3>
         </div>
 
@@ -222,7 +224,7 @@ console.log(subData)
             <div className="radioBtn__Section">
               <h5>Payment Type</h5>
               <div className="radio__sec">
-                 {" "}
+                {" "}
                 <input
                   type="radio"
                   id="css"
@@ -230,7 +232,7 @@ console.log(subData)
                   value="cash"
                   onChange={handlePaymentType}
                 />
-                  <label for="css">Cash</label>
+                <label for="css">Cash</label>
               </div>
 
               <div className="radio__sec">
@@ -241,7 +243,7 @@ console.log(subData)
                   value="credit"
                   onChange={handlePaymentType}
                 />
-                  <label for="html">Credit</label>
+                <label for="html">Credit</label>
               </div>
             </div>
 
@@ -250,15 +252,15 @@ console.log(subData)
 
               <select
                 id=""
-                name= "supplierid"
+                name="supplierid"
                 onChange={handleMainData}
                 required
               >
-              <option disabled="true" selected>Select Supplier</option>
+                <option disabled="true" selected>Select Supplier</option>
                 {supplier && supplier.map((item) => (
-                <option value={item.Value} >
-                 {item.Text}
-                </option>))}
+                  <option value={item.Value} >
+                    {item.Text}
+                  </option>))}
 
               </select>
             </div>
@@ -292,22 +294,22 @@ console.log(subData)
             <div className="input__area__Section">
               <div className="left__input__areaa sectionss">
                 <select
-                name="Productsname"
-                placeholder="Products"
-                onChange={handleAddDataToTable}
-                value={subData.Productsname}
-                required
+                  name="ProductsId"
+                  placeholder="Products"
+                  onChange={handleMainData}
+                  value={subData.ProductsId}
+                  required
 
                 >
                   <option disabled="true" selected>Select Product</option>
-                  {productmaster && productmaster.map((item) => ( 
-                    <option onClick={subdataUpdate} value={item.PName}>{item.PName}</option>))}
+                  {productmaster && productmaster.map((item) => (
+                    <option onClick={subdataUpdate} value={item.ProdctId}>{item.PName}</option>))}
                 </select>
                 <input
                   type="text"
                   name="HSNCode"
                   placeholder="HSN Code"
-                  onChange={handleAddDataToTable}
+                  onChange={handleMainData}
                   value={subData.HSNCode}
                   required
                 />
@@ -315,7 +317,7 @@ console.log(subData)
                   type="text"
                   name="BatchNo"
                   placeholder="Batch No"
-                  onChange={handleAddDataToTable}
+                  onChange={handleMainData}
                   value={subData.BatchNo}
                   required
                 />
@@ -339,7 +341,7 @@ console.log(subData)
                   type="number"
                   name="Qty"
                   placeholder="Qty"
-                  onChange={handleAddDataToTable}
+                  onChange={handleMainData}
                   value={subData.Qty}
                   required
                 />
@@ -347,7 +349,7 @@ console.log(subData)
                   type="number"
                   name="FreeQty"
                   placeholder="Free Qty"
-                  onChange={handleAddDataToTable}
+                  onChange={handleMainData}
                   value={subData.FreeQty}
                   required
                 />
@@ -358,14 +360,14 @@ console.log(subData)
                   name="Rate"
                   step="0.01"
                   placeholder="Rate"
-                  onChange={handleAddDataToTable}
+                  onChange={handleMainData}
                   value={subData.Rate}
                 />
                 <input
                   type="number"
                   name="Discount"
                   placeholder="Disc"
-                  onChange={handleAddDataToTable}
+                  onChange={handleMainData}
                   value={subData.Discount}
                   required
                 />
@@ -373,7 +375,7 @@ console.log(subData)
                   type="text"
                   name="GST"
                   placeholder="GST"
-                  onChange={handleAddDataToTable}
+                  onChange={handleMainData}
                   value={subData.GST}
                   required
                 />
@@ -381,7 +383,7 @@ console.log(subData)
                   type="number"
                   name="TAX"
                   placeholder="Tax Param"
-                  onChange={handleAddDataToTable}
+                  onChange={handleMainData}
                   value={subData.TAX}
                   required
                 />
@@ -389,13 +391,13 @@ console.log(subData)
                   type="number"
                   name="Total"
                   placeholder="Total"
-                  onChange={handleAddDataToTable}
+                  onChange={handleMainData}
                   value={subData.Total}
                   required
                 />
                 <div className="button__sectionssss">
                   <button type="submit">Add Product</button>
-                  <button type="button" onClick={HandleUpdateData}>
+                  <button type="button" onClick={(e)=>{HandleUpdateData(e);inventoryServices.postProductmaster(subData)}}>
                     Update
                   </button>
                 </div>
@@ -426,7 +428,7 @@ console.log(subData)
               <tbody>
                 {dataInTable.map((data, index) => (
                   <tr key={index} onClick={() => handleEditTableData(data)}>
-                    <td>{data?.Name}</td>
+                    <td>{data?.ProdctsId}</td>
                     <td>{data?.HSNCode}</td>
                     <td>{data?.BatchNo}</td>
                     <td>{data?.Expiry}</td>
@@ -526,12 +528,12 @@ console.log(subData)
               onClick={(e) => {
                 mainFormSubmit(e);
                 handleMainData(e);
-                inventoryServices.postPurchasedetails()
+                uploadPurchaseDetails(Mainvalues)
               }}
             >
               Save
             </button>
-            <button>Print</button>
+            <button onClick={()=>window.print()}>Print</button>
             <button
               onClick={() => {
                 setAddNewBtn(false);

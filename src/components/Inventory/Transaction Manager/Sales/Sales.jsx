@@ -14,6 +14,11 @@ function Sales() {
   const [data, setData] = useState([])
   const [clickedTr, SetClickedTr] = useState("");
   const [ordertypedata,setOrdertypedata] = useState([])
+  const [totalamount,setTotalAmount] = useState('')
+  const [totalgross,setTotalgross] = useState('')
+  const [netamount,setNetamount] = useState('')
+
+
   const DateFilter = () => {
     var FromdateSplit = fromDate.split("/");
     var toDateSplit = toDate.split("/");
@@ -28,13 +33,40 @@ function Sales() {
   }
   }
 
+  const totalAmount = ()=>{
+    let total = 0
+    data.map(item=>{
+      total = total + item.Amount
+    })
+    setTotalAmount(total)
+  }
+
+  const totalGrossvalue = ()=>{
+    let total = 0
+    data.map(item=>{
+      total = total + item.Gross
+    })
+    setTotalgross(total);
+  }
+
+  const totalNetamount = ()=>{
+    let total = 0
+    data.map(item=>{
+      total = total + item.Net
+    })
+    setNetamount(total);
+  }
+
   useEffect(() => {
     inventoryServices.getSales()
       .then(data => { setData(data) })
       .catch(err => console.log(err))
     inventoryServices.getsaleOrdertype()
     .then(data => { setOrdertype(data) })
-    .catch(err => console.log(err))
+    .catch(err => console.log(err));
+    totalAmount();
+    totalGrossvalue();
+    totalNetamount();
   }, [])
   return (
     <>
@@ -268,7 +300,7 @@ function Sales() {
                 <h5>Total Gross Amount</h5>
 
                 <div className="amount__holder">
-                  <h5>14000.00</h5>
+                  <h5>{(totalgross.length === 0) ? 0 : totalgross}</h5>
                 </div>
               </div>
 
@@ -276,7 +308,7 @@ function Sales() {
                 <h5>Total Amount</h5>
 
                 <div className="amount__holder">
-                  <h5>14000.00</h5>
+                  <h5>{(totalamount.length === 0) ? 0 : totalamount}</h5>
                 </div>
               </div>
 
@@ -284,7 +316,7 @@ function Sales() {
                 <h5>Net Amount</h5>
 
                 <div className="amount__holder">
-                  <h5>14000.00</h5>
+                  <h5>{(netamount.length === 0) ? 0 : netamount}</h5>
                 </div>
               </div>
             </div>

@@ -18,6 +18,9 @@ function PurchaseDetails() {
   const [importPo, setImportPo] = useState(false);
   const [data, setData] = useState([])
   const [clickedTr, SetClickedTr] = useState("");
+  const [editmode,setEditmode] = useState(false);
+  const [updatableproducts,setUpdatableProducts] = useState([])
+  const [total,setTotal] = useState('')
 
   const handleStartDate = (date) => {
     setStartDate(date);
@@ -37,12 +40,24 @@ const purchaseDeatailsFilter = (from,to)=>{
   })
 }
 
+const totalAmount = ()=>{
+  let total = 0
+  data.map(item=>{
+    total = total + item.Amount
+  })
+  setTotal(total)
+}
+
   useEffect(() => {
     inventoryServices.getTransactionproductdeatails()
       .then(data => {
         setData(data)
       }).catch(err => console.log(err))
+      ;totalAmount()
   }, [])
+  console.log(editmode)
+
+
   return (
     <>
       {addNewBtn && (
@@ -50,6 +65,8 @@ const purchaseDeatailsFilter = (from,to)=>{
 
           setAddNewBtn={setAddNewBtn}
           setMainTableView={setMainTableView}
+          status={editmode}
+          editable={updatableproducts}
         />
       )}
 
@@ -99,6 +116,7 @@ const purchaseDeatailsFilter = (from,to)=>{
                 onClick={() => {
                   setAddNewBtn(true);
                   setMainTableView(false);
+
                 }}
               >
                 <svg
@@ -118,7 +136,7 @@ const purchaseDeatailsFilter = (from,to)=>{
                 </svg>
                 <h5>New</h5>
               </div>
-              <div className="different__option">
+              <div onClick={()=>{ (editmode) ?setEditmode(false):setEditmode(true)}} className="different__option">
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
                   width="32.5"
@@ -203,10 +221,15 @@ const purchaseDeatailsFilter = (from,to)=>{
                 </thead>
                 <tbody>
                   {data[0] ? data.map((datas,index) => (
-                    <tr
+                    <tr 
                       keys={datas.id}
                       className={clickedTr === datas.SINO && "selectedTr "}
-                      onClick={() => SetClickedTr(datas.SINO)}
+                      onClick={() => {SetClickedTr(datas.SINO);if(editmode){
+                        setAddNewBtn(true);
+                        setMainTableView(false);
+                        setUpdatableProducts(datas)
+                      } }}
+                      
                     >
                       <td
                         className={datas.Status === "canceled" && "Canceled "}
@@ -278,7 +301,7 @@ const purchaseDeatailsFilter = (from,to)=>{
                 <h5>Total Amount</h5>
 
                 <div className="amount__holder">
-                  <h5>14000.00</h5>
+                  <h5>{(total.length === 0) ? 0 : total}</h5>
                 </div>
               </div>
             </div>
