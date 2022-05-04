@@ -17,7 +17,7 @@ function RecipieView() {
     console.log(menuId,"id");
     axios
       .get(
-        `https://zres.clubsoft.co.in/Recipe/GetPRecipeById?MenuId=${menuId}&CMPid=1`
+        `${process.env.REACT_APP_BASE_URL}Recipe/GetPRecipeById?MenuId=${menuId}&CMPid=1`
       )
       .then(res=>{
         setData(res.data);

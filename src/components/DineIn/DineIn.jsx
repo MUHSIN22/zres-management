@@ -60,7 +60,7 @@ function DineIn({ SetClicked }) {
    const firstNumber = 5*(currentPage-1)
    const lastNumber = (currentPage*5)-1
     axios
-      .get(`${process.env.REACT_APP_BASE_URL}/DineIn/GetAllTablesInDine?CMPid=1`)
+      .get(`${process.env.REACT_APP_BASE_URL}DineIn/GetAllTablesInDine?CMPid=1`)
       .then((res) => {
         const filteredData = res.data.filter((data,index)=>{
           return index >= firstNumber && index <= lastNumber  
@@ -73,7 +73,7 @@ function DineIn({ SetClicked }) {
   }, [currentPage]);
   useEffect(() => {
     axios
-      .get(`${process.env.REACT_APP_BASE_URL}/DineIn/GetAvailableTables?CMPid=1`)
+      .get(`${process.env.REACT_APP_BASE_URL}DineIn/GetAvailableTables?CMPid=1`)
       .then((res) => {
         setGetTableAvailability(res.data);
         setAllTableAvailability(res.data);

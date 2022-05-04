@@ -9,7 +9,7 @@ function Delivered() {
 
   useEffect(() => {
     axios
-      .get(`${process.env.REACT_APP_BASE_URL}/DeliveryManager/GetDriver?CMPid=1`)
+      .get(`${process.env.REACT_APP_BASE_URL}DeliveryManager/GetDriver?CMPid=1`)
       .then((req) => {
         const data = req.data.map((data) => {
           return {
@@ -20,7 +20,7 @@ function Delivered() {
         setDrivers(data);
       });
     axios
-      .get(`${process.env.REACT_APP_BASE_URL}/DeliveryManager/DelivetStatus?CMPid=1`)
+      .get(`${process.env.REACT_APP_BASE_URL}DeliveryManager/DelivetStatus?CMPid=1`)
       .then((req) => {
         setStatusData(req.data);
       });

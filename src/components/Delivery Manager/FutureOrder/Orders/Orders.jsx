@@ -19,7 +19,7 @@ function Orders() {
   useEffect(() => {
     axios
     .get(
-      `${process.env.REACT_APP_BASE_URL}/DeliveryManager/FutureOrders?CMPid=1`
+      `${process.env.REACT_APP_BASE_URL}DeliveryManager/FutureOrders?CMPid=1`
     )
     .then((req) => {
       setOrderData(req.data)

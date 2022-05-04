@@ -10,7 +10,7 @@ function NewOrder() {
   useEffect(() => {
     axios
       .get(
-        `${process.env.REACT_APP_BASE_URL}/DeliveryManager/GetAllNewOrders?CMPid=1`
+        `${process.env.REACT_APP_BASE_URL}DeliveryManager/GetAllNewOrders?CMPid=1`
       )
       .then((res) => {
         setNewOrderData(res.data);
@@ -21,7 +21,7 @@ function NewOrder() {
     setOrderNoData(id)
   }
   const readyButtonHandler = (data) => {
-    axios.post(`${process.env.REACT_APP_BASE_URL}/DeliveryManager/GetAllPickUpOrders?CMPid=1`,data)
+    axios.post(`${process.env.REACT_APP_BASE_URL}DeliveryManager/GetAllPickUpOrders?CMPid=1`,data)
     .then(res=>{
       console.log(res);
     })
