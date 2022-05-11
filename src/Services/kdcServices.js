@@ -31,6 +31,25 @@ export const kdcServices = {
     startOrder : (orderId) => {
         return new Promise((resolve,reject) => {
             fetch(`${BASE_URL}OrdersKDS/StartSettingBtnClick?OrderID=${orderId}&CMPid=1`)
+
+            .then(res => res.json())
+            .then(data => resolve(data))
+            .catch(err => reject(err))
+        })
+    },
+
+    doneOrder : (orderId) => {
+        return new Promise((resolve,reject) => {
+            fetch(`${BASE_URL}OrdersKDS/DoneSettingBtnClick?${orderId}&CMPid=1`)
+            .then(res => res.json())
+            .then(data => resolve(data))
+            .catch(err => reject(err))
+        })
+    },
+
+    doneOrder : (orderId) => {
+        return new Promise((resolve,reject) => {
+            fetch(`${BASE_URL}OrdersKDS/PrioritySettingBtnClick?${orderId}&CMPid=1`) 
             .then(res => res.json())
             .then(data => resolve(data))
             .catch(err => reject(err))

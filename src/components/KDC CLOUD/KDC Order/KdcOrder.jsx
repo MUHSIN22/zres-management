@@ -30,9 +30,20 @@ function KdcOrder() {
       .catch(err => console.log(err))
   }, [])
 
-  const handleDoneBtn = () => {
+  const handleDoneBtn = (orderID) => {
     setPressItem(false);
+    kdcServices.doneOrder(orderID)
+      .then(res => {
+        console.log(res);
+      })
   };
+
+  const handlePriorityBtn = (orderID) => {
+    kdcServices.doneOrder(orderID)
+    .then(res => {
+      console.log(res);
+    })
+  }
 
   return (
     <div className="kdcorder">
@@ -48,7 +59,7 @@ function KdcOrder() {
                 <div
                   className={
                     "differnt__oder__list " +
-                    (item.Status === "PRIORITY" ? "order-card-priority " : (item.Status === "PENDING") ? "order-card-pending " : (item.Status === "COOKING") ? 'order-card-cooking ' : '') +
+                    (item.OrderStatus === "PRIORITY" ? "order-card-priority " : (item.OrderStatus === "PENDING") ? "order-card-pending " : (item.OrderStatus === "COOKING") ? 'order-card-cooking ' : '') +
                     (selectedId === index && blikerOn && "bliker__active")
                   }
                   onClick={() => {
@@ -62,8 +73,8 @@ function KdcOrder() {
                   {selectedId === index && pressItem !== false && (
                     <div className="overLayer__section">
                       <button className="startBtn" onClick={() => handleStartBtn(item.OrderID)}>Start</button>
-                      <button onClick={() => handleDoneBtn()}>Done</button>
-                      <button className="startBtn priorityBtn">Priority</button>
+                      <button onClick={() => handleDoneBtn(item.OrderID)}>Done</button>
+                      <button className="startBtn priorityBtn" onClick={() => handlePriorityBtn(item.OrderID)}>Priority</button>
                     </div>
                   )}
 
@@ -80,7 +91,7 @@ function KdcOrder() {
                     </div>
 
                     <div className="infosections">
-                      <p>Table 4</p>
+                      <p>Table {item.TableNumber}</p>
                       <p>#{item.OrderID}</p>
                     </div>
 

@@ -49,10 +49,21 @@ const Date = [
 function OpeningBalance() {
   const [clickedTr, SetClickedTr] = useState("");
   const [openingBalance,setOpeningBalance] = useState([]);
+  const [totalCredit,setTotalCredit] = useState(0);
+  const [totalDebit,setTotalDebit] = useState(0);
 
   useEffect(()=>{
     accountServices.getOpeningBalance()
-    .then(data => setOpeningBalance(data))
+    .then(data => {
+      let td = 0,tc = 0;
+      setOpeningBalance(data)
+      data.forEach((item) => {
+        td += item.Debit;
+        tc += item.Credit;
+      })
+      setTotalCredit(tc);
+      setTotalDebit(td)
+    })
     .catch(err => console.log(err))
   },[])
 
@@ -264,11 +275,11 @@ function OpeningBalance() {
                   onClick={() => SetClickedTr(item.OBid)}
                 >
                   <td>{item.OBid}</td>
-                  <td>{item.OBid}</td>
-                  <td>Metro super market</td>
-                  <td></td>
-                  <td>5000</td>
-                  <td>5200</td>
+                  <td>{item.AccCode}</td>
+                  <td>{item.AccName}</td>
+                  <td>{item.Narration}</td>
+                  <td>{item.Debit}</td>
+                  <td>{item.Credit}</td>
                 </tr>
               ))}
             </tbody>
@@ -279,8 +290,8 @@ function OpeningBalance() {
                 <td></td>
                 <td></td>
                 <td></td>
-                <td style={{ backgroundColor: "#C0C0C0" }}>1752</td>
-                <td style={{ backgroundColor: "#C0C0C0" }}>2100</td>
+                <td style={{ backgroundColor: "#C0C0C0" }}>{totalDebit}</td>
+                <td style={{ backgroundColor: "#C0C0C0" }}>{totalCredit}</td>
               </tr>
             </tfoot>
           </table>

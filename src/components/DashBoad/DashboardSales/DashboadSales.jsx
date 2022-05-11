@@ -64,9 +64,9 @@ function DashboadSales() {
       .then(res => {
         setAllData(res)
         setChartOfSales([
-          { name: "Sales", value: res.ChartOfSales[0].Sale },
-          { name: "Purchase", value: res.ChartOfSales[0].Purchase },
-          { name: "Gross Profit", value: res.ChartOfSales[0].GrossProfit },
+          { name: "Sales", value: res.ChartOfSales[0]?.Sale },
+          { name: "Purchase", value: res.ChartOfSales[0]?.Purchase  },
+          { name: "Gross Profit", value: res.ChartOfSales[0]?.GrossProfit },
         ])
       })
       .catch(err => console.log(err))
@@ -88,9 +88,9 @@ function DashboadSales() {
       .then(res => {
         setAllData(res);
         setChartOfSales([
-          { name: "Sales", value: res.ChartOfSales[0].Sale },
-          { name: "Purchase", value: res.ChartOfSales[0].Purchase },
-          { name: "Gross Profit", value: res.ChartOfSales[0].GrossProfit },
+          { name: "Sales", value: res.ChartOfSales[0]?.Sale },
+          { name: "Purchase", value: res.ChartOfSales[0]?.Purchase },
+          { name: "Gross Profit", value: res.ChartOfSales[0]?.GrossProfit },
         ])
       })
   }, [])
