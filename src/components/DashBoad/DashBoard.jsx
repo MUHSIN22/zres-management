@@ -15,6 +15,7 @@ import Menu from "@mui/material/Menu";
 import MenuItem from "@mui/material/MenuItem";
 import { Link, Outlet, Route, Routes, useNavigate } from "react-router-dom";
 import { EssentialContext } from "../../Data manager/EssentialContext";
+import { dashboardServices } from "../../Services/DashboardServices";
 
 const masterCategiry = [
   {
@@ -44,8 +45,8 @@ const masterCategiry = [
 function DashBoard() {
   const navigate = useNavigate();
   const [dateTimePopup, setDateTimePopup] = useState(false);
-  const [startDate, setStartDate] = useState(null);
-  const [toDate, setToDate] = useState(null);
+  const [startDate, setStartDate] = useState(new Date().toDateString());
+  const [toDate, setToDate] = useState(new Date().toISOString());
 
   const [categoryID, setCategoryID] = useState("");
   const [subCategoryCss, setSubCategoryCss] = useState("firstValue");
@@ -64,7 +65,7 @@ function DashBoard() {
   const handleClick = (event) => {
     setAnchorEl(event.currentTarget);
   };
-  const handleClose = () => {
+  const handleClose = (type) => {
     setAnchorEl(null);
   };
 
@@ -138,123 +139,6 @@ function DashBoard() {
       {/* PRODUCT MASTER SECTION */}
 
       <div className="master__body__section">
-        <div className="headder__div__section">
-          {dateTimePopup && (
-            <div className="date__popup__section">
-              <div className="DATE__SECTION__WRAPPER">
-                <div className="left__date dateSectionss">
-                  <h4>From Date</h4>
-                  <DatePicker
-                    selected={startDate}
-                    onChange={(date) => handleStartDate(date)}
-                    dateFormat={"dd/MM/yyyy"}
-                    isClearable
-                    placeholderText="DD/MM/YYYY"
-                  />
-                </div>
-                <div className="right__date dateSectionss">
-                  <h4>To Date</h4>
-                  <DatePicker
-                    selected={toDate}
-                    onChange={(date) => handleToDate(date)}
-                    dateFormat={"dd/MM/yyyy"}
-                    minDate={startDate}
-                    isClearable
-                    placeholderText="DD/MM/YYYY"
-                  />
-                </div>
-              </div>
-              <div className="BTN__SECTIONS">
-                <button className="apply__btn">Apply</button>
-                <button onClick={() => setDateTimePopup(!dateTimePopup)}>
-                  Cancel
-                </button>
-              </div>
-            </div>
-          )}
-
-          <div className="left__side__type">
-            {/* <select name="" id="">
-              <option value="">All Order Types</option>
-              <option value=""></option>
-              <option value=""></option>
-            </select> */}
-
-            <div>
-              <Button
-                id="basic-button"
-                aria-controls={open ? "basic-menu" : undefined}
-                aria-haspopup="true"
-                aria-expanded={open ? "true" : undefined}
-                onClick={handleClick}
-                color="secondary"
-                variant="contained"
-              >
-                {selectedDropdown}
-              </Button>
-              <Menu
-                id="basic-menu"
-                anchorEl={anchorEl}
-                open={open}
-                onClose={handleClose}
-                MenuListProps={{
-                  "aria-labelledby": "basic-button",
-                }}
-              >
-                <MenuItem
-                  disabled={
-                    selectedDropdown === "All Order Type" && ("true" || "false")
-                  }
-                  defaultValue=""
-                  onClick={() => {
-                    handleClose();
-                    setSelectedDropdown("All Order Type");
-                  }}
-                >
-                  All Order Type
-                </MenuItem>
-                <MenuItem
-                  disabled={
-                    selectedDropdown === "WalkIn" && ("true" || "false")
-                  }
-                  onClick={() => {
-                    handleClose();
-                    setSelectedDropdown("WalkIn");
-                  }}
-                >
-                  WalkIn
-                </MenuItem>
-                <MenuItem
-                  disabled={
-                    selectedDropdown === "DineIn" && ("true" || "false")
-                  }
-                  onClick={() => {
-                    handleClose();
-                    setSelectedDropdown("DineIn");
-                  }}
-                >
-                  DineIn
-                </MenuItem>
-              </Menu>
-            </div>
-          </div>
-
-          <div className="right___side__date__section">
-            <CalendarTodayIcon />
-            <h5>Today:</h5>
-            <h5>
-              {" "}
-              {startDate === null ? " " : moment(startDate).format("LL")} -
-              {toDate === null ? "" : moment(toDate).format("LL")}{" "}
-            </h5>
-
-            <KeyboardArrowDownIcon
-              style={{ cursor: "pointer" }}
-              onClick={() => setDateTimePopup(!dateTimePopup)}
-            />
-          </div>
-        </div>
-
         {/* dashboard items appears below on clicking sub categories */}
         <Outlet />
       </div>

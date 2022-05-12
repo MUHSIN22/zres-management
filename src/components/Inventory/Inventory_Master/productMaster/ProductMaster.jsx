@@ -9,12 +9,17 @@ function ProductMaster() {
   const [selectedTr, setSelectedTr] = useState({});
   const [editOption, setEditOption] = useState(false);
   const [data,setData] = useState([])
+  const [editmode,setEditmode] = useState(false);
+  const [editabledata,setEditabledata] = useState([])
 
   useEffect(() => {
     inventoryServices.getProductdetails()
     .then(data =>{
       setData(data)
     }).catch(err => console.log(err))
+    
+  
+
   },[])
 
   return (
@@ -30,6 +35,8 @@ function ProductMaster() {
           editOption={editOption}
           dataToEdit={selectedTr}
           setEditOption={setEditOption}
+          status={editmode}
+          editable={editabledata}
         />
       )}
 
@@ -71,7 +78,7 @@ function ProductMaster() {
             {/* edit btn */}
             {selectedTr.length !== 0 && (
               <>
-                <div className="different__option">
+                <div  onClick={()=>editmode ? setEditmode(false): setEditmode(true)} className="different__option">
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
                     width="32.5"
@@ -137,13 +144,18 @@ function ProductMaster() {
                   {data && data.map((product,index)=> (
 
                  
-                  <tr  key={product.ProdctId} style={{ cursor: "pointer" }}>
+                  <tr  onClick={() => { if(editmode){
+                    setAddNewBtn(true);
+                    setMainTableView(false);
+                    setEditabledata(product)
+                  }
+                  }} key={product.ProdctId} style={{ cursor: "pointer" }}>
                     <td >{index + 1 }</td>
-                    <td>4</td>
+                    <td>{product.ProductCode}</td>
                     <td>{product.PName}</td>
                     <td>{product.HSNCode}</td>
                     <td>{product.GroupName ? product.GroupName : 'no Data in api'  }</td>
-                    <td>kg</td>
+                    <td>{product.UOMid}</td>
                     <td>{product.Taxid}</td>
                     <td>{product.ReorderLevel}</td>
                     <td>{product.MaxStockLevel}</td>

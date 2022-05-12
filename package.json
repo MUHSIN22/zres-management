@@ -36,6 +36,7 @@
     "dotenv": "^16.0.0",
     "draft-js": "^0.11.7",
     "faker": "^6.6.6",
+    "firebase": "^9.6.11",
     "jquery": "^3.6.0",
     "jspdf": "^2.5.1",
     "jspdf-autotable": "^3.5.23",

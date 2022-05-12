@@ -1,6 +1,22 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
+import { accountServices } from "../../../../../Services/AccountsServices";
 import "./supplyerPaymentAdd.scss";
 function SupplyerPaymentAdd() {
+  const [suppliers,setSuppliers]  = useState([])
+  const [supplierPayments,setSupplierPayments] = useState([])
+
+  const handleSupplierSelect = (event) => {
+    accountServices.getSupplierPaymentList(event.target.value)
+      .then(res => {setSupplierPayments(res);console.log(res);})
+      .catch(err => console.log(err))
+  }
+
+  useEffect(() => {
+    accountServices.getSuppliers()
+      .then(res => {setSuppliers(res);console.log(res);})
+      .catch(err => console.log(err))
+  },[])
+
   return (
     <div className="SupplyerPaymentAdd">
       <div className="headder__Section">
@@ -56,9 +72,15 @@ function SupplyerPaymentAdd() {
           <div className="diff__input__Section">
             <div className="input__Section">
               <h5>Supplier</h5>
-              <select name="" id="">
-                <option value="">Metro Super Market</option>
-                <option value=""></option>
+              <select name="" id="" onChange={handleSupplierSelect}>
+                <option>Select supplier</option>
+                <>
+                {
+                  suppliers.map((item,index) => (
+                    <option key={index} value={item.Value}>{item.Text}</option>
+                  ))
+                }
+                </>
               </select>
             </div>
 

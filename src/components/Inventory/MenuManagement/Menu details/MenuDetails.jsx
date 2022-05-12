@@ -89,11 +89,15 @@ function MenuDetails() {
   // this use effect is used to refresh the data when sorted
   useEffect(() => {
     setDataTorender(data);
-    inventoryServices.getMenu()
-    .then(data =>{
-      setData(data)
-    })
+  
   }, [data, nameSorting, categorysorting, statusSorting]);
+
+ useEffect(() => {
+  inventoryServices.getMenu()
+  .then(data =>{
+    setData(data)
+  })
+ },[])
 
   const handleDelete = (id) => {
     const newData = data?.filter((item) => item.id !== id);
@@ -135,15 +139,16 @@ function MenuDetails() {
   const SortByStatus = () => {
     if (statusSorting) {
       // decending
+      
       const dataSorted = data.sort((a, b) =>
-        a.Status.toLowerCase() > b.Status.toLowerCase() ? 1 : -1
+        a.IsActive.toLowerCase() > b.IsActive.toLowerCase() ? 1 : -1
       );
       setStatusSorting(false);
       setData(dataSorted);
     } else {
       //  ascending
       const dataSorted = data.sort((a, b) =>
-        a.Status.toLowerCase() < b.Status.toLowerCase() ? 1 : -1
+        a.IsActive.toLowerCase() < b.IsActive.toLowerCase() ? 1 : -1
       );
       setData(dataSorted);
     }
@@ -266,10 +271,7 @@ function MenuDetails() {
                       {!statusSorting ? (
                         <ArrowDropUpIcon
                           style={{ cursor: "pointer" }}
-                          onClick={() => {
-                            SortByStatus();
-                            setStatusSorting(true);
-                          }}
+                        
                         />
                       ) : (
                         <ArrowDropDownIcon
@@ -315,7 +317,7 @@ function MenuDetails() {
                           <input type="checkbox" name="" id="" />
                         </td>
                         <td className="ImagettD" data-label="">
-                          <img src={datas.Image} alt="" />
+                          <img src={`data:image/png;base64,${datas.Image}`} alt="" />
                         </td>
 
                         <td colSpan="2">{datas.ItemName}</td>

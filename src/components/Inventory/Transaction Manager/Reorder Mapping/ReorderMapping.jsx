@@ -4,49 +4,7 @@ import { useState } from "react";
 import { useEffect } from "react";
 import { inventoryServices } from "../../../../Services/InventoryServices";
 
-const Date = [
-  {
-    id: 1,
-    SINO: "1",
 
-    RtnNo: "1",
-
-    RtnDate: "25/11/2021",
-
-    InvNo: "10212",
-
-    InvDate: "25/11/2021",
-
-    Amound: 10000,
-
-    Supplier: "Ram",
-
-    ReturnType: "Direct Return",
-
-    UserName: "vivek",
-  },
-
-  {
-    id: 2,
-    SINO: "2",
-
-    RtnNo: "2",
-
-    RtnDate: "25/11/2021",
-
-    InvNo: "10212",
-
-    InvDate: "25/11/2021",
-
-    Amound: 10000,
-
-    Supplier: "Ram",
-
-    ReturnType: "Expiry Return",
-
-    UserName: "vivek",
-  },
-];
 
 function ReorderMapping() {
   const [addNewBtn, setAddNewBtn] = useState(false);
@@ -54,29 +12,19 @@ function ReorderMapping() {
   const [data, setData] = useState([])
   const [fromDate, setFromDate] = useState("");
   const [toDate, setToDate] = useState("");
-
+  const [productname, setProductname] = useState([])
   const [clickedTr, SetClickedTr] = useState("");
 
-  const DateFilter = () => {
-    var FromdateSplit = fromDate.split("/");
-    var toDateSplit = toDate.split("/");
-  };
 
   const [datatoMap, setDatatoMap] = useState([]);
 
-  const filteredData = (from,to)=>{
-    if(from && to)  
-    inventoryServices.getReorderFiltereddata()
-    .then(data=>{
-      setData(data)
-    }).catch(err => console.log(err))
-  }
 
-   useEffect(() => {
-inventoryServices.getReordermapping()
-.then(data => { setData(data) })
-.catch(err => console.log(err))
-  },[])
+
+  useEffect(() => {
+    inventoryServices.getReordermapping()
+      .then(data => { setData(data);setProductname(data) })
+      .catch(err => console.log(err))
+  }, [])
 
   return (
     <>
@@ -132,7 +80,10 @@ inventoryServices.getReordermapping()
               <div className="input__Section">
                 <h5>Product Name</h5>
                 <select name="" id="">
-                  <option value=""></option>
+                  <option disabled="true" selected>Select product Name</option>
+                  {productname && productname.map((item) => (
+                    <option value={item.ProductName}>{item.ProductName}</option>
+                  ))}
                 </select>
               </div>
 
@@ -175,18 +126,18 @@ inventoryServices.getReordermapping()
                   </tr>
                 </thead>
                 <tbody>
-                  {data && data.map((datas,index) => (
+                  {data[0] ? data.map((datas, index) => (
                     <tr
-                      keys={index+1}
-                      className={clickedTr === index+1 && "selectedTr "}
-                      onClick={() => SetClickedTr(index+1)}
+                      keys={index + 1}
+                      className={clickedTr === index + 1 && "selectedTr "}
+                      onClick={() => SetClickedTr(index + 1)}
                     >
                       <td
                         className={
                           datas.ReturnType === "Expiry Return" && "Canceled "
                         }
                       >
-                        {index+1}
+                        {index + 1}
                       </td>
                       <td
                         className={
@@ -284,7 +235,7 @@ inventoryServices.getReordermapping()
                         />
                       </td>
                     </tr>
-                  ))}
+                  )):"No data found"}
                 </tbody>
               </table>
             </div>

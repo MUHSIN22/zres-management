@@ -3,26 +3,21 @@ import "./addNewTax.scss";
 import SucessfullMag from "../../../Transaction Manager/Reports/Stock Cost/clossing stock print/SucessfullMessage/SucessfullMag";
 import SucessSnackbars from "../../../../basic components/sucessSidePopup";
 import FailSnackbars from "../../../../basic components/failSnackBar";
+import { inventoryServices } from '../../../../../Services/InventoryServices'
 
-function AddNewTax({ setAddNewBtn, setMainTableView, editTax }) {
-  const data = {
-    TaxCode: "",
-    TaxPercentage: "",
-    Taxable: false,
-    TypeOfTax: "",
-    TypeName: null,
-    UserID: 1,
-    CMPid: 1,
-  };
+function AddNewTax({ setAddNewBtn, setMainTableView, editTax,status,editable }) {
+
 
   // tax category id
 
   const [hideText, setHideText] = useState(false);
-  const [dataToSend, setDataToSend] = useState(data);
+  const [dataToSend, setDataToSend] = useState('');
   const [addSucessfull, setAddSucessfull] = useState(false);
   const [snackbarSucess, setSnackbarSucess] = useState(false);
   const [snackbarFail, setSnackBarFail] = useState(false);
+  const [taxdrop, setTaxdrop] = useState([])
 
+  console.log(dataToSend)
   const handleDatatoSend = (e) => {
     const value = e.target.value;
     setDataToSend({
@@ -32,11 +27,30 @@ function AddNewTax({ setAddNewBtn, setMainTableView, editTax }) {
     });
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = (e,data) =>{
     e.preventDefault();
-  };
+    inventoryServices.postTaxmaster(data)
+    console.log(data)
+  }
 
-  const handleDeletefunctionss = () => {};
+  const handleDeletefunctionss = () => { };
+
+  useEffect(() => {
+    inventoryServices.getTaxtypedropdown().then(
+      res => {
+        setTaxdrop(res)
+      })
+if(status){
+  setDataToSend({
+    TaxCode: editable.TaxCode, 
+    Taxable: editable.Taxable, 
+    TaxPercentage:editable.TaxPercentage, 
+    TypeOfTax: editable.TypeName,
+  
+  })
+}
+  }, [])
+
 
   return (
     <>
@@ -54,7 +68,7 @@ function AddNewTax({ setAddNewBtn, setMainTableView, editTax }) {
         </div>
 
         <div className="inner__Section">
-          <form action="" onSubmit={(e) => handleSubmit(e)}>
+          <form action="" onSubmit={(e) => handleSubmit(e,dataToSend)}>
             <div className="top__section">
               <div className="tax__code__Section">
                 <div className="input__Section__tax">
@@ -79,7 +93,7 @@ function AddNewTax({ setAddNewBtn, setMainTableView, editTax }) {
                     checked={hideText}
                     onChange={(e) => setHideText(e.target.checked)}
                   />
-                    <label for="html">Hide</label>
+                  <label for="html">Hide</label>
                 </div>
               </div>
 
@@ -123,7 +137,9 @@ function AddNewTax({ setAddNewBtn, setMainTableView, editTax }) {
                   <option value="" disabled selected>
                     Choose Tax
                   </option>
-                  <option value="">Text</option>
+                  {taxdrop && taxdrop.map((item) => (
+
+                    <option value={item.Typeid} >{item.Name}</option>))}
                 </select>
               </div>
 
@@ -134,10 +150,11 @@ function AddNewTax({ setAddNewBtn, setMainTableView, editTax }) {
                       <input
                         type="checkbox"
                         id="Taxable"
+                        name="Taxable"
                         checked={dataToSend.Taxable}
                         onChange={handleDatatoSend}
                       />
-                        <label for="Taxable">Taxable</label>
+                      <label for="Taxable">Taxable</label>
                     </div>
                   </div>
                 </div>

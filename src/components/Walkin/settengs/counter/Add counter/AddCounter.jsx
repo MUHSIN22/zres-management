@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { Link } from "react-router-dom";
 // import SucessfullMag from "../../../Transaction Manager/Reports/Stock Cost/clossing stock print/SucessfullMessage/SucessfullMag";
 import "./addCounter.scss";
 function AddCounter({ setAddNewBtn, setMainTableView }) {
@@ -43,6 +44,7 @@ function AddCounter({ setAddNewBtn, setMainTableView }) {
               <button type="submit">save</button>
               <button type="submit">Delete</button>
               <button type="submit">clear</button>
+         
               <button
                 onClick={() => {
                   setAddNewBtn(false);
@@ -51,6 +53,7 @@ function AddCounter({ setAddNewBtn, setMainTableView }) {
               >
                 Close
               </button>
+          
             </div>
           </form>
         </div>

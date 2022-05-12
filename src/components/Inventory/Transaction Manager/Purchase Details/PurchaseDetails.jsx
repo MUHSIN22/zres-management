@@ -9,51 +9,6 @@ import "react-datepicker/dist/react-datepicker.css";
 import NumberFormat from "react-number-format";
 import { inventoryServices } from "../../../../Services/InventoryServices";
 
-const Data = [
-  {
-    SINO: "1",
-
-    ArrNo: "1",
-
-    ArrDate: "25/11/2021",
-
-    InvNo: "10212",
-
-    InvDate: "25/11/2021",
-
-    Amound: 10000,
-
-    Supplier: "Ram",
-
-    TotalProduct: 5,
-
-    Status: "",
-
-    UserName: "vivek",
-  },
-
-  {
-    SINO: "2",
-
-    ArrNo: "1",
-
-    ArrDate: "25/10/2022",
-
-    InvNo: "10212",
-
-    InvDate: "25/10/2022",
-
-    Amound: 10000,
-
-    Supplier: "Rohit",
-
-    TotalProduct: 5,
-
-    Status: "canceled",
-
-    UserName: "roy",
-  },
-];
 
 function PurchaseDetails() {
   const [startDate, setStartDate] = useState(null);
@@ -63,6 +18,9 @@ function PurchaseDetails() {
   const [importPo, setImportPo] = useState(false);
   const [data, setData] = useState([])
   const [clickedTr, SetClickedTr] = useState("");
+  const [editmode,setEditmode] = useState(false);
+  const [updatableproducts,setUpdatableProducts] = useState([])
+  const [total,setTotal] = useState('')
 
   const handleStartDate = (date) => {
     setStartDate(date);
@@ -75,18 +33,40 @@ function PurchaseDetails() {
 
   console.log(moment(startDate).format("DD/MM/yyyy"));
 
+const purchaseDeatailsFilter = (from,to)=>{
+  inventoryServices.getTransactionproductdeatailsFilter(from,to).then(data=>{
+    
+    setData(data)
+  })
+}
+
+const totalAmount = ()=>{
+  let total = 0
+  data.map(item=>{
+    total = total + item.Amount
+  })
+  setTotal(total)
+}
+
   useEffect(() => {
     inventoryServices.getTransactionproductdeatails()
       .then(data => {
         setData(data)
       }).catch(err => console.log(err))
+      ;totalAmount()
   }, [])
+  console.log(editmode)
+
+
   return (
     <>
       {addNewBtn && (
         <PurchaseDetailsAdd
+
           setAddNewBtn={setAddNewBtn}
           setMainTableView={setMainTableView}
+          status={editmode}
+          editable={updatableproducts}
         />
       )}
 
@@ -136,6 +116,7 @@ function PurchaseDetails() {
                 onClick={() => {
                   setAddNewBtn(true);
                   setMainTableView(false);
+
                 }}
               >
                 <svg
@@ -155,7 +136,7 @@ function PurchaseDetails() {
                 </svg>
                 <h5>New</h5>
               </div>
-              <div className="different__option">
+              <div onClick={()=>{ (editmode) ?setEditmode(false):setEditmode(true)}} className="different__option">
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
                   width="32.5"
@@ -218,7 +199,7 @@ function PurchaseDetails() {
                 />
               </div>
 
-              <div className="search__Section">
+              <div onClick={()=>{purchaseDeatailsFilter(startDate,toDate)}} className="search__Section">
                 <button>Search</button>
               </div>
             </div>
@@ -239,11 +220,16 @@ function PurchaseDetails() {
                   </tr>
                 </thead>
                 <tbody>
-                  {data && data.map((datas,index) => (
-                    <tr
+                  {data[0] ? data.map((datas,index) => (
+                    <tr 
                       keys={datas.id}
                       className={clickedTr === datas.SINO && "selectedTr "}
-                      onClick={() => SetClickedTr(datas.SINO)}
+                      onClick={() => {SetClickedTr(datas.SINO);if(editmode){
+                        setAddNewBtn(true);
+                        setMainTableView(false);
+                        setUpdatableProducts(datas)
+                      } }}
+                      
                     >
                       <td
                         className={datas.Status === "canceled" && "Canceled "}
@@ -297,10 +283,10 @@ function PurchaseDetails() {
                       <td
                         className={datas.Status === "canceled" && "Canceled "}
                       >
-                        {datas.supplierName === null | '' ? 'No supplier available' : datas.SupplierName}
+                        {datas.UserName === null | '' ? 'No Username Available' : datas.UserName}
                       </td>
                     </tr>
-                  ))}
+                  )): "No data found"}
                 </tbody>
               </table>
             </div>
@@ -315,7 +301,7 @@ function PurchaseDetails() {
                 <h5>Total Amount</h5>
 
                 <div className="amount__holder">
-                  <h5>14000.00</h5>
+                  <h5>{(total.length === 0) ? 0 : total}</h5>
                 </div>
               </div>
             </div>

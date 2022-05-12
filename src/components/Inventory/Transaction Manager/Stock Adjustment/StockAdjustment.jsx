@@ -5,59 +5,28 @@ import AddStockAdjustment from "./addStockAdjustable/AddStockAdjustment";
 import EditableUpdatablePage from "./editableUpdatablePage/EditableUpdatablePage";
 import "./stockAdjustment.scss";
 
-const Date = [
-  {
-    SINO: "1",
 
-    RefNo: "1",
-
-    Date: "25/11/2021",
-
-    TotalProduct: "1",
-
-    CreatedBy: "Admin",
-
-    CreatedOn: "22/11/2021 3:30 PM",
-  },
-
-  {
-    SINO: "2",
-
-    RefNo: "1",
-
-    Date: "25/11/2021",
-
-    TotalProduct: "1",
-
-    CreatedBy: "Admin",
-
-    CreatedOn: "22/11/2021 3:30 PM",
-  },
-
-  {
-    SINO: "2",
-
-    RefNo: "1",
-
-    Date: "25/11/2021",
-
-    TotalProduct: "1",
-
-    CreatedBy: "Admin",
-
-    CreatedOn: "22/11/2021 3:30 PM",
-  },
-];
 
 function StockAdjustment() {
   const [addNewBtn, setAddNewBtn] = useState(false);
   const [mainTableView, setMainTableView] = useState(true);
   const [data, setData] = useState([])
   const [editableUpdatable, setEditableUpdatable] = useState(false);
+  const [fromDate,setfromDate]= useState('')
+  const [toDate,settoDate]= useState('')
   const [dataStoredForEditableUpdatable, setDataStoredForEditableUpdatable] =
     useState([]);
 
   const [clickedTr, SetClickedTr] = useState("");
+
+  const salesadjustmentFilter = (from,to)=>{
+    if(from && to){
+    inventoryServices.getStockadjustmentFilter(from,to).then(res=>{
+      console.log(res)
+      setData(res)
+    })
+  }
+  }
 
   useEffect(() => {
     inventoryServices.getStockadjustment()
@@ -158,14 +127,14 @@ function StockAdjustment() {
           <div className="bottom__Section">
             <div className="table__filter">
               <div className="dateSearchWrapper">
-                <h5>From Date</h5> <input type="date" name="" id="" />
+                <h5>From Date</h5> <input onChange={(e)=>{setfromDate(e.target.value)}} value={fromDate} type="date" name="" id="" />
               </div>
 
               <div className="dateSearchWrapper">
-                <h5>To Date</h5> <input type="date" name="" id="" />
+                <h5>To Date</h5> <input onChange={(e)=>{settoDate(e.target.value)}} value={toDate} type="date" name="" id="" />
               </div>
 
-              <div className="search__Section">
+              <div onClick={()=>salesadjustmentFilter(fromDate,toDate)} className="search__Section">
                 <button>Search</button>
               </div>
             </div>
@@ -182,7 +151,7 @@ function StockAdjustment() {
                   </tr>
                 </thead>
                 <tbody>
-                  {data && data.map((datas,index) => (
+                  {data[0] ? data.map((datas,index) => (
                     <tr
                       keys={index+1}
                       className={clickedTr === index+1 && "selectedTr "}
@@ -200,7 +169,7 @@ function StockAdjustment() {
                       <td>{datas.CreatedBy}</td>
                       <td>{datas.CreatedOn}</td>
                     </tr>
-                  ))}
+                  )):"No data found"}
                 </tbody>
               </table>
             </div>

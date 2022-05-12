@@ -1,24 +1,24 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import "./purchaseDetailsAdd.scss";
 import DatePicker from "react-datepicker";
 import moment from "moment";
 import "react-datepicker/dist/react-datepicker.css";
 import FailSnackbars from "../../../../basic components/failSnackBar";
 import SucessSnackbars from "../../../../basic components/sucessSidePopup";
-const mainData = {
-  PrchsId: "",
-  ArrivalDate: "",
-  ArrivalNo: "",
-  InvoiceNo: "",
-  InvoiceDate: "",
-  PaymentType: "",
-  supplierid: "",
-  Address: "",
-  GSTNo: "",
-  GrandTotal: "",
-  ProductsTotal: "",
-  Status: "",
-};
+import { inventoryServices } from "../../../../../Services/InventoryServices";
+// const mainData = {
+//   ArrivalDate: "",
+//   ArrivalNo: "",
+//   InvoiceNo: "",
+//   InvoiceDate: "",
+//   PaymentType: "",
+//   supplierid: "",
+//   Address: "",
+//   GSTNo: "",
+//   GrandTotal: "",
+//   ProductsTotal: "",
+//   Status: "",
+// };
 
 const innerTable = {
   HSNCode: "",
@@ -33,23 +33,24 @@ const innerTable = {
   GST: "",
   TAX: "",
   Name: "",
-  productArray: [],
+
 };
 
 function PurchaseDetailsAdd({ setAddNewBtn, setMainTableView }) {
-  const [invDate, setInventoryDate] = useState(null);
-  const [arrivalDate, setArivalDate] = useState(null);
-  const [expiryDate, setExpiryDate] = useState(null);
-  const [Mainvalues, setMainValues] = useState(mainData);
+  const [invDate, setInventoryDate] = useState('');
+  const [arrivalDate, setArivalDate] = useState('');
+  const [expiryDate, setExpiryDate] = useState('');
+  const [Mainvalues, setMainValues] = useState('');
   const [subData, setSubdata] = useState(innerTable);
   const [dataInTable, setDataInTable] = useState([]);
   const convertDate = moment(expiryDate).format("DD-MM-YYYY");
   const convertedArivalDate = moment(arrivalDate).format("DD-MM-YYYY");
   const convertedinvoiceDate = moment(invDate).format("DD-MM-YYYY");
-
+  const [productmaster, setProductMaster] = useState([])
   const [snackbarSucess, setSnackbarSucess] = useState(false);
   const [snackbarFail, setSnackBarFail] = useState(false);
   const [messageToPassToSnackBar, setMessageToPassToSnackBar] = useState("");
+  const [supplier, setSupplier] = useState([])
 
   const handleArrivalDate = (date) => {
     setArivalDate(date);
@@ -63,7 +64,8 @@ function PurchaseDetailsAdd({ setAddNewBtn, setMainTableView }) {
     setExpiryDate(date);
   };
 
-  const [paymentTypeChecked, setPaymentTypeChecked] = useState("cash");
+  const [paymentTypeChecked, setPaymentTypeChecked] = useState(Mainvalues.PaymentType);
+
   const handlePaymentType = (e) => {
     const checked = e.target.checked;
     const name = e.target.value;
@@ -72,43 +74,45 @@ function PurchaseDetailsAdd({ setAddNewBtn, setMainTableView }) {
     }
   };
 
-  const handleAddDataToTable = (evt) => {
-    const name = evt.target.value;
-    setSubdata({
-      ...subData,
-      [evt.target.name]: name,
-      Expiry: convertDate,
-    });
-  };
+
 
   const handleMainData = (evt) => {
-    const name = evt.target.value;
+    const value = evt.target.value;
     setMainValues({
       ...Mainvalues,
-      [evt.target.name]: name,
+      [evt.target.name]: value,
       PaymentType: paymentTypeChecked,
       InvoiceDate: convertedinvoiceDate,
       ArrivalDate: convertedArivalDate,
-      productArray: dataInTable,
+      productArray: subData,
+    })
+    setSubdata({
+      ...subData,
+      [evt.target.name]: value,
+      Expiry: convertDate,
     });
   };
+  
 
   const mainFormSubmit = (e) => {
-    if (dataInTable.length == 0) {
-      setSnackBarFail(true);
-      setMessageToPassToSnackBar("Please Add Product");
-      return;
-    }
+    // if (dataInTable.length == 0) {
+    //   setSnackBarFail(true);
+    //   setMessageToPassToSnackBar("Please Add Product");
+    //   return;
+    // }
     e.preventDefault();
     window.alert("form submited");
-    console.log("dataToSend", Mainvalues, dataInTable);
+    console.log("dataToSend:>>>", Mainvalues, dataInTable);
   };
 
   const handleDataforTable = (e) => {
     e.preventDefault();
     setDataInTable([...dataInTable, subData]);
     setSubdata(innerTable);
+
   };
+ 
+console.log(Mainvalues)
 
   const handleEditTableData = (data) => {
     // setValues(data);
@@ -116,20 +120,44 @@ function PurchaseDetailsAdd({ setAddNewBtn, setMainTableView }) {
 
   const HandleUpdateData = (e) => {
     e.preventDefault();
-    // const code = values;
-
-    // const ProductExsit = datainTable.find(
-    //   (items) => items.HsnCode === code.HsnCode
-    // );
-
-    // if (ProductExsit) {
-    //   setDatainTable(
-    //     datainTable.map((item) =>
-    //       item.HsnCode === code.HsnCode ? { ...ProductExsit, code } : item
-    //     )
-    //   );
-    // }
   };
+
+const uploadPurchaseDetails =(data)=>{
+  inventoryServices.postPurchasedetails(data)
+
+}
+
+
+
+  useEffect(() => {
+    inventoryServices.getSuppliers()
+      .then(res => {
+        setSupplier(res)
+      })
+    inventoryServices.getProductdetails()
+      .then(data => {
+        setProductMaster(data)
+      }).catch(err => console.log(err))
+
+  }, [])
+  
+  const subdataUpdate = () => {
+    if (subData.ProductsId !== '' ) {
+      const data = productmaster.filter(item => item.ProdctId == subData.ProductsId)
+console.log(data)
+
+      setSubdata({
+        HSNCode: data[0].HSNCode,
+        BatchNo: data[0].RackNo,
+        Qty: data[0].Quantity,
+        ProdctsId: data[0].ProdctId,
+        Discount: data[0].Discount,
+      })
+    }
+  }
+
+
+
 
   return (
     <>
@@ -196,7 +224,7 @@ function PurchaseDetailsAdd({ setAddNewBtn, setMainTableView }) {
             <div className="radioBtn__Section">
               <h5>Payment Type</h5>
               <div className="radio__sec">
-                 {" "}
+                {" "}
                 <input
                   type="radio"
                   id="css"
@@ -204,7 +232,7 @@ function PurchaseDetailsAdd({ setAddNewBtn, setMainTableView }) {
                   value="cash"
                   onChange={handlePaymentType}
                 />
-                  <label for="css">Cash</label>
+                <label for="css">Cash</label>
               </div>
 
               <div className="radio__sec">
@@ -215,7 +243,7 @@ function PurchaseDetailsAdd({ setAddNewBtn, setMainTableView }) {
                   value="credit"
                   onChange={handlePaymentType}
                 />
-                  <label for="html">Credit</label>
+                <label for="html">Credit</label>
               </div>
             </div>
 
@@ -223,20 +251,17 @@ function PurchaseDetailsAdd({ setAddNewBtn, setMainTableView }) {
               <h5>Supplier</h5>
 
               <select
-                name=""
                 id=""
                 name="supplierid"
-                value={Mainvalues.supplierid}
                 onChange={handleMainData}
                 required
               >
-                <option value="" disabled selected>
-                  pic option
-                </option>
+                <option disabled="true" selected>Select Supplier</option>
+                {supplier && supplier.map((item) => (
+                  <option value={item.Value} >
+                    {item.Text}
+                  </option>))}
 
-                <option value="1">ram</option>
-                <option value="2">revi</option>
-                <option value="3">kishor</option>
               </select>
             </div>
 
@@ -268,19 +293,23 @@ function PurchaseDetailsAdd({ setAddNewBtn, setMainTableView }) {
           <form autoComplete="off" onSubmit={(e) => handleDataforTable(e)}>
             <div className="input__area__Section">
               <div className="left__input__areaa sectionss">
-                <input
-                  type="text"
-                  name="Name"
+                <select
+                  name="ProductsId"
                   placeholder="Products"
-                  onChange={handleAddDataToTable}
-                  value={subData.Name}
+                  onChange={handleMainData}
+                  value={subData.ProductsId}
                   required
-                />
+
+                >
+                  <option disabled="true" selected>Select Product</option>
+                  {productmaster && productmaster.map((item) => (
+                    <option onClick={subdataUpdate} value={item.ProdctId}>{item.PName}</option>))}
+                </select>
                 <input
                   type="text"
                   name="HSNCode"
                   placeholder="HSN Code"
-                  onChange={handleAddDataToTable}
+                  onChange={handleMainData}
                   value={subData.HSNCode}
                   required
                 />
@@ -288,7 +317,7 @@ function PurchaseDetailsAdd({ setAddNewBtn, setMainTableView }) {
                   type="text"
                   name="BatchNo"
                   placeholder="Batch No"
-                  onChange={handleAddDataToTable}
+                  onChange={handleMainData}
                   value={subData.BatchNo}
                   required
                 />
@@ -312,7 +341,7 @@ function PurchaseDetailsAdd({ setAddNewBtn, setMainTableView }) {
                   type="number"
                   name="Qty"
                   placeholder="Qty"
-                  onChange={handleAddDataToTable}
+                  onChange={handleMainData}
                   value={subData.Qty}
                   required
                 />
@@ -320,7 +349,7 @@ function PurchaseDetailsAdd({ setAddNewBtn, setMainTableView }) {
                   type="number"
                   name="FreeQty"
                   placeholder="Free Qty"
-                  onChange={handleAddDataToTable}
+                  onChange={handleMainData}
                   value={subData.FreeQty}
                   required
                 />
@@ -331,14 +360,14 @@ function PurchaseDetailsAdd({ setAddNewBtn, setMainTableView }) {
                   name="Rate"
                   step="0.01"
                   placeholder="Rate"
-                  onChange={handleAddDataToTable}
+                  onChange={handleMainData}
                   value={subData.Rate}
                 />
                 <input
                   type="number"
                   name="Discount"
                   placeholder="Disc"
-                  onChange={handleAddDataToTable}
+                  onChange={handleMainData}
                   value={subData.Discount}
                   required
                 />
@@ -346,7 +375,7 @@ function PurchaseDetailsAdd({ setAddNewBtn, setMainTableView }) {
                   type="text"
                   name="GST"
                   placeholder="GST"
-                  onChange={handleAddDataToTable}
+                  onChange={handleMainData}
                   value={subData.GST}
                   required
                 />
@@ -354,7 +383,7 @@ function PurchaseDetailsAdd({ setAddNewBtn, setMainTableView }) {
                   type="number"
                   name="TAX"
                   placeholder="Tax Param"
-                  onChange={handleAddDataToTable}
+                  onChange={handleMainData}
                   value={subData.TAX}
                   required
                 />
@@ -362,13 +391,13 @@ function PurchaseDetailsAdd({ setAddNewBtn, setMainTableView }) {
                   type="number"
                   name="Total"
                   placeholder="Total"
-                  onChange={handleAddDataToTable}
+                  onChange={handleMainData}
                   value={subData.Total}
                   required
                 />
                 <div className="button__sectionssss">
                   <button type="submit">Add Product</button>
-                  <button type="button" onClick={HandleUpdateData}>
+                  <button type="button" onClick={(e)=>{HandleUpdateData(e);inventoryServices.postProductmaster(subData)}}>
                     Update
                   </button>
                 </div>
@@ -399,7 +428,7 @@ function PurchaseDetailsAdd({ setAddNewBtn, setMainTableView }) {
               <tbody>
                 {dataInTable.map((data, index) => (
                   <tr key={index} onClick={() => handleEditTableData(data)}>
-                    <td>{data?.Name}</td>
+                    <td>{data?.ProdctsId}</td>
                     <td>{data?.HSNCode}</td>
                     <td>{data?.BatchNo}</td>
                     <td>{data?.Expiry}</td>
@@ -499,11 +528,12 @@ function PurchaseDetailsAdd({ setAddNewBtn, setMainTableView }) {
               onClick={(e) => {
                 mainFormSubmit(e);
                 handleMainData(e);
+                uploadPurchaseDetails(Mainvalues)
               }}
             >
               Save
             </button>
-            <button>Print</button>
+            <button onClick={()=>window.print()}>Print</button>
             <button
               onClick={() => {
                 setAddNewBtn(false);

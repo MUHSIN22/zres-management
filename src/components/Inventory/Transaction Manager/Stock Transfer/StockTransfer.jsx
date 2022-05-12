@@ -4,47 +4,7 @@ import { useState } from "react";
 import StockTransferAdd from "./StockTransferAdd/StockTransferAdd";
 import { inventoryServices } from "../../../../Services/InventoryServices";
 
-const Date = [
-  {
-    SINO: "1",
 
-    RtnNo: "1",
-
-    RtnDate: "25/11/2021",
-
-    InvNo: "10212",
-
-    InvDate: "25/11/2021",
-
-    Amound: 10000,
-
-    Supplier: "Ram",
-
-    ReturnType: "Direct Return",
-
-    UserName: "vivek",
-  },
-
-  {
-    SINO: "2",
-
-    RtnNo: "2",
-
-    RtnDate: "25/11/2021",
-
-    InvNo: "10212",
-
-    InvDate: "25/11/2021",
-
-    Amound: 10000,
-
-    Supplier: "Ram",
-
-    ReturnType: "Expiry Return",
-
-    UserName: "vivek",
-  },
-];
 
 function StockTransfer() {
   const [addNewBtn, setAddNewBtn] = useState(false);
@@ -52,26 +12,40 @@ function StockTransfer() {
   const [data, setData] = useState([])
   const [fromDate, setFromDate] = useState("");
   const [toDate, setToDate] = useState("");
-
+  const [branch, setBranch] = useState("")
   const [clickedTr, SetClickedTr] = useState("");
+  const [branchdata, setBranchdata] = useState("")
+  const [editmode,setEditmode] = useState(false)
+  const [updatableProducts, setUpdatableProducts] = useState([])
 
-  const DateFilter = () => {
-    var FromdateSplit = fromDate.split("/");
-    var toDateSplit = toDate.split("/");
-  };
+  const stockTransferFilter = (from, to, branch) => {
+    if (from && to && branch) {
+      inventoryServices.getStocktransferFilter(from, to, branch).then(res => {
+        setData(res.data)
+      })
+    }
+  }
+
 
   useEffect(() => {
     inventoryServices.getstocktransferrequest()
-    .then((data) => {
-      setData(data)
-    })
-  },[])
+      .then((data) => {
+        setData(data)
+      })
+
+    inventoryServices.getAllbranchess()
+      .then((data) => {
+        setBranch(data)
+      })
+  }, [])
   return (
     <>
       {addNewBtn && (
         <StockTransferAdd
           setAddNewBtn={setAddNewBtn}
           setMainTableView={setMainTableView}
+          status={editmode}
+          editable={updatableProducts}
         />
       )}
 
@@ -109,7 +83,7 @@ function StockTransfer() {
                 </svg>
                 <h5>New</h5>
               </div>
-              <div className="different__option">
+              <div onClick={()=>{ (editmode) ? setEditmode(false) : setEditmode(true) }} className="different__option">
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
                   width="32.5"
@@ -193,12 +167,14 @@ function StockTransfer() {
 
               <div className="input__Section">
                 <h5>Branch</h5>
-                <select name="" id="">
-                  <option value=""></option>
+                <select onChange={(e)=>setBranchdata(e.target.value)} name="" id="">
+                  <option disabled="true" selected>Select Branch</option>
+                  {branch && branch.map((branch) => (
+                    <option value={branch.BranchId}>{branch.BName}</option>))}
                 </select>
               </div>
 
-              <div className="search__Section">
+              <div onClick={()=>stockTransferFilter(fromDate,toDate,branchdata)} className="search__Section">
                 <button>Search</button>
               </div>
             </div>
@@ -220,11 +196,15 @@ function StockTransfer() {
                   </tr>
                 </thead>
                 <tbody>
-                  {data && data.map((datas,index) => (
+                  {data[0] ? data.map((datas, index) => (
                     <tr
-                      keys={index+1}
-                      className={clickedTr === index+1 && "selectedTr "}
-                      onClick={() => SetClickedTr(index+1)}
+                      keys={index + 1}
+                      className={clickedTr === index + 1 && "selectedTr "}
+                      onClick={() =>{ SetClickedTr(index + 1); if(editmode){
+                        setAddNewBtn(true);
+                        setMainTableView(false);
+                        setUpdatableProducts(datas)
+                      }}}
                     >
                       <td>
                         <input type="checkbox" name="" id="" />
@@ -234,7 +214,7 @@ function StockTransfer() {
                           datas.ReturnType === "Expiry Return" && "Canceled "
                         }
                       >
-                        {index+1}
+
                       </td>
                       <td
                         className={
@@ -248,7 +228,7 @@ function StockTransfer() {
                           datas.ReturnType === "Expiry Return" && "Canceled "
                         }
                       >
-                        {datas.RtnDate}
+                        {datas.FromBranch}
                       </td>
                       <td
                         className={
@@ -300,10 +280,10 @@ function StockTransfer() {
                         {datas.Amound}
                       </td>
                     </tr>
-                  ))}
+                  )):"No data found"}
                 </tbody>
               </table>
-            </div>
+            </div>  
           </div>
         </div>
       )}

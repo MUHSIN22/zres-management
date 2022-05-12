@@ -22,6 +22,7 @@ import FoodOrderPage from "./components/foodOrder/FoodOrderPage";
 import PrintComponent from "./components/printing/PrintingComp";
 import Billgenerated from "./components/Walkin/Bills/Billgenerated";
 import { EssentialProvider } from "./Data manager/EssentialContext";
+import KdcOrder from "./components/KDC CLOUD/KDC Order/KdcOrder";
 // import 'material-react-toastify/dist/ReactToastify.css';
 function App() {
   return (
@@ -37,7 +38,9 @@ function App() {
               <Route path="/dinein" element={<DineIn />}/>
               <Route path="/walkin" element={<Walkin />}/>
               <Route path="/DashBoad" element={<DashBoard />}/>
-              <Route path="/kdcCloud" element={<KdcCoud />}/>
+              <Route path="/kdcCloud" element={<KdcCoud />}>
+                <Route path="orders" element={<KdcOrder />}/>
+              </Route>
               <Route path="/optionSection" element={ <OptionSelection />}/>
               <Route path="/mainPage/*" element={<MainPage />}/>
               <Route path="/crm" element={<Crm />}/>
