@@ -5,6 +5,8 @@ import SearchIcon from "@mui/icons-material/Search";
 import axios from "axios";
 import AddRecipie from "./addrecipie/AddRecipie";
 import { Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
+
 function RecipeDetails() {
   const [addProducts, setAddProducts] = useState(false);
   const [recipeDataView, setRecipieDataView] = useState(true);
@@ -12,6 +14,7 @@ function RecipeDetails() {
   const [recipeCategory,setRecipeCategory] = useState([])
   const [loading,setLoading]=useState(" ")
   const [searchItem,setSearchItem] = useState("")
+  const nav =useNavigate()
 
   const categoryClicked = (id) => {
     setLoading("loading...")
@@ -27,6 +30,7 @@ function RecipeDetails() {
 
   
   useEffect(()=>{
+
     setLoading("loading...")
     console.log("entered.............");
     axios
@@ -42,6 +46,7 @@ function RecipeDetails() {
 
   console.log(menuByCategory,"serchItem")
   useEffect(() => {
+    console.log("scrolled to top");
     axios
     .get(
       `${process.env.REACT_APP_BASE_URL}RCGroup?CMPid=1`
@@ -77,7 +82,7 @@ function RecipeDetails() {
               //     setMainPage(false);
               //   }}
               onClick={() => {
-                setAddProducts(true);
+                nav("/mainPage/inventory/receipe-management/inventory")
                 setRecipieDataView(false);
               }}
             >

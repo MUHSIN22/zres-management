@@ -26,10 +26,9 @@ function RecipeManagement() {
   //   // selCategory[0].name
   // );
 
-  // useEffect(() => {
-  //   setSelCategory(masterCategiry);
-  //   setClickedSubCategory(masterCategiry[0].name);
-  // }, []);
+  useEffect(() => {
+    window.scrollTo(0,0)
+  }, []);
   const location = useLocation()
   const navigate = useNavigate();
   useEffect(()=>{
