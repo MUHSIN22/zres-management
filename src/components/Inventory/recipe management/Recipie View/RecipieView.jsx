@@ -12,6 +12,7 @@ function RecipieView() {
   const [loading, setLoading] = useState("loding..")
   const location = useParams()
   useEffect(() => {
+    window.scrollTo(0,0)
     setLoading("loading...")
     const menuId = location.id
     console.log(menuId,"id");

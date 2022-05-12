@@ -38,7 +38,7 @@ function DineIn({ SetClicked }) {
   const [dataToWalkin, setDatatoWalkin] = useState(false);
   const pageNumber = [];
   const [currentPage, setCurrentPage] = useState(1);
-  const [postPerPage, setPostPerPage] = useState(5);
+  const [postPerPage, setPostPerPage] = useState(10);
   const indexOfLastPost = currentPage * postPerPage;
   const indexOfFirstPost = indexOfLastPost - postPerPage;
   const [totalTablesLength, setTotalTablesLength] = useState(0);
@@ -57,8 +57,8 @@ function DineIn({ SetClicked }) {
   }
  useEffect(() => {  
    setLoading(true)
-   const firstNumber = 5*(currentPage-1)
-   const lastNumber = (currentPage*5)-1
+   const firstNumber = postPerPage*(currentPage-1)
+   const lastNumber = (currentPage*postPerPage)-1 
     axios
       .get(`${process.env.REACT_APP_BASE_URL}DineIn/GetAllTablesInDine?CMPid=1`)
       .then((res) => {

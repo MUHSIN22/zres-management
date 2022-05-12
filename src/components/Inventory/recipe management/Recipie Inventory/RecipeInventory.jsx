@@ -17,6 +17,7 @@ import TinyMceRichText from "./tynymce/TinyMceRichText";
 import NewRatting from "./ratting/NewRatting";
 import { Editor } from "@tinymce/tinymce-react";
 import axios from "axios";
+import { useNavigate } from "react-router-dom";
 
 const ITEM_HEIGHT = 38;
 const ITEM_PADDING_TOP = 8;
@@ -128,6 +129,9 @@ function RecipeInventory() {
   const [forTools,setForTools] =useState([])
   const [RichTextContent, setRichTextContent] = useState("");
   const [recipeCategory, setRecipeCategory] = useState([]);
+
+  const nav =useNavigate()
+  
   const handleChange = (event) => {
     const {
       target: { value },
@@ -260,10 +264,12 @@ function RecipeInventory() {
     "packingMaterials":forPacking
     }
     
-    axios.post(`${process.env.REACT_APP_BASE_URL}Recipe`, 
+    axios.post(`${process.env.REACT_APP_BASE_URL}Recipe?CMPid=1`, 
     jsonData
   ).then(function (response) {
       console.log(response);
+      alert("Recipe added successfully")
+      nav("/mainPage/inventory/receipe-management")
     })
     .catch(function (error) {
       console.log(error);

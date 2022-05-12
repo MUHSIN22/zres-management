@@ -1,54 +1,101 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import "./expo.scss";
 function Expo() {
+
+  const [newData, setNewData] = useState([])
+  const [runningData, setRunningData] = useState([])
+  const [doneData, setDoneData] = useState([])
+  const [big , setBig] = useState(0)
+
+  useEffect(() => {
+    fetch(`${process.env.REACT_APP_BASE_URL}KDS/ExpoForNewOrder?CMPid=1`)
+      .then((response) => response.json())
+      .then((data) => {
+        setNewData(data)
+        if(big<data.length){
+          setBig(data.length) 
+        }
+      })
+
+    fetch(`${process.env.REACT_APP_BASE_URL}KDS/ExpoForCookingOrder?CMPid=1`)
+      .then((response) => response.json())
+      .then((data) => {
+        setRunningData(data)
+        if(big<data.length){
+          setBig(data.length) 
+        }
+      })
+
+    fetch(`${process.env.REACT_APP_BASE_URL}KDS/ExpoForDoneOrder?CMPid=1`)
+      .then((response) => response.json())
+      .then((data) => {
+        setDoneData(data)
+        if(big<data.length){
+          setBig(data.length) 
+        }
+      })
+
+    }, [])
+    console.log(big);
+
+
+
+
   return (
     <div className="Expo">
       <div className="expo__top__section">
-        <table id="customers">
-          <tr>
-            <th style={{ backgroundImage: "linear-gradient(#ffff, #31CDD2)" }}>
-              New
-            </th>
-            <th style={{ backgroundImage: "linear-gradient(#ffff, #E1870E)" }}>
-              Cooking
-            </th>
-            <th style={{ backgroundImage: "linear-gradient(#ffff, #009751)" }}>
-              Done
-            </th>
-          </tr>
-
-          {[...Array(20)].map((elementInArray, index) => (
-            <tr>
-              <td>
-                {" "}
-                <p style={{ margin: "0", display: "inline", float: "left" }}>
-                  Alfreds Futterkiste
-                </p>
-                <p style={{ margin: "0", display: "inline", float: "right" }}>
-                  5
-                </p>
-              </td>
-              <td style={{ color: "#E1870E" }}>
-                {" "}
-                <p style={{ margin: "0", display: "inline", float: "left" }}>
-                  Alfreds Futterkiste
-                </p>
-                <p style={{ margin: "0", display: "inline", float: "right" }}>
-                  5
-                </p>
-              </td>
-              <td style={{ color: "#009751" }}>
-                {" "}
-                <p style={{ margin: "0", display: "inline", float: "left" }}>
-                  Alfreds Futterkiste
-                </p>
-                <p style={{ margin: "0", display: "inline", float: "right" }}>
-                  5
-                </p>
-              </td>
+        <div>
+          <table  >
+            <tr style={{ background: "#6CDADE" }} height={"40px"}>
+              <th>new </th>
             </tr>
-          ))}
-        </table>
+            {
+              newData.map((data, i) => (
+                <tr key={i}>
+                  <td style={{ color: "#6CDADE", height: "60px", background: i % 2 !== 0 && "#393939" }} className="td">
+                    <p>{data.ItemName}</p>
+                    <p>{data.CountOfItems}</p>
+                  </td>
+                </tr>
+              ))
+            }
+          </table>
+        </div>
+        <div>
+          <table>
+            <tr style={{ background: "#EDBE7F" }} height={"40px"}>
+              <th>cooking</th>
+            </tr>
+            {
+              runningData.map((data, i) => (
+                <tr key={i}>
+                  <td className="td" style={{ color: "#EDBE7F", height: "60px", background: i % 2 !== 0 && "#393939" }}>
+                    <p>{data.ItemName}</p>
+                    <p>{data.CountOfItems}</p>
+                  </td>
+                </tr>
+              ))
+            }
+          </table>
+        </div>
+        <div>
+          <table>
+            <tr style={{ background: "#0C633B" }} height={"40px"}>
+              <th>done</th>
+            </tr>
+            {
+              doneData.map((data, i) => (
+                <tr key={i}>
+                  <td style={{ color: "#0C633B", height: "60px", background: i % 2 !== 0 && "#393939" }} className="td">
+                    <p>{data.ItemName}</p>
+                    <p>{data.CountOfItems}</p>
+                  </td>
+                </tr>
+              ))
+            }
+
+          </table>
+        </div>
       </div>
       <div className="expo__bottom__section">
         <div className="BtnSection">
