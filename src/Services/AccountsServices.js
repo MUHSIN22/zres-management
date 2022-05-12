@@ -112,9 +112,10 @@ export const accountServices = {
     },
     
     // Opening balance
-    getOpeningBalance : () => {
+    getOpeningBalance : (date) => {
+        let entryDate = date ? new Date(date).toLocaleDateString() : new Date().toLocaleDateString()
         return new Promise((resolve,reject) => {
-            fetch(`${BASE_URL}Balance/search?EntryDate=2022-01-03&CMPid=1`)
+            fetch(`${BASE_URL}Balance/search?EntryDate=${entryDate}&CMPid=1`)
             .then(res => res.json())
             .then(data => resolve(data))
             .catch(err => reject(err))

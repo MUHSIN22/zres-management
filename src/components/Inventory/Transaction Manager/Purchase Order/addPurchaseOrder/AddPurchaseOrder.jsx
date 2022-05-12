@@ -4,6 +4,7 @@ import DatePicker from "react-datepicker";
 import moment from "moment";
 import SucessSnackbars from "../../../../basic components/sucessSidePopup";
 import FailSnackbars from "../../../../basic components/failSnackBar";
+import { inventoryServices } from "../../../../../Services/InventoryServices";
 
 const mainData = {
   OrderDate: "",
@@ -28,8 +29,8 @@ function PurchaseDetailsAdd({ setAddNewBtn, setMainTableView }) {
   const [datainTable, setDatainTable] = useState([]);
   const [OrderDate, setOrderDate] = useState(null);
   const [expyryDate, setExpiryDate] = useState(null);
-  const [Mainvalues, setMainValues] = useState(mainData);
-  const [subData, setSubdata] = useState(innerTable);
+  const [Mainvalues, setMainValues] = useState('');
+  const [subData, setSubdata] = useState('');
   const convertDate = moment(OrderDate).format("DD-MM-YYYY");
   const cnvertedExpiry = moment(expyryDate).format("DD-MM-YYYY");
   const [messageToPassToSnackbar, setMessageToPassToSnackbar] = useState("");
@@ -61,7 +62,7 @@ function PurchaseDetailsAdd({ setAddNewBtn, setMainTableView }) {
       OrderDate: convertDate,
     });
 
-    console.log("main valuess", Mainvalues);
+    console.log("main valuess", Mainvalues,subData);
   };
 
   const handleDataforTable = (e) => {
@@ -88,13 +89,9 @@ function PurchaseDetailsAdd({ setAddNewBtn, setMainTableView }) {
     // }
   };
 
-  const mainFormSubmit = (e) => {
+  const mainFormSubmit = (e,main,sub) => {
     e.preventDefault();
-    if (datainTable.length == 0) {
-      setSnackBarFail(true);
-      setMessageToPassToSnackbar("Please Add Product");
-      return;
-    }
+    inventoryServices.postPurchaseorder(main,sub)
     window.alert("form submited");
     console.log("dataToSend", Mainvalues, datainTable);
   };
@@ -142,7 +139,7 @@ function PurchaseDetailsAdd({ setAddNewBtn, setMainTableView }) {
               <h5>Supplier Name</h5>
 
               <select
-                name=""
+              
                 id=""
                 name="supplierid"
                 value={Mainvalues.supplierid}
@@ -253,7 +250,7 @@ function PurchaseDetailsAdd({ setAddNewBtn, setMainTableView }) {
         {/* bottom section */}
         <div className="bottom__sections">
           <div className="bottom__btn__section">
-            <button onClick={mainFormSubmit}>Save</button>
+            <button onClick={(e)=>mainFormSubmit(e,Mainvalues,subData)}>Save</button>
 
             <button
               onClick={() => {

@@ -116,7 +116,7 @@ const totalAmount = ()=>{
                 onClick={() => {
                   setAddNewBtn(true);
                   setMainTableView(false);
-
+                   setEditmode(false)
                 }}
               >
                 <svg
