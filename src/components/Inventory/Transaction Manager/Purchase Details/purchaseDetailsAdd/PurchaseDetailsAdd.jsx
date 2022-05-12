@@ -36,7 +36,7 @@ const innerTable = {
 
 };
 
-function PurchaseDetailsAdd({ setAddNewBtn, setMainTableView }) {
+function PurchaseDetailsAdd({ setAddNewBtn, setMainTableView ,status,editable}) {
   const [invDate, setInventoryDate] = useState('');
   const [arrivalDate, setArivalDate] = useState('');
   const [expiryDate, setExpiryDate] = useState('');
@@ -94,6 +94,7 @@ function PurchaseDetailsAdd({ setAddNewBtn, setMainTableView }) {
   };
   
 
+
   const mainFormSubmit = (e) => {
     // if (dataInTable.length == 0) {
     //   setSnackBarFail(true);
@@ -139,19 +140,37 @@ const uploadPurchaseDetails =(data)=>{
         setProductMaster(data)
       }).catch(err => console.log(err))
 
+
+        if(status){
+          setMainValues({
+            "ArrivalNo": editable.ArrivalNo,
+            "ArrivalDate": editable.ArrivalDate,
+            "InvoiceNo": editable.InvoiceNo,
+            "InvoiceDate": editable.InvoiceDate,
+            "PaymentType": editable.PaymentType,
+            "supplierid": editable.supplierid,
+            "Address": editable.Address,
+            "GSTNo": editable.GSTNo,
+            "GrandTotal": editable.GrandTotal,
+            "totalTax": editable.TotalTax,
+
+          })
+        }
   }, [])
   
+  // console.log(editable)
+
   const subdataUpdate = () => {
     if (subData.ProductsId !== '' ) {
       const data = productmaster.filter(item => item.ProdctId == subData.ProductsId)
 console.log(data)
 
       setSubdata({
-        HSNCode: data[0].HSNCode,
-        BatchNo: data[0].RackNo,
-        Qty: data[0].Quantity,
-        ProdctsId: data[0].ProdctId,
-        Discount: data[0].Discount,
+        HSNCode: (data[0] !== '') && data[0].HSNCode,
+        BatchNo: (data[0] !== '') && data[0].RackNo,
+        Qty: (data[0] !== '') && data[0].Quantity,
+        ProdctsId: (data[0] !== '') && data[0].ProdctId,
+        Discount: (data[0] !== '') && data[0].Discount,
       })
     }
   }

@@ -66,7 +66,8 @@ function PurchaseReturnAdd({ setAddNewBtn, setMainTableView }) {
       [evt.target.name]: name,
     });
   };
-
+  
+console.log(values)
 
   const handleValidationSubForm = () => {
     let temp = {};
@@ -555,10 +556,12 @@ console.log(data)
           <div className="bottom__btn__section">
             <button
               type="submit"
-            // onClick={() => {
-            //   setAddNewBtn(false);
-            //   setMainTableView(true);
-            // }}
+            onClick={() => {
+              setAddNewBtn(false);
+              setMainTableView(true);
+              inventoryServices.postPurchaseReturn(values);
+            }}
+
             >
               Save
             </button>
