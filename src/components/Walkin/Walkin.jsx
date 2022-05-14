@@ -24,55 +24,6 @@ import { faLaptopHouse } from "@fortawesome/free-solid-svg-icons";
 import Placeorder from "./placeorder/placeorder";
 import Discount from "./discount/Discount";
 
-const refData = [
-  {
-    headCategory: "Burger",
-    categoryChilds: [
-      {
-        name: "Bob Barns Burger",
-        includes: "adons",
-      },
-      {
-        name: "Chicking Burger",
-        includes: "adons",
-      },
-      {
-        name: "Kfc Burger",
-        includes: "adons",
-      },
-      {
-        name: "ffc Burger",
-        includes: "adons",
-      },
-    ],
-  },
-
-  {
-    headCategory: "Drinks",
-    categoryChilds: [
-      {
-        id: 126,
-        name: "Lime",
-        price: 125,
-      },
-      {
-        id: 136,
-        name: "Coconut water",
-        price: 115,
-      },
-      {
-        id: 146,
-        name: "Orange Juice",
-        price: 135,
-      },
-      {
-        id: 156,
-        name: "Mango Shake",
-        price: 145,
-      },
-    ],
-  },
-];
 
 function Walkin({ dataToSendToWlkinPage }) {
   const [CartItem, setCartItem] = useState([]);
@@ -199,13 +150,12 @@ function Walkin({ dataToSendToWlkinPage }) {
   const [walikinView, setWalkinView] = useState(true);
 
 
-  const searchCustmer = async () => {
-    const res = await fetch('https://zres.clubsoft.co.in/Customer?CMPid=1', {
-      method: 'GET'
-    })
-    const customers = await res.json()
-    setSearchCustomer(customers)
+  const searchCustmer = () => {
+    walkinServices.getCustomer().then((res) => {
+      setSearchCustomer(res);
+    });
   }
+  
 
   const [filterdCustomer, setFilteredCustomer] = useState([]);
   const [filtValue, setFiltValue] = useState("");
@@ -271,7 +221,7 @@ function Walkin({ dataToSendToWlkinPage }) {
       {itemDetailsClick && (
         <div className="Burger__option__selection__section__container">
           <div className="burger__option__sections__inner__div">
-            <BurgerOptionSection setItemDetailsClick={setItemDetailsClick} productName={mainCategoryPic} />
+            <BurgerOptionSection  setItemDetailsClick={setItemDetailsClick} productName={mainCategoryPic} />
           </div>
         </div>
       )}

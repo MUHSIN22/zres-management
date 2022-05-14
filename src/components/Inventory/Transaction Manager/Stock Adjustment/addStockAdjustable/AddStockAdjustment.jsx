@@ -131,7 +131,7 @@ console.log(tabledata)
             </div>
             <div className="input__sections">
               <h5>Product Name</h5>
-              <select  name="productId" value={searchdata.productId} onChange={handleSearchData} id="">
+              <select  name="productId"  onChange={handleSearchData} id="">
                 <option selected="true" disabled="disabled">Select Product</option>
                 {productdropdown && productdropdown.map((items) => (
                   <option value={items.Cid}>

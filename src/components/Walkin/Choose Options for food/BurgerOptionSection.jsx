@@ -130,7 +130,7 @@ function BurgerOptionSection({ setItemDetailsClick,productName }) {
             {checkedStat
               .filter((items) => items.SectionName === selectedOption)
               .map((prod) => (
-                <>
+                <  >
                   <div className="right__curresponding__headder">
                     <h4>{prod.SectionName}</h4>
                     {}

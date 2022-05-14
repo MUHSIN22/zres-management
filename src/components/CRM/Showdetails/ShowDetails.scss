@@ -1,0 +1,18 @@
+.showdetails_container{
+    box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.2);
+    background: #fff;
+    width: 50rem;
+    height: 28rem;
+    position: fixed;
+    top: 3rem;
+    left: 25rem;
+    border-radius: 1rem;
+    grid-template-areas: "left right";
+
+    .left_side{
+      grid-area: left;
+    }
+    .right_side{
+        grid-area: right;
+    }
+  }
