@@ -154,13 +154,12 @@ function Walkin({ dataToSendToWlkinPage }) {
   const [walikinView, setWalkinView] = useState(true);
 
 
-  const searchCustmer = async () => {
-    const res = await fetch('https://zres.clubsoft.co.in/Customer?CMPid=1', {
-      method: 'GET'
-    })
-    const customers = await res.json()
-    setSearchCustomer(customers)
+  const searchCustmer = () => {
+    walkinServices.getCustomer().then((res) => {
+      setSearchCustomer(res);
+    });
   }
+  
 
   const [filterdCustomer, setFilteredCustomer] = useState([]);
   const [filtValue, setFiltValue] = useState("");
