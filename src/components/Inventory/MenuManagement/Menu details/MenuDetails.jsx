@@ -283,7 +283,21 @@ function MenuDetails() {
                         />
                       )}
                     </th>
-                    <th colSpan="2"></th>
+                     MenuID
+                    <th >
+                    MenuGroupID
+                    </th>
+                    <th>
+                    ShortName
+                    </th>
+                    <th>
+                      Weight
+                    </th>
+                    <th>
+                      RackNo
+                    </th>
+                    <th>Max Stock Level</th>
+                    <th>Createdby</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -321,7 +335,6 @@ function MenuDetails() {
                         </td>
 
                         <td colSpan="2">{datas.ItemName}</td>
-
                         <td>{datas.CategoryName === null ? 'No Data in APi': datas.CategoryName}</td>
 
                         <td>{datas.ItemPrice}</td>
@@ -351,7 +364,13 @@ function MenuDetails() {
                             </div>
                           </div>
                         </td>
-
+                        <td>{datas.MenuID}</td>
+                        <td>{datas.MenuGroupID}</td>
+                        <td>{datas.ShortName}</td>
+                        <td>{datas.Weight}</td>
+                        <td>{datas.RackNo}</td>
+                        <td>{datas.MaxStockLevel}</td>
+                        <td>{datas.CreatedBy}</td>
                         <td className="editDeleteSection" colSpan="2">
                           <div className="wrapper__section__edit__delete">
                             <div className="Sectionss">

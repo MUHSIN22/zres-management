@@ -38,7 +38,7 @@ const innerTable = {
   TAX: "",
   Name: "",
 };
-function AddGoodsReport({ setAddNewBtn, setMainTableView }) {
+function AddGoodsReport({ setAddNewBtn, setMainTableView ,status,editable}) {
   const [invDate, setInventoryDate] = useState(null);
   const [arrivalDate, setArivalDate] = useState(null);
   const [expiryDate, setExpiryDate] = useState(null);
@@ -95,13 +95,14 @@ function AddGoodsReport({ setAddNewBtn, setMainTableView }) {
     });
   };
 
-  const mainFormSubmit = (e) => {
+  const mainFormSubmit = (e,main,sub) => {
     e.preventDefault();
     if (dataInTable.length == 0) {
       setSnackBarFail(true);
       setMessageToPassToSnackbar("Please Add Product");
       return;
     }
+    inventoryServices.postGoodreceipt(main,sub)
     window.alert("form submited");
     console.log("dataToSend", Mainvalues, dataInTable);
   };
@@ -144,6 +145,7 @@ setSubdata({
    Qty: (data[0] !== '') && data[0].Quantity,
    productID: (data[0] !== '') && data[0].ProdctId,
   Discount: (data[0] !== '') && data[0].Discount,
+  
       })
     } 
   }
@@ -155,6 +157,18 @@ setSubdata({
         setProductMaster(data)
       }).catch(err => console.log(err))
 
+      if(status){
+        setMainValues({
+          "TransDate": editable.TransDate,
+          "TransNo": editable.TransNo,
+          "RefNo": editable.RefNo,
+          "RefDate": editable.RefDate,
+          "PaymentType": editable.Payment,
+          "Address": editable.Address,
+          "GrandTotal": editable.TotalDiscount,
+          "totalTax": editable.TotalTax,
+        })
+      }
   }, [])
   
   return (
@@ -513,7 +527,7 @@ setSubdata({
             </div>
           </div>
           <div className="bottom__btn__section">
-            <button onClick={mainFormSubmit}>Save</button>
+            <button onClick={(e)=>mainFormSubmit(e,Mainvalues,subData)}>Save</button>
             <button>Print</button>
             <button
               onClick={() => {
