@@ -20,6 +20,7 @@ import AddCustomer from "../CRM/addCustomer/AddCustomer";
 import dummyUser from "./dummyUser";
 import Alert from "@mui/material/Alert";
 import Stack from "@mui/material/Stack";
+import { faLaptopHouse } from "@fortawesome/free-solid-svg-icons";
 const refData = [
   {
     headCategory: "Burger",
@@ -121,15 +122,12 @@ function Walkin({ dataToSendToWlkinPage }) {
       setCartItem(
         CartItem.map((item) =>
           item.MenuID === Product.MenuID
-            ? { ...ProductExist, quantity: ProductExist.quantity + 1 }
+            ? { ...ProductExist, quantity: ProductExist.quantity + 1,subitems:true }
             : item
-
-
         )
-
       );
     } else {
-      setCartItem([...CartItem, { ...Product, quantity: 1 }]);
+      setCartItem([...CartItem, { ...Product, quantity: 1 ,subitems:true}]);
     }
 
   };
@@ -178,15 +176,13 @@ function Walkin({ dataToSendToWlkinPage }) {
   const handleAddManualQuantity = (e) => {
     setManualQty(manualQty.concat(e.target.innerText));
 
-    if (manualQty == 0) {
+    if (manualQty === 0) {
       console.log("ereeor qty");
     } else {
       console.log("good qty");
     }
   };
 
-  console.log(manualQty);
-  // subtotal
 
   const subTotal = CartItem.reduce(
     (price, item) => price + item.quantity * item.ItemPrice,
@@ -264,13 +260,8 @@ function Walkin({ dataToSendToWlkinPage }) {
 
   return (
     <>
-
-
-
       {/* payment sucessfull popup */}
-
       {/* choose option for food section */}
-
       {itemDetailsClick && (
         <div className="Burger__option__selection__section__container">
           <div className="burger__option__sections__inner__div">
@@ -889,8 +880,9 @@ function Walkin({ dataToSendToWlkinPage }) {
                         <div
                           className="single__product"
                           onClick={() => {
+                            // setItemDetailsClick(true);
                             setMainCategoryPic(categ.ItemName)
-                            categ.IsAddOn === false
+                            categ.IsAddOn === true
                               ? setItemDetailsClick(true)
                               : HandleAddToCart(categ)
                           }}

@@ -1,16 +1,17 @@
 import React, { useState } from "react";
 import "./burgerOptionSection.scss";
 import Checkbox from "@mui/material/Checkbox";
+
 function BurgerOptionSection({ setItemDetailsClick,productName }) {
   const Addons = [
     {
       id: 1,
-      SectionName: "AddOns",
+      SectionName: "Add Ons",
       items: [
         {
           id: 494,
           name: "Cheese",
-          price: "1.0",
+          price: 1.0,
         },
 
         {
@@ -64,42 +65,20 @@ function BurgerOptionSection({ setItemDetailsClick,productName }) {
     },
   ];
 
-  const newAdons = [
-    {
-      name: "adons",
-      data: [
-        {
-          id: 494,
-          name: "Cheese",
-          price: "1.0",
-        },
 
-        {
-          id: 434,
-          name: "Bacon",
-          price: 2.0,
-        },
-
-        {
-          id: 484,
-          name: "Onion",
-          price: 3.0,
-        },
-      ],
-    },
-  ];
-  const [selectedOption, setSelectedOption] = useState("AddOns");
+  
+  const [selectedOption, setSelectedOption] = useState(Addons[0].SectionName);
   const [checkedStat, setCheckedState] = useState(Addons);
+  const [selectedAddOns,setSelectedAddOns] = useState([]);
 
   const handleCheckboxClick = (e, data, prod) => {
-    // this looks for the main hedder addons
     const AddonMain = checkedStat.find((items) => items.id === prod.id);
-    // this will look for subaddons
     const Selectedsub = AddonMain.items.find((items) => items.id === data.id);
+    setSelectedAddOns([...selectedAddOns,Selectedsub])
+    console.clear();
+    console.log(selectedAddOns);
 
   };
-
-  console.log("origin", checkedStat);
 
  
   return (
@@ -112,23 +91,16 @@ function BurgerOptionSection({ setItemDetailsClick,productName }) {
 
       <div className="mid__option__section">
         <div className="left__mid__option">
+          {Addons.map((d,i)=>(
           <div
+            key={i}
             className={
               "button__section__area " +
-              (selectedOption === "AddOns" && "active")
+              (selectedOption === d.SectionName && "active")
             }
-            onClick={() => setSelectedOption("AddOns")}
-          >
-            <h5>Add Ons</h5>
-          </div>
-          <div
-            className={
-              "button__section__area " +
-              (selectedOption === "BreadSelection" && "active")
-            }
-            onClick={() => setSelectedOption("BreadSelection")}
-          >
-            <div className="svg__manadaory__Section">
+            onClick={() => setSelectedOption(d.SectionName)}
+            >
+              {i===1&&<div className="svg__manadaory__Section">
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 width="40"
@@ -148,19 +120,9 @@ function BurgerOptionSection({ setItemDetailsClick,productName }) {
                   </tspan>
                 </text>
               </svg>
-            </div>
-
-            <h5>Choose Your Bread</h5>
-          </div>
-          <div
-            className={
-              "button__section__area " +
-              (selectedOption === "Topping" && "active")
-            }
-            onClick={() => setSelectedOption("Topping")}
-          >
-            <h5>Topping</h5>
-          </div>
+            </div>}
+            <h5>{d.SectionName}</h5>
+          </div>))}
         </div>
         <div className="right__mid__option">
           {/* AddOns section */}
@@ -172,7 +134,6 @@ function BurgerOptionSection({ setItemDetailsClick,productName }) {
                   <div className="right__curresponding__headder">
                     <h4>{prod.SectionName}</h4>
                     {}
-
                     {prod.SectionName !== "BreadSelection" && (
                       <>
                         <p>Please Choose Maximum Of {prod.items.length}</p>
@@ -206,7 +167,7 @@ function BurgerOptionSection({ setItemDetailsClick,productName }) {
           </div>
         </div>
       </div>
-      <hr />
+      <hr/>
       <div className="bottom__addmodifier__cancel__Section">
         <svg
           xmlns="http://www.w3.org/2000/svg"
