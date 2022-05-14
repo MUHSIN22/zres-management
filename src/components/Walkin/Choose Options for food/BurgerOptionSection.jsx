@@ -88,9 +88,10 @@ function BurgerOptionSection({ setItemDetailsClick,productName }) {
       ],
     },
   ];
+
   const [selectedOption, setSelectedOption] = useState("AddOns");
   const [checkedStat, setCheckedState] = useState(Addons);
-
+  const [modifierdata,setModifierdata] = useState('')  
   const handleCheckboxClick = (e, data, prod) => {
     // this looks for the main hedder addons
     const AddonMain = checkedStat.find((items) => items.id === prod.id);
@@ -98,6 +99,20 @@ function BurgerOptionSection({ setItemDetailsClick,productName }) {
     const Selectedsub = AddonMain.items.find((items) => items.id === data.id);
 
   };
+
+  console.log(modifierdata)
+  const handleSubmit = (e) =>{
+    e.preventDefault()
+    const checkbox = e.target.checked;
+    console.log(Checkbox)
+
+    setModifierdata({
+
+      ...modifierdata,
+     [e.target.name] :checkbox
+       
+  })
+  }
 
   console.log("origin", checkedStat);
 
@@ -188,8 +203,11 @@ function BurgerOptionSection({ setItemDetailsClick,productName }) {
                     {prod.items.map((item) => (
                       <div className="CheckBoxArea__Section">
                         <Checkbox
-                          checked={item.checked}
+                
                           key={item.name}
+                          name={item.name}
+                          value={item.name}
+                          onChange={handleSubmit}
                           sx={{ "& .MuiSvgIcon-root": { fontSize: 38 } }}
                           onClick={(e) => handleCheckboxClick(e, item, prod)}
                         />

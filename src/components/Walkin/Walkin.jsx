@@ -23,55 +23,6 @@ import Stack from "@mui/material/Stack";
 import Placeorder from "./placeorder/placeorder";
 import Discount from "./discount/Discount";
 
-const refData = [
-  {
-    headCategory: "Burger",
-    categoryChilds: [
-      {
-        name: "Bob Barns Burger",
-        includes: "adons",
-      },
-      {
-        name: "Chicking Burger",
-        includes: "adons",
-      },
-      {
-        name: "Kfc Burger",
-        includes: "adons",
-      },
-      {
-        name: "ffc Burger",
-        includes: "adons",
-      },
-    ],
-  },
-
-  {
-    headCategory: "Drinks",
-    categoryChilds: [
-      {
-        id: 126,
-        name: "Lime",
-        price: 125,
-      },
-      {
-        id: 136,
-        name: "Coconut water",
-        price: 115,
-      },
-      {
-        id: 146,
-        name: "Orange Juice",
-        price: 135,
-      },
-      {
-        id: 156,
-        name: "Mango Shake",
-        price: 145,
-      },
-    ],
-  },
-];
 
 function Walkin({ dataToSendToWlkinPage }) {
   const [CartItem, setCartItem] = useState([]);
@@ -280,7 +231,7 @@ function Walkin({ dataToSendToWlkinPage }) {
       {itemDetailsClick && (
         <div className="Burger__option__selection__section__container">
           <div className="burger__option__sections__inner__div">
-            <BurgerOptionSection setItemDetailsClick={setItemDetailsClick} productName={mainCategoryPic} />
+            <BurgerOptionSection  setItemDetailsClick={setItemDetailsClick} productName={mainCategoryPic} />
           </div>
         </div>
       )}
