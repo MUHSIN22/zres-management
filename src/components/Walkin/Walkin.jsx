@@ -21,6 +21,9 @@ import dummyUser from "./dummyUser";
 import Alert from "@mui/material/Alert";
 import Stack from "@mui/material/Stack";
 import { faLaptopHouse } from "@fortawesome/free-solid-svg-icons";
+import Placeorder from "./placeorder/placeorder";
+import Discount from "./discount/Discount";
+
 const refData = [
   {
     headCategory: "Burger",
@@ -89,6 +92,9 @@ function Walkin({ dataToSendToWlkinPage }) {
   const [beverage, setBeverage] = useState([])
   const [itembymenu, setItembymenu] = useState([])
   const [menubyid, setMenubyid] = useState('')
+  const [discount,setDiscount] = useState(false)
+ 
+  const [placeorder,setPlaceorder] = useState(false)
   // useEffect(() => {
   //   const timeout = setTimeout(() => {
   //     const current = new Date().toLocaleString();
@@ -408,11 +414,11 @@ function Walkin({ dataToSendToWlkinPage }) {
 
               </div>
               <div className="right__bottom__nav__section">
-                <div className="buttons btnBlue">
+                <div onClick={()=>{setDiscount(true)}} className="buttons btnBlue">
                   <AddIcon />
                   <h5>Discounts</h5>
                 </div>
-                <div className="buttons btnsBig">
+                <div onClick={()=>{setPlaceorder(true)}} className="buttons btnsBig">
                   <h4>Place Order</h4>
                 </div>
               </div>
@@ -669,13 +675,35 @@ function Walkin({ dataToSendToWlkinPage }) {
                   </table>
                 </div>
               </div>
+             
 
               <div className="bottom__walkin__left__mid__Section">
+              <div className="buttons btnOrange addNotess">
+                  {addNotes && <AddNotes SetNotes={SetNotes} notes={notes} />}
 
+                  <svg
+                    onClick={() => setAddNotes(!addNotes)}
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="22.444"
+                    height="22.444"
+                    viewBox="0 0 22.444 22.444"
+                  >
+                    <path
+                      id="Path_24"
+                      data-name="Path 24"
+                      d="M18.8,9.28,10.084.562A1.925,1.925,0,0,0,8.718,0H1.937A1.943,1.943,0,0,0,0,1.937V8.718a1.933,1.933,0,0,0,.572,1.376L9.29,18.812a1.925,1.925,0,0,0,1.366.562,1.894,1.894,0,0,0,1.366-.572L18.8,12.022a1.894,1.894,0,0,0,.572-1.366A1.957,1.957,0,0,0,18.8,9.28Zm-8.147,8.166L1.937,8.718V1.937H8.718v-.01l8.718,8.718Z"
+                      transform="matrix(0.174, 0.985, -0.985, 0.174, 19.08, 0)"
+                      fill="#fff"
+                    />
+                  </svg>
+
+                  <h5 onClick={() => setAddNotes(!addNotes)}>Add Notes</h5>
+                </div> 
+                <div>
                 <h3>Sub Total :{subTotal}</h3>
                 <h3>Tax : 5000</h3>
                 <h2>Total : 15000.00</h2>
-
+                </div>
               </div>
 
             </div>
@@ -723,6 +751,8 @@ function Walkin({ dataToSendToWlkinPage }) {
                     className="menuCategory"
                     onClick={() => { setMainCategoryPic("") }}
                   >
+                     {placeorder && <Placeorder status={()=>setPlaceorder(false)} /> }
+                     {discount && <Discount status={()=>setDiscount(false)} />}
                     <svg
                       id="house_black_24dp"
                       xmlns="http://www.w3.org/2000/svg"
@@ -758,6 +788,7 @@ function Walkin({ dataToSendToWlkinPage }) {
 
                   {mainCategoryPic && (
                     <div className="selected__subCate__name">
+                  
                       <svg
                         id="Group_1915"
                         data-name="Group 1915"

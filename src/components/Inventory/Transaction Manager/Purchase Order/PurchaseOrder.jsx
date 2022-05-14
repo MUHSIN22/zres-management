@@ -13,6 +13,8 @@ function PurchaseOrder() {
   const [toDate, setToDate] = useState("");
   const [data, setData] = useState([])
   const [clickedTr, SetClickedTr] = useState("");
+  const [editmode, setEditmode] = useState(false)
+  const [updatableProducts, setUpdatableProducts] = useState([])
 
   const DateFilter = () => {
     var FromdateSplit = fromDate.split("/");
@@ -39,6 +41,8 @@ function PurchaseOrder() {
         <PurchaseDetailsAdd
           setAddNewBtn={setAddNewBtn}
           setMainTableView={setMainTableView}
+          status={editmode}
+          editable={updatableProducts}
         />
       )}
 
@@ -76,7 +80,7 @@ function PurchaseOrder() {
                 </svg>
                 <h5>New</h5>
               </div>
-              <div className="different__option">
+              <div onClick={() => { (editmode) ? setEditmode(false) : setEditmode(true) }} className="different__option">
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
                   width="32.5"
@@ -162,7 +166,7 @@ function PurchaseOrder() {
                     <tr
                       keys={index+1}
                       className={clickedTr === index+1 && "selectedTr "}
-                      onClick={() => SetClickedTr(index+1)}
+                      onClick={() =>{SetClickedTr(index+1);if (editmode){ setAddNewBtn(true);setMainTableView(false);setUpdatableProducts(datas)}}}
                     >
                       <td>
                         <input type="checkbox" name="" id="" />
