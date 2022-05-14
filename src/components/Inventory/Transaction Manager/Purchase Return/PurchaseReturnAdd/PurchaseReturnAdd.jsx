@@ -5,7 +5,7 @@ import Stack from "@mui/material/Stack";
 import DatePicker from "react-datepicker";
 import { inventoryServices } from "../../../../../Services/InventoryServices";
 
-function PurchaseReturnAdd({ setAddNewBtn, setMainTableView }) {
+function PurchaseReturnAdd({ setAddNewBtn, setMainTableView ,editable,status}) {
   const defvalue = {
     Products: "",
     HsnCode: "",
@@ -51,6 +51,7 @@ function PurchaseReturnAdd({ setAddNewBtn, setMainTableView }) {
   const [paymetType, setPaymentType] = useState("");
   const [supplier, setSupplier] = useState([])
   const [productmaster, setProductMaster] = useState([])
+ 
 
   const handleMainDataValue = (evt) => {
     const name = evt.target.value;
@@ -163,6 +164,21 @@ console.log(data)
       .then(data => {
         setProductMaster(data)
       }).catch(err => console.log(err))
+
+      if(status){
+        setMainDataVale({
+          "returnDate": editable.ReturnDate,
+          "returnNo": editable.ReturnNo,
+          "invNoInvoiceNo": editable.InvoiceNo,
+          "invDate": editable.InvoiceDate,
+          "paymentType": editable.PaymentType,
+          "supplier": editable.supplierid,
+          "address": editable.Address,
+          "Gst": editable.GSTNo,
+          "netAmt": editable.Total,
+          "totalTax": editable.Totaltax
+        })
+      }
   }, [])
 
   return (

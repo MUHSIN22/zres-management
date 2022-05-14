@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import "./AddPurchaseOrder.scss";
 import DatePicker from "react-datepicker";
 import moment from "moment";
@@ -25,7 +25,7 @@ const innerTable = {
   Amount: "",
 };
 
-function PurchaseDetailsAdd({ setAddNewBtn, setMainTableView }) {
+function PurchaseDetailsAdd({ setAddNewBtn, setMainTableView,status,editable }) {
   const [datainTable, setDatainTable] = useState([]);
   const [OrderDate, setOrderDate] = useState(null);
   const [expyryDate, setExpiryDate] = useState(null);
@@ -34,9 +34,10 @@ function PurchaseDetailsAdd({ setAddNewBtn, setMainTableView }) {
   const convertDate = moment(OrderDate).format("DD-MM-YYYY");
   const cnvertedExpiry = moment(expyryDate).format("DD-MM-YYYY");
   const [messageToPassToSnackbar, setMessageToPassToSnackbar] = useState("");
-
+  const [supplier, setSupplier] = useState([])
   const [snackbarSucess, setSnackbarSucess] = useState(false);
   const [snackbarFail, setSnackBarFail] = useState(false);
+  const [productmaster, setProductMaster] = useState([])
 
   const handleOrderDate = (date) => {
     setOrderDate(date);
@@ -62,7 +63,7 @@ function PurchaseDetailsAdd({ setAddNewBtn, setMainTableView }) {
       OrderDate: convertDate,
     });
 
-    console.log("main valuess", Mainvalues,subData);
+    console.log("main valuess", Mainvalues, subData);
   };
 
   const handleDataforTable = (e) => {
@@ -72,7 +73,7 @@ function PurchaseDetailsAdd({ setAddNewBtn, setMainTableView }) {
     console.log("subdata", datainTable, subData);
   };
 
-  const handleEditTableData = (data) => {};
+  const handleEditTableData = (data) => { };
 
   const HandleUpdateData = (e) => {
     // e.preventDefault();
@@ -89,12 +90,50 @@ function PurchaseDetailsAdd({ setAddNewBtn, setMainTableView }) {
     // }
   };
 
-  const mainFormSubmit = (e,main,sub) => {
+  const mainFormSubmit = (e, main, sub) => {
     e.preventDefault();
-    inventoryServices.postPurchaseorder(main,sub)
+    inventoryServices.postPurchaseorder(main, sub)
+    console.log(main, sub)
     window.alert("form submited");
     console.log("dataToSend", Mainvalues, datainTable);
   };
+
+  // const subdataUpdate = () => {
+  //   if (subData.ProductsId !== '') {
+  //     const data = productmaster.filter(item => item.ProdctId == subData.ProductsId)
+  //     console.log(data)
+
+  //     setSubdata({
+  //       Rate: data[0].RackNo,
+  //       Qty: data[0].Quantity,
+  //       Remarks: data[0].Discount,
+  //       Amount: data[0].Amount,
+  //     })
+     
+  //   }
+  // }
+
+  useEffect(() => {
+    inventoryServices.getSuppliers()
+      .then(res => {
+        setSupplier(res)
+      })
+      inventoryServices.getProductdetails()
+      .then(data => {
+        setProductMaster(data)
+      }).catch(err => console.log(err))
+
+      if(status){
+        setMainValues({
+          "Address": editable.Address,
+          "supplierid": editable.supplierid,
+          "OrderNo": editable.OrderNo,
+          "OrderDate": editable.OrderDate,
+        })
+      }
+  }, [])
+console.log(subData)
+
 
   return (
     <>
@@ -137,17 +176,19 @@ function PurchaseDetailsAdd({ setAddNewBtn, setMainTableView }) {
           <div className="right__section">
             <div className="input__Sections">
               <h5>Supplier Name</h5>
-
               <select
-              
                 id=""
                 name="supplierid"
                 value={Mainvalues.supplierid}
                 onChange={handleMainData}
+                required
               >
-                <option value="1">ram</option>
-                <option value="2">revi</option>
-                <option value="3">kishor</option>
+                <option disabled="true" selected>Select Supplier</option>
+                {supplier && supplier.map((item) => (
+                  <option value={item.Value} >
+                    {item.Text}
+                  </option>))}
+
               </select>
             </div>
 
@@ -169,13 +210,18 @@ function PurchaseDetailsAdd({ setAddNewBtn, setMainTableView }) {
           <form autoComplete="off" onSubmit={handleDataforTable}>
             <div className="input__area__Section">
               <div className="left__input__areaa sectionss">
-                <input
-                  type="text"
-                  name="PrdctId"
+                <select
+                  name="ProductsId"
                   placeholder="Products"
                   onChange={handleAddDataToTable}
-                  value={subData.PrdctId}
-                />
+                  value={subData.ProductsId}
+                  required
+
+                >
+                  <option disabled="true" selected>Select Product</option>
+                  {productmaster && productmaster.map((item) => (
+                    <option  value={item.ProdctId}>{item.PName}</option>))}
+                </select>
                 <input
                   type="number"
                   name="Qty"
@@ -250,7 +296,7 @@ function PurchaseDetailsAdd({ setAddNewBtn, setMainTableView }) {
         {/* bottom section */}
         <div className="bottom__sections">
           <div className="bottom__btn__section">
-            <button onClick={(e)=>mainFormSubmit(e,Mainvalues,subData)}>Save</button>
+            <button onClick={(e) => mainFormSubmit(e, Mainvalues, subData)}>Save</button>
 
             <button
               onClick={() => {
