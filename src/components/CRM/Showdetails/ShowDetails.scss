@@ -1,18 +1,123 @@
-.showdetails_container{
-    box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.2);
-    background: #fff;
-    width: 50rem;
-    height: 28rem;
-    position: fixed;
-    top: 3rem;
-    left: 25rem;
-    border-radius: 1rem;
-    grid-template-areas: "left right";
+.showdetails_container {
+  box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.2);
+  background: #fff;
+  width: 50rem;
+  height: fit-content;
+  position: fixed;
+  top: 3rem;
+  left: 25rem;
+  border-radius: 1rem;
+  display: grid;
+  grid-template-areas: "left right";
+  grid-template-columns: 1.8fr 3fr;
+  color: #040153;
 
-    .left_side{
-      grid-area: left;
+  .left_side {
+    grid-area: left;
+    border-right: 1px solid black;
+    padding: 1rem;
+
+    .header {
+      padding-top: 1rem;
+      display: flex;
+      gap: 6rem;
+      padding-left: 2rem;
+      border-bottom: 1px solid black;
+      height: 4.4rem;
+
+      button {
+        background: #C30208 0% 0% no-repeat padding-box;
+        border-radius: 7px;
+        opacity: 1;
+        width: 5rem;
+        color: #fff;
+        height: 2rem;
+      }
     }
-    .right_side{
-        grid-area: right;
+
+    .details {
+      display: flex;
+      flex-direction: column;
+      padding: 2rem 0 0 2.5rem;
+
+      .details_row {
+        padding-bottom: 0.5rem;
+
+        .title {
+          font-weight: 700;
+          padding-bottom: 0.5rem;
+        }
+
+        .subtitle {
+          margin-left: 1rem;
+        }
+      }
+    }
+
+    .buttons {
+      margin-top: 1rem;
+      padding-bottom: 1rem;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 0.3rem;
+    }
+
+  }
+
+  .right_side {
+    grid-area: right;
+    padding: 1rem;
+
+    .table_main {
+      width: 100%;
+      margin-top: 2rem;
+      border-collapse: collapse;
+
+      .theader {
+        border-bottom: 1px solid black;
+
+      }
+
+      th {
+        padding-bottom: 1rem;
+      }
+
+      p {
+        display: flex;
+        justify-content: center;
+        margin-top: 1rem;
+      }
+    }
+
+    .total {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      border-top: 1px solid black;
+      padding: 0.5rem 0 0.5rem 0;
+
+      .loyality {
+        display: flex;
+        gap: 0.5rem;
+      }
+
+      .total_price {
+
+        .total_price_row {
+          display: flex;
+          gap: 1rem;
+          justify-content: space-between;
+
+          p {
+            padding: 0.3rem;
+          }
+
+          .omr {
+            font-weight: 600;
+          }
+        }
+      }
     }
   }
+}

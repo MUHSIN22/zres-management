@@ -1,9 +1,10 @@
 import React, { useEffect, useState } from "react";
 import { crmServices } from "../../../../Services/CrmServices";
+import ShowDetails from "../../Showdetails/ShowDetails";
 import "./runningOrder.scss";
-function RunningOrder({number}) {
+function RunningOrder({number,action}) {
 const [ runningOrder, setRunningOrder ] = useState([]);
-
+const [show,setShow] = useState(false)
   useEffect(() => {
     if(number.lenth !== 0){
     crmServices.getRunningorders(number)
@@ -49,9 +50,12 @@ const [ runningOrder, setRunningOrder ] = useState([]);
                 <td data-label="Source"></td>
                 <td data-label="Loyality">{order.LoyalityPoint}</td>
                 <td data-label="#">
-                  <a href="#" className="button">
+                  <a onClick={()=>setShow(true)} className="button">
                     Show Details
                   </a>
+                  {show ?
+                  <ShowDetails action={()=>setShow(false)} />:null
+}
                 </td>
               </tr>))}
             </tbody>

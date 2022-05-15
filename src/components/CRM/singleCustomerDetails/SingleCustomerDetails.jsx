@@ -4,9 +4,9 @@ import CustomerProfileSection from "./customerProfileSection/CustomerProfileSect
 import CusomerInsight from "./customerInsightSection/CusomerInsight";
 import RunningOrder from "./runningOrder/RunningOrder";
 import PastOrder from "./pastOrder/PastOrder";
-import ShowDetails from "../Showdetails/ShowDetails";
 
 function SingleCustomerDetails({number}) {
+
   return (
     <div className="singleCustomer__details">
 
@@ -14,11 +14,11 @@ function SingleCustomerDetails({number}) {
       <div className="headder__top__section">
         <CustomerProfileSection number={number}/>
         <CusomerInsight number={number} />
-        {
-          <ShowDetails/>
-        }
+      
+        
+      
       </div>
-      <RunningOrder number={number} />
+      <RunningOrder  number={number} />
       <PastOrder  number={number}/>
     </div>
   );
