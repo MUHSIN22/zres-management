@@ -1,19 +1,37 @@
 import React, { useEffect, useState } from "react";
 import "./expo.scss";
+import ItemSummary from "./ItemSummary/ItemSummary";
+import Recipe from "./Recipe/Recipe";
 function Expo() {
 
   const [newData, setNewData] = useState([])
   const [runningData, setRunningData] = useState([])
   const [doneData, setDoneData] = useState([])
-  const [big , setBig] = useState(0)
+  const [big, setBig] = useState(0)
+  const [loading, setLoading] = useState(false)
+  const [selectItem, setSelectItem] = useState({ itemId: 0, status: false , type:""})
+  const [recipe, setRecipe] = useState(false)
+
+
+  const handleSelect = (id,odType) => {
+    setSelectItem({ itemId: id, status: true,type:odType })
+  }
+  const handleRecipe = () => {
+    if (selectItem.status) {
+      setRecipe(true)
+    }
+  }
+
+  console.log(selectItem, recipe);
 
   useEffect(() => {
+    setLoading(true)
     fetch(`${process.env.REACT_APP_BASE_URL}KDS/ExpoForNewOrder?CMPid=1`)
       .then((response) => response.json())
       .then((data) => {
         setNewData(data)
-        if(big<data.length){
-          setBig(data.length) 
+        if (big < data.length) {
+          setBig(data.length)
         }
       })
 
@@ -21,8 +39,8 @@ function Expo() {
       .then((response) => response.json())
       .then((data) => {
         setRunningData(data)
-        if(big<data.length){
-          setBig(data.length) 
+        if (big < data.length) {
+          setBig(data.length)
         }
       })
 
@@ -30,29 +48,35 @@ function Expo() {
       .then((response) => response.json())
       .then((data) => {
         setDoneData(data)
-        if(big<data.length){
-          setBig(data.length) 
+        if (big < data.length) {
+          setBig(data.length)
         }
       })
-
-    }, [])
-    console.log(big);
+    setLoading(false)
+  }, [])
 
 
 
 
   return (
     <div className="Expo">
+        {
+          recipe &&
+      <div className="side_panel">
+          <Recipe setRecipe={setRecipe} selectItem={selectItem} />
+        {/* <ItemSummary/> */}
+      </div>
+        }
       <div className="expo__top__section">
         <div>
           <table  >
             <tr style={{ background: "#6CDADE" }} height={"40px"}>
               <th>new </th>
             </tr>
-            {
+            {loading ? <h1>Loading...</h1> :
               newData.map((data, i) => (
                 <tr key={i}>
-                  <td style={{ color: "#6CDADE", height: "60px", background: i % 2 !== 0 && "#393939" }} className="td">
+                  <td onClick={() => handleSelect(data.MenuID,"NEW")} style={{ color: "#6CDADE", height: "60px", background: selectItem.itemId === data.MenuID && selectItem.type === "NEW" ? "white" : i % 2 !== 0 ? "#393939" : "#080808"}} className="td">
                     <p>{data.ItemName}</p>
                     <p>{data.CountOfItems}</p>
                   </td>
@@ -69,7 +93,9 @@ function Expo() {
             {
               runningData.map((data, i) => (
                 <tr key={i}>
-                  <td className="td" style={{ color: "#EDBE7F", height: "60px", background: i % 2 !== 0 && "#393939" }}>
+                  <td onClick={() => handleSelect(data.MenuID,"COOKING")} 
+                  className="td" 
+                  style={{ color: "#EDBE7F", height: "60px", background:  selectItem.itemId===data.MenuID && selectItem.type === "COOKING" ? "white" :i % 2 !== 0 ? "#393939" :"#080808" }}>
                     <p>{data.ItemName}</p>
                     <p>{data.CountOfItems}</p>
                   </td>
@@ -86,8 +112,8 @@ function Expo() {
             {
               doneData.map((data, i) => (
                 <tr key={i}>
-                  <td style={{ color: "#0C633B", height: "60px", background: i % 2 !== 0 && "#393939" }} className="td">
-                    <p>{data.ItemName}</p>
+                  <td className="td" onClick={() => handleSelect(data.MenuID,"DONE")} style={{ color: "#EDBE7F", height: "60px", background: selectItem.itemId === data.MenuID && selectItem.type === "DONE" ? "white" : i % 2 !== 0 ? "#393939" : "#080808" }}>                    
+                  <p>{data.ItemName}</p>
                     <p>{data.CountOfItems}</p>
                   </td>
                 </tr>
@@ -228,7 +254,7 @@ function Expo() {
             <h4>ITEM SUMMARTY</h4>
           </div>
 
-          <div className="button">
+          <div onClick={handleRecipe} className="button">
             <svg
               xmlns="http://www.w3.org/2000/svg"
               width="20.518"
@@ -271,8 +297,8 @@ function Expo() {
           </div>
         </div>
         <div className="BtnSection">
-          <div className="button">
-            <svg
+          <div className="b">
+            {/* <svg
               xmlns="http://www.w3.org/2000/svg"
               width="51.771"
               height="25.771"
@@ -378,9 +404,9 @@ function Expo() {
                   fill="#fff"
                 />
               </g>
-            </svg>
+            </svg> */}
 
-            <h4>ITEM SUMMARTY</h4>
+            {/* <h4>ITEM SUMMARTY</h4> */}
           </div>
         </div>
       </div>

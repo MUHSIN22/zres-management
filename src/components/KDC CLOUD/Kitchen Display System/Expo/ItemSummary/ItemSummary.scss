@@ -1,0 +1,55 @@
+.itemSummary {
+  width: 100%;
+  height: auto;
+  padding: 50px;
+  display: grid;
+  overflow: scroll;
+  grid-gap: 10px;
+  .headingContainer {
+    display: flex;
+    justify-content: space-between;
+    button {
+      background: #000;
+      color: white;
+      border-radius: 10px;
+      border: 1px;
+      padding: 5px 20px;
+    }
+  }
+}
+
+.items {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  .itemDetailsContainer {
+    width: 260px;
+    align-items: center;
+    display: flex;
+    justify-content: space-between;
+    gap: 50px;
+    p{
+      color: rgb(108, 218, 222);
+    }
+  }
+}
+
+hr{
+  margin-bottom: 20px;
+}
+.itemSummaryWraper{
+  display: grid;
+  height: auto;
+  min-height: 100vh;
+  width: 100%;
+  flex-direction: column;
+  align-content: space-between;
+}
+.total{
+  padding: 7px 0px;
+  display: flex;
+  justify-content: space-between;
+}
+.calculationPart{
+  padding: 50px;
+}
