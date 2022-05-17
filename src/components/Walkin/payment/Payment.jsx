@@ -7,7 +7,8 @@ import PaymetTypeMainScreen from "../paymentMethod/PaymetTypeMainScreen";
 import { useEffect } from "react";
 import NumPad from "react-numpad";
 import Billgenerated from "../Bills/Billgenerated";
-function Payment({ setPaymentOption, paymentOption, setPaymentSUcessfull }) {
+
+function Payment({ setPaymentOption, paymentOption, setPaymentSUcessfull, dinein }) {
   const [pay, setPay] = useState(false);
   const [mainPaymentSection, setMainPaymentSection] = useState(true);
   const [changeDueActive, setChangeDueActive] = useState(false);
@@ -128,7 +129,7 @@ function Payment({ setPaymentOption, paymentOption, setPaymentSUcessfull }) {
             <hr style={{ marginTop: "10px", marginBottom: "5px" }} />
 
             <div className="bottom__area__sections">
-              <h4>Walk in</h4>
+              <h4>{dinein?"Dine In":"Walk in"}</h4>
 
               <div className="button__area">
                 <button onClick={() => setPaymentOption(false)}>Back</button>
@@ -203,7 +204,7 @@ function Payment({ setPaymentOption, paymentOption, setPaymentSUcessfull }) {
           </div>
         </div>
       )}
-      <Billgenerated printNow={printNow} />
+      <Billgenerated printNow={printNow} dinein={dinein} />
     </>
   );
 }

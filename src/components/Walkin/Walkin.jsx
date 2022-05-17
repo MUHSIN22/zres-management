@@ -24,7 +24,7 @@ import Placeorder from "./placeorder/placeorder";
 import Discount from "./discount/Discount";
 
 
-function Walkin({ dataToSendToWlkinPage }) {
+function Walkin({ dataToSendToWlkinPage, dinein }) {
   const [CartItem, setCartItem] = useState([]);
   const [switchOn, setSwichOn] = useState(false);
   const [mainCategoryPic, setMainCategoryPic] = useState("");
@@ -229,6 +229,10 @@ function Walkin({ dataToSendToWlkinPage }) {
     walkinServices.getAllcategories()
     .then(data=>{ setAllmenu(data)})
 
+    if(dinein){
+      console.log("PAGE FROM DINEIN");
+    }
+
   }, [])
 
   return (
@@ -259,6 +263,7 @@ function Walkin({ dataToSendToWlkinPage }) {
             <div className="Burger__option__selection__section__container ">
               <div className="burger__option__sections__inner__div payment__area">
                 <Payment
+                  dinein={dinein}
                   setPaymentSUcessfull={setPaymentSUcessfull}
                   setPaymentOption={setPaymentOption}
                   paymentOption={paymentOption}

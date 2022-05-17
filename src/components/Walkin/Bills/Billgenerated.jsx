@@ -1,6 +1,6 @@
 import React, { useEffect } from "react";
 import "./billgenerator.scss";
-function Billgenerated({ printNow, setPrintNow }) {
+function Billgenerated({ printNow, setPrintNow, dinein}) {
   useEffect(() => {
     if (printNow === true) {
       printData();
@@ -33,7 +33,7 @@ function Billgenerated({ printNow, setPrintNow }) {
             <thead>
               <tr>
                 <th style={{ textAlign: "left" }}>INVOICE COPY</th>
-                <th style={{ textAlign: "right" }}>WALKIN</th>
+                <th style={{ textAlign: "right" }}>{dinein?"DINEIN":"WALKIN"}</th>
               </tr>
             </thead>
 
