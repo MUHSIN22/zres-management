@@ -97,8 +97,9 @@
 
 .side_panel{
   overflow: scroll;
-  width: 500px;
+  width: auto;
   height: 100vh;
+  min-width: 300px;
   position: absolute;
   right: 0;
   // display: grid;

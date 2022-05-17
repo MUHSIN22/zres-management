@@ -9,16 +9,30 @@ function Expo() {
   const [doneData, setDoneData] = useState([])
   const [big, setBig] = useState(0)
   const [loading, setLoading] = useState(false)
-  const [selectItem, setSelectItem] = useState({ itemId: 0, status: false , type:""})
+  const [selectItem, setSelectItem] = useState({ itemId: 0, status: false, type: "" })
   const [recipe, setRecipe] = useState(false)
+  const [itemSummary, setItemSummary] = useState(false)
 
 
-  const handleSelect = (id,odType) => {
-    setSelectItem({ itemId: id, status: true,type:odType })
+  const handleSelect = (id, odType) => {
+    setSelectItem({ itemId: id, status: true, type: odType })
+  }
+  const handleItemSummary = () => {
+    if (selectItem.status) {
+      setRecipe(false)
+      setItemSummary(true)
+    } else {
+      alert("item not selected\nplease select an item")
+    }
+
   }
   const handleRecipe = () => {
     if (selectItem.status) {
+      setItemSummary(false)
       setRecipe(true)
+    }
+    else {
+      alert("item not selected\nplease select an item")
     }
   }
 
@@ -60,13 +74,18 @@ function Expo() {
 
   return (
     <div className="Expo">
+      {(recipe || itemSummary) && <div className="side_panel">
         {
           recipe &&
-      <div className="side_panel">
           <Recipe setRecipe={setRecipe} selectItem={selectItem} />
-        {/* <ItemSummary/> */}
-      </div>
+
         }
+        {
+          itemSummary && <ItemSummary setItemSummary={setItemSummary} selectItem={selectItem} />
+        }
+
+      </div>}
+
       <div className="expo__top__section">
         <div>
           <table  >
@@ -76,7 +95,7 @@ function Expo() {
             {loading ? <h1>Loading...</h1> :
               newData.map((data, i) => (
                 <tr key={i}>
-                  <td onClick={() => handleSelect(data.MenuID,"NEW")} style={{ color: "#6CDADE", height: "60px", background: selectItem.itemId === data.MenuID && selectItem.type === "NEW" ? "white" : i % 2 !== 0 ? "#393939" : "#080808"}} className="td">
+                  <td onClick={() => handleSelect(data.MenuID, "NEW")} style={{ color: "#6CDADE", height: "60px", background: selectItem.itemId === data.MenuID && selectItem.type === "NEW" ? "white" : i % 2 !== 0 ? "#393939" : "#080808" }} className="td">
                     <p>{data.ItemName}</p>
                     <p>{data.CountOfItems}</p>
                   </td>
@@ -93,9 +112,9 @@ function Expo() {
             {
               runningData.map((data, i) => (
                 <tr key={i}>
-                  <td onClick={() => handleSelect(data.MenuID,"COOKING")} 
-                  className="td" 
-                  style={{ color: "#EDBE7F", height: "60px", background:  selectItem.itemId===data.MenuID && selectItem.type === "COOKING" ? "white" :i % 2 !== 0 ? "#393939" :"#080808" }}>
+                  <td onClick={() => handleSelect(data.MenuID, "COOKING")}
+                    className="td"
+                    style={{ color: "#EDBE7F", height: "60px", background: selectItem.itemId === data.MenuID && selectItem.type === "COOKING" ? "white" : i % 2 !== 0 ? "#393939" : "#080808" }}>
                     <p>{data.ItemName}</p>
                     <p>{data.CountOfItems}</p>
                   </td>
@@ -112,8 +131,8 @@ function Expo() {
             {
               doneData.map((data, i) => (
                 <tr key={i}>
-                  <td className="td" onClick={() => handleSelect(data.MenuID,"DONE")} style={{ color: "#EDBE7F", height: "60px", background: selectItem.itemId === data.MenuID && selectItem.type === "DONE" ? "white" : i % 2 !== 0 ? "#393939" : "#080808" }}>                    
-                  <p>{data.ItemName}</p>
+                  <td className="td" onClick={() => handleSelect(data.MenuID, "DONE")} style={{ color: "#EDBE7F", height: "60px", background: selectItem.itemId === data.MenuID && selectItem.type === "DONE" ? "white" : i % 2 !== 0 ? "#393939" : "#080808" }}>
+                    <p>{data.ItemName}</p>
                     <p>{data.CountOfItems}</p>
                   </td>
                 </tr>
@@ -125,50 +144,8 @@ function Expo() {
       </div>
       <div className="expo__bottom__section">
         <div className="BtnSection">
-          <div className="button">
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              width="46"
-              height="25"
-              viewBox="0 0 46 34"
-            >
-              <g id="surface1" transform="translate(-1 -7)">
-                <path
-                  id="Path_11"
-                  data-name="Path 11"
-                  d="M9,12H39v3H9Z"
-                  fill="#424242"
-                />
-                <path
-                  id="Path_12"
-                  data-name="Path 12"
-                  d="M4,29H44V19a4,4,0,0,0-4-4H8a4,4,0,0,0-4,4Z"
-                  fill="#616161"
-                />
-                <path
-                  id="Path_13"
-                  data-name="Path 13"
-                  d="M8,41H40c3,0,4-4,4-4l3-8H1l3,8s1,4,4,4"
-                  fill="#7f7f7f"
-                />
-                <path
-                  id="Path_14"
-                  data-name="Path 14"
-                  d="M11,7H37v8H11Z"
-                  fill="#90caf9"
-                />
-                <path
-                  id="Path_15"
-                  data-name="Path 15"
-                  d="M7,23H41v6H7Z"
-                  fill="#212121"
-                />
-              </g>
-            </svg>
-            <h4>PRINT</h4>
-          </div>
 
-          <div className="button">
+          <div onClick={handleItemSummary} className="button">
             <svg
               xmlns="http://www.w3.org/2000/svg"
               width="30"
