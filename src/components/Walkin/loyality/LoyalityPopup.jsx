@@ -1,9 +1,39 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import CancelIcon from "@mui/icons-material/Cancel";
 import "./loyalityPoup.scss";
 import {BiSearchAlt} from 'react-icons/bi'
+import { walkinServices } from "../../../Services/WalkinServices";
 
 function LoyalityPopup({ setLoyalityPopup }) {
+  const [searchCustomer, setSearchCustomer] = useState([])
+  const [filterdCustomer, setFilteredCustomer] = useState([]);
+  const [filtValue, setFiltValue] = useState("");
+  var today = new Date();
+
+  useEffect(()=>{
+    searchCustmer();
+  },[])
+
+  const searchCustmer = () => {
+    walkinServices.getCustomer().then((res) => {
+      setSearchCustomer(res);
+    });
+  }
+
+
+  const handleCustomerSearch = async() => {
+    const filterData = await searchCustomer.filter((data) => {
+      if (filtValue) {
+        return (
+          data.Phone.toString().includes(filtValue) ||
+          data.CName.toLocaleLowerCase().includes(filtValue)
+        );
+      }
+      return "";
+    });
+    setFilteredCustomer(filterData);
+  };
+
   return (
     <div className="LoyalityPopup">
       <div className="loyality__Popup__headder">
@@ -16,14 +46,14 @@ function LoyalityPopup({ setLoyalityPopup }) {
         </div>
       </div>
       <div className="date">
-        <p>25 nov 21 17:58</p>
+        <p>{`${today.getDate()}-${today.getMonth()+1}-${today.getFullYear()}`}</p>
       </div>
       <div className="search_bar">
         <div className="search">
           <BiSearchAlt/>
-        <input type="text" placeholder="search by customer name or Contact no."/>
+        <input type="text" placeholder="search by customer name or Contact no."  onChange={e=>setFiltValue(e.target.value)} />
         </div>
-        <button>Search</button>
+        <button onClick={handleCustomerSearch} >Search</button>
       </div>
 
       <div className="loyal_table">
@@ -38,13 +68,27 @@ function LoyalityPopup({ setLoyalityPopup }) {
             </tr>
           </thead>
           <tbody>
-            <tr>
-              <td>alex</td>
-              <td>123456789</td>
-              <td>100</td>
-              <td>10</td>
-              <td>90</td>
+            {
+            filterdCustomer.length?
+            filterdCustomer?.map((d,i)=>(
+              <tr key={i} >
+                <td>{d.CName}</td>
+                <td>{d.Phone}</td>
+                <td>{d.LoyaltyPoint?d.LoyaltyPoint:0}</td>
+                <td>{d.IsRedemed?d.IsRedemed:0}</td>
+                <td>{d.LoyaltyPoint - d.IsRedemed}</td>
+              </tr>
+              ))
+            :searchCustomer?.map((d,i)=>(
+            <tr key={i} >
+              <td>{d.CName}</td>
+              <td>{d.Phone}</td>
+              <td>{d.LoyaltyPoint?d.LoyaltyPoint:0}</td>
+              <td>{d.IsRedemed?d.IsRedemed:0}</td>
+              <td>{d.LoyaltyPoint - d.IsRedemed}</td>
             </tr>
+            ))
+            }
           </tbody>
         </table>
       </div>

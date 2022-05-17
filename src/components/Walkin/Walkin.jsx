@@ -14,7 +14,6 @@ import PaymentSucessfull from "./payment/PaymentSucessFullpage/PaymentSucessfull
 import ProfileHeadder from "../profile Headder and Settings/ProfileHeadder";
 import SplitCheck from "./payment/spilitCheck/SplitCheck";
 import AddNotes from "./addNotes/AddNotes";
-// import Clock from "react-live-clock";
 import LoyalityPopup from "./loyality/LoyalityPopup";
 import AddCustomer from "../CRM/addCustomer/AddCustomer";
 import dummyUser from "./dummyUser";
@@ -29,7 +28,7 @@ function Walkin({ dataToSendToWlkinPage }) {
   const [CartItem, setCartItem] = useState([]);
   const [switchOn, setSwichOn] = useState(false);
   const [mainCategoryPic, setMainCategoryPic] = useState("");
-  const [itemDetailsClick, setItemDetailsClick] = useState(false);
+  const [itemDetails, setItemDetails] = useState(null);
   const [paymentOption, setPaymentOption] = useState(false);
   const [paymentSucessfull, setPaymentSUcessfull] = useState(false);
   const [dateTime, setDateTime] = useState();
@@ -44,8 +43,16 @@ function Walkin({ dataToSendToWlkinPage }) {
   const [itembymenu, setItembymenu] = useState([])
   const [menubyid, setMenubyid] = useState('')
   const [discount,setDiscount] = useState(false)
- 
   const [placeorder,setPlaceorder] = useState(false)
+
+  const calculateTotal = ()=>{
+    let price = CartItem.reduce(
+      (price, item) => price + item.quantity * item.ItemPrice,
+      0
+    );
+
+    console.log('bla');
+  }
   // useEffect(() => {
   //   const timeout = setTimeout(() => {
   //     const current = new Date().toLocaleString();
@@ -71,28 +78,25 @@ function Walkin({ dataToSendToWlkinPage }) {
   };
 
   // add items to cart
+  const HandleAddToCart = (Product,items = []) => {
 
-  const HandleAddToCart = (Product) => {
-    console.log(Product)
     const ProductExist = CartItem.find((items) => items.MenuID === Product.MenuID);
     if (ProductExist) {
       setCartItem(
         CartItem.map((item) =>
           item.MenuID === Product.MenuID
-            ? { ...ProductExist, quantity: ProductExist.quantity + 1,subitems:true }
+            ? { ...ProductExist, quantity: ProductExist.quantity + 1,}
             : item
         )
       );
     } else {
-      setCartItem([...CartItem, { ...Product, quantity: 1 ,subitems:true}]);
+      setCartItem([...CartItem, { ...Product, quantity: 1 ,subitems:items}]);
     }
-
   };
 
   // delete item from cart
 
   const handleDeleteFromCart = (product) => {
-    console.log("function trigered");
     setCartItem(CartItem.filter((item) => item.MenuID !== product.MenuID));
   };
 
@@ -141,10 +145,10 @@ function Walkin({ dataToSendToWlkinPage }) {
   };
 
 
-  const subTotal = CartItem.reduce(
-    (price, item) => price + item.quantity * item.ItemPrice,
-    0
-  );
+  // const subTotal = CartItem.reduce(
+  //   (price, item) => price + item.quantity * item.ItemPrice,
+  //   0
+  // );
 
   const [splitCheck, setSplitCheck] = useState(false);
   const [walikinView, setWalkinView] = useState(true);
@@ -159,6 +163,7 @@ function Walkin({ dataToSendToWlkinPage }) {
 
   const [filterdCustomer, setFilteredCustomer] = useState([]);
   const [filtValue, setFiltValue] = useState("");
+
   const handleCustomerSearch = (e) => {
     const searchedValue = e.target.value;
     searchCustmer()
@@ -174,6 +179,7 @@ function Walkin({ dataToSendToWlkinPage }) {
     });
     setFilteredCustomer(filterData);
   };
+  
   const [selectedCusetomer, setSelectedCustomer] = useState({});
   const handleSelectedCustomer = (id) => {
     const customerDetails = searchCustomer.find((data) => data.CustomerID === id);
@@ -207,7 +213,18 @@ function Walkin({ dataToSendToWlkinPage }) {
       setChangeQtyPopup(false);
     }
   };
+
+  const subTotal = CartItem.reduce(
+    (price, item) => price + item.quantity * item.ItemPrice,0);
+
+  const totalNumberOfPrdts = CartItem.reduce((total,item)=>total+item?.quantity,0);
+  const totalTaxPercent = CartItem.reduce((tax, item) => tax + item?.quantity *item?.TaxPercentage,0)
+  const taxAmount = Math.round((((totalTaxPercent/totalNumberOfPrdts)/100)*subTotal)*100)/100 || 0;
+    
   
+  
+
+
   useEffect(() => {
     walkinServices.getAllcategories()
     .then(data=>{ setAllmenu(data)})
@@ -218,10 +235,11 @@ function Walkin({ dataToSendToWlkinPage }) {
     <>
       {/* payment sucessfull popup */}
       {/* choose option for food section */}
-      {itemDetailsClick && (
+      {itemDetails && (
         <div className="Burger__option__selection__section__container">
           <div className="burger__option__sections__inner__div">
-            <BurgerOptionSection  setItemDetailsClick={setItemDetailsClick} productName={mainCategoryPic} />
+            <BurgerOptionSection  
+              setItemDetailsClick={setItemDetails} product={itemDetails} submit={HandleAddToCart} />
           </div>
         </div>
       )}
@@ -252,7 +270,7 @@ function Walkin({ dataToSendToWlkinPage }) {
           {splitCheck && (
             <div className="Burger__option__selection__section__container ">
               <div className="burger__option__sections__inner__div SplitCheckArea">
-                <SplitCheck setSplitCheck={setSplitCheck} />
+                <SplitCheck setSplitCheck={setSplitCheck} cartItems={CartItem} />
               </div>
             </div>
           )}
@@ -500,93 +518,52 @@ function Walkin({ dataToSendToWlkinPage }) {
                                   </div>
                                 )}
 
-                                {items?.subitems && (
+                                {items?.subitems.length && (
                                   <div className="sub__items__details">
-                                    <div className="diff__sections">
-                                      <svg
-                                        xmlns="http://www.w3.org/2000/svg"
-                                        width="30.043"
-                                        height="30.203"
-                                        viewBox="0 0 354.043 311.203"
-                                      >
-                                        <g
-                                          id="Group_2944"
-                                          data-name="Group 2944"
-                                          transform="translate(-23149.584 23957.395)"
+                                    {items.subitems.map((d,i)=>(
+                                      <div className="diff__sections" key={i}>
+                                        <svg
+                                          xmlns="http://www.w3.org/2000/svg"
+                                          width="30.043"
+                                          height="30.203"
+                                          viewBox="0 0 354.043 311.203"
                                         >
-                                          <rect
-                                            id="Rectangle_1151"
-                                            data-name="Rectangle 1151"
-                                            width="26"
-                                            height="311"
-                                            transform="translate(23149.584 -23957.395)"
-                                            fill="#2e2c60"
-                                          />
-                                          <rect
-                                            id="Rectangle_1152"
-                                            data-name="Rectangle 1152"
-                                            width="352"
-                                            height="23"
-                                            transform="translate(23151.627 -23669.191)"
-                                            fill="#2e2c60"
-                                          />
-                                        </g>
-                                      </svg>
-                                      <div className="detaills">
-                                        <h6>Cheese</h6>
-                                        <p
-                                          style={{
-                                            fontSize: "8px",
-                                            marginLeft: "5px",
-                                          }}
-                                        >
-                                          + 1 OMR
-                                        </p>
+                                          <g
+                                            id="Group_2944"
+                                            data-name="Group 2944"
+                                            transform="translate(-23149.584 23957.395)"
+                                          >
+                                            <rect
+                                              id="Rectangle_1151"
+                                              data-name="Rectangle 1151"
+                                              width="26"
+                                              height="311"
+                                              transform="translate(23149.584 -23957.395)"
+                                              fill="#2e2c60"
+                                            />
+                                            <rect
+                                              id="Rectangle_1152"
+                                              data-name="Rectangle 1152"
+                                              width="352"
+                                              height="23"
+                                              transform="translate(23151.627 -23669.191)"
+                                              fill="#2e2c60"
+                                            />
+                                          </g>
+                                        </svg>
+                                        <div className="detaills">
+                                          <h6>{d.name}</h6>
+                                          <p
+                                            style={{
+                                              fontSize: "8px",
+                                              marginLeft: "5px",
+                                            }}
+                                          >
+                                            + {d.price} OMR
+                                          </p>
+                                        </div>
                                       </div>
-                                    </div>
-
-                                    <div className="diff__sections">
-                                      <svg
-                                        xmlns="http://www.w3.org/2000/svg"
-                                        width="30.043"
-                                        height="30.203"
-                                        viewBox="0 0 354.043 311.203"
-                                      >
-                                        <g
-                                          id="Group_2944"
-                                          data-name="Group 2944"
-                                          transform="translate(-23149.584 23957.395)"
-                                        >
-                                          <rect
-                                            id="Rectangle_1151"
-                                            data-name="Rectangle 1151"
-                                            width="26"
-                                            height="311"
-                                            transform="translate(23149.584 -23957.395)"
-                                            fill="#2e2c60"
-                                          />
-                                          <rect
-                                            id="Rectangle_1152"
-                                            data-name="Rectangle 1152"
-                                            width="352"
-                                            height="23"
-                                            transform="translate(23151.627 -23669.191)"
-                                            fill="#2e2c60"
-                                          />
-                                        </g>
-                                      </svg>
-                                      <div className="detaills">
-                                        <h6>Wheat</h6>
-                                        <p
-                                          style={{
-                                            fontSize: "8px",
-                                            marginLeft: "5px",
-                                          }}
-                                        >
-                                          + 1 OMR
-                                        </p>
-                                      </div>
-                                    </div>
+                                    ))}
                                   </div>
                                 )}
                               </div>
@@ -651,8 +628,8 @@ function Walkin({ dataToSendToWlkinPage }) {
                 </div> 
                 <div>
                 <h3>Sub Total :{subTotal}</h3>
-                <h3>Tax : 5000</h3>
-                <h2>Total : 15000.00</h2>
+                <h3>Tax : {taxAmount}</h3>
+                <h2>Total : {(subTotal + taxAmount)+.00}</h2>
                 </div>
               </div>
 
@@ -864,7 +841,7 @@ function Walkin({ dataToSendToWlkinPage }) {
                             // setItemDetailsClick(true);
                             setMainCategoryPic(categ.ItemName)
                             categ.IsAddOn === true
-                              ? setItemDetailsClick(true)
+                              ? setItemDetails(categ)
                               : HandleAddToCart(categ)
                           }}
                         >
@@ -890,7 +867,7 @@ function Walkin({ dataToSendToWlkinPage }) {
           <div className="walkin__headder__nav">
             <div className="bottom__nav__section">
               <div className="left__bottom__nav__section">
-                <div className="buttons" style={{ backgroundColor: "#dfa75c" }}>
+                <div className="buttons" style={{ backgroundColor: "#dfa75c" }} onClick={()=>setCartItem([])}>
                   <h5>Cancel</h5>
                 </div>
                 <div

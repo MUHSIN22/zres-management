@@ -23,7 +23,7 @@ import PrintComponent from "./components/printing/PrintingComp";
 import Billgenerated from "./components/Walkin/Bills/Billgenerated";
 import { EssentialProvider } from "./Data manager/EssentialContext";
 import KdcOrder from "./components/KDC CLOUD/KDC Order/KdcOrder";
-// import 'material-react-toastify/dist/ReactToastify.css';
+
 function App() {
   return (
     <EssentialProvider>

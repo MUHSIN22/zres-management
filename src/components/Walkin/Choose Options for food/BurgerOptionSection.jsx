@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import "./burgerOptionSection.scss";
 import Checkbox from "@mui/material/Checkbox";
 
-function BurgerOptionSection({ setItemDetailsClick,productName }) {
+function BurgerOptionSection({ setItemDetailsClick,product, submit }) {
   const Addons = [
     {
       id: 1,
@@ -35,11 +35,13 @@ function BurgerOptionSection({ setItemDetailsClick,productName }) {
         {
           id: 155,
           name: "Wheat",
+          price:1
         },
 
         {
           id: 165,
           name: "Whole Grain",
+          price:2
         },
       ],
     },
@@ -51,15 +53,18 @@ function BurgerOptionSection({ setItemDetailsClick,productName }) {
         {
           id: 175,
           name: "Caremelized Onion",
+          price:0.5
         },
 
         {
           id: 185,
           name: "Tomatoes",
+          price:2
         },
         {
           id: 195,
           name: "Letues",
+          price:1
         },
       ],
     },
@@ -71,20 +76,31 @@ function BurgerOptionSection({ setItemDetailsClick,productName }) {
   const [checkedStat, setCheckedState] = useState(Addons);
   const [selectedAddOns,setSelectedAddOns] = useState([]);
 
-  const handleCheckboxClick = (e, data, prod) => {
-    const AddonMain = checkedStat.find((items) => items.id === prod.id);
-    const Selectedsub = AddonMain.items.find((items) => items.id === data.id);
-    setSelectedAddOns([...selectedAddOns,Selectedsub])
-    console.clear();
-    console.log(selectedAddOns);
-
+  const handleCheckboxClick = async(e, data, prod) =>{
+    const AddonMain = await checkedStat.find((items) => items.id === prod.id);
+    const Selectedsub = await AddonMain.items.find((items) => items.id === data.id);
+    let index = await selectedAddOns.findIndex(d=>d.id===Selectedsub.id);
+    if(index === -1){
+      console.log(Selectedsub);
+      setSelectedAddOns([...selectedAddOns,Selectedsub]);
+    }else{
+      let newArr = selectedAddOns;
+      newArr.pop(index);
+      console.log(newArr);
+      setSelectedAddOns(newArr);
+    }
   };
 
- 
+  const onSubmit = ()=>{
+    submit(product,selectedAddOns);
+    setItemDetailsClick(false);
+  }
+
+  console.log(product);
   return (
     <div className="BurgerOptionSection">
       <div className="top__hedding__section">
-        <h4>{productName}</h4>
+        <h4>{product.ItemName}</h4>
       </div>
 
       <hr />
@@ -149,7 +165,7 @@ function BurgerOptionSection({ setItemDetailsClick,productName }) {
                     {prod.items.map((item) => (
                       <div className="CheckBoxArea__Section">
                         <Checkbox
-                          checked={item.checked}
+                          checked={selectedAddOns.includes(item)}
                           key={item.name}
                           sx={{ "& .MuiSvgIcon-root": { fontSize: 38 } }}
                           onClick={(e) => handleCheckboxClick(e, item, prod)}
@@ -190,7 +206,7 @@ function BurgerOptionSection({ setItemDetailsClick,productName }) {
         </svg>
         <div className="button__sections__addmodifer__cancel">
           <button onClick={() => setItemDetailsClick(false) }> Cancel </button>
-          <button style={{ backgroundColor: "#040153", color: "#fff" }} >
+          <button style={{ backgroundColor: "#040153", color: "#fff" }} onClick={()=>onSubmit()} >
             Add Modifier
           </button>
         </div>

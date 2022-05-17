@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import Billgenerated from "../../Bills/Billgenerated";
 import "./cheque.scss";
-function Cheque({ numberOrder }) {
+function Cheque({ numberOrder, data, dividedPrice }) {
   const [printNow, setPrintNow] = useState(false);
 
   return (
@@ -18,22 +18,24 @@ function Cheque({ numberOrder }) {
                   justifyContent: "space-between",
                 }}
               >
-                <h4>458/{numberOrder + 1}</h4> <h4>$30.058</h4>
+                <h4>458/{numberOrder + 1}</h4> <h4>${Math.round(dividedPrice*100)/100}</h4>
               </div>
             </th>
           </tr>
         </thead>
         <tbody>
+            {data.map((item,i)=>(
           <tr>
-            <td style={{ padding: "0px" }}>
-              <div className="data__wrapper__body active">
-                <p>Bobs Barn Burger</p>
-                <p>2</p>
-                <p>15.0</p>
-                <p>15.0</p>
-              </div>
-            </td>
+              <td style={{ padding: "0px" }} key={i}>
+                <div className="data__wrapper__body active">
+                  <p>{item.ItemName}</p>
+                  <p>{item.TaxPercentage}</p>
+                  <p>{item.ItemPrice}</p>
+                  <p>{item.ItemPrice+((item.TaxPercentage/100)*item.ItemPrice)}</p>
+                </div>
+              </td>
           </tr>
+            ))}
         </tbody>
       </table>
 
