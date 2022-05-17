@@ -1,0 +1,42 @@
+.header {
+    display: flex;
+    padding-top: 1rem;
+    .selected {
+        border: 1px solid black;
+
+        border-bottom: none;
+        padding: 1rem;
+    }
+    .not_selected{
+        border-top: none;
+        padding: 1rem;
+        border-bottom: 1px solid black;
+    }
+    .border_end{
+        width: 70%;
+    }
+ 
+}
+.status_history{
+      
+}
+.status_table{
+    width: 100%;
+    margin-top: 2rem;
+   
+    p{
+        display: flex;
+        justify-content:center;
+    }
+    th{
+        border:1px solid black;
+        padding: 0.5rem;
+    }
+
+    td{
+        padding: 0.5rem;
+        border:1px solid black;
+        background:#80808047;  
+        border-radius:0!important;
+    }
+}

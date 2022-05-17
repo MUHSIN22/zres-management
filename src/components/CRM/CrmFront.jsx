@@ -8,6 +8,7 @@ import { Link } from "react-router-dom";
 import SingleCustomerDetails from "./singleCustomerDetails/SingleCustomerDetails";
 import LoadingScreen from "../loadingScreen/LoadingScreen";
 import  {crmServices} from "../../Services/CrmServices"
+import ShowDetails from "./Showdetails/ShowDetails";
 
 
 
@@ -192,7 +193,6 @@ function CrmFront({ setSmsCategory }) {
             )}
           </div>
         </div>
-
         <div className="result">  
           {userFound && <SingleCustomerDetails  number={number}/>}
 
