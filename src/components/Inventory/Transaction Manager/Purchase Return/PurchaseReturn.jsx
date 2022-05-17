@@ -27,10 +27,11 @@ function PurchaseReturn() {
       setData(data)
     }).catch(err => console.log(err))
   }
+
   const totalAmount = ()=>{
     let total = 0
     data.map(item=>{
-      total = total + item.Amount
+      total = total + item.GrandTotal
     })
     setTotal(total)
   }
@@ -40,7 +41,7 @@ function PurchaseReturn() {
       .then(data => { setData(data) })
       .catch(err => console.log(err));
       totalAmount()
-  }, [])
+  },[])
   return (
     <>
       {addNewBtn && (

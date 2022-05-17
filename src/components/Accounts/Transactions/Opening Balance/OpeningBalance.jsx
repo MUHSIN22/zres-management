@@ -4,68 +4,46 @@ import SearchIcon from "@mui/icons-material/Search";
 import "./OpeningBalance.scss";
 import { accountServices } from "../../../../Services/AccountsServices";
 
-const Date = [
-  {
-    SINO: "1",
 
-    productCode: 541,
-    Amound: 10000,
-
-    productName: "sugar",
-    stock: 50,
-  },
-
-  {
-    SINO: "2",
-
-    productCode: 341,
-    Amound: 10000,
-
-    productName: "oil",
-    stock: 10,
-  },
-
-  {
-    SINO: "3",
-
-    productCode: 241,
-    Amound: 100000,
-
-    productName: "Potato",
-    stock: 30,
-  },
-
-  {
-    SINO: "4",
-
-    productCode: 341,
-    Amound: 10000,
-
-    productName: "Onion",
-    stock: 10,
-  },
-];
 
 function OpeningBalance() {
   const [clickedTr, SetClickedTr] = useState("");
-  const [openingBalance,setOpeningBalance] = useState([]);
-  const [totalCredit,setTotalCredit] = useState(0);
-  const [totalDebit,setTotalDebit] = useState(0);
+  const [openingBalance, setOpeningBalance] = useState([]);
+  const [totalCredit, setTotalCredit] = useState(0);
+  const [totalDebit, setTotalDebit] = useState(0);
+  const [date, setDate] = useState(null)
 
-  useEffect(()=>{
+  useEffect(() => {
     accountServices.getOpeningBalance()
-    .then(data => {
-      let td = 0,tc = 0;
-      setOpeningBalance(data)
-      data.forEach((item) => {
-        td += item.Debit;
-        tc += item.Credit;
+      .then(data => {
+        let td = 0, tc = 0;
+        setOpeningBalance(data)
+        data.forEach((item) => {
+          td += item.Debit;
+          tc += item.Credit;
+        })
+        setTotalCredit(tc);
+        setTotalDebit(td)
       })
-      setTotalCredit(tc);
-      setTotalDebit(td)
-    })
-    .catch(err => console.log(err))
-  },[])
+      .catch(err => console.log(err))
+  }, [])
+
+  const getFilteredBalance = () => {
+    if (date) {
+      accountServices.getOpeningBalance(date)
+        .then(data => {
+          let td = 0, tc = 0;
+          setOpeningBalance(data)
+          data.forEach((item) => {
+            td += item.Debit;
+            tc += item.Credit;
+          })
+          setTotalCredit(tc);
+          setTotalDebit(td)
+        })
+        .catch(err => console.log(err))
+    }
+  }
 
   return (
     <div className="OpeningBalance">
@@ -236,7 +214,7 @@ function OpeningBalance() {
           <div className="input__Section">
             <div className="input__field">
               <h4>Entry-Date</h4>
-              <input type="date" name="" id="" />
+              <input type="date" name="" id="" onChange={(event) => setDate(event.target.value)} />
             </div>
 
             <div className="input__field">
@@ -248,7 +226,7 @@ function OpeningBalance() {
           </div>
 
           <div className="bottom__input__section">
-            <div className="serch__box">
+            <div className="serch__box" onClick={getFilteredBalance}>
               <h4>Refresh</h4>
             </div>
           </div>
@@ -268,7 +246,7 @@ function OpeningBalance() {
               </tr>
             </thead>
             <tbody className="table-body">
-              {openingBalance.map((item,index) => (
+              {openingBalance.map((item, index) => (
                 <tr
                   keys={index}
                   className={clickedTr === item.OBid && "selectedTr "}

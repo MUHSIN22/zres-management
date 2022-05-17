@@ -1,0 +1,25 @@
+.placeorder_container{
+position: fixed;
+top: 14rem;
+right: 29rem;
+background: #fff;
+width: 25rem;
+height: 15rem;
+display: flex;
+justify-content: space-around;
+align-items: center;
+flex-direction: column;
+border-radius: 1rem;
+box-shadow: 0 0.5rem 1rem rgba(0,0,0,0.2);
+
+button{
+    box-shadow: 6px 3px 6px #04015380;
+border-radius: 16px;
+opacity: 1;
+width: 6rem;
+height: 2rem;
+background: #040153 0% 0% no-repeat padding-box;
+color: #fff;
+cursor: pointer;
+}
+}

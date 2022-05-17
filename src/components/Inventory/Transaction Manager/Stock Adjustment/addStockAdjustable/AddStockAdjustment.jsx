@@ -60,6 +60,8 @@ function AddStockAdjustment({ setAddNewBtn, setMainTableView }) {
   const [productdropdown, setProductdropdown] = useState([])
   // if the data in dropdown is selected the abovr tr must be removed and ne tr must be added
   const [dropdownarrayClicked, setDropDownArrayClicked] = useState(false);
+  const [searchdata,setSearchdata] = useState('')
+  const [tabledata,setTabledata] = useState([])
 
   const handleSelectedItem = (productCode) => {
     const dataSorted = datas.find((items) => items.productCode === productCode);
@@ -67,6 +69,27 @@ function AddStockAdjustment({ setAddNewBtn, setMainTableView }) {
   };
 
   console.log("THE FILTERED DATA IS ", filterData);
+
+  const handleSearchData = (evt) => {
+    const name = evt.target.value;
+    setSearchdata({
+      ...searchdata,
+      [evt.target.name]: name,
+     
+    });
+  };
+console.log(searchdata)
+
+const searchStock = (data)=>{
+  console.log(data)
+if(data.date && data.productId && data.CategoryId){
+  inventoryServices.getStockadjustmentsearchdata(data).then(res=>{
+    console.log(res);setTabledata(data)}).catch(err=>{ console.log(err)})
+    
+  }
+
+}
+console.log(tabledata)
 
   useEffect(() => {
     inventoryServices.getStockcost()
@@ -90,25 +113,25 @@ function AddStockAdjustment({ setAddNewBtn, setMainTableView }) {
           <div className="top">
             <div className="input__sections">
               <h5>Ref No</h5>
-              <input type="text" />
+              <input  name="refno" value={searchdata.refno} onChange={handleSearchData} type="text" />
             </div>
             <div className="input__sections">
               <h5>Category</h5>
-              <select name="CategoryId" id="">
+              <select  value={searchdata.CategoryId} onChange={handleSearchData} name="CategoryId" id="">
                 <option disabled selected>Select Category</option>
                 {category && category.map((item) => (
-                  <option value=""></option>))}
+                  <option value={item.MenuGroupId}>{item.MenuGroupName}</option>))}
               </select>
             </div>
           </div>
           <div className="bottom">
             <div className="input__sections">
               <h5>To Date</h5>
-              <input type="date" />
+              <input name="date" value={searchdata.date} onChange={handleSearchData} type="date" />
             </div>
             <div className="input__sections">
               <h5>Product Name</h5>
-              <select name="" id="">
+              <select  name="productId" value={searchdata.productId} onChange={handleSearchData} id="">
                 <option selected="true" disabled="disabled">Select Product</option>
                 {productdropdown && productdropdown.map((items) => (
                   <option value={items.Cid}>
@@ -119,7 +142,7 @@ function AddStockAdjustment({ setAddNewBtn, setMainTableView }) {
           </div>
         </div>
         <div className="search__Section">
-          <button>Search</button>
+          <button onClick={()=>searchStock(searchdata)}>Search</button>
           <button>Cancel</button>
         </div>
       </div>
@@ -130,37 +153,6 @@ function AddStockAdjustment({ setAddNewBtn, setMainTableView }) {
       <div className="mid__section">
         <div className="table__sections">
           {/* pop  */}
-
-          {productMoreOption && (
-            <div className="pop__up__table">
-              {!dropdownarrayClicked && (
-                <table className="table">
-                  <thead>
-                    <tr>
-                      <th className="lefttd">Product Code</th>
-                      <th>Product Name</th>
-                      <th>Stock</th>
-                      <th>Disc Perc</th>
-                      <th className="righttd"> Tax Perc</th>
-                    </tr>
-                  </thead>
-
-                  <tbody>
-                    {datas.map((items) => (
-                      <tr onClick={() => handleSelectedItem(items.productCode)}>
-                        <td className="lefttd">{items.productCode}</td>
-                        <td>{items.ProductName}</td>
-                        <td>{items.Stock}</td>
-                        <td>{items.DisPer}</td>
-                        <td className="righttd">{items.TaxPer}</td>
-                      </tr>
-                    ))}
-                  </tbody>
-                </table>
-              )}
-            </div>
-          )}
-
           {/* main table */}
           <table className="table">
             <thead>
@@ -178,33 +170,21 @@ function AddStockAdjustment({ setAddNewBtn, setMainTableView }) {
               </tr>
             </thead>
             <tbody>
-              {!dropdownarrayClicked && (
+                
                 <tr>
                   <td></td>
-                  <td style={{ textAlign: "right" }}>
-                    {productMoreOption && (
-                      <ArrowDropDownIcon
-                        style={{ cursor: "pointer" }}
-                        onClick={() => setProductsMoreOption(false)}
-                      />
-                    )}
-                    {!productMoreOption && (
-                      <ArrowRightIcon
-                        style={{ cursor: "pointer" }}
-                        onClick={() => setProductsMoreOption(true)}
-                      />
-                    )}
-                  </td>
-                  <td></td>
-                  <td></td>
-                  <td></td>
-                  <td></td>
-                  <td></td>
-                  <td></td>
-                  <td></td>
-                  <td></td>
+                  <td>{tabledata.ProductName}</td>
+                  <td>{tabledata.BatchNo}</td>
+                  <td>{tabledata.Expiry}</td>
+                  <td>{tabledata.Stock}</td>
+                  <td>{tabledata.QtyAdd}</td>
+                  <td>{tabledata.QtyDeduct}</td>
+                  <td>{tabledata.Amount}</td>
+                  <td>{tabledata.DeductAmount}</td>
                 </tr>
-              )}
+               
+
+            
 
               {/* this will view if they clicked on sub Category */}
 

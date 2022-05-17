@@ -63,6 +63,9 @@ hr{
   display: grid;
   color: rgb(0, 0, 0);
   text-align: center;
+  svg{
+    justify-self: center;
+  }
   p{
     font-size: 8px;
   }

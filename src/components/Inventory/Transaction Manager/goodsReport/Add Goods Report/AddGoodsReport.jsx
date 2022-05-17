@@ -1,9 +1,10 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import "./addGoodsReport.scss";
 import DatePicker from "react-datepicker";
 import SucessSnackbars from "../../../../basic components/sucessSidePopup";
 import FailSnackbars from "../../../../basic components/failSnackBar";
 import moment from "moment";
+import { inventoryServices } from "../../../../../Services/InventoryServices";
 const mainData = {
   PrchsId: "",
   RefNo: "",
@@ -37,18 +38,18 @@ const innerTable = {
   TAX: "",
   Name: "",
 };
-function AddGoodsReport({ setAddNewBtn, setMainTableView }) {
+function AddGoodsReport({ setAddNewBtn, setMainTableView ,status,editable}) {
   const [invDate, setInventoryDate] = useState(null);
   const [arrivalDate, setArivalDate] = useState(null);
   const [expiryDate, setExpiryDate] = useState(null);
-  const [Mainvalues, setMainValues] = useState(mainData);
-  const [subData, setSubdata] = useState(innerTable);
+  const [Mainvalues, setMainValues] = useState('');
+  const [subData, setSubdata] = useState('');
   const [dataInTable, setDataInTable] = useState([]);
   const convertDate = moment(expiryDate).format("DD-MM-YYYY");
   const convertedArivalDate = moment(arrivalDate).format("DD-MM-YYYY");
   const convertedinvoiceDate = moment(invDate).format("DD-MM-YYYY");
   const [messageToPassToSnackbar, setMessageToPassToSnackbar] = useState("");
-
+  const [productmaster, setProductMaster] = useState([])
   const [snackbarSucess, setSnackbarSucess] = useState(false);
   const [snackbarFail, setSnackBarFail] = useState(false);
 
@@ -94,22 +95,22 @@ function AddGoodsReport({ setAddNewBtn, setMainTableView }) {
     });
   };
 
-  const mainFormSubmit = (e) => {
+  const mainFormSubmit = (e,main,sub) => {
     e.preventDefault();
     if (dataInTable.length == 0) {
       setSnackBarFail(true);
       setMessageToPassToSnackbar("Please Add Product");
       return;
     }
+    inventoryServices.postGoodreceipt(main,sub)
     window.alert("form submited");
     console.log("dataToSend", Mainvalues, dataInTable);
   };
-
+console.log(subData)
   const handleDataforTable = (e) => {
     e.preventDefault();
     setDataInTable([...dataInTable, subData]);
   };
-
   const handleEditTableData = (data) => {
     // setValues(data);
   };
@@ -133,6 +134,43 @@ function AddGoodsReport({ setAddNewBtn, setMainTableView }) {
 
   console.log("MAIN VALUES", Mainvalues);
 
+  const subdataUpdate = () => {
+    if (subData.ProductsId !== '' ) {
+      const data = productmaster.filter(item => item.ProdctId == subData.productID)
+console.log(data)
+
+setSubdata({
+   HSNCode: (data[0] !== '') && data[0].HSNCode,
+   BatchNo: (data[0] !== '') && data[0].RackNo,
+   Qty: (data[0] !== '') && data[0].Quantity,
+   productID: (data[0] !== '') && data[0].ProdctId,
+  Discount: (data[0] !== '') && data[0].Discount,
+  
+      })
+    } 
+  }
+
+  useEffect(() => {
+
+    inventoryServices.getProductdetails()
+      .then(data => {
+        setProductMaster(data)
+      }).catch(err => console.log(err))
+
+      if(status){
+        setMainValues({
+          "TransDate": editable.TransDate,
+          "TransNo": editable.TransNo,
+          "RefNo": editable.RefNo,
+          "RefDate": editable.RefDate,
+          "PaymentType": editable.Payment,
+          "Address": editable.Address,
+          "GrandTotal": editable.TotalDiscount,
+          "totalTax": editable.TotalTax,
+        })
+      }
+  }, [])
+  
   return (
     <>
       {snackbarSucess && (
@@ -240,7 +278,6 @@ function AddGoodsReport({ setAddNewBtn, setMainTableView }) {
               <h5>Branch</h5>
 
               <select
-                name=""
                 id=""
                 value={Mainvalues.BrachId}
                 name="BrachId"
@@ -271,14 +308,11 @@ function AddGoodsReport({ setAddNewBtn, setMainTableView }) {
           <form autoComplete="off" onSubmit={(e) => handleDataforTable(e)}>
             <div className="input__area__Section">
               <div className="left__input__areaa sectionss">
-                <input
-                  type="text"
-                  name="Name"
-                  placeholder="Products"
-                  onChange={handleAddDataToTable}
-                  value={subData.Name}
-                  required
-                />
+              <select value={subData.productID} name="productID" onChange={handleAddDataToTable}>
+             <option disabled selected>Select Product</option>
+              {productmaster && productmaster.map((item) => (
+                    <option onClick={subdataUpdate} value={item.ProdctId}>{item.PName}</option>))}
+                    </select>
                 <input
                   type="text"
                   name="HSNCode"
@@ -493,7 +527,7 @@ function AddGoodsReport({ setAddNewBtn, setMainTableView }) {
             </div>
           </div>
           <div className="bottom__btn__section">
-            <button onClick={mainFormSubmit}>Save</button>
+            <button onClick={(e)=>mainFormSubmit(e,Mainvalues,subData)}>Save</button>
             <button>Print</button>
             <button
               onClick={() => {
