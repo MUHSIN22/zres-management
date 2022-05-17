@@ -1,16 +1,23 @@
 .LoyalityPopup {
-  width: 400px;
-  height: 400px;
+  width: 39rem;
+  height: 45rem;
   background-color: #fff;
   box-shadow: 0 0 10px rgb(70, 70, 70);
-  left: 40%;
-  right: 40%;
+  left: 53%;
+  right: 9%;
   border-radius: 15px;
   position: absolute;
-  top: 20%;
+  top: 0%;
   z-index: 2;
-
+  display: grid;
+  grid-row-gap: 2rem;
+  grid-template-areas: "head"
+                        "date"
+                        "seachbar"
+                        "table"
+                        "buttons";
   .loyality__Popup__headder {
+    grid-area:head;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -34,4 +41,74 @@
       right: 10px;
     }
   }
+  .date{
+    grid-area:date;
+    display: flex;
+    justify-content: flex-end;
+    padding-right: 1rem;
+    font-weight: 600;
+  }
+  .search_bar{
+grid-area:seachbar;
+display: flex;
+justify-content:center;
+align-items: center;
+  }
+.search{
+  margin-right: 3rem;
+  box-shadow: 0 0 10px rgb(70, 70, 70);
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  padding: 0 0.5rem 0 0.5rem;
+  input{
+    width: 19rem;
+height: 2rem;
+border:none;
+outline: none;
+padding:0.5rem;
+border-radius: 1rem;
+  }
 }
+
+button{
+  background: #040153 0% 0% no-repeat padding-box;
+box-shadow: 6px 3px 6px #04015380;
+border-radius: 11px;
+opacity: 1;
+color: #fff;
+width: 6rem;
+padding: 0.3rem;
+}
+.loyal_table{
+  grid-area:table;
+  display: flex;
+  flex-direction: column;
+  overflow-y: scroll;
+  height: 70vh;
+  width: 100%;
+  table{
+    width: 100%;
+    border-collapse: collapse;
+    tr{
+      th{
+        padding: 1rem;
+        font-weight: 600;
+        background-color: #cbccdf;
+        color:#040153;
+        font-size: 0.9rem;
+      }
+      td{
+        padding: 0.5rem;
+      }
+    }
+  }
+}
+.button{
+  padding: 0 1rem 1rem 0;
+  grid-area: buttons;
+  display: flex;
+  justify-content: flex-end;
+}
+}
+

@@ -1,16 +1,17 @@
 import React, { useState } from "react";
 import "./burgerOptionSection.scss";
 import Checkbox from "@mui/material/Checkbox";
-function BurgerOptionSection({ setItemDetailsClick,productName }) {
+
+function BurgerOptionSection({ setItemDetailsClick,product, submit }) {
   const Addons = [
     {
       id: 1,
-      SectionName: "AddOns",
+      SectionName: "Add Ons",
       items: [
         {
           id: 494,
           name: "Cheese",
-          price: "1.0",
+          price: 1.0,
         },
 
         {
@@ -34,11 +35,13 @@ function BurgerOptionSection({ setItemDetailsClick,productName }) {
         {
           id: 155,
           name: "Wheat",
+          price:1
         },
 
         {
           id: 165,
           name: "Whole Grain",
+          price:2
         },
       ],
     },
@@ -50,85 +53,70 @@ function BurgerOptionSection({ setItemDetailsClick,productName }) {
         {
           id: 175,
           name: "Caremelized Onion",
+          price:0.5
         },
 
         {
           id: 185,
           name: "Tomatoes",
+          price:2
         },
         {
           id: 195,
           name: "Letues",
+          price:1
         },
       ],
     },
   ];
 
-  const newAdons = [
-    {
-      name: "adons",
-      data: [
-        {
-          id: 494,
-          name: "Cheese",
-          price: "1.0",
-        },
 
-        {
-          id: 434,
-          name: "Bacon",
-          price: 2.0,
-        },
-
-        {
-          id: 484,
-          name: "Onion",
-          price: 3.0,
-        },
-      ],
-    },
-  ];
-  const [selectedOption, setSelectedOption] = useState("AddOns");
+  
+  const [selectedOption, setSelectedOption] = useState(Addons[0].SectionName);
   const [checkedStat, setCheckedState] = useState(Addons);
+  const [selectedAddOns,setSelectedAddOns] = useState([]);
 
-  const handleCheckboxClick = (e, data, prod) => {
-    // this looks for the main hedder addons
-    const AddonMain = checkedStat.find((items) => items.id === prod.id);
-    // this will look for subaddons
-    const Selectedsub = AddonMain.items.find((items) => items.id === data.id);
-
+  const handleCheckboxClick = async(e, data, prod) =>{
+    const AddonMain = await checkedStat.find((items) => items.id === prod.id);
+    const Selectedsub = await AddonMain.items.find((items) => items.id === data.id);
+    let index = await selectedAddOns.findIndex(d=>d.id===Selectedsub.id);
+    if(index === -1){
+      console.log(Selectedsub);
+      setSelectedAddOns([...selectedAddOns,Selectedsub]);
+    }else{
+      let newArr = selectedAddOns;
+      newArr.pop(index);
+      console.log(newArr);
+      setSelectedAddOns(newArr);
+    }
   };
 
-  console.log("origin", checkedStat);
+  const onSubmit = ()=>{
+    submit(product,selectedAddOns);
+    setItemDetailsClick(false);
+  }
 
- 
+  console.log(product);
   return (
     <div className="BurgerOptionSection">
       <div className="top__hedding__section">
-        <h4>{productName}</h4>
+        <h4>{product.ItemName}</h4>
       </div>
 
       <hr />
 
       <div className="mid__option__section">
         <div className="left__mid__option">
+          {Addons.map((d,i)=>(
           <div
+            key={i}
             className={
               "button__section__area " +
-              (selectedOption === "AddOns" && "active")
+              (selectedOption === d.SectionName && "active")
             }
-            onClick={() => setSelectedOption("AddOns")}
-          >
-            <h5>Add Ons</h5>
-          </div>
-          <div
-            className={
-              "button__section__area " +
-              (selectedOption === "BreadSelection" && "active")
-            }
-            onClick={() => setSelectedOption("BreadSelection")}
-          >
-            <div className="svg__manadaory__Section">
+            onClick={() => setSelectedOption(d.SectionName)}
+            >
+              {i===1&&<div className="svg__manadaory__Section">
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 width="40"
@@ -148,19 +136,9 @@ function BurgerOptionSection({ setItemDetailsClick,productName }) {
                   </tspan>
                 </text>
               </svg>
-            </div>
-
-            <h5>Choose Your Bread</h5>
-          </div>
-          <div
-            className={
-              "button__section__area " +
-              (selectedOption === "Topping" && "active")
-            }
-            onClick={() => setSelectedOption("Topping")}
-          >
-            <h5>Topping</h5>
-          </div>
+            </div>}
+            <h5>{d.SectionName}</h5>
+          </div>))}
         </div>
         <div className="right__mid__option">
           {/* AddOns section */}
@@ -168,11 +146,10 @@ function BurgerOptionSection({ setItemDetailsClick,productName }) {
             {checkedStat
               .filter((items) => items.SectionName === selectedOption)
               .map((prod) => (
-                <>
+                <  >
                   <div className="right__curresponding__headder">
                     <h4>{prod.SectionName}</h4>
                     {}
-
                     {prod.SectionName !== "BreadSelection" && (
                       <>
                         <p>Please Choose Maximum Of {prod.items.length}</p>
@@ -188,7 +165,7 @@ function BurgerOptionSection({ setItemDetailsClick,productName }) {
                     {prod.items.map((item) => (
                       <div className="CheckBoxArea__Section">
                         <Checkbox
-                          checked={item.checked}
+                          checked={selectedAddOns.includes(item)}
                           key={item.name}
                           sx={{ "& .MuiSvgIcon-root": { fontSize: 38 } }}
                           onClick={(e) => handleCheckboxClick(e, item, prod)}
@@ -206,7 +183,7 @@ function BurgerOptionSection({ setItemDetailsClick,productName }) {
           </div>
         </div>
       </div>
-      <hr />
+      <hr/>
       <div className="bottom__addmodifier__cancel__Section">
         <svg
           xmlns="http://www.w3.org/2000/svg"
@@ -229,7 +206,7 @@ function BurgerOptionSection({ setItemDetailsClick,productName }) {
         </svg>
         <div className="button__sections__addmodifer__cancel">
           <button onClick={() => setItemDetailsClick(false) }> Cancel </button>
-          <button style={{ backgroundColor: "#040153", color: "#fff" }} >
+          <button style={{ backgroundColor: "#040153", color: "#fff" }} onClick={()=>onSubmit()} >
             Add Modifier
           </button>
         </div>

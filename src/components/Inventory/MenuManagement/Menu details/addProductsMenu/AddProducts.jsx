@@ -59,8 +59,8 @@ function AddProducts({
     price: "",
     image: "",
     menuName: "",
-    category:"",
-    status:"",
+    category: "",
+    status: "",
     sizeandprice: [],
     imageFile: null,
   };
@@ -81,11 +81,11 @@ function AddProducts({
     setDataToSend({
       ...dataToSend,
       [e.target.name]: value,
-      status:checkbox
+      status: checkbox
     });
   };
 
- 
+
 
   const handlesizeSelectionData = () => {
     setDiffSizeSelectionStored([...diffSizeSelectionStored, dataToSend]);
@@ -101,7 +101,7 @@ function AddProducts({
     if (e.target.files && e.target.files[0]) {
       let ImageFile = e.target.files[0];
       const reader = new FileReader();
-      
+
       reader.onload = (x) => {
         setDataToSend({
           ...dataToSend,
@@ -166,13 +166,19 @@ function AddProducts({
         // setImage(updatableProducts.Image);
         // setCategoryname(updatableProducts.CategoryName);
         setActiveBlock(updatableProducts.Status);
-        Data.menuCode= updatableProducts.MenuID
-        Data.menuName= updatableProducts.ItemName
-        Data.price= updatableProducts.ItemPrice
-        Data.menuCode= updatableProducts.MenuID
-        Data.image= updatableProducts.Image
-        Data.category= updatableProducts.CategoryName
-        Data.status= updatableProducts.IsActive
+        Data.menuCode = updatableProducts.MenuID
+        Data.menuName = updatableProducts.ItemName
+        Data.price = updatableProducts.ItemPrice
+        Data.menuCode = updatableProducts.MenuID
+        Data.image = updatableProducts.Image
+        Data.category = updatableProducts.CategoryName
+        Data.status = updatableProducts.IsActive
+        Data.shortName = updatableProducts.ShortName
+        Data.CreatedBy = updatableProducts.CreatedBy
+        Data.MaxStockLevel = updatableProducts.MaxStockLevel
+        Data.MenuGroupID = updatableProducts.MenuGroupID
+        Data.RackNo = updatableProducts.RackNo
+        Data.Weight = updatableProducts.Weight
 
       };
       HandleUpdateProductsFeild();
@@ -222,16 +228,81 @@ function AddProducts({
                     name="menuName"
                     value={dataToSend.menuName}
                     onChange={handleAddCategoryToSend}
-                    
+
                   />
+                </div>
+                <div className="input__Sections">
+                  <h5>Short Name</h5>
+                  <input
+                    type="text"
+                    name="shortName"
+                    value={dataToSend.shortName}
+                    onChange={handleAddCategoryToSend}
+
+                  />
+                </div>
+                <div className="input__Sections">
+                  <h5>Weight</h5>
+                  <input
+                    type="text"
+                    name="MenuGroupID"
+                    value={dataToSend.MenuGroupID}
+                    onChange={handleAddCategoryToSend}
+
+                  />
+                </div>
+                <div className="input__Sections">
+                  <h5>RackNo</h5>
+                  <input
+                    type="text"
+                    name="RackNo"
+                    value={dataToSend.RackNo}
+                    onChange={handleAddCategoryToSend}
+
+                  />
+
+                </div>
+
+                <div className="input__Sections">
+                  <h5>MaxStockLevel</h5>
+                  <input
+                    type="text"
+                    name="MaxStockLevel"
+                    value={dataToSend.MaxStockLevel}
+                    onChange={handleAddCategoryToSend}
+
+                  />
+
+                </div>
+                <div className="input__Sections">
+                  <h5>CreatedBy</h5>
+                  <input
+                    type="text"
+                    name="CreatedBy"
+                    value={dataToSend.CreatedBy}
+                    onChange={handleAddCategoryToSend}
+
+                  />
+
+                </div>
+                <div className="input__Sections">
+                  <h5>Weight</h5>
+                  <input
+                    type="text"
+                    name="Weight"
+                    value={dataToSend.Weight}
+                    onChange={handleAddCategoryToSend}
+
+                  />
+
                 </div>
                 <div className="input__Sections">
                   <h5>Category Name</h5>
                   <input type="text"
-                  name="category"
-                  value={dataToSend.category}
-                  onChange={handleAddCategoryToSend}
-                   />
+                    name="category"
+                    value={dataToSend.category}
+                    onChange={handleAddCategoryToSend}
+                  />
                 </div>
                 <div className="input__Sections priceInput">
                   <h5>Price</h5>
@@ -242,7 +313,7 @@ function AddProducts({
                     value={dataToSend.price}
                     onChange={handleAddCategoryToSend}
                   />
-                   
+
                   <AddBoxOutlinedIcon
                     onClick={() => setSizeSetting(!sizesetting)}
                   />
@@ -320,7 +391,7 @@ function AddProducts({
                       type="checkbox"
                       name="status"
                       id="block"
-                      checked={editProduct ? dataToSend.status === false :null}
+                      checked={editProduct ? dataToSend.status === false : null}
                     />
                     <h5>Block</h5>
                   </div>
@@ -328,7 +399,7 @@ function AddProducts({
                 <div className="drop__image__section">
                   <section className="container">
                     <div {...getRootProps({ className: "dropzone" })}>
-                      <input {...getInputProps()}  onChange={ImagePreview} />
+                      <input {...getInputProps()} onChange={ImagePreview} />
 
                       {addProducts && (
                         <>
@@ -362,7 +433,7 @@ function AddProducts({
                         <img
                           style={{ width: "100px" }}
                           src={dataToSend?.image}
-                          
+
                         ></img>
                       </aside>
                     </aside>

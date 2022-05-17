@@ -36,6 +36,7 @@ function CrmFront({ setSmsCategory }) {
     .then(data =>{setCustomer(data)})
   }, [number]);
 
+
   const handleSearch = () => {
     if (customer.find((data) => data.Phone === number)) {
       const SearchData = customer.filter((dta) => dta.Phone === number);
