@@ -46,6 +46,16 @@ export const walkinServices = {
                     reject(err)
                 })
         })
+    },
+    getCustomer : ()=>{
+        return new Promise((resolve, reject) => {
+            fetch(`${BASE_URL}Customer?CMPid=1`)
+                .then(res => res.json())
+                .then(data => { resolve(data) })
+                .catch((err) => {
+                    reject(err)
+                })
+        })
     }
 
 }
