@@ -1,10 +1,11 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import "./addNewCredit.scss";
 import DatePicker from "react-datepicker";
 import moment from "moment";
 import "react-datepicker/dist/react-datepicker.css";
 import FailSnackbars from "../../../../basic components/failSnackBar";
 import SucessSnackbars from "../../../../basic components/sucessSidePopup";
+import { accountServices } from "../../../../../Services/AccountsServices";
 
 const mainData = {
   PrchsId: "",
@@ -37,11 +38,32 @@ const innerTable = {
 };
 
 function AddNewCredit({ setAddNewBtn, setMainTableView }) {
-  const [subData, setSubdata] = useState(innerTable);
   const [dataInTable, setDataInTable] = useState([]);
   const [expiryDate, setExpiryDate] = useState(null);
   const convertDate = moment(expiryDate).format("DD-MM-YYYY");
   const [Mainvalues, setMainValues] = useState(mainData);
+  const [creditData, setCreditData] = useState([]);
+  const [products, setProducts] = useState([])
+  const [suppliers, setSuppliers] = useState([])
+  const [creditEntries, setCreditEntries] = useState({
+    "CrDate": "",
+    "EntryNo": "",
+    "EntryDate": "",
+    "SupplierID": "",
+    "Expiry": "",
+    "HSNCode": "",
+    "BatchNo": "",
+    "Qty": "",
+    "FreeQty": "",
+    "Rate": "",
+    "Discount": "",
+    "GST": "",
+    "PrdctId": "",
+    "TaxParam": "",
+    "Total": "",
+    "UserID": "",
+    "CMPid": ""
+  })
 
   const [snackbarSucess, setSnackbarSucess] = useState(false);
   const [snackbarFail, setSnackBarFail] = useState(false);
@@ -53,18 +75,55 @@ function AddNewCredit({ setAddNewBtn, setMainTableView }) {
 
   const handleDataforTable = (e) => {
     e.preventDefault();
-    setDataInTable([...dataInTable, subData]);
-    setSubdata(innerTable);
+    setDataInTable([...dataInTable, creditEntries]);
+    setCreditEntries(innerTable);
   };
 
+  const handleSaving = () => {
+    if(creditData[0]){
+      accountServices.uploadDebitNote(creditData)
+        .then(res => console.log(res))
+        .catch(err => console.log(err))
+    }
+  }
+
   const handleAddDataToTable = (evt) => {
-    const name = evt.target.value;
-    setSubdata({
-      ...subData,
-      [evt.target.name]: name,
-      Expiry: convertDate,
-    });
+    // const name = evt.target.value;
+    // setcreditEntries({
+    //   ...creditEntries,
+    //   [evt.target.name]: name,
+    //   Expiry: convertDate,
+    // });
   };
+
+  const handleData = (event, name) => {
+    setCreditEntries({ ...creditEntries, [!name ? event.target.name : name]: name ? event : event.target.value })
+  }
+
+  const handleAdding = (event) => {
+    console.log(creditEntries);
+    setCreditData([...creditData,creditEntries])
+    setCreditEntries({
+      ...creditEntries,
+      "CrDate": "",
+      "EntryNo": "",
+      "EntryDate": "",
+      "SupplierID": "",
+      "Expiry": "",
+      "HSNCode": "",
+      "BatchNo": "",
+      "Qty": "",
+      "FreeQty": "",
+      "Rate": "",
+      "Discount": "",
+      "GST": "",
+      "PrdctId": "",
+      "TaxParam": "",
+      "Total": "",
+      "UserID": "",
+      "CMPid": ""
+    })
+  }
 
   const mainFormSubmit = (e) => {
     if (dataInTable.length == 0) {
@@ -94,6 +153,17 @@ function AddNewCredit({ setAddNewBtn, setMainTableView }) {
     // }
   };
 
+
+  useEffect(() => {
+    accountServices.getProductDropdown()
+      .then(res => setProducts(res))
+      .catch(err => console.log(err))
+
+    accountServices.getDebitNoteDropdown()
+      .then(res => setSuppliers(res))
+      .catch(err => console.log(err))
+  }, [])
+
   return (
     <div className="AddNewCredit">
       <div className="headderName">
@@ -106,21 +176,21 @@ function AddNewCredit({ setAddNewBtn, setMainTableView }) {
           <div className="top">
             <div className="input__sections">
               <h5>Entry No</h5>
-              <input type="text" />
+              <input name="EntryNo" value={creditEntries.EntryNo} type="text" onChange={handleData} />
             </div>
             <div className="input__sections">
               <h5>Entry Date</h5>
-              <input type="date" />
+              <input name="EntryDate" value={creditEntries.EntryDate} type="date" onChange={handleData} />
             </div>
           </div>
           <div className="bottom">
             <div className="input__sections">
               <h5>Cr.No</h5>
-              <input type="text" className="invoiceno" />
+              <input type="text" value={creditEntries.CrNo} name="CrNo" className="invoiceno" onChange={handleData} />
             </div>
             <div className="input__sections invDate">
               <h5>Cr.Date</h5>
-              <input type="date" />
+              <input name="CrDate" value={creditEntries.CrDate} type="date" onChange={handleData} />
             </div>
           </div>
         </div>
@@ -128,23 +198,27 @@ function AddNewCredit({ setAddNewBtn, setMainTableView }) {
           <div className="input__Sections">
             <h5>Supplier</h5>
 
-            <select name="" id="">
-              <option value="">ram</option>
-              <option value="">revi</option>
-              <option value="">kishor</option>
+            <select name="SupplierID" id="" onChange={handleData}>
+              <option value={creditEntries.SupplierID}>Choose Supplier</option>
+              {
+                suppliers.map((item, index) => (
+                  <option value={item.Value} key={index}>{item.Text}</option>
+                ))
+              }
+
             </select>
           </div>
 
           <div className="input__Sections">
-            <input type="text" placeholder="Location" />
+            <input type="text" name="location" placeholder="Location" onChange={handleData} />
           </div>
           <div className="input__Sections">
-            <input type="text" placeholder="GSTNO" />
+            <input type="text" name="GSTNo" placeholder="GSTNO" onChange={handleData} />
           </div>
 
           <div className="radioBtn__Section">
             <div className="radio__sec">
-                <input type="radio" id="css" name="fav_language" value="CSS" /> {" "}
+              <input type="radio" id="css" name="fav_language" value="CSS" /> {" "}
               <label for="css">Cash Bill</label>
             </div>
 
@@ -162,28 +236,34 @@ function AddNewCredit({ setAddNewBtn, setMainTableView }) {
         <form autoComplete="off" onSubmit={(e) => handleDataforTable(e)}>
           <div className="input__area__Section">
             <div className="left__input__areaa sectionss">
-              <input
-                type="text"
-                name="Name"
-                placeholder="Products"
-                onChange={handleAddDataToTable}
-                value={subData.Name}
-                required
-              />
+              <select name="PrdctId" id="" value={creditEntries.PrdctId} onChange={handleData}>
+                <option value="">Choose product</option>
+                {
+                  products.map((item, index) => (
+                    <option value={item.Value} key={index}>{item.Text}</option>
+                  ))
+                }
+              </select>
               <input
                 type="text"
                 name="HSNCode"
                 placeholder="HSN Code"
-                onChange={handleAddDataToTable}
-                value={subData.HSNCode}
+                onChange={(event) => {
+                  handleAddDataToTable(event)
+                  handleData(event)
+                }}
+                value={creditEntries.HSNCode}
                 required
               />
               <input
                 type="text"
                 name="BatchNo"
                 placeholder="Batch No"
-                onChange={handleAddDataToTable}
-                value={subData.BatchNo}
+                onChange={(event) => {
+                  handleAddDataToTable(event)
+                  handleData(event)
+                }}
+                value={creditEntries.BatchNo}
                 required
               />
               <div
@@ -194,8 +274,12 @@ function AddNewCredit({ setAddNewBtn, setMainTableView }) {
               >
                 <DatePicker
                   placeholderText="Expiry"
-                  selected={expiryDate}
-                  onChange={(date) => handleExpiryDate(date)}
+                  selected={creditEntries.Expiry}
+                  name="Expiry"
+                  onChange={(event) => {
+                    handleAddDataToTable(event)
+                    handleData(event, "Expiry")
+                  }}
                   dateFormat={"dd/MM/yyyy"}
                   isClearable
                   required
@@ -206,16 +290,22 @@ function AddNewCredit({ setAddNewBtn, setMainTableView }) {
                 type="number"
                 name="Qty"
                 placeholder="Qty"
-                onChange={handleAddDataToTable}
-                value={subData.Qty}
+                onChange={(event) => {
+                  handleAddDataToTable(event)
+                  handleData(event)
+                }}
+                value={creditEntries.Qty}
                 required
               />
               <input
                 type="number"
                 name="FreeQty"
                 placeholder="Free Qty"
-                onChange={handleAddDataToTable}
-                value={subData.FreeQty}
+                onChange={(event) => {
+                  handleAddDataToTable(event)
+                  handleData(event)
+                }}
+                value={creditEntries.FreeQty}
                 required
               />
             </div>
@@ -224,43 +314,58 @@ function AddNewCredit({ setAddNewBtn, setMainTableView }) {
                 type="number"
                 name="Rate"
                 placeholder="Rate"
-                onChange={handleAddDataToTable}
-                value={subData.Rate}
+                onChange={(event) => {
+                  handleAddDataToTable(event)
+                  handleData(event)
+                }}
+                value={creditEntries.Rate}
               />
               <input
                 type="number"
                 name="Discount"
                 placeholder="Disc"
-                onChange={handleAddDataToTable}
-                value={subData.Discount}
+                onChange={(event) => {
+                  handleAddDataToTable(event)
+                  handleData(event)
+                }}
+                value={creditEntries.Discount}
                 required
               />
               <input
                 type="text"
                 name="GST"
                 placeholder="GST"
-                onChange={handleAddDataToTable}
-                value={subData.GST}
+                onChange={(event) => {
+                  handleAddDataToTable(event)
+                  handleData(event)
+                }}
+                value={creditEntries.GST}
                 required
               />
               <input
                 type="number"
-                name="TAX"
+                name="TaxParam"
                 placeholder="Tax Param"
-                onChange={handleAddDataToTable}
-                value={subData.TAX}
+                onChange={(event) => {
+                  handleAddDataToTable(event)
+                  handleData(event)
+                }}
+                value={creditEntries.TaxParam}
                 required
               />
               <input
                 type="number"
                 name="Total"
                 placeholder="Total"
-                onChange={handleAddDataToTable}
-                value={subData.Total}
+                onChange={(event) => {
+                  handleAddDataToTable(event)
+                  handleData(event)
+                }}
+                value={creditEntries.Total}
                 required
               />
               <div className="button__sectionssss">
-                <button type="submit">Add Product</button>
+                <button type="submit" onClick={handleAdding}>Add Product</button>
                 <button type="button" onClick={HandleUpdateData}>
                   Update
                 </button>
@@ -289,35 +394,35 @@ function AddNewCredit({ setAddNewBtn, setMainTableView }) {
               </tr>
             </thead>
             <tbody>
-              <tr>
-                <td>Suger</td>
-                <td>3004104</td>
-                <td>e201200</td>
-                <td>12/2021</td>
-                <td>20kg</td>
-                <td>0</td>
-                <td>100</td>
-                <td>0</td>
-                <td>12%</td>
-                <td>qty</td>
-                <td>1000</td>
-              </tr>
-              <tr>
-                <td>Suger</td>
-                <td>3004104</td>
-                <td>e201200</td>
-                <td>12/2021</td>
-                <td>20kg</td>
-                <td>0</td>
-                <td>100</td>
-                <td>0</td>
-                <td>12%</td>
-                <td>qty</td>
-                <td>1000</td>
-              </tr>
+              {
+                creditData.map((item, index) => (
+                  <tr>
+                    {
+                      products.map((product,index) => (
+                        <>
+                          {
+                            item.PrdctId === product.Value &&
+                            <td>{product.Text}</td>
+                          }
+                        </>
+                      ))
+                    }
+                    <td>{item.HSNCode}</td>
+                    <td>{item.BatchNo}</td>
+                    <td>{new Date(item.Expiry).toLocaleDateString()}</td>
+                    <td>{item.Qty}</td>
+                    <td>{item.FreeQty}</td>
+                    <td>{item.Rate}</td>
+                    <td>{item.Discount}</td>
+                    <td>{item.GST}%</td>
+                    <td>{item.TaxParam}</td>
+                    <td>{item.Total}</td>
+                  </tr>
+                ))
+              }
             </tbody>
 
-            <tfoot className="tfootTotal">
+            {/* <tfoot className="tfootTotal">
               <tr>
                 <th></th>
                 <th></th>
@@ -331,7 +436,7 @@ function AddNewCredit({ setAddNewBtn, setMainTableView }) {
                 <th></th>
                 <th>Total</th>
               </tr>
-            </tfoot>
+            </tfoot> */}
           </table>
         </div>
       </div>
@@ -357,11 +462,12 @@ function AddNewCredit({ setAddNewBtn, setMainTableView }) {
             onClick={() => {
               setAddNewBtn(false);
               setMainTableView(true);
+              handleSaving();
             }}
           >
             Save
           </button>
-          <button>Print</button>
+          {/* <button>Print</button> */}
           <button
             onClick={() => {
               setAddNewBtn(false);

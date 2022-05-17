@@ -12,7 +12,13 @@ function ChartOfAcccount() {
   useEffect(() => {
     Sketch();
     accountServices.getChartOfAccounts()
-      .then(data => { setCharts(data); console.log(data); })
+      .then(data => { 
+        setCharts(data); 
+        console.log(data); 
+        data.forEach((item,index) => {
+          Sketch(index)
+        })
+      })
       .catch(err => console.log(err))
   }, []);
 
@@ -27,7 +33,7 @@ function ChartOfAcccount() {
               <h3>Chart Of Account</h3>
             </div>
 
-            <div className="right">
+            {/* <div className="right">
               <div
                 className="icon__section"
                 onClick={() => closePrintActive(true)}
@@ -179,7 +185,7 @@ function ChartOfAcccount() {
 
                 <h4>Export Pdf</h4>
               </div>
-            </div>
+            </div> */}
           </div>
         </div>
         <table width={"100%"} id="chartofaccount">
@@ -192,165 +198,44 @@ function ChartOfAcccount() {
                   <h5>Balance</h5>
                 </div>
 
-                {/* {
-                  charts.map((item, index) => ( */}
-                    <ul id="tree1" class="tree ">
-                      <li >
-                        <a href="#">Assets</a>
-                        <ul>
-                          <li>
-                            <a href="#" className="innerHead">
-                              Cash and Cash Equipment
-                            </a>
-                            <ul>
-                              {/* <li>
-                            <a href="#">for again mapping use this</a>
-                            <ul>
-                              <li>
-                                <a href="#">Report1</a>
-                              </li>
-                              <li>
-                                <a href="#">Report2</a>
-                              </li>
-                              <li>
-                                <a href="#">Report3</a>
-                              </li>
-                            </ul>
-                            </li> */}
 
-                              <div className="li__section">
-                                <li>Cash on Hand</li>
-                                <h5>500000</h5>
-                              </div>
-
-                              <div className="li__section">
-                                <li>SBI Bank</li>
-                                <h5>500000</h5>
-                              </div>
-                            </ul>
-                          </li>
-
-                          <li>
-                            <a className="innerHead" href="#">
-                              Sundry Debitor
-                            </a>
-                            <ul>
-                              <div className="li__section">
-                                <li>Dr Rajan Tomas</li>
-                                <h5>500000</h5>
-                              </div>
-                            </ul>
-                          </li>
-
-                          <li>
-                            <a className="innerHead" href="#">
-                              Inventory
-                            </a>
-                            <ul>
-                              <div className="li__section">
-                                <li>Stock</li>
-                                <h5>8000</h5>
-                              </div>
-
-                              <div className="li__section">
-                                <li>Office</li>
-                                <h5>50000</h5>
-                              </div>
-                            </ul>
-                          </li>
-
-                          <li>
-                            <a className="innerHead" href="#">
-                              Fixed Asset
-                            </a>
-                            <ul>
-                              <li>Cost Of Furniture</li>
-                              <li>Cost of Office Equipment</li>
-                            </ul>
-                          </li>
-                        </ul>
-                      </li>
-                    </ul>
-                    <ul id="tree2" class="tree ">
-                      <li >
-                        <a href="#">Assets</a>
-                        <ul>
-                          <li>
-                            <a href="#" className="innerHead">
-                              Cash and Cash Equipment
-                            </a>
-                            <ul>
-                              {/* <li>
-                            <a href="#">for again mapping use this</a>
-                            <ul>
-                              <li>
-                                <a href="#">Report1</a>
-                              </li>
-                              <li>
-                                <a href="#">Report2</a>
-                              </li>
-                              <li>
-                                <a href="#">Report3</a>
-                              </li>
-                            </ul>
-                            </li> */}
-
-                              <div className="li__section">
-                                <li>Cash on Hand</li>
-                                <h5>500000</h5>
-                              </div>
-
-                              <div className="li__section">
-                                <li>SBI Bank</li>
-                                <h5>500000</h5>
-                              </div>
-                            </ul>
-                          </li>
-
-                          <li>
-                            <a className="innerHead" href="#">
-                              Sundry Debitor
-                            </a>
-                            <ul>
-                              <div className="li__section">
-                                <li>Dr Rajan Tomas</li>
-                                <h5>500000</h5>
-                              </div>
-                            </ul>
-                          </li>
-
-                          <li>
-                            <a className="innerHead" href="#">
-                              Inventory
-                            </a>
-                            <ul>
-                              <div className="li__section">
-                                <li>Stock</li>
-                                <h5>8000</h5>
-                              </div>
-
-                              <div className="li__section">
-                                <li>Office</li>
-                                <h5>50000</h5>
-                              </div>
-                            </ul>
-                          </li>
-
-                          <li>
-                            <a className="innerHead" href="#">
-                              Fixed Asset
-                            </a>
-                            <ul>
-                              <li>Cost Of Furniture</li>
-                              <li>Cost of Office Equipment</li>
-                            </ul>
-                          </li>
-                        </ul>
-                      </li>
-                    </ul>
-                  {/* )) */}
-                {/* } */}
-
+                <>
+                  {
+                    charts.map((item, index) => (
+                      <>
+                        {
+                          index < 4 &&
+                          <ul id={"tree"+index} class="tree ">
+                            <li >
+                              <a href="#">{item.AccountType}</a>
+                              <ul>
+                                {
+                                  item.AccountGroup.map((item, index) => (
+                                    <li key={index}>
+                                      <a href="#" className="innerHead">
+                                        {item.AccountGroupName}
+                                      </a>
+                                      <ul>
+                                        {
+                                          item.Accounts.map((item, index) => (
+                                            <div className="li__section">
+                                              <li>{item.AccountName}</li>
+                                              <h5>{item.Balance}</h5>
+                                            </div>
+                                          ))
+                                        }
+                                      </ul>
+                                    </li>
+                                  ))
+                                }
+                              </ul>
+                            </li>
+                          </ul>
+                        }
+                      </>
+                    ))
+                  }
+                </>
               </div>
             </td>
           </tr>

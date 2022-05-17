@@ -1,5 +1,5 @@
-export default function Sketch() {
-  var tree = document.getElementById("tree1");
+export default function Sketch(index) {
+  var tree = document.getElementById("tree"+index);
   if (tree) {
     tree.querySelectorAll("ul").forEach(function (el, key, parent) {
       var elm = el.parentNode;
