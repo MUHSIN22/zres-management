@@ -214,9 +214,7 @@ function Walkin({ dataToSendToWlkinPage, dinein }) {
     }
   };
 
-  const subTotal = CartItem.reduce(
-    (price, item) => price + item.quantity * item.ItemPrice,0);
-
+  const subTotal = CartItem.reduce((price, item) => price + item.quantity * item.ItemPrice,0);
   const totalNumberOfPrdts = CartItem.reduce((total,item)=>total+item?.quantity,0);
   const totalTaxPercent = CartItem.reduce((tax, item) => tax + item?.quantity *item?.TaxPercentage,0)
   const taxAmount = Math.round((((totalTaxPercent/totalNumberOfPrdts)/100)*subTotal)*100)/100 || 0;
@@ -264,6 +262,9 @@ function Walkin({ dataToSendToWlkinPage, dinein }) {
               <div className="burger__option__sections__inner__div payment__area">
                 <Payment
                   dinein={dinein}
+                  subTotal={subTotal}
+                  taxAmount={taxAmount}
+                  items={CartItem}
                   setPaymentSUcessfull={setPaymentSUcessfull}
                   setPaymentOption={setPaymentOption}
                   paymentOption={paymentOption}

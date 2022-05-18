@@ -1,18 +1,23 @@
 import React, { useEffect } from "react";
 import "./billgenerator.scss";
-function Billgenerated({ printNow, setPrintNow, dinein}) {
+function Billgenerated({ printNow, dinein,items}) {
   useEffect(() => {
     if (printNow === true) {
       printData();
     }
   }, [printNow]);
+  
+  const subTotal = items.reduce((price, item) => price + item.quantity * item.ItemPrice,0);
+  const totalNumberOfPrdts = items.reduce((total,item)=>total+item?.quantity,0);
+  const totalTaxPercent = items.reduce((tax, item) => tax + item?.quantity *item?.TaxPercentage,0)
+  const taxAmount = Math.round((((totalTaxPercent/totalNumberOfPrdts)/100)*subTotal)*100)/100 || 0;
+  const today = new Date()
 
   const printData = () => {
     window.frames["print_frame"].document.body.innerHTML =
       document.getElementById("printableTable").innerHTML;
     window.frames["print_frame"].window.focus();
     window.frames["print_frame"].window.print();
-    setPrintNow(false);
   };
 
   return (
@@ -43,8 +48,8 @@ function Billgenerated({ printNow, setPrintNow, dinein}) {
                 <td style={{ textAlign: "right" }}>Staff - Athul</td>
               </tr>
               <tr>
-                <td>20/12/2020</td>
-                <td style={{ textAlign: "right" }}>8:50pm</td>
+                <td>{today.getDate()}/{today.getMonth()+1}/{today.getFullYear()}</td>
+                <td style={{ textAlign: "right" }}>{today.getHours()}:{today.getMinutes()}</td>
               </tr>
             </tbody>
           </table>
@@ -60,36 +65,13 @@ function Billgenerated({ printNow, setPrintNow, dinein}) {
               </tr>
             </thead>
             <tbody>
+              {items && items.map((d,i)=>(
               <tr>
-                <td style={{ textAlign: "center" }}>2</td>
-                <td style={{ textAlign: "center" }}>Margerita pizza</td>
-                <td style={{ textAlign: "center" }}>250</td>
+                <td style={{ textAlign: "center" }}>{d.quantity}</td>
+                <td style={{ textAlign: "center" }}>{d.ItemName}</td>
+                <td style={{ textAlign: "center" }}>{d.ItemPrice*d.quantity+.00}</td>
               </tr>
-              <tr>
-                <td style={{ textAlign: "center" }}>2</td>
-                <td style={{ textAlign: "center" }}>Burger</td>
-                <td style={{ textAlign: "center" }}>250</td>
-              </tr>
-              <tr>
-                <td style={{ textAlign: "center" }}>2</td>
-                <td style={{ textAlign: "center" }}>Lime</td>
-                <td style={{ textAlign: "center" }}>250</td>
-              </tr>
-              <tr>
-                <td style={{ textAlign: "center" }}>2</td>
-                <td style={{ textAlign: "center" }}>Coke</td>
-                <td style={{ textAlign: "center" }}>250</td>
-              </tr>
-              <tr>
-                <td style={{ textAlign: "center" }}>2</td>
-                <td style={{ textAlign: "center" }}>pizza</td>
-                <td style={{ textAlign: "center" }}>250</td>
-              </tr>
-              <tr>
-                <td style={{ textAlign: "center" }}>2</td>
-                <td style={{ textAlign: "center" }}>Margerita pizza</td>
-                <td style={{ textAlign: "center" }}>250</td>
-              </tr>
+              ))}
             </tbody>
           </table>
         </div>
@@ -98,19 +80,19 @@ function Billgenerated({ printNow, setPrintNow, dinein}) {
           <table width="100%">
             <tr>
               <th style={{ textAlign: "right", paddingRight: "10px" }}>Tax:</th>
-              <td style={{ textAlign: "left" }}> 5%</td>
+              <td style={{ textAlign: "left" }}>{totalTaxPercent}%</td>
             </tr>
             <tr>
               <th style={{ textAlign: "right", paddingRight: "10px" }}>
                 Total:
               </th>
-              <td style={{ textAlign: "left" }}>575</td>
+              <td style={{ textAlign: "left" }}>{subTotal+taxAmount+.00}</td>
             </tr>
             <tr>
               <th style={{ textAlign: "right", paddingRight: "10px" }}>
                 Amount Recived:
               </th>
-              <td style={{ textAlign: "left" }}>5002</td>
+              <td style={{ textAlign: "left" }}>0.00</td>
             </tr>
             <tr>
               <th style={{ textAlign: "right", paddingRight: "10px" }}>
