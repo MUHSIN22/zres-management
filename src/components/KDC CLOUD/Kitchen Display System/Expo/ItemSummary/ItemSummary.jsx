@@ -63,7 +63,7 @@ const ItemSummary = ({ selectItem, setItemSummary }) => {
                                     <div>
                                         <h4>{data.ItemName}</h4>
                                         <p>({data.Modifier})</p>
-                                    </div>
+                                      </div>
                                     <Barcode displayValue={false} width={2} height={50} value={data.OrderID} format="CODE128" />
                                 </div>
                             </div>
