@@ -76,8 +76,7 @@
     "sass": "^1.49.9",
     "slick-carousel": "^1.8.1",
     "styled-components": "^5.3.3",
-    "web-vitals": "^1.1.2",
-    "webpack": "^5.72.1"
+    "web-vitals": "^1.1.2"
   },
   "scripts": {
     "watch": "npm-watch",

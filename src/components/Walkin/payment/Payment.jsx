@@ -8,7 +8,7 @@ import { useEffect } from "react";
 import NumPad from "react-numpad";
 import Billgenerated from "../Bills/Billgenerated";
 
-function Payment({ setPaymentOption, paymentOption, setPaymentSUcessfull, dinein }) {
+function Payment({ setPaymentOption, paymentOption, setPaymentSUcessfull, dinein,subTotal,taxAmount, items }) {
   const [pay, setPay] = useState(false);
   const [mainPaymentSection, setMainPaymentSection] = useState(true);
   const [changeDueActive, setChangeDueActive] = useState(false);
@@ -30,7 +30,7 @@ function Payment({ setPaymentOption, paymentOption, setPaymentSUcessfull, dinein
 
   const handleChange = (event) =>
     setAmountEnter(addCommas(removeNonNumeric(event.target.value)));
-
+  console.log(items);
   return (
     <>
       {/* paymentTypeScreen */}
@@ -90,7 +90,7 @@ function Payment({ setPaymentOption, paymentOption, setPaymentSUcessfull, dinein
               <div className="left__area__split__Section">
                 <div className="left__top__payment__section">
                   <h4>Total Amount OMR</h4>
-                  <h1>4500.00</h1>
+                  <h1>{subTotal+taxAmount+.00}</h1>
                 </div>
                 <div className="right__area__split__Section">
                   <button>Cash</button>
@@ -204,7 +204,7 @@ function Payment({ setPaymentOption, paymentOption, setPaymentSUcessfull, dinein
           </div>
         </div>
       )}
-      <Billgenerated printNow={printNow} dinein={dinein} />
+      <Billgenerated items={items} printNow={printNow} dinein={dinein} />
     </>
   );
 }
