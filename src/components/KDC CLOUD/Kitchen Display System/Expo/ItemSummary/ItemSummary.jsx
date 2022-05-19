@@ -9,7 +9,7 @@ const ItemSummary = ({ selectItem, setItemSummary }) => {
     const [summaryData, setSummaryData] = useState([])
     useEffect(() => {
         setLoading({ status: true, msg: "Loading..." })
-        fetch(`${process.env.REACT_APP_BASE_URL}KDS/ItemSummary?ItemID=${27}&Status=new&CMPid=1`)
+        fetch(`${process.env.REACT_APP_BASE_URL}KDS/ItemSummary?ItemID=${selectItem.itemId}&Status=${selectItem.type}&CMPid=1`)
             .then(res => res.json()).then(data => {
                 setSummaryData(data)
                 setLoading({ status: false, msg: "" })
