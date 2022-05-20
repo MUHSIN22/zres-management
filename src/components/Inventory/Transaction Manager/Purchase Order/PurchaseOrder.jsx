@@ -15,7 +15,15 @@ function PurchaseOrder() {
   const [clickedTr, SetClickedTr] = useState("");
   const [editmode, setEditmode] = useState(false)
   const [updatableProducts, setUpdatableProducts] = useState([])
+  const [deletemode,setDeletemode] = useState(false) 
 
+
+  const deleteAction = (data)=>{
+    if (window.confirm('Are you sure you wish to delete this item?') && deletemode) {
+      console.log(data)
+      inventoryServices.deleteProductmaster(data.Taxid)
+   }
+   }
   const DateFilter = () => {
     var FromdateSplit = fromDate.split("/");
     var toDateSplit = toDate.split("/");
@@ -99,7 +107,7 @@ function PurchaseOrder() {
                 </svg>
                 <h5>Edit</h5>
               </div>
-              <div className="different__option">
+              <div onClick={()=>deletemode ? setDeletemode(false) : setDeletemode(true)} className="different__option">
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
                   width="23.42"
@@ -166,7 +174,8 @@ function PurchaseOrder() {
                     <tr
                       keys={index+1}
                       className={clickedTr === index+1 && "selectedTr "}
-                      onClick={() =>{SetClickedTr(index+1);if (editmode){ setAddNewBtn(true);setMainTableView(false);setUpdatableProducts(datas)}}}
+                      onClick={() =>{SetClickedTr(index+1);if (editmode){ setAddNewBtn(true);setMainTableView(false);setUpdatableProducts(datas)}  deletemode && 
+                      deleteAction(datas)}}
                     >
                       <td>
                         <input type="checkbox" name="" id="" />

@@ -13,12 +13,20 @@ function StockAdjustment() {
   const [data, setData] = useState([])
   const [editableUpdatable, setEditableUpdatable] = useState(false);
   const [fromDate,setfromDate]= useState('')
+  const [editmode,setEditmode] = useState(false)
   const [toDate,settoDate]= useState('')
   const [dataStoredForEditableUpdatable, setDataStoredForEditableUpdatable] =
     useState([]);
 
   const [clickedTr, SetClickedTr] = useState("");
+  const [deletemode,setDeletemode] = useState(false) 
 
+
+  const deleteAction = (data)=>{
+    if (window.confirm('Are you sure you wish to delete this item?') && deletemode) {
+      inventoryServices.deleteStockadjustment(data.StkAid)
+   }
+   }
   const salesadjustmentFilter = (from,to)=>{
     if(from && to){
     inventoryServices.getStockadjustmentFilter(from,to).then(res=>{
@@ -84,7 +92,7 @@ function StockAdjustment() {
                 </svg>
                 <h5>New</h5>
               </div>
-              <div className="different__option">
+              <div onClick={()=>{editmode ? setEditmode(false) : setEditmode(true) }} className="different__option">
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
                   width="32.5"
@@ -103,7 +111,7 @@ function StockAdjustment() {
                 </svg>
                 <h5>Edit</h5>
               </div>
-              <div className="different__option">
+              <div onClick={()=>deletemode ? setDeletemode(false) : setDeletemode(true)} className="different__option">
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
                   width="23.42"
@@ -157,9 +165,13 @@ function StockAdjustment() {
                       className={clickedTr === index+1 && "selectedTr "}
                       onClick={() => {
                         SetClickedTr(index+1);
+                        if(editmode){
                         setDataStoredForEditableUpdatable(datas);
                         setEditableUpdatable(true);
                         setMainTableView(false);
+                        }
+                        deletemode && 
+                        deleteAction(datas)
                       }}
                     >
                       <td>{index+1}</td>

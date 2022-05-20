@@ -17,7 +17,15 @@ function StockTransfer() {
   const [branchdata, setBranchdata] = useState("")
   const [editmode,setEditmode] = useState(false)
   const [updatableProducts, setUpdatableProducts] = useState([])
+  const [deletemode,setDeletemode] = useState(false) 
 
+
+  const deleteAction = (data)=>{
+    if (window.confirm('Are you sure you wish to delete this item?') && deletemode) {
+      console.log(data)
+      inventoryServices.deleteProductmaster(data.StkTrnsfrRqstId)
+   }
+   }
   const stockTransferFilter = (from, to, branch) => {
     if (from && to && branch) {
       inventoryServices.getStocktransferFilter(from, to, branch).then(res => {
@@ -102,7 +110,7 @@ function StockTransfer() {
                 </svg>
                 <h5>Edit</h5>
               </div>
-              <div className="different__option">
+              <div onClick={()=>deletemode ? setDeletemode(false) : setDeletemode(true)} className="different__option">
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
                   width="23.42"
@@ -204,7 +212,8 @@ function StockTransfer() {
                         setAddNewBtn(true);
                         setMainTableView(false);
                         setUpdatableProducts(datas)
-                      }}}
+                      }  deletemode && 
+                      deleteAction(datas)}}
                     >
                       <td>
                         <input type="checkbox" name="" id="" />
@@ -214,14 +223,14 @@ function StockTransfer() {
                           datas.ReturnType === "Expiry Return" && "Canceled "
                         }
                       >
-
+                        {index+1}
                       </td>
                       <td
                         className={
                           datas.ReturnType === "Expiry Return" && "Canceled "
                         }
                       >
-                        {datas.RtnNo}
+                        {datas.TransData === '' ? 'Noo data in api' : datas.TransData}
                       </td>
                       <td
                         className={
@@ -235,14 +244,14 @@ function StockTransfer() {
                           datas.ReturnType === "Expiry Return" && "Canceled "
                         }
                       >
-                        {datas.InvNo}
+                        {datas.GrossAmount}
                       </td>
                       <td
                         className={
                           datas.ReturnType === "Expiry Return" && "Canceled "
                         }
                       >
-                        {datas.InvDate}
+                        {datas.Tax === '' ? 'No Data in Api' : datas.Tax}
                       </td>
                       <td
                         className={
@@ -263,21 +272,21 @@ function StockTransfer() {
                           datas.ReturnType === "Expiry Return" && "Canceled "
                         }
                       >
-                        {datas.IsApprove}
+                        {datas.IsApprove ? "Approved" : "Pending"}
                       </td>
                       <td
                         className={
                           datas.ReturnType === "Expiry Return" && "Canceled "
                         }
                       >
-                        {datas.Amound}
+                        {datas.CreditNoteAmount}
                       </td>
                       <td
                         className={
                           datas.ReturnType === "Expiry Return" && "Canceled "
                         }
                       >
-                        {datas.Amound}
+                        {datas.CreatedBy === '' ? 'Not data in api' : datas.CreatedBy}
                       </td>
                     </tr>
                   )):"No data found"}

@@ -673,4 +673,78 @@ export const inventoryServices = {
             })
         })
     },
+    deleteProductmaster : (cid) =>{
+        return new Promise((resolve, reject) => {
+            fetch(`${BASE_URL}Category/delete?Cid=${cid}8&CMPid=1`)
+                .then(res => res.json())
+                .then(data => { resolve(data) })
+                .catch(err => reject(err))
+        })
+    },
+
+    deleteMeasurementdetails : (mid) =>{
+        return new Promise((resolve, reject) => {
+            fetch(`${BASE_URL}UOM/delete?UOMid=${mid}&CMPid=1`)
+                .then(res => res.json())
+                .then(data => { resolve(data) })
+                .catch(err => reject(err))
+        })
+    },
+    deleteTaxmaster : (tid) =>{
+        return new Promise((resolve, reject) => {
+            fetch(`${BASE_URL}Tax/delete?Taxid=${tid}&CMPid=1`)
+                .then(res => res.json())
+                .then(data => { resolve(data) })
+                .catch(err => reject(err))
+        })
+    },
+    deletePurchaseDetails : (pid) =>{
+        return new Promise((resolve, reject) => {
+            fetch(`${BASE_URL}Purchase/delete?id=${pid}&CMPid=1`)
+                .then(res => res.json())
+                .then(data => { resolve(data) })
+                .catch(err => reject(err))
+        })
+    },
+    deletePurchaseReturnDetails : (pid) =>{
+        return new Promise((resolve, reject) => {
+            fetch(`${BASE_URL}PurchaseReturn/delete?id=${pid}&CMPid=1`)
+                .then(res => res.json())
+                .then(data => { resolve(data) })
+                .catch(err => reject(err))
+        })
+    },
+   deletePurchaseOrder: (pid)=>{
+        return new Promise((resolve, reject) => {
+            fetch(`${BASE_URL}PurchaseOrder/delete?id=${pid}&CMPid=1`)
+                .then(res => res.json())
+                .then(data => { resolve(data) })
+                .catch(err => reject(err))
+        })
+    },
+    deleteStockadjustment: (pid)=>{
+        return new Promise((resolve, reject) => {
+            fetch(`${BASE_URL}StockAdjust/delete?id=${pid}&CMPid=1`)
+                .then(res => res.json())
+                .then(data => { resolve(data) })
+                .catch(err => reject(err))
+        })
+    },
+    deleteStocktransfer: (pid)=>{
+        return new Promise((resolve, reject) => {
+            fetch(`${BASE_URL}StkTransferRequest/delete?id=${pid}&CMPid=1`)
+                .then(res => res.json())
+                .then(data => { resolve(data) })
+                .catch(err => reject(err))
+        })
+    },
+    deleteGoodReceipt : (pid) =>{
+        return new Promise((resolve, reject) => {
+            fetch(`${BASE_URL}GoodsReceipt/delete?id=${pid}&CMPid=1`)
+                .then(res => res.json())
+                .then(data => { resolve(data) })
+                .catch(err => reject(err))
+        })
+    }
+ 
 }

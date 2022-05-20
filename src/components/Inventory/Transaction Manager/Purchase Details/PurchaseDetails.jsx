@@ -21,6 +21,14 @@ function PurchaseDetails() {
   const [editmode,setEditmode] = useState(false);
   const [updatableproducts,setUpdatableProducts] = useState([])
   const [total,setTotal] = useState('')
+  const [deletemode,setDeletemode] = useState(false) 
+
+
+  const deleteAction = (data)=>{
+    if (window.confirm('Are you sure you wish to delete this item?') && deletemode) {
+      inventoryServices.deletePurchaseDetails(data.PrchsId)
+   }
+   }
 
   const handleStartDate = (date) => {
     setStartDate(date);
@@ -155,7 +163,7 @@ const totalAmount = ()=>{
                 </svg>
                 <h5>Edit</h5>
               </div>
-              <div className="different__option">
+              <div onClick={()=>deletemode ? setDeletemode(false) : setDeletemode(true)} className="different__option">
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
                   width="23.42"
@@ -228,7 +236,10 @@ const totalAmount = ()=>{
                         setAddNewBtn(true);
                         setMainTableView(false);
                         setUpdatableProducts(datas)
-                      } }}
+                      }
+                      deletemode && 
+                      deleteAction(datas);
+                       }}
                       
                     >
                       <td
