@@ -37,7 +37,7 @@ const innerTable = {
   Name: "",
 };
 
-function AddNewCredit({ setAddNewBtn, setMainTableView }) {
+function AddNewCredit({ setAddNewBtn, setMainTableView,dataId }) {
   const [dataInTable, setDataInTable] = useState([]);
   const [expiryDate, setExpiryDate] = useState(null);
   const convertDate = moment(expiryDate).format("DD-MM-YYYY");
@@ -61,8 +61,8 @@ function AddNewCredit({ setAddNewBtn, setMainTableView }) {
     "PrdctId": "",
     "TaxParam": "",
     "Total": "",
-    "UserID": "",
-    "CMPid": ""
+    "UserID": "1",
+    "CMPid": "1"
   })
 
   const [snackbarSucess, setSnackbarSucess] = useState(false);
@@ -81,7 +81,7 @@ function AddNewCredit({ setAddNewBtn, setMainTableView }) {
 
   const handleSaving = () => {
     if(creditData[0]){
-      accountServices.uploadDebitNote(creditData)
+      accountServices.uploadCreditNote(creditData)
         .then(res => console.log(res))
         .catch(err => console.log(err))
     }
@@ -120,8 +120,8 @@ function AddNewCredit({ setAddNewBtn, setMainTableView }) {
       "PrdctId": "",
       "TaxParam": "",
       "Total": "",
-      "UserID": "",
-      "CMPid": ""
+      "UserID": "1",
+      "CMPid": "1"
     })
   }
 
@@ -162,6 +162,13 @@ function AddNewCredit({ setAddNewBtn, setMainTableView }) {
     accountServices.getDebitNoteDropdown()
       .then(res => setSuppliers(res))
       .catch(err => console.log(err))
+
+      console.log(dataId);
+      if(dataId){
+        accountServices.getCreditNoteById(dataId)
+        .then(res => console.log(res))
+        .err(err => console.log(err))
+      }
   }, [])
 
   return (
@@ -198,7 +205,7 @@ function AddNewCredit({ setAddNewBtn, setMainTableView }) {
           <div className="input__Sections">
             <h5>Supplier</h5>
 
-            <select name="SupplierID" id="" onChange={handleData}>
+            <select name="SupplierID" id="" onChange={handleData} value={creditEntries.SupplierID}>
               <option value={creditEntries.SupplierID}>Choose Supplier</option>
               {
                 suppliers.map((item, index) => (

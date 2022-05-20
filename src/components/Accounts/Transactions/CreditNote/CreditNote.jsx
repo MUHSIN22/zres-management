@@ -57,9 +57,13 @@ function CreditNote() {
   const [creditNotes,setCreditNotes] = useState([]);
   const [fromDate, setFromDate] = useState(null);
   const [toDate, setToDate] = useState(null);
+  const [isEdit,setIsEdit] = useState(false)
 
   const [clickedTr, SetClickedTr] = useState("");
-
+  const handleEdit = () => {
+    console.log(clickedTr);
+    setIsEdit(true)
+  }
   const handleFilteredCreditNotes = () => {
     if(fromDate && toDate){
       accountServices.getFiltereCreditNotes(fromDate,toDate)
@@ -76,14 +80,15 @@ function CreditNote() {
 
   return (
     <>
-      {addNewBtn && (
+      {addNewBtn || isEdit && (
         <AddNewCredit
           setAddNewBtn={setAddNewBtn}
           setMainTableView={setMainTableView}
+          dataId={clickedTr}
         />
       )}
 
-      {mainTableView && (
+      {(!addNewBtn && !isEdit)&& (
         <div className="DebitNote">
           {/* ADD NEW SECTION START */}
 
@@ -117,7 +122,7 @@ function CreditNote() {
                 </svg>
                 <h5>New</h5>
               </div>
-              <div className="different__option">
+              <div className="different__option" onClick={handleEdit}>
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
                   width="32.5"

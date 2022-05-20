@@ -131,12 +131,34 @@ export const accountServices = {
             .catch(err => reject(err))
         })
     },
+    getDebitNoteById : (id) => {
+        return new Promise((resolve,reject) => {
+            fetch(`${BASE_URL}DebitNote/GetDebitNoteById?id=${id}&CMPid=1`)
+            .then(res => res.json())
+            .then(data => resolve(data))
+            .catch(err => reject(err))
+        })
+    },
     uploadDebitNote : (data) => {
         return new Promise((resolve,reject) => {
             fetch(`${BASE_URL}DebitNote?CMPid=1`,{
                 method: "POST",
                 headers:{
                     "Content-Type": "application/json"
+                },
+                body: JSON.stringify(data)
+            })
+            .then(res => res.json())
+            .then(data => resolve(data))
+            .catch(err => reject(err))
+        })
+    },
+    updateDebitNote : (data) => {
+        return new Promise((resolve,reject) => {
+            fetch(`${BASE_URL}DebitNote/Update`,{
+                method: "POST",
+                headers:{
+                    "Content-Type" : "application/json"
                 },
                 body: JSON.stringify(data)
             })
@@ -178,7 +200,42 @@ export const accountServices = {
                 .catch(err => reject(err))
         })
     },
-
+    uploadCreditNote : (data) => {
+        return new Promise((resolve,reject) => {
+            fetch(`${BASE_URL}CreditNote?CMPid=1`,{
+                method: "POST",
+                headers:{
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify(data)
+            })
+            .then(res => res.json())
+            .then(data => resolve(data))
+            .catch(err => reject(err))
+        })
+    },
+    updateCreditNote : (data) => {
+        return new Promise((resolve,reject) => {
+            fetch(`${BASE_URL}CreditNote/Update`,{
+                method: "POST",
+                headers:{
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify(data)
+            })
+            .then(res => res.json())
+            .then(data => resolve(data))
+            .catch(err => reject(err))
+        })
+    },
+    getCreditNoteById : (id) => {
+        return new Promise((resolve,reject) => {
+            fetch(`${BASE_URL}CreditNote/GetCreditNoteById?id=${id}&CMPid=1`)
+            .then(res => res.json())
+            .then(data => resolve(data))
+            .catch(err => reject(err))
+        })
+    },
     // Credit Notes
     getAllCreditNotes : () => {
         return new Promise((resolve,reject) => {
@@ -188,6 +245,7 @@ export const accountServices = {
             .catch(err => reject(err))
         })
     },
+    
     getFiltereCreditNotes : (from,to) => {
         return new Promise((resolve,reject) => {
             // /CreditNote/search?fromdate=2020-01-01&todate=2022-12-12&CMPid=1

@@ -56,8 +56,9 @@ function DebitNote() {
   const [debitNote,setDebitNote] = useState([])
   const [fromDate, setFromDate] = useState(null);
   const [toDate, setToDate] = useState(null);
+  const [isEdit,setIsEdit] = useState(false)
 
-  const [clickedTr, SetClickedTr] = useState("");
+  const [clickedTr, SetClickedTr] = useState(null);
 
   const handleFilteredData = () => {
     if(fromDate && toDate){
@@ -65,6 +66,11 @@ function DebitNote() {
       .then(data => setDebitNote(data))
       .catch(err => console.log(err))
     }
+  }
+
+  const handleEdit = () => {
+    console.log(clickedTr);
+    setIsEdit(true)
   }
 
   useEffect(() => {
@@ -75,14 +81,15 @@ function DebitNote() {
 
   return (
     <>
-      {addNewBtn && (
+      {(addNewBtn || isEdit) && (
         <AddNewDebitNote
           setAddNewBtn={setAddNewBtn}
           setMainTableView={setMainTableView}
+          dataId={clickedTr}
         />
       )}
 
-      {mainTableView && (
+      {(!addNewBtn && !isEdit) && (
         <div className="DebitNote">
           {/* ADD NEW SECTION START */}
 
@@ -116,7 +123,7 @@ function DebitNote() {
                 </svg>
                 <h5>New</h5>
               </div>
-              <div className="different__option">
+              <div className="different__option" onClick={handleEdit}>
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
                   width="32.5"
