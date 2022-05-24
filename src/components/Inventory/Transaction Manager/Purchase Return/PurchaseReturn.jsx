@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useCallback, useEffect } from "react";
 import "./purchaseReturn.scss";
 import { useState } from "react";
 import PurchaseReturnAdd from "./PurchaseReturnAdd/PurchaseReturnAdd";
@@ -32,19 +32,26 @@ function PurchaseReturn() {
     }).catch(err => console.log(err))
   }
 
-  const totalAmount = ()=>{
-    let total = 0
-    data.map(item=>{
-      total = total + item.GrandTotal
-    })
-    setTotal(total)
-  }
+
+
+  const Totalamount = useCallback(
+    () => {
+      const totalAmount = ()=>{
+        let total = 0
+        
+        data.map(item=>{
+          total = total + item.GrandTotal
+        })
+        setTotal(total)
+      }
+    }
+  );
 
   useEffect(() => {
     inventoryServices.getPurchasereturn()
       .then(data => { setData(data) })
       .catch(err => console.log(err));
-      totalAmount()
+      Totalamount()
   },[])
   return (
     <>
