@@ -77,6 +77,7 @@ function AddStockAdjustment({ setAddNewBtn, setMainTableView }) {
       [evt.target.name]: name,
      
     });
+    
   };
 console.log(searchdata)
 
@@ -92,10 +93,10 @@ if(data.date && data.productId && data.CategoryId){
 console.log(tabledata)
 
   useEffect(() => {
-    inventoryServices.getStockcost()
+    inventoryServices.getProductdetails()
       .then(data => {
         setProductdropdown(data)
-      })
+      }).catch(err => console.log(err))
 
     walkinServices.getAllcategories()
       .then(data => { setCategory(data) })
@@ -134,8 +135,8 @@ console.log(tabledata)
               <select  name="productId"  onChange={handleSearchData} id="">
                 <option selected="true" disabled="disabled">Select Product</option>
                 {productdropdown && productdropdown.map((items) => (
-                  <option value={items.Cid}>
-                    {items.ProductName}
+                  <option value={items.ProdctId}>
+                    {items.PName}
                   </option>))}
               </select>
             </div>

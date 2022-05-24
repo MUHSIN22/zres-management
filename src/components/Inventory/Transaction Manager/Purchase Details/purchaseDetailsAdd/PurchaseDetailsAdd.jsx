@@ -127,7 +127,9 @@ const uploadPurchaseDetails =(data)=>{
   inventoryServices.postPurchasedetails(data)
 
 }
-
+const editPurchaseDetails = (data)=>{
+  inventoryServices.editPurchasedetails(data)
+}
 
 
   useEffect(() => {
@@ -547,7 +549,12 @@ console.log(data)
               onClick={(e) => {
                 mainFormSubmit(e);
                 handleMainData(e);
-                uploadPurchaseDetails(Mainvalues)
+                if(status){
+                  editPurchaseDetails(Mainvalues);
+                }else{
+                  uploadPurchaseDetails(Mainvalues)
+                }
+            
               }}
             >
               Save

@@ -535,8 +535,9 @@ export const inventoryServices = {
 
     getStockadjustmentsearchdata: (data) => {
         return new Promise((resolve, reject) => {
-            fetch(`${BASE_URL}StockAdjust/SearchByProduct?ArrivalDate=${data.date}&Cid=${data.CategoryId}&ProdctId=${data.productId}&CMPid=1`)
-                .then(res => res.json())
+            // fetch(`${BASE_URL}StockAdjust/SearchByProduct?ArrivalDate=${data.date}&Cid=${data.CategoryId}&ProdctId=${data.productId}&CMPid=1`)
+            fetch(`${BASE_URL}StockAdjust/SearchByProduct?ArrivalDate=2020-01-01&Cid=1&ProdctId=1&CMPid=1`)
+            .then(res => res.json())
                 .then(data => { resolve(data) })
                 .catch(err => reject(err))
         })
@@ -673,4 +674,108 @@ export const inventoryServices = {
             })
         })
     },
+    deleteProductmaster : (cid) =>{
+        return new Promise((resolve, reject) => {
+            fetch(`${BASE_URL}Category/delete?Cid=${cid}8&CMPid=1`)
+                .then(res => res.json())
+                .then(data => { resolve(data) })
+                .catch(err => reject(err))
+        })
+    },
+
+    deleteMeasurementdetails : (mid) =>{
+        return new Promise((resolve, reject) => {
+            fetch(`${BASE_URL}UOM/delete?UOMid=${mid}&CMPid=1`)
+                .then(res => res.json())
+                .then(data => { resolve(data) })
+                .catch(err => reject(err))
+        })
+    },
+    deleteTaxmaster : (tid) =>{
+        return new Promise((resolve, reject) => {
+            fetch(`${BASE_URL}Tax/delete?Taxid=${tid}&CMPid=1`)
+                .then(res => res.json())
+                .then(data => { resolve(data) })
+                .catch(err => reject(err))
+        })
+    },
+    deletePurchaseDetails : (pid) =>{
+        return new Promise((resolve, reject) => {
+            fetch(`${BASE_URL}Purchase/delete?id=${pid}&CMPid=1`)
+                .then(res => res.json())
+                .then(data => { resolve(data) })
+                .catch(err => reject(err))
+        })
+    },
+    deletePurchaseReturnDetails : (pid) =>{
+        return new Promise((resolve, reject) => {
+            fetch(`${BASE_URL}PurchaseReturn/delete?id=${pid}&CMPid=1`)
+                .then(res => res.json())
+                .then(data => { resolve(data) })
+                .catch(err => reject(err))
+        })
+    },
+   deletePurchaseOrder: (pid)=>{
+        return new Promise((resolve, reject) => {
+            fetch(`${BASE_URL}PurchaseOrder/delete?id=${pid}&CMPid=1`)
+                .then(res => res.json())
+                .then(data => { resolve(data) })
+                .catch(err => reject(err))
+        })
+    },
+    deleteStockadjustment: (pid)=>{
+        return new Promise((resolve, reject) => {
+            fetch(`${BASE_URL}StockAdjust/delete?id=${pid}&CMPid=1`)
+                .then(res => res.json())
+                .then(data => { resolve(data) })
+                .catch(err => reject(err))
+        })
+    },
+    deleteStocktransfer: (pid)=>{
+        return new Promise((resolve, reject) => {
+            fetch(`${BASE_URL}StkTransferRequest/delete?id=${pid}&CMPid=1`)
+                .then(res => res.json())
+                .then(data => { resolve(data) })
+                .catch(err => reject(err))
+        })
+    },
+    deleteGoodReceipt : (pid) =>{
+        return new Promise((resolve, reject) => {
+            fetch(`${BASE_URL}GoodsReceipt/delete?id=${pid}&CMPid=1`)
+                .then(res => res.json())
+                .then(data => { resolve(data) })
+                .catch(err => reject(err))
+        })
+    },
+    editPurchasedetails : (data)=>{
+        return new Promise((resolve, reject) => {
+            fetch(`${BASE_URL}Purchase/update&CMPid=1`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(
+                    {
+                        purchase: {
+                            "ArrivalDate": data.ArrivalDate,
+                            "ArrivalNo": data.ArrivalNo,
+                            "InvoiceNo": data.InvoiceNo,
+                            "InvoiceDate": data.InvoiceDate,
+                            "PaymentType": data.PaymentType,
+                            "supplierid": data.supplierid,
+                            "Address": data.Address,
+                            "GSTNo": data.GSTNo,
+                            "GrandTotal": data.GrandTotal,
+                            "TotalDiscount": data.Discount,
+                            "CMPid": 1,
+                        },
+    
+                        purchaseDeatails: [
+                            { "ProdctId": data.ProdctsId, "Qty": data.Qty, "FreeQty": data.FreeQty, "Rate": data.Rate, "HSNCode": data.HSNCode, "BatchNo": data.BatchNo, "Expiry": data.Expiry, "GST": data.GST, "TaxParam": data.TAX, "Total": data.Total, "UserID": 1, "CMPid": 1 }
+                        ]
+                    }
+                )
+            })
+        })
+    }, 
 }

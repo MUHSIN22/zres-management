@@ -11,12 +11,19 @@ function MesurementDetails() {
   const [editMesure, setEditMeasure] = useState();
   const [editmode,setEditmode] = useState(false);
   const [updatableproducts,setUpdatableProducts] = useState([])
+  const [deletemode,setDeletemode] = useState(false) 
+
+
+  const deleteAction = (data)=>{
+    if (window.confirm('Are you sure you wish to delete this item?') && deletemode) {
+     inventoryServices.deleteMeasurementdetails(data.UOMid)
+   }
+   }
 
   useEffect(() => {
     inventoryServices.getMeasurementdeatails()
       .then(data => { setData(data) })
       .catch(err => { console.log(err) });
-
   }, [])
 
   return (
@@ -82,7 +89,7 @@ function MesurementDetails() {
               </svg>
               <h5>Edit</h5>
             </div>
-            <div className="different__option">
+            <div onClick={()=>deletemode ? setDeletemode(false) : setDeletemode(true)} className="different__option">
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 width="23.42"
@@ -120,7 +127,11 @@ function MesurementDetails() {
                       setAddNewBtn(true);
                       setMainTableView(false);
                       setUpdatableProducts(measurement);
-                    }}} key={measurement.UOMid}>
+                    }
+                    deletemode && 
+                    deleteAction(measurement);
+
+                    }} key={measurement.UOMid}>
                       <td>{measurement.UOMid}</td>
                       <td>{measurement.Unit}</td>
                       <td>{measurement.Symbol}</td>

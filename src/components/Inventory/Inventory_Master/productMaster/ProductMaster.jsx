@@ -11,6 +11,17 @@ function ProductMaster() {
   const [data,setData] = useState([])
   const [editmode,setEditmode] = useState(false);
   const [editabledata,setEditabledata] = useState([])
+  const [deletemode,setDeletemode] = useState(false) 
+
+
+  const deleteAction = (data)=>{
+    if (window.confirm('Are you sure you wish to delete this item?') && deletemode) {
+     console.log(data.Cid)
+     inventoryServices.deleteProductmaster(data.Cid)
+   }
+   }
+
+  console.log(editabledata)
 
   useEffect(() => {
     inventoryServices.getProductdetails()
@@ -21,7 +32,7 @@ function ProductMaster() {
   
 
   },[])
-
+console.log(deletemode)
   return (
     <div className="productMaster">
       {/* sucess message for add btn */}
@@ -98,7 +109,7 @@ function ProductMaster() {
                   <h5>Edit</h5>
                 </div>
 
-                <div className="different__option">
+                <div onClick={()=>deletemode ? setDeletemode(false) : setDeletemode(true)} className="different__option">
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
                     width="23.42"
@@ -142,13 +153,15 @@ function ProductMaster() {
                 </thead>
                 <tbody>
                   {data && data.map((product,index)=> (
+                  <tr  onClick={() => { 
 
-                 
-                  <tr  onClick={() => { if(editmode){
+                    if(editmode){
                     setAddNewBtn(true);
                     setMainTableView(false);
-                    setEditabledata(product)
+                    setEditabledata(product);
                   }
+                 deletemode && 
+                  deleteAction(product);
                   }} key={product.ProdctId} style={{ cursor: "pointer" }}>
                     <td >{index + 1 }</td>
                     <td>{product.ProductCode}</td>

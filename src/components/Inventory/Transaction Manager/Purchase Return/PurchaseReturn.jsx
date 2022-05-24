@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useCallback, useEffect } from "react";
 import "./purchaseReturn.scss";
 import { useState } from "react";
 import PurchaseReturnAdd from "./PurchaseReturnAdd/PurchaseReturnAdd";
@@ -17,10 +17,14 @@ function PurchaseReturn() {
   const [clickedTr, SetClickedTr] = useState("");
   const [total,setTotal] = useState('')
   const [data, setData] = useState([])
-  const DateFilter = () => {
-    var FromdateSplit = fromDate.split("/");
-    var toDateSplit = toDate.split("/");
-  };
+  const [deletemode,setDeletemode] = useState(false) 
+
+
+  const deleteAction = (data)=>{
+    if (window.confirm('Are you sure you wish to delete this item?') && deletemode) {
+      inventoryServices.deletePurchaseReturnDetails(data.PRid)
+   }
+   }
 
   const purchasereturnFilter = (from, to) => {
     inventoryServices.getPurchasereturnFilter(from, to).then(data => {
@@ -28,19 +32,26 @@ function PurchaseReturn() {
     }).catch(err => console.log(err))
   }
 
-  const totalAmount = ()=>{
-    let total = 0
-    data.map(item=>{
-      total = total + item.GrandTotal
-    })
-    setTotal(total)
-  }
+
+
+  const Totalamount = useCallback(
+    () => {
+      const totalAmount = ()=>{
+        let total = 0
+        
+        data.map(item=>{
+          total = total + item.GrandTotal
+        })
+        setTotal(total)
+      }
+    }
+  );
 
   useEffect(() => {
     inventoryServices.getPurchasereturn()
       .then(data => { setData(data) })
       .catch(err => console.log(err));
-      totalAmount()
+      Totalamount()
   },[])
   return (
     <>
@@ -106,7 +117,7 @@ function PurchaseReturn() {
                 </svg>
                 <h5>Edit</h5>
               </div>
-              <div className="different__option">
+              <div onClick={()=>deletemode ? setDeletemode(false) : setDeletemode(true)} className="different__option">
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
                   width="23.42"
@@ -175,6 +186,8 @@ function PurchaseReturn() {
                       className={clickedTr === datas.index + 1 && "selectedTr "}
                       onClick={() => {
                         SetClickedTr(datas.index + 1); if (editmode){ setAddNewBtn(true);setMainTableView(false);setUpdatableProducts(datas)}
+                        deletemode && 
+                        deleteAction(datas)
                       }}
 
                     >
