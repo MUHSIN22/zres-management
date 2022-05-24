@@ -6,6 +6,7 @@ import "react-datepicker/dist/react-datepicker.css";
 import FailSnackbars from "../../../../basic components/failSnackBar";
 import SucessSnackbars from "../../../../basic components/sucessSidePopup";
 import { accountServices } from "../../../../../Services/AccountsServices";
+import { data } from "jquery";
 
 const mainData = {
   PrchsId: "",
@@ -37,7 +38,7 @@ const innerTable = {
   Name: "",
 };
 
-function AddNewCredit({ setAddNewBtn, setMainTableView,dataId }) {
+function AddNewCredit({ setAddNewBtn, setMainTableView, dataId }) {
   const [dataInTable, setDataInTable] = useState([]);
   const [expiryDate, setExpiryDate] = useState(null);
   const convertDate = moment(expiryDate).format("DD-MM-YYYY");
@@ -80,10 +81,16 @@ function AddNewCredit({ setAddNewBtn, setMainTableView,dataId }) {
   };
 
   const handleSaving = () => {
-    if(creditData[0]){
-      accountServices.uploadCreditNote(creditData)
-        .then(res => console.log(res))
-        .catch(err => console.log(err))
+    if(dataId){
+      accountServices.updateCreditNote(creditEntries)
+      .then(res => console.log(res))
+      .catch(err => console.log(err))
+    }else{
+      if (creditData[0]) {
+        accountServices.uploadCreditNote(creditData)
+          .then(res => console.log(res))
+          .catch(err => console.log(err))
+      }
     }
   }
 
@@ -102,7 +109,7 @@ function AddNewCredit({ setAddNewBtn, setMainTableView,dataId }) {
 
   const handleAdding = (event) => {
     console.log(creditEntries);
-    setCreditData([...creditData,creditEntries])
+    setCreditData([...creditData, creditEntries])
     setCreditEntries({
       ...creditEntries,
       "CrDate": "",
@@ -163,12 +170,12 @@ function AddNewCredit({ setAddNewBtn, setMainTableView,dataId }) {
       .then(res => setSuppliers(res))
       .catch(err => console.log(err))
 
-      console.log(dataId);
-      if(dataId){
-        accountServices.getCreditNoteById(dataId)
-        .then(res => console.log(res))
-        .err(err => console.log(err))
-      }
+    console.log(dataId);
+    if (dataId) {
+      accountServices.getCreditNoteById(dataId)
+        .then(res => setCreditEntries(res))
+        .catch(err => console.log(err))
+    }
   }, [])
 
   return (
@@ -187,7 +194,7 @@ function AddNewCredit({ setAddNewBtn, setMainTableView,dataId }) {
             </div>
             <div className="input__sections">
               <h5>Entry Date</h5>
-              <input name="EntryDate" value={creditEntries.EntryDate} type="date" onChange={handleData} />
+              <input name="EntryDate" value={creditEntries.EntryDate !== "" && new Date(creditEntries.EntryDate).toISOString().substr(0, 10)} type="date" onChange={handleData} />
             </div>
           </div>
           <div className="bottom">
@@ -206,7 +213,7 @@ function AddNewCredit({ setAddNewBtn, setMainTableView,dataId }) {
             <h5>Supplier</h5>
 
             <select name="SupplierID" id="" onChange={handleData} value={creditEntries.SupplierID}>
-              <option value={creditEntries.SupplierID}>Choose Supplier</option>
+              <option>Choose Supplier</option>
               {
                 suppliers.map((item, index) => (
                   <option value={item.Value} key={index}>{item.Text}</option>
@@ -281,7 +288,7 @@ function AddNewCredit({ setAddNewBtn, setMainTableView,dataId }) {
               >
                 <DatePicker
                   placeholderText="Expiry"
-                  selected={creditEntries.Expiry}
+                  selected={creditEntries.Expiry && moment(creditEntries.Expiry).toDate()}
                   name="Expiry"
                   onChange={(event) => {
                     handleAddDataToTable(event)
@@ -372,64 +379,66 @@ function AddNewCredit({ setAddNewBtn, setMainTableView,dataId }) {
                 required
               />
               <div className="button__sectionssss">
-                <button type="submit" onClick={handleAdding}>Add Product</button>
-                <button type="button" onClick={HandleUpdateData}>
-                  Update
-                </button>
+                {
+                  !dataId &&
+                  <button type="submit" onClick={handleAdding}>Add Product</button>
+                }
               </div>
             </div>
           </div>
         </form>
       </div>
       {/* mid table */}
-      <div className="mid__section">
-        <div className="table__sectionsss">
-          <table className="table">
-            <thead>
-              <tr>
-                <th>Products</th>
-                <th>HSN Code</th>
-                <th>BatchNo</th>
-                <th>Expiry</th>
-                <th>Qty</th>
-                <th>Free Qty</th>
-                <th>Rate</th>
-                <th>Disc</th>
-                <th>GST</th>
-                <th>Tax Param</th>
-                <th>Total</th>
-              </tr>
-            </thead>
-            <tbody>
-              {
-                creditData.map((item, index) => (
-                  <tr>
-                    {
-                      products.map((product,index) => (
-                        <>
-                          {
-                            item.PrdctId === product.Value &&
-                            <td>{product.Text}</td>
-                          }
-                        </>
-                      ))
-                    }
-                    <td>{item.HSNCode}</td>
-                    <td>{item.BatchNo}</td>
-                    <td>{new Date(item.Expiry).toLocaleDateString()}</td>
-                    <td>{item.Qty}</td>
-                    <td>{item.FreeQty}</td>
-                    <td>{item.Rate}</td>
-                    <td>{item.Discount}</td>
-                    <td>{item.GST}%</td>
-                    <td>{item.TaxParam}</td>
-                    <td>{item.Total}</td>
-                  </tr>
-                ))
-              }
-            </tbody>
+      {
+        !dataId &&
+        <div className="mid__section">
+          <div className="table__sectionsss">
+            <table className="table">
+              <thead>
+                <tr>
+                  <th>Products</th>
+                  <th>HSN Code</th>
+                  <th>BatchNo</th>
+                  <th>Expiry</th>
+                  <th>Qty</th>
+                  <th>Free Qty</th>
+                  <th>Rate</th>
+                  <th>Disc</th>
+                  <th>GST</th>
+                  <th>Tax Param</th>
+                  <th>Total</th>
+                </tr>
+              </thead>
+              <tbody>
+                {
+                  creditData.map((item, index) => (
+                    <tr>
+                      {
+                        products.map((product, index) => (
+                          <>
+                            {
+                              item.PrdctId === product.Value &&
+                              <td>{product.Text}</td>
+                            }
+                          </>
+                        ))
+                      }
+                      <td>{item.HSNCode}</td>
+                      <td>{item.BatchNo}</td>
+                      <td>{new Date(item.Expiry).toLocaleDateString()}</td>
+                      <td>{item.Qty}</td>
+                      <td>{item.FreeQty}</td>
+                      <td>{item.Rate}</td>
+                      <td>{item.Discount}</td>
+                      <td>{item.GST}%</td>
+                      <td>{item.TaxParam}</td>
+                      <td>{item.Total}</td>
+                    </tr>
+                  ))
+                }
+              </tbody>
 
-            {/* <tfoot className="tfootTotal">
+              {/* <tfoot className="tfootTotal">
               <tr>
                 <th></th>
                 <th></th>
@@ -444,9 +453,10 @@ function AddNewCredit({ setAddNewBtn, setMainTableView,dataId }) {
                 <th>Total</th>
               </tr>
             </tfoot> */}
-          </table>
+            </table>
+          </div>
         </div>
-      </div>
+      }
       {/* ends */}
 
       {/* bottom section */}
@@ -472,7 +482,7 @@ function AddNewCredit({ setAddNewBtn, setMainTableView,dataId }) {
               handleSaving();
             }}
           >
-            Save
+            {dataId ? "Update" : "Save"}
           </button>
           {/* <button>Print</button> */}
           <button
