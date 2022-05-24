@@ -131,12 +131,51 @@ export const accountServices = {
             .catch(err => reject(err))
         })
     },
+    uploadDebitNote : (data) => {
+        return new Promise((resolve,reject) => {
+            fetch(`${BASE_URL}DebitNote?CMPid=1`,{
+                method: "POST",
+                headers:{
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify(data)
+            })
+            .then(res => res.json())
+            .then(data => resolve(data))
+            .catch(err => reject(err))
+        })
+    },
     getFilteredDebitNote: (from,to) => {
         return new Promise((resolve,reject) => {
             fetch(`${BASE_URL}DebitNote/search?fromdate=${from}&todate=${to}&CMPid=1`)
             .then(res => res.json())
             .then(data => resolve(data))
             .catch(err => reject(err))
+        })
+    },
+    getDebitNotebySupplier : (supplierId) => {
+        return new Promise((resolve,reject) => {
+            fetch(`${BASE_URL}DebitNote/GetProductBySupplier?supplierid=${supplierId}&CMPid=1`)
+            .then(res => res.json())
+            .then(data => resolve(data))
+            .catch(err => reject(err))
+        })
+    },
+    getDebitNoteDropdown : () => {
+        return new Promise((resolve,reject) => {
+            fetch(`${BASE_URL}DebitNote/GetSupplierName?CMPid=1`)
+                .then(res => res.json())
+                .then(data => resolve(data))
+                .catch(err => reject(err))
+        })
+    },
+
+    getProductDropdown : () => {
+        return new Promise((resolve,reject) => {
+            fetch(`${BASE_URL}ReOrderMapping/GetProductName?CMPid=1`)
+                .then(res => res.json())
+                .then(data => resolve(data))
+                .catch(err => reject(err))
         })
     },
 
@@ -192,6 +231,21 @@ export const accountServices = {
                 method: "POST",
                 headers: {
                     'Content-Type':"application/json"
+                },
+                body: JSON.stringify(data)
+            })
+            .then(res => res.json())
+            .then(data => resolve(data))
+            .catch(err => reject(err))
+        })
+    },
+
+    updateJournel : (data) => {
+        return new Promise((resolve,reject) => {
+            fetch(`${BASE_URL}Journal/update`,{
+                method: "POST",
+                headers: {
+                    "Content-Type" : "application/json"
                 },
                 body: JSON.stringify(data)
             })
@@ -313,6 +367,21 @@ export const accountServices = {
                 method: "POST",
                 headers: {
                     'Content-Type':"application/json"
+                },
+                body: JSON.stringify(data)
+            })
+            .then(res => res.json())
+            .then(data => resolve(data))
+            .catch(err => reject(err))
+        })
+    },
+
+    updateContra : (data) => {
+        return new Promise((resolve,reject) => {
+            fetch(`${BASE_URL}Contra/update`,{
+                method: "POST",
+                headers: {
+                    "Content-Type" : "application/json"
                 },
                 body: JSON.stringify(data)
             })

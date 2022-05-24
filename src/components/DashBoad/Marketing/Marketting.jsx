@@ -15,7 +15,7 @@ function Marketting() {
 
   useEffect(() => {
     dashboardServices.getMarketingData()
-      .then(data => { setMarketingData(data)})
+      .then(data => { setMarketingData(data) })
       .catch(err => console.log(err))
 
   }, [])
@@ -83,7 +83,41 @@ function Marketting() {
               </div>
             </div>
             <div className="right__section__wrapper">
-              <div className="what__happening__div">
+              <div className="bottom__div_items what__happening__div">
+                <div className="top__icon__section">
+                  <FontAwesomeIcon style={{ color: "#fdc307" }} icon={faFolder} />
+                </div>
+                <h4>Whats happening?</h4>
+                <hr />
+                <ul>
+                  <li>
+                    <div className="inner__li">
+                      <h5>Number of Orders</h5> <h5>{marketingData.LIVE[0].NoOfOrders}</h5>{" "}
+                    </div>
+                  </li>
+                  <li>
+                    <div className="inner__li">
+                      <h5>Number of Cancelled Orders</h5> <h5>{marketingData.LIVE[0].NoOfCanelledOrders}</h5>{" "}
+                    </div>
+                  </li>
+                  <li>
+                    <div className="inner__li">
+                      <h5>Number of Customers Visited</h5> <h5>{marketingData.LIVE[0].NoOfCustomerVisited}</h5>{" "}
+                    </div>
+                  </li>
+                  <li>
+                    <div className="inner__li">
+                      <h5>Total sales</h5> <h5>{marketingData.LIVE[0].TotalSales}</h5>{" "}
+                    </div>
+                  </li>
+                  <li>
+                    <div className="inner__li">
+                      <h5>Peak Hour</h5> <h5>{marketingData.LIVE[0].peakHour}</h5>{" "}
+                    </div>
+                  </li>
+                </ul>
+              </div>
+              {/* <div className="what__happening__div">
                 <div className="top__icon__section">
                   <img
                     src="https://www.maxpixel.net/static/photo/1x/Live-Internet-Youtube-Button-Online-Streaming-6366830.png"
@@ -111,7 +145,7 @@ function Marketting() {
                     </h5>
                   </div>
                 </div>
-              </div>
+              </div> */}
             </div>
           </div>
 
@@ -180,7 +214,7 @@ function Marketting() {
               </div>
               <h4>No of Covers Served</h4>
 
-              <PieChartSection data={[{name:"No of covers served",value:marketingData.NoOfCoveresSaved[0].NoOfCoveresSaved}]}/>
+              <PieChartSection data={[{ name: "No of covers served", value: marketingData.NoOfCoveresSaved[0].NoOfCoveresSaved }]} />
               <div className="location__name__section">
                 <div className="color__area"></div>
                 <p>Location name</p>

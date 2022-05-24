@@ -214,7 +214,7 @@ function DineIn({ SetClicked }) {
                 />
               </div>
             </div>
-            <Walkin dataToSendToWlkinPage={dataToSendToWlkinPage} />
+            <Walkin dinein dataToSendToWlkinPage={dataToSendToWlkinPage} />
           </>
         )}
         {DineIn && (

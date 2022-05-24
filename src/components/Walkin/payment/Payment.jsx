@@ -7,7 +7,8 @@ import PaymetTypeMainScreen from "../paymentMethod/PaymetTypeMainScreen";
 import { useEffect } from "react";
 import NumPad from "react-numpad";
 import Billgenerated from "../Bills/Billgenerated";
-function Payment({ setPaymentOption, paymentOption, setPaymentSUcessfull }) {
+
+function Payment({ setPaymentOption, paymentOption, setPaymentSUcessfull, dinein,subTotal,taxAmount, items }) {
   const [pay, setPay] = useState(false);
   const [mainPaymentSection, setMainPaymentSection] = useState(true);
   const [changeDueActive, setChangeDueActive] = useState(false);
@@ -29,7 +30,7 @@ function Payment({ setPaymentOption, paymentOption, setPaymentSUcessfull }) {
 
   const handleChange = (event) =>
     setAmountEnter(addCommas(removeNonNumeric(event.target.value)));
-
+  console.log(items);
   return (
     <>
       {/* paymentTypeScreen */}
@@ -89,7 +90,7 @@ function Payment({ setPaymentOption, paymentOption, setPaymentSUcessfull }) {
               <div className="left__area__split__Section">
                 <div className="left__top__payment__section">
                   <h4>Total Amount OMR</h4>
-                  <h1>4500.00</h1>
+                  <h1>{subTotal+taxAmount+.00}</h1>
                 </div>
                 <div className="right__area__split__Section">
                   <button>Cash</button>
@@ -128,7 +129,7 @@ function Payment({ setPaymentOption, paymentOption, setPaymentSUcessfull }) {
             <hr style={{ marginTop: "10px", marginBottom: "5px" }} />
 
             <div className="bottom__area__sections">
-              <h4>Walk in</h4>
+              <h4>{dinein?"Dine In":"Walk in"}</h4>
 
               <div className="button__area">
                 <button onClick={() => setPaymentOption(false)}>Back</button>
@@ -203,7 +204,7 @@ function Payment({ setPaymentOption, paymentOption, setPaymentSUcessfull }) {
           </div>
         </div>
       )}
-      <Billgenerated printNow={printNow} />
+      <Billgenerated items={items} printNow={printNow} dinein={dinein} />
     </>
   );
 }

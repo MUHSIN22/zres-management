@@ -334,7 +334,7 @@ function CashRecipt() {
                                   Pic Account Type
                                 </option>
                                 {debitDropDown?.map((list) => (
-                                  <option value={list.Text}>
+                                  <option value={list.Value}>
                                     {list.Text}
                                   </option>
                                 ))}

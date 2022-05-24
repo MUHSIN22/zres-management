@@ -24,7 +24,7 @@ const cartIten = [
   },
 ];
 
-function SplitCheck({ setSplitCheck }) {
+function SplitCheck({ setSplitCheck, cartItems }) {
   const [noOfSplits, setNoOfSplits] = useState(null);
   const [dataStore, setDataStore] = useState([]);
   const [clickedTr, setClickedTr] = useState("");
@@ -41,8 +41,13 @@ function SplitCheck({ setSplitCheck }) {
       setDataStore([...dataStore, { ...filterId, clicked: "true" }]);
     }
   };
-  console.log("THE SELECTED DATA", dataStore);
-
+  console.log("THE SELECTED DATA", cartItems);
+  const subTotal = cartItems.reduce(
+    (price, item) => price + item.quantity * item.ItemPrice,0);
+  const totalNumberOfPrdts = cartItems.reduce((total,item)=>total+item?.quantity,0);
+  const totalTaxPercent = cartItems.reduce((tax, item) => tax + item?.quantity *item?.TaxPercentage,0)
+  const taxAmount = Math.round((((totalTaxPercent/totalNumberOfPrdts)/100)*subTotal)*100)/100 || 0;
+  
   return (
     <div className="SpitCheck">
       <div className="splitCheckHeadder__Section">
@@ -64,13 +69,13 @@ function SplitCheck({ setSplitCheck }) {
                       justifyContent: "space-between",
                     }}
                   >
-                    <h4>458</h4> <h4>$30.058</h4>
+                    <h4>458</h4> <h4>${subTotal+taxAmount}</h4>
                   </div>
                 </th>
               </tr>
             </thead>
             <tbody>
-              {cartIten.map((item) => (
+              {cartItems?.map((item) => (
                 <tr
                   onClick={() => {
                     setClickedTr(item.id);
@@ -79,15 +84,15 @@ function SplitCheck({ setSplitCheck }) {
                   className={dataStore?.includes((d) => d.id === item.id)}
                 >
                   <td style={{ padding: "0px" }}>
-                    <p>{item.name}</p>
+                    <p>{item.ItemName}</p>
                   </td>
                   <td>
                     {" "}
-                    <p>{item.qty}</p>
+                    <p>{item.quantity}</p>
                   </td>
                   <td>
                     {" "}
-                    <p>{item.price}</p>
+                    <p>{item.ItemPrice}</p>
                   </td>
                 </tr>
               ))}
@@ -97,7 +102,7 @@ function SplitCheck({ setSplitCheck }) {
         {noOfSplits && (
           <div className="check__add">
             {[...Array(noOfSplits)].map((elementInArray, index) => (
-              <Cheque numberOrder={index} />
+              <Cheque numberOrder={index} data={cartItems} dividedPrice={((subTotal+taxAmount)/noOfSplits)}/>
             ))}
           </div>
         )}

@@ -1,10 +1,11 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import "./addNewDebitNote.scss";
 import DatePicker from "react-datepicker";
 import moment from "moment";
 import "react-datepicker/dist/react-datepicker.css";
 import FailSnackbars from "../../../../basic components/failSnackBar";
 import SucessSnackbars from "../../../../basic components/sucessSidePopup";
+import { accountServices } from "../../../../../Services/AccountsServices";
 
 const mainData = {
   PrchsId: "",
@@ -42,6 +43,30 @@ function AddNewDebitNote({ setAddNewBtn, setMainTableView }) {
   const [expiryDate, setExpiryDate] = useState(null);
   const convertDate = moment(expiryDate).format("DD-MM-YYYY");
   const [Mainvalues, setMainValues] = useState(mainData);
+  const [suppliers, setSuppliers] = useState([]);
+  const [debitTable,setDebitTable] = useState([]);
+  const [products,setProducts] = useState([]);
+  const [debitEntries, setDebitEntries] = useState({
+    "CrDate": "",
+    "EntryNo": "",
+    "EntryDate": "",
+    "SupplierID": "",
+    "Expiry": "",
+    "HSNCode": "",
+    "BatchNo": "",
+    "Qty": "",
+    "FreeQty": "",
+    "Rate": "",
+    "Discount": "",
+    "GST": "",
+    "PrdctId": "",
+    "TaxParam": "",
+    "Total": "",
+    "UserID": "",
+    "CMPid": ""
+  })
+
+  const [debitData,setDebitData] = useState([])
 
   const [snackbarSucess, setSnackbarSucess] = useState(false);
   const [snackbarFail, setSnackBarFail] = useState(false);
@@ -57,14 +82,51 @@ function AddNewDebitNote({ setAddNewBtn, setMainTableView }) {
     setSubdata(innerTable);
   };
 
+  const handleSaving = () => {
+    if(debitData[0]){
+      accountServices.uploadDebitNote(debitData)
+        .then(res => console.log(res))
+        .catch(err => console.log(err))
+    }
+  }
+
   const handleAddDataToTable = (evt) => {
-    const name = evt.target.value;
-    setSubdata({
-      ...subData,
-      [evt.target.name]: name,
-      Expiry: convertDate,
-    });
+    // const name = evt.target.value;
+    // setdebitEntries({
+    //   ...debitEntries,
+    //   [evt.target.name]: name,
+    //   Expiry: convertDate,
+    // });
   };
+
+  const handleData = (event, name) => {
+    setDebitEntries({ ...debitEntries, [!name ? event.target.name : name]: name ? event : event.target.value })
+  }
+
+  const handleAdding = (event) => {
+    console.log(debitEntries);
+    setDebitData([...debitData,debitEntries])
+    setDebitEntries({
+      ...debitEntries,
+      "CrDate": "",
+      "EntryNo": "",
+      "EntryDate": "",
+      "SupplierID": "",
+      "Expiry": "",
+      "HSNCode": "",
+      "BatchNo": "",
+      "Qty": "",
+      "FreeQty": "",
+      "Rate": "",
+      "Discount": "",
+      "GST": "",
+      "PrdctId": "",
+      "TaxParam": "",
+      "Total": "",
+      "UserID": "",
+      "CMPid": ""
+    })
+  }
 
   const mainFormSubmit = (e) => {
     if (dataInTable.length == 0) {
@@ -77,6 +139,12 @@ function AddNewDebitNote({ setAddNewBtn, setMainTableView }) {
     console.log("dataToSend", Mainvalues, dataInTable);
   };
 
+  const getSupplierDebitNote = (event) => {
+    accountServices.getDebitNotebySupplier(event.target.value)
+      .then(res => {setDebitTable(res);console.log(res);})
+      .catch(err => console.log(err))
+  }
+  
   const HandleUpdateData = (e) => {
     e.preventDefault();
     // const code = values;
@@ -93,6 +161,16 @@ function AddNewDebitNote({ setAddNewBtn, setMainTableView }) {
     //   );
     // }
   };
+
+  useEffect(() => {
+    accountServices.getDebitNoteDropdown()
+    .then(res => setSuppliers(res))
+    .catch(err => console.log(err))
+
+    accountServices.getProductDropdown()
+    .then(res => setProducts(res))
+    .catch(err => console.log(err))
+  },[])
   return (
     <div className="AddNewDebitNote">
       <div className="headderName">
@@ -103,23 +181,23 @@ function AddNewDebitNote({ setAddNewBtn, setMainTableView }) {
       <div className="top__Section">
         <div className="left__Section">
           <div className="top">
-            <div className="input__sections">
+          <div className="input__sections">
               <h5>Entry No</h5>
-              <input type="text" />
+              <input name="EntryNo" value={debitEntries.EntryNo} type="text" onChange={handleData} />
             </div>
             <div className="input__sections">
               <h5>Entry Date</h5>
-              <input type="date" />
+              <input name="EntryDate" value={debitEntries.EntryDate} type="date" onChange={handleData} />
             </div>
           </div>
           <div className="bottom">
             <div className="input__sections">
               <h5>Cr.No</h5>
-              <input type="text" className="invoiceno" />
+              <input type="text" value={debitEntries.CrNo} name="CrNo" className="invoiceno" onChange={handleData} />
             </div>
             <div className="input__sections invDate">
               <h5>Cr.Date</h5>
-              <input type="date" />
+              <input name="CrDate" value={debitEntries.CrDate} type="date" onChange={handleData} />
             </div>
           </div>
         </div>
@@ -127,10 +205,13 @@ function AddNewDebitNote({ setAddNewBtn, setMainTableView }) {
           <div className="input__Sections">
             <h5>Supplier</h5>
 
-            <select name="" id="">
-              <option value="">ram</option>
-              <option value="">revi</option>
-              <option value="">kishor</option>
+            <select name="" id="" onChange={getSupplierDebitNote}>
+              <option value="">Select supplier</option>
+              {
+                suppliers.map((item,index) => (
+                  <option value={item.Value} key={index}>{item.Text}</option>
+                ))
+              }
             </select>
           </div>
 
@@ -145,28 +226,34 @@ function AddNewDebitNote({ setAddNewBtn, setMainTableView }) {
         <form autoComplete="off" onSubmit={(e) => handleDataforTable(e)}>
           <div className="input__area__Section">
             <div className="left__input__areaa sectionss">
-              <input
-                type="text"
-                name="Name"
-                placeholder="Products"
-                onChange={handleAddDataToTable}
-                value={subData.Name}
-                required
-              />
+            <select name="PrdctId" id="" value={debitEntries.PrdctId} onChange={handleData}>
+                <option value="">Choose product</option>
+                {
+                  products.map((item, index) => (
+                    <option value={item.Value} key={index}>{item.Text}</option>
+                  ))
+                }
+              </select>
               <input
                 type="text"
                 name="HSNCode"
                 placeholder="HSN Code"
-                onChange={handleAddDataToTable}
-                value={subData.HSNCode}
+                onChange={(event) => {
+                  handleAddDataToTable(event)
+                  handleData(event)
+                }}
+                value={debitEntries.HSNCode}
                 required
               />
               <input
                 type="text"
                 name="BatchNo"
                 placeholder="Batch No"
-                onChange={handleAddDataToTable}
-                value={subData.BatchNo}
+                onChange={(event) => {
+                  handleAddDataToTable(event)
+                  handleData(event)
+                }}
+                value={debitEntries.BatchNo}
                 required
               />
               <div
@@ -177,8 +264,12 @@ function AddNewDebitNote({ setAddNewBtn, setMainTableView }) {
               >
                 <DatePicker
                   placeholderText="Expiry"
-                  selected={expiryDate}
-                  onChange={(date) => handleExpiryDate(date)}
+                  selected={debitEntries.Expiry}
+                  name="Expiry"
+                  onChange={(event) => {
+                    handleAddDataToTable(event)
+                    handleData(event, "Expiry")
+                  }}
                   dateFormat={"dd/MM/yyyy"}
                   isClearable
                   required
@@ -189,61 +280,82 @@ function AddNewDebitNote({ setAddNewBtn, setMainTableView }) {
                 type="number"
                 name="Qty"
                 placeholder="Qty"
-                onChange={handleAddDataToTable}
-                value={subData.Qty}
+                onChange={(event) => {
+                  handleAddDataToTable(event)
+                  handleData(event)
+                }}
+                value={debitEntries.Qty}
                 required
               />
               <input
                 type="number"
                 name="FreeQty"
                 placeholder="Free Qty"
-                onChange={handleAddDataToTable}
-                value={subData.FreeQty}
+                onChange={(event) => {
+                  handleAddDataToTable(event)
+                  handleData(event)
+                }}
+                value={debitEntries.FreeQty}
                 required
               />
             </div>
             <div className="right__input__areaa sectionss">
-              <input
+            <input
                 type="number"
                 name="Rate"
                 placeholder="Rate"
-                onChange={handleAddDataToTable}
-                value={subData.Rate}
+                onChange={(event) => {
+                  handleAddDataToTable(event)
+                  handleData(event)
+                }}
+                value={debitEntries.Rate}
               />
               <input
                 type="number"
                 name="Discount"
                 placeholder="Disc"
-                onChange={handleAddDataToTable}
-                value={subData.Discount}
+                onChange={(event) => {
+                  handleAddDataToTable(event)
+                  handleData(event)
+                }}
+                value={debitEntries.Discount}
                 required
               />
               <input
                 type="text"
                 name="GST"
                 placeholder="GST"
-                onChange={handleAddDataToTable}
-                value={subData.GST}
+                onChange={(event) => {
+                  handleAddDataToTable(event)
+                  handleData(event)
+                }}
+                value={debitEntries.GST}
                 required
               />
               <input
                 type="number"
-                name="TAX"
+                name="TaxParam"
                 placeholder="Tax Param"
-                onChange={handleAddDataToTable}
-                value={subData.TAX}
+                onChange={(event) => {
+                  handleAddDataToTable(event)
+                  handleData(event)
+                }}
+                value={debitEntries.TaxParam}
                 required
               />
               <input
                 type="number"
                 name="Total"
                 placeholder="Total"
-                onChange={handleAddDataToTable}
-                value={subData.Total}
+                onChange={(event) => {
+                  handleAddDataToTable(event)
+                  handleData(event)
+                }}
+                value={debitEntries.Total}
                 required
               />
               <div className="button__sectionssss">
-                <button type="submit">Add Product</button>
+                <button type="submit" onClick={handleAdding}>Add Product</button>
                 <button type="button" onClick={HandleUpdateData}>
                   Update
                 </button>
@@ -286,22 +398,6 @@ function AddNewDebitNote({ setAddNewBtn, setMainTableView }) {
                 <td>1000</td>
               </tr>
             </tbody>
-
-            <tfoot className="tfootTotal">
-              <tr>
-                <th></th>
-                <th></th>
-                <th></th>
-                <th></th>
-                <th></th>
-                <th></th>
-                <th></th>
-                <th>Disc total</th>
-                <th></th>
-                <th></th>
-                <th>Total</th>
-              </tr>
-            </tfoot>
           </table>
         </div>
       </div>
@@ -359,6 +455,7 @@ function AddNewDebitNote({ setAddNewBtn, setMainTableView }) {
             onClick={() => {
               setAddNewBtn(false);
               setMainTableView(true);
+              handleSaving()
             }}
           >
             Save

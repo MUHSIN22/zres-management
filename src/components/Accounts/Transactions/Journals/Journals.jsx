@@ -103,7 +103,16 @@ function Journals() {
   }
   const handleUpdate = (event) => {
     event.preventDefault();
-    console.log(newData);
+    // console.log(newData);
+    accountServices.updateJournel(newData)
+      .then(res => {
+        toast.success("Edited successfully!")
+        handleClearALL()
+      })
+      .catch(err => {
+        console.log(err)
+        toast.error('Insertion Failed')
+      })
   }
 
   const handleJournalSubmit = (e) => {

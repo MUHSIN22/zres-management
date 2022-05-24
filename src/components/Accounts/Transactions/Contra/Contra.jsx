@@ -111,6 +111,17 @@ function Contra({
   const handleUpdate = (event) => {
     event.preventDefault();
     console.log(newData);
+    accountServices.updateContra(newData)
+    .then((res) => {
+      if(!res.error){
+        toast.success('Successfully added!')
+        handleClearALL()
+      }else{
+        toast.error('Insertion Failed')
+      }
+    }).catch(err => {
+      toast.error('Insertion Failed')
+    })
   }
 
   const handleJournalSubmit = (e) => {
