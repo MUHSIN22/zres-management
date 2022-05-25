@@ -19,17 +19,8 @@ const StockCost = React.forwardRef((props, ref) => {
   const [categoryid,setCategoryid] = useState('')
 
   const count = data.length;
- let costtotal = data.reduce(
-   
-    (price, item) => price + count * item.CostOfSale,
-    0
-  );
-  let saletotal = data.reduce(
-   
-    (price, item) => price + count * item.SalesPrice,
-    0
-  );
-  
+
+
   const  stockCostFilter = (from,to,Cid,Pid)=>{
   if(from && to && Cid && Pid){
     inventoryServices.getStockcostFilter(from,to,Cid,Pid)
@@ -50,6 +41,20 @@ const StockCost = React.forwardRef((props, ref) => {
   const title = new Date().toLocaleDateString() + ' stock cost'
   exportPDF(headers,title,d);
 }
+
+const totalPurchaseAmount   = data.reduce(    
+    (price, item) => price + count * item.PurchaseAmount,
+    0
+  );
+console.log(totalPurchaseAmount)
+
+  const totalStock = data.reduce(
+    (stock, item) => stock + count * item.ActualStock,
+    0
+    )
+
+
+
   useEffect(() => {
     
   inventoryServices.getStockcost()
@@ -61,6 +66,9 @@ const StockCost = React.forwardRef((props, ref) => {
   .then(data => {setCategorydropdown(data)})
   }, [])
   
+
+
+
   return (
     <>
       <div className="StockCost">
@@ -350,8 +358,8 @@ const StockCost = React.forwardRef((props, ref) => {
                   <td></td>
                   <td colspan="2"></td>
                   <td></td>
-                  <td style={{ backgroundColor: "#C0C0C0" }}>{costtotal}</td>
-                  <td style={{ backgroundColor: "#C0C0C0" }}>{saletotal}</td>
+                  <td style={{ backgroundColor: "#C0C0C0" }}>{totalPurchaseAmount}</td>
+                  <td style={{ backgroundColor: "#C0C0C0" }}>{totalStock}</td>
                   <td></td>
                 </tr>
               </tfoot>

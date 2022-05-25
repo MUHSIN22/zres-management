@@ -48,6 +48,9 @@ function ClossingStockPrint({ setSendingToPrint }) {
   const [printSucsess, setPrintSucess] = useState(false);
   const [totalClosing,setTotalClosing] = useState(0)
   const [totalActual,setTotalActual] = useState(0)
+
+ 
+
   return (
     <>
       {printSucsess && (

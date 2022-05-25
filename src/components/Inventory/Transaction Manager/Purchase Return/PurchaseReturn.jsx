@@ -34,8 +34,7 @@ function PurchaseReturn() {
 
 
 
-  const Totalamount = useCallback(
-    () => {
+  
       const totalAmount = ()=>{
         let total = 0
         
@@ -44,15 +43,15 @@ function PurchaseReturn() {
         })
         setTotal(total)
       }
-    }
-  );
 
+
+ 
   useEffect(() => {
     inventoryServices.getPurchasereturn()
       .then(data => { setData(data) })
       .catch(err => console.log(err));
-      Totalamount()
-  },[])
+   
+  },[]);
   return (
     <>
       {addNewBtn && (

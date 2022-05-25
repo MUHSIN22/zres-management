@@ -48,6 +48,44 @@ function ClossingStockReport() {
     exportPDF(headers,title,d);
   }
 
+const totalclosingStock = () =>{
+  let totalclosing = 0
+  data.map(data=>{
+    totalclosing = totalclosing + data.ClosingStock
+  })
+  setTotalclosing(totalclosing)
+}
+
+const totalActualstock = ()=>{
+  let totalactual = 0
+  data.map(data=>{
+    totalactual = totalactual + data.ActualStock
+  })
+  setTotalactual(totalactual)
+}
+
+const totalDifference = ()=>{
+  let totaldifference = 0
+  data.map(data=>{
+    totaldifference = totaldifference + data.Difference
+  })
+  setTotalDifference(totaldifference)
+}
+
+const totalOpeningStock = ()=>{
+  let totalopening = 0
+  data.map(data=>{
+    totalopening = totalopening + data.openigStock
+  })
+  setTotalopening(totalopening)
+}
+
+useEffect(() => {
+  totalActualstock()
+  totalclosingStock()
+  totalDifference()
+  totalOpeningStock()
+})
   useEffect(() => {
     inventoryServices.getClosestock()
       .then(data => { setData(data); setProductdropdown(data) })

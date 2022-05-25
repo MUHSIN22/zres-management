@@ -23,6 +23,48 @@ function GpStatement() {
     }
    }
 
+   const totalMrp = () =>{
+    let total = 0
+    data.map(item=>{
+      total = total + item.MRP
+    })
+    setTotalmrp(total)
+   }
+
+   const totalSalesprice = () =>{
+    let total = 0
+    data.map(item=>{
+      total = total + item.SalesPrice
+    })
+    setTotalsales(total)
+   }
+
+   const totalCost = () =>{
+    let total = 0
+    data.map(item=>{
+      total = total + item.CostOfSale
+    })
+    setTotalcost(total)
+
+   }
+
+   const totalGp = () =>{
+    let total = 0
+    data.map(item=>{
+      total = total + item.GrossProfit
+    })
+    setTotalgp(total)
+    }
+
+    useEffect(
+      () => {
+        totalMrp()
+        totalSalesprice()
+        totalCost()
+        totalGp()
+      }
+    )
+
   useEffect(() => {
   inventoryServices.getGpstatement()
   .then(data =>{ setData(data)})
@@ -92,7 +134,7 @@ function GpStatement() {
 
                       <td>{datas.Date}</td>
 
-                      <td>{datas.Rate}</td>
+                      <td>{datas.MRP}</td>
                       <td>{datas.ItemName}</td>
                       <td>{datas.SalesPrice}</td>
 
