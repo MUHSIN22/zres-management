@@ -7,8 +7,11 @@ import PaymetTypeMainScreen from "../paymentMethod/PaymetTypeMainScreen";
 import { useEffect } from "react";
 import NumPad from "react-numpad";
 import Billgenerated from "../Bills/Billgenerated";
-
+import { CardElement, useStripe, useElements } from "@stripe/react-stripe-js";
+import { loadStripe } from "@stripe/stripe-js";
+import { Elements } from "@stripe/react-stripe-js";
 function Payment({ setPaymentOption, paymentOption, setPaymentSUcessfull, dinein,subTotal,taxAmount, items }) {
+  const stripePromise = loadStripe('pk_live_51L14E1BlqVCLxONn4xOdQyr4rgvzSwiuZm6anksyqRcQhfbwNlxXBSrnXOfCPOkQZRAGy4feTvaks6zM5PG76mFD00wgY8M8tJ');
   const [pay, setPay] = useState(false);
   const [mainPaymentSection, setMainPaymentSection] = useState(true);
   const [changeDueActive, setChangeDueActive] = useState(false);
@@ -16,6 +19,8 @@ function Payment({ setPaymentOption, paymentOption, setPaymentSUcessfull, dinein
   const [loyalityPayment, setLoyalityPayment] = useState(false);
   const [amountEnter, setAmountEnter] = useState(0);
   const [printNow, setPrintNow] = useState(false);
+  const stripe = useStripe();
+  const elements = useElements();
   useEffect(() => {
     let loyalityPoint = 50;
     if (loyalityPoint) {
@@ -30,6 +35,33 @@ function Payment({ setPaymentOption, paymentOption, setPaymentSUcessfull, dinein
 
   const handleChange = (event) =>
     setAmountEnter(addCommas(removeNonNumeric(event.target.value)));
+
+
+    const handleSubmit = async (e) => {
+      // e.preventDefault();
+      if (!stripe || !elements) {
+        // Stripe.js has not loaded yet. Make sure to disable
+        // form submission until Stripe.js has loaded.
+        return;
+      }
+      // Get a reference to a mounted CardElement. Elements knows how
+      // to find your CardElement because there can only ever be one of
+      // each type of element.
+      const cardElement = elements.getElement(CardElement);
+  
+      // use stripe.createToken to get a unique token for the card
+      const { error, token } = await stripe.createToken(cardElement);
+  
+      if (!error) {
+        // Backend is not implemented yet, but once there isn’t any errors,
+        // you can pass the token and payment data to the backend to complete
+        // the charge
+        console.log('gone good!');
+      } else {
+        console.log(error);
+      }
+    };
+  
   console.log(items);
   return (
     <>
@@ -94,12 +126,12 @@ function Payment({ setPaymentOption, paymentOption, setPaymentSUcessfull, dinein
                 </div>
                 <div className="right__area__split__Section">
                   <button>Cash</button>
-                  <button onClick={() => setPaymentType("Card Payment")}>
-                    Credit Card
-                  </button>
-                  <button onClick={() => setPaymentType("Mobile Payment")}>
-                    Mobile Pay
-                  </button>
+                    <button onClick={() => handleSubmit()}>
+                      Credit Card
+                    </button>
+                    <button onClick={() => handleSubmit()}>
+                      Mobile Pay
+                    </button>
                 </div>
                 <div className="left__bottom__payment__section">
                   <div className="top__section">

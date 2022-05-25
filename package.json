@@ -22,6 +22,8 @@
     "@mui/styled-engine-sc": "^5.1.0",
     "@mui/styles": "^5.2.2",
     "@mui/x-data-grid": "^5.1.0",
+    "@stripe/react-stripe-js": "^1.8.0",
+    "@stripe/stripe-js": "^1.29.0",
     "@syncfusion/ej2-react-dropdowns": "^19.3.55",
     "@syncfusion/ej2-react-treegrid": "^19.4.40",
     "@testing-library/jest-dom": "^5.15.1",

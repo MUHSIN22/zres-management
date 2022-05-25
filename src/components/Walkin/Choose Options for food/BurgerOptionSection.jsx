@@ -1,8 +1,10 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import "./burgerOptionSection.scss";
 import Checkbox from "@mui/material/Checkbox";
 
 function BurgerOptionSection({ setItemDetailsClick,product, submit }) {
+
+
   const Addons = [
     {
       id: 1,
@@ -72,14 +74,39 @@ function BurgerOptionSection({ setItemDetailsClick,product, submit }) {
 
 
   
-  const [selectedOption, setSelectedOption] = useState(Addons[0].SectionName);
+  const [selectedOption, setSelectedOption] = useState(1);
   const [checkedStat, setCheckedState] = useState(Addons);
   const [selectedAddOns,setSelectedAddOns] = useState([]);
+  const [addonList,setAddonList] = useState([]);
+
+  useEffect(()=>{
+    async function getAddons(){
+      let request = await fetch('https://zres1.clubsoft.co.in/WalkIn/GetModifierCategory?CMPid=1');
+      let addOnList = await request.json();
+      let temVar = await addOnList;
+      for(let addon of temVar){
+          console.log(addon);
+          let request = await fetch(`https://zres1.clubsoft.co.in/WalkIn/GetModifierItemsByCategory?MCategoryID=${addon.MCategoryID}&CMPid=1`);
+          addon.items = await request.json()
+        }
+      setAddonList(temVar)
+    }
+    
+    
+    getAddons();
+    setSelectedOption(1)
+    console.log(addonList);
+  },[])
+
 
   const handleCheckboxClick = async(e, data, prod) =>{
-    const AddonMain = await checkedStat.find((items) => items.id === prod.id);
-    const Selectedsub = await AddonMain.items.find((items) => items.id === data.id);
-    let index = await selectedAddOns.findIndex(d=>d.id===Selectedsub.id);
+    console.log(prod,data);
+    const AddonMain = await addonList.find((items) => items.MCategoryID === prod.MCategoryID);
+    console.log(AddonMain);
+    const Selectedsub = await AddonMain.items.find((items) => items.MID === data.MID);
+    console.log(Selectedsub);
+    console.log(selectedAddOns);
+    let index = await selectedAddOns.findIndex(d=>d.MID===Selectedsub.MID);
     if(index === -1){
       console.log(Selectedsub);
       setSelectedAddOns([...selectedAddOns,Selectedsub]);
@@ -91,12 +118,22 @@ function BurgerOptionSection({ setItemDetailsClick,product, submit }) {
     }
   };
 
+
+  // const getDatasFromBackEnd = async()=>{
+  //   const modifilers = await fetch('https://zres1.clubsoft.co.in/WalkIn/GetModifierCategory?CMPid=1');
+  //   console.log(modifilers);
+  // }
+
+  // useEffect(()=>{
+  //   getDatasFromBackEnd();
+  // },[])
+
   const onSubmit = ()=>{
     submit(product,selectedAddOns);
     setItemDetailsClick(false);
   }
 
-  console.log(product);
+  // console.log(product);
   return (
     <div className="BurgerOptionSection">
       <div className="top__hedding__section">
@@ -107,14 +144,14 @@ function BurgerOptionSection({ setItemDetailsClick,product, submit }) {
 
       <div className="mid__option__section">
         <div className="left__mid__option">
-          {Addons.map((d,i)=>(
+          {addonList.map((d,i)=>(
           <div
             key={i}
             className={
               "button__section__area " +
-              (selectedOption === d.SectionName && "active")
+              (selectedOption === d.MCategoryID && "active")
             }
-            onClick={() => setSelectedOption(d.SectionName)}
+            onClick={() => setSelectedOption(d.MCategoryID)}
             >
               {i===1&&<div className="svg__manadaory__Section">
               <svg
@@ -137,43 +174,43 @@ function BurgerOptionSection({ setItemDetailsClick,product, submit }) {
                 </text>
               </svg>
             </div>}
-            <h5>{d.SectionName}</h5>
+            <h5>{d.MCategoryName}</h5>
           </div>))}
         </div>
         <div className="right__mid__option">
           {/* AddOns section */}
           <div className="right__curesponding__details">
-            {checkedStat
-              .filter((items) => items.SectionName === selectedOption)
+            {addonList
+              .filter((items) => items.MCategoryID === selectedOption)
               .map((prod) => (
                 <  >
                   <div className="right__curresponding__headder">
-                    <h4>{prod.SectionName}</h4>
+                    <h4>{prod.MCategoryName}</h4>
                     {}
-                    {prod.SectionName !== "BreadSelection" && (
+                    {prod.MCategoryName !== "BreadSelection" && (
                       <>
-                        <p>Please Choose Maximum Of {prod.items.length}</p>
+                        <p>Please Choose Maximum Of {prod?.items?.length}</p>
                       </>
                     )}
-                    {prod.SectionName === "BreadSelection" && (
+                    {prod.MCategoryName === "BreadSelection" && (
                       <>
                         <p>Please Choose one </p>
                       </>
                     )}
                   </div>
                   <div className="checkboc__curresponding__section__wrapper">
-                    {prod.items.map((item) => (
+                    {prod.items?.map((item) => (
                       <div className="CheckBoxArea__Section">
                         <Checkbox
-                          checked={selectedAddOns.includes(item)}
-                          key={item.name}
+                          checked={selectedAddOns?.includes(item)}
+                          key={item.MItemName}
                           sx={{ "& .MuiSvgIcon-root": { fontSize: 38 } }}
                           onClick={(e) => handleCheckboxClick(e, item, prod)}
                         />
 
                         <div className="checkboc__details">
-                          <h5>{item.name}</h5>
-                          <p>{item.price} OMR</p>
+                          <h5>{item.MItemName}</h5>
+                          <p>{item.Rate} OMR</p>
                         </div>
                       </div>
                     ))}
