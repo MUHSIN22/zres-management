@@ -4,3 +4,6 @@
   box-sizing: border-box;
   font-family: "Segoe UI", sans-serif;
 }
+.react-datepicker__close-icon {
+  width: max-content !important;
+}
