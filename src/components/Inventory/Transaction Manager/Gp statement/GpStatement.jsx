@@ -9,7 +9,10 @@ function GpStatement() {
   const [data,setData] = useState([])
   const [fromDate, setFromDate] = useState("");
   const [toDate, setToDate] = useState("");
-
+  const [totalmrp,setTotalmrp] = useState(0)
+  const [totalsales,setTotalsales] = useState(0)
+  const [totalcost,setTotalcost] = useState(0)
+  const [totalgp,setTotalgp] = useState(0)
   const [clickedTr, SetClickedTr] = useState("");
 
   const stockStatementFilter = (from,to)=>{
@@ -102,7 +105,7 @@ function GpStatement() {
                   )):"No data found"}
                 </tbody>
                 <tfoot>
-                  <tr>
+                  {/* <tr>
                     <td className="grandSummary" colSpan="2">
                       Grand Summary
                     </td>
@@ -112,7 +115,7 @@ function GpStatement() {
                     <td>800</td>
                     <td>1200</td>
                     <td></td>
-                  </tr>
+                  </tr> */}
                 </tfoot>
               </table>
             </div>
@@ -122,7 +125,7 @@ function GpStatement() {
                 <h5>Total Mrp</h5>
 
                 <div className="amount__holder">
-                  <h5>14000.00</h5>
+                  <h5>{totalmrp}</h5>
                 </div>
               </div>
 
@@ -130,7 +133,7 @@ function GpStatement() {
                 <h5>Total Sales Price</h5>
 
                 <div className="amount__holder">
-                  <h5>14000.00</h5>
+                  <h5>{totalsales}</h5>
                 </div>
               </div>
 
@@ -138,7 +141,7 @@ function GpStatement() {
                 <h5>Total Cost</h5>
 
                 <div className="amount__holder">
-                  <h5>14000.00</h5>
+                  <h5>{totalcost}</h5>
                 </div>
               </div>
 
@@ -146,7 +149,7 @@ function GpStatement() {
                 <h5>Total Gp</h5>
 
                 <div className="amount__holder">
-                  <h5>14000.00</h5>
+                  <h5>{totalgp}</h5>
                 </div>
               </div>
             </div>

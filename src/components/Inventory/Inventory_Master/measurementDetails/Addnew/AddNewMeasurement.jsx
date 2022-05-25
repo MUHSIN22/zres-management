@@ -47,6 +47,10 @@ status,
 
   const handleDeletefunctionss = () => {};
 
+  const handleEditMeasurement = (e,data)=>{
+    e.preventDefault();
+    inventoryServices.editMeasurementdetails(data)
+  }
   useEffect(() => {
    if(status){
       setDataToSend({
@@ -73,7 +77,7 @@ status,
         </div>
 
         <div className="inner__Section">
-          <form action="" onSubmit={(e) => handleSubmit(e,DataToSend)}>
+          <form action="" onSubmit={(e) => (status) ? handleEditMeasurement(e,DataToSend) : handleSubmit(e,DataToSend)}>
             <div className="top__secton">
               <div className="lef__Side__form">
                 <div className="input__Sections">

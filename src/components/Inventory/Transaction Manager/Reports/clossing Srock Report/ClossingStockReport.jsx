@@ -12,6 +12,10 @@ function ClossingStockReport() {
   const [fromdate, setFromdate] = useState('')
   const [productid, setProductid] = useState('')
   const [productdropdown, setProductdropdown] = useState([])
+  const [totalclosing,setTotalclosing]= useState(0)
+  const [totalactual,setTotalactual] = useState(0)
+  const [totalopening,setTotalopening]= useState(0)
+  const [totaldifference,setTotalDifference]= useState(0)
 
   const handlePrintFunction = () => {
     window.print();
@@ -279,10 +283,10 @@ function ClossingStockReport() {
                 <td></td>
                 <td></td>
                 <td></td>
-                <td>454</td>
-                <td>785</td>
-                <td>555</td>
-                <td>562</td>
+                <td>{totalclosing}</td>
+                <td>{totalactual}</td>
+                <td>{totaldifference}</td>
+                <td>{totaldifference}</td>
                 <td></td>
                 <td></td>
               </tr>

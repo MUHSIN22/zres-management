@@ -46,6 +46,8 @@ const Date = [
 ];
 function ClossingStockPrint({ setSendingToPrint }) {
   const [printSucsess, setPrintSucess] = useState(false);
+  const [totalClosing,setTotalClosing] = useState(0)
+  const [totalActual,setTotalActual] = useState(0)
   return (
     <>
       {printSucsess && (
@@ -287,8 +289,8 @@ function ClossingStockPrint({ setSendingToPrint }) {
                   <tr keys={datas.id}>
                     <td>{datas.SINO}</td>
                     <td>{datas.productName}</td>
-                    <td>1254</td>
-                    <td>452</td>
+                    <td>{totalClosing}</td>
+                    <td>{totalActual}</td>
                     <td>Dec/21</td>
                     <td>1200</td>
 
