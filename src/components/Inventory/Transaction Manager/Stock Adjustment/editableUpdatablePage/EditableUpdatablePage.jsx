@@ -1,6 +1,34 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import "./editableUpdatablePage.scss";
-function EditableUpdatablePage({ setEditableUpdatable, setMainTableView }) {
+function EditableUpdatablePage({ setEditableUpdatable, setMainTableView,editable,status }) {
+  console.log(editable)
+
+const [editabledata,setEditableData] = useState([])
+const [total,setTotal] = useState ({
+  Amount: 0,
+  AmountDeduct: 0,
+})
+
+
+ const handleChange =(e)=>{
+    const name = e.target.name
+    setEditableData({
+      ...editabledata,
+      [name]:e.target.value
+    })
+
+  }
+
+  useEffect(() => {
+    if(status){
+    setEditableData({
+      refNo:editable.RefNo,
+      toDate:editable.ToDate
+    })
+  }
+
+  },[])
+
   return (
     <div className="EditableUpdatablePage">
       <div className="headderName">
@@ -13,13 +41,13 @@ function EditableUpdatablePage({ setEditableUpdatable, setMainTableView }) {
           <div className="top">
             <div className="input__sections">
               <h5>Ref No</h5>
-              <input type="text" />
+              <input name="refNo" onChange={handleChange} value={editabledata.refNo} type="text" />
             </div>
           </div>
           <div className="bottom">
             <div className="input__sections">
               <h5>To Date</h5>
-              <input type="date" />
+              <input name="toDate" onChange={handleChange} value={editabledata.toDate} type="date" />
             </div>
           </div>
         </div>
@@ -49,23 +77,23 @@ function EditableUpdatablePage({ setEditableUpdatable, setMainTableView }) {
             <tbody>
               <tr contenteditable="true">
                 <td>Suger</td>
-                <td>3004104</td>
-                <td>e201200</td>
-                <td>12/2021</td>
-                <td>20kg</td>
-                <td>0</td>
-                <td>100</td>
-                <td>0</td>
-                <td>12%</td>
-                <td>qty</td>
-                <td>1000</td>
+                <td>{editable.ProductName}</td>
+                  <td>{editable.BatchNo}</td>
+                  <td>{editable.Expiry}</td>
+                  <td>{editable.Stock}</td>
+                  <td>{editable.QtyAdd}</td>
+                  <td>{editable.QtyDeduct}</td>
+                  <td>{editable.Mrp}</td>
+                  <td>{editable.Gst}</td>
+                  <td>{editable.Amount}</td>
+                  <td>{editable.DeductAmount}</td>
               </tr>
             </tbody>
           </table>
         </div>
         <div className="total__section">
-          <div className="totalss disc">Amount : 0.000</div>
-          <div className="totalss">Amount Deduct : 1000</div>
+          <div className="totalss disc">Amount : {total.Amount}</div>
+          <div className="totalss">Amount Deduct : {total.AmountDeduct}</div>
         </div>
       </div>
       {/* ends */}

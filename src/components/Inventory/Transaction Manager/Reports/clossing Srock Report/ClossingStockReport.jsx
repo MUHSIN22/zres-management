@@ -12,6 +12,10 @@ function ClossingStockReport() {
   const [fromdate, setFromdate] = useState('')
   const [productid, setProductid] = useState('')
   const [productdropdown, setProductdropdown] = useState([])
+  const [totalclosing,setTotalclosing]= useState(0)
+  const [totalactual,setTotalactual] = useState(0)
+  const [totalopening,setTotalopening]= useState(0)
+  const [totaldifference,setTotalDifference]= useState(0)
 
   const handlePrintFunction = () => {
     window.print();
@@ -44,6 +48,44 @@ function ClossingStockReport() {
     exportPDF(headers,title,d);
   }
 
+const totalclosingStock = () =>{
+  let totalclosing = 0
+  data.map(data=>{
+    totalclosing = totalclosing + data.ClosingStock
+  })
+  setTotalclosing(totalclosing)
+}
+
+const totalActualstock = ()=>{
+  let totalactual = 0
+  data.map(data=>{
+    totalactual = totalactual + data.ActualStock
+  })
+  setTotalactual(totalactual)
+}
+
+const totalDifference = ()=>{
+  let totaldifference = 0
+  data.map(data=>{
+    totaldifference = totaldifference + data.Difference
+  })
+  setTotalDifference(totaldifference)
+}
+
+const totalOpeningStock = ()=>{
+  let totalopening = 0
+  data.map(data=>{
+    totalopening = totalopening + data.openigStock
+  })
+  setTotalopening(totalopening)
+}
+
+useEffect(() => {
+  totalActualstock()
+  totalclosingStock()
+  totalDifference()
+  totalOpeningStock()
+})
   useEffect(() => {
     inventoryServices.getClosestock()
       .then(data => { setData(data); setProductdropdown(data) })
@@ -279,10 +321,10 @@ function ClossingStockReport() {
                 <td></td>
                 <td></td>
                 <td></td>
-                <td>454</td>
-                <td>785</td>
-                <td>555</td>
-                <td>562</td>
+                <td>{totalclosing}</td>
+                <td>{totalactual}</td>
+                <td>{totaldifference}</td>
+                <td>{totaldifference}</td>
                 <td></td>
                 <td></td>
               </tr>

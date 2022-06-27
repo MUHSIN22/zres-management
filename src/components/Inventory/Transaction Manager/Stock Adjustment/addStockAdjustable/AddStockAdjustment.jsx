@@ -81,13 +81,17 @@ function AddStockAdjustment({ setAddNewBtn, setMainTableView }) {
   };
 console.log(searchdata)
 
+const handleEditdata = (data) =>{
+  inventoryServices.editStockadjustment(data)     ///edit api
+} 
+
+
 const searchStock = (data)=>{
   console.log(data)
-if(data.date && data.productId && data.CategoryId){
+// if(data.date && data.productId && data.CategoryId){
   inventoryServices.getStockadjustmentsearchdata(data).then(res=>{
-    console.log(res);setTabledata(data)}).catch(err=>{ console.log(err)})
-    
-  }
+    console.log(res);setTabledata(res)}).catch(err=>{ console.log(err)})
+  // }
 
 }
 console.log(tabledata)
@@ -171,38 +175,18 @@ console.log(tabledata)
               </tr>
             </thead>
             <tbody>
-                
-                <tr>
-                  <td></td>
-                  <td>{tabledata.ProductName}</td>
-                  <td>{tabledata.BatchNo}</td>
-                  <td>{tabledata.Expiry}</td>
-                  <td>{tabledata.Stock}</td>
-                  <td>{tabledata.QtyAdd}</td>
-                  <td>{tabledata.QtyDeduct}</td>
-                  <td>{tabledata.Amount}</td>
-                  <td>{tabledata.DeductAmount}</td>
-                </tr>
-               
-
-            
-
-              {/* this will view if they clicked on sub Category */}
-
-              {filterData?.map((items, id) => (
+                {tabledata && tabledata.map((items,index) => (
                 <tr contentEditable="true">
-                  <td>{id}</td>
+                  <td>{index+1}</td>
                   <td>{items.ProductName}</td>
-                  <td>{items.batch}</td>
-                  <td>{items.expiry}</td>
+                  <td>{items.BatchNo}</td>
+                  <td>{items.Expiry}</td>
                   <td>{items.Stock}</td>
-                  <td>{items.OtyAdd}</td>
+                  <td>{items.QtyAdd}</td>
                   <td>{items.QtyDeduct}</td>
-                  <td>{items.Mrp}</td>
                   <td>{items.Amount}</td>
-                  <td>{items.AmoundDeduct}</td>
-                </tr>
-              ))}
+                  <td>{items.DeductAmount}</td>
+                </tr>))}
             </tbody>
           </table>
         </div>

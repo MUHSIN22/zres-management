@@ -33,6 +33,12 @@ function AddNewTax({ setAddNewBtn, setMainTableView, editTax,status,editable }) 
     console.log(data)
   }
 
+  const handleEditTax = (e,data) =>{
+    e.preventDefault();
+    inventoryServices.editTaxmaster(data)
+    console.log(data)
+  }
+
   const handleDeletefunctionss = () => { };
 
   useEffect(() => {
@@ -68,7 +74,7 @@ if(status){
         </div>
 
         <div className="inner__Section">
-          <form action="" onSubmit={(e) => handleSubmit(e,dataToSend)}>
+          <form action="" onSubmit={(e) => (!status) ?  handleSubmit(e,dataToSend) : handleEditTax(e,dataToSend)}>
             <div className="top__section">
               <div className="tax__code__Section">
                 <div className="input__Section__tax">

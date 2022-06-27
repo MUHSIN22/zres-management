@@ -5,7 +5,7 @@ import Stack from "@mui/material/Stack";
 import DatePicker from "react-datepicker";
 import { inventoryServices } from "../../../../../Services/InventoryServices";
 
-function PurchaseReturnAdd({ setAddNewBtn, setMainTableView ,editable,status}) {
+function PurchaseReturnAdd({ setAddNewBtn, setMainTableView, editable, status }) {
   const defvalue = {
     Products: "",
     HsnCode: "",
@@ -51,7 +51,7 @@ function PurchaseReturnAdd({ setAddNewBtn, setMainTableView ,editable,status}) {
   const [paymetType, setPaymentType] = useState("");
   const [supplier, setSupplier] = useState([])
   const [productmaster, setProductMaster] = useState([])
- 
+
 
   const handleMainDataValue = (evt) => {
     const name = evt.target.value;
@@ -67,12 +67,12 @@ function PurchaseReturnAdd({ setAddNewBtn, setMainTableView ,editable,status}) {
       [evt.target.name]: name,
     });
   };
-  
-console.log(values)
+
+  console.log(values)
 
   const handleValidationSubForm = () => {
     let temp = {};
-    temp.Products = values.ProductsId.length ? 0   : "This Field is Required.";
+    temp.Products = values.ProductsId.length ? 0 : "This Field is Required.";
     temp.HsnCode = values.HsnCode ? "" : "This Field is Required.";
     temp.BatchNo = values.BatchNo ? "" : "This Field is Required.";
     temp.Expiry = values.Expiry ? "" : "This Field is Required.";
@@ -132,6 +132,7 @@ console.log(values)
     console.log("main submit called ", mainDataValue);
   };
 
+
   const handlePaymentType = (e) => {
     const activeValue = e.target.checked;
     if (activeValue) {
@@ -141,9 +142,9 @@ console.log(values)
   console.log(mainDataValue, values)
 
   const subdataUpdate = () => {
-    if (values.ProductsId !== '' ) {
+    if (values.ProductsId !== '') {
       const data = productmaster.filter(item => item.ProdctId == values.ProductsId)
-console.log(data)
+      console.log(data)
 
       setValues({
         HsnCode: data[0].HSNCode,
@@ -152,7 +153,7 @@ console.log(data)
         ProdctsId: data[0].ProdctId,
         Discount: data[0].Discount,
       })
-    } 
+    }
   }
 
   useEffect(() => {
@@ -165,20 +166,20 @@ console.log(data)
         setProductMaster(data)
       }).catch(err => console.log(err))
 
-      if(status){
-        setMainDataVale({
-          "returnDate": editable.ReturnDate,
-          "returnNo": editable.ReturnNo,
-          "invNoInvoiceNo": editable.InvoiceNo,
-          "invDate": editable.InvoiceDate,
-          "paymentType": editable.PaymentType,
-          "supplier": editable.supplierid,
-          "address": editable.Address,
-          "Gst": editable.GSTNo,
-          "netAmt": editable.Total,
-          "totalTax": editable.Totaltax
-        })
-      }
+    if (status) {
+      setMainDataVale({
+        "returnDate": editable.ReturnDate,
+        "returnNo": editable.ReturnNo,
+        "invNoInvoiceNo": editable.InvoiceNo,
+        "invDate": editable.InvoiceDate,
+        "paymentType": editable.PaymentType,
+        "supplier": editable.supplierid,
+        "address": editable.Address,
+        "Gst": editable.GSTNo,
+        "netAmt": editable.Total,
+        "totalTax": editable.Totaltax
+      })
+    }
   }, [])
 
   return (
@@ -408,7 +409,7 @@ console.log(data)
                 />
                 <div className="button__sectionssss">
                   <button onClick={handleDataforTable}>Add Product</button>
-                  <button onClick={(e)=>{HandleUpdateData(e);inventoryServices.postProductmaster(values)}}>Update</button>
+                  <button onClick={(e) => { HandleUpdateData(e); inventoryServices.postProductmaster(values) }}>Update</button>
                 </div>
               </div>
             </div>
@@ -572,16 +573,17 @@ console.log(data)
           <div className="bottom__btn__section">
             <button
               type="submit"
-            onClick={() => {
-              setAddNewBtn(false);
-              setMainTableView(true);
-              inventoryServices.postPurchaseReturn(values);
-            }}
+              onClick={() => {
+                setAddNewBtn(false);
+                setMainTableView(true);
+                (status) ? inventoryServices.editPurchaseReturn(values) :
+                  inventoryServices.postPurchaseReturn(values);
+              }}
 
             >
               Save
             </button>
-            <button onClick={()=>window.print()}>Print</button>
+            <button onClick={() => window.print()}>Print</button>
             <button
               onClick={() => {
                 setAddNewBtn(false);

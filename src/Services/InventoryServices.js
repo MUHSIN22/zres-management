@@ -536,8 +536,8 @@ export const inventoryServices = {
     getStockadjustmentsearchdata: (data) => {
         return new Promise((resolve, reject) => {
             // fetch(`${BASE_URL}StockAdjust/SearchByProduct?ArrivalDate=${data.date}&Cid=${data.CategoryId}&ProdctId=${data.productId}&CMPid=1`)
-            fetch(`${BASE_URL}StockAdjust/SearchByProduct?ArrivalDate=2020-01-01&Cid=1&ProdctId=1&CMPid=1`)
-            .then(res => res.json())
+            fetch(`${BASE_URL}StockAdjust/SearchByProduct?ArrivalDate=2022-04-08&Cid=1&ProdctId=1&CMPid=1`)
+                .then(res => res.json())
                 .then(data => { resolve(data) })
                 .catch(err => reject(err))
         })
@@ -674,7 +674,7 @@ export const inventoryServices = {
             })
         })
     },
-    deleteProductmaster : (cid) =>{
+    deleteProductmaster: (cid) => {
         return new Promise((resolve, reject) => {
             fetch(`${BASE_URL}Category/delete?Cid=${cid}8&CMPid=1`)
                 .then(res => res.json())
@@ -683,7 +683,7 @@ export const inventoryServices = {
         })
     },
 
-    deleteMeasurementdetails : (mid) =>{
+    deleteMeasurementdetails: (mid) => {
         return new Promise((resolve, reject) => {
             fetch(`${BASE_URL}UOM/delete?UOMid=${mid}&CMPid=1`)
                 .then(res => res.json())
@@ -691,7 +691,7 @@ export const inventoryServices = {
                 .catch(err => reject(err))
         })
     },
-    deleteTaxmaster : (tid) =>{
+    deleteTaxmaster: (tid) => {
         return new Promise((resolve, reject) => {
             fetch(`${BASE_URL}Tax/delete?Taxid=${tid}&CMPid=1`)
                 .then(res => res.json())
@@ -699,7 +699,7 @@ export const inventoryServices = {
                 .catch(err => reject(err))
         })
     },
-    deletePurchaseDetails : (pid) =>{
+    deletePurchaseDetails: (pid) => {
         return new Promise((resolve, reject) => {
             fetch(`${BASE_URL}Purchase/delete?id=${pid}&CMPid=1`)
                 .then(res => res.json())
@@ -707,7 +707,7 @@ export const inventoryServices = {
                 .catch(err => reject(err))
         })
     },
-    deletePurchaseReturnDetails : (pid) =>{
+    deletePurchaseReturnDetails: (pid) => {
         return new Promise((resolve, reject) => {
             fetch(`${BASE_URL}PurchaseReturn/delete?id=${pid}&CMPid=1`)
                 .then(res => res.json())
@@ -715,7 +715,7 @@ export const inventoryServices = {
                 .catch(err => reject(err))
         })
     },
-   deletePurchaseOrder: (pid)=>{
+    deletePurchaseOrder: (pid) => {
         return new Promise((resolve, reject) => {
             fetch(`${BASE_URL}PurchaseOrder/delete?id=${pid}&CMPid=1`)
                 .then(res => res.json())
@@ -723,7 +723,7 @@ export const inventoryServices = {
                 .catch(err => reject(err))
         })
     },
-    deleteStockadjustment: (pid)=>{
+    deleteStockadjustment: (pid) => {
         return new Promise((resolve, reject) => {
             fetch(`${BASE_URL}StockAdjust/delete?id=${pid}&CMPid=1`)
                 .then(res => res.json())
@@ -731,7 +731,7 @@ export const inventoryServices = {
                 .catch(err => reject(err))
         })
     },
-    deleteStocktransfer: (pid)=>{
+    deleteStocktransfer: (pid) => {
         return new Promise((resolve, reject) => {
             fetch(`${BASE_URL}StkTransferRequest/delete?id=${pid}&CMPid=1`)
                 .then(res => res.json())
@@ -739,7 +739,7 @@ export const inventoryServices = {
                 .catch(err => reject(err))
         })
     },
-    deleteGoodReceipt : (pid) =>{
+    deleteGoodReceipt: (pid) => {
         return new Promise((resolve, reject) => {
             fetch(`${BASE_URL}GoodsReceipt/delete?id=${pid}&CMPid=1`)
                 .then(res => res.json())
@@ -747,12 +747,12 @@ export const inventoryServices = {
                 .catch(err => reject(err))
         })
     },
-    editPurchasedetails : (data)=>{
+    editPurchasedetails: (data) => {
         return new Promise((resolve, reject) => {
-            fetch(`${BASE_URL}Purchase/update&CMPid=1`, {
+            fetch(`${BASE_URL}Purchase/update`, {
                 method: 'POST',
                 headers: {
-                    'Content-Type': 'application/json'
+                    'Content-Type': 'application/json',
                 },
                 body: JSON.stringify(
                     {
@@ -769,7 +769,7 @@ export const inventoryServices = {
                             "TotalDiscount": data.Discount,
                             "CMPid": 1,
                         },
-    
+
                         purchaseDeatails: [
                             { "ProdctId": data.ProdctsId, "Qty": data.Qty, "FreeQty": data.FreeQty, "Rate": data.Rate, "HSNCode": data.HSNCode, "BatchNo": data.BatchNo, "Expiry": data.Expiry, "GST": data.GST, "TaxParam": data.TAX, "Total": data.Total, "UserID": 1, "CMPid": 1 }
                         ]
@@ -777,5 +777,233 @@ export const inventoryServices = {
                 )
             })
         })
-    }, 
+    },
+
+    editProductmaster: (data) => {
+        return new Promise((resolve, reject) => {
+            fetch(`${BASE_URL}INVT_Product/update`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(
+                    {
+                        InvtGid: data.groupID,
+                        ProductCode: data.ProductCode,
+                        PName: data.PName,
+                        Cid: data.Cid,
+                        UOMid: data.Unit,
+                        RackNo: data.RackNo,
+                        CreatedBy: "AAA",
+                        MaxStockLevel: data.MaxStockLevel,
+                        ReorderLevel: data.ReorderLevel,
+                        ShortName: data.ShortName,
+                        Discount: data.Discount,
+                        Image: data.image,
+                        Taxid: data.Taxid,
+                        HSNCode: data.HSNCode,
+                        UserID: 1,
+                        CMPid: 1,
+                        MenuBlocked: data.MenuBlocked,
+                    }
+                )
+            })
+        })
+    },
+    editMeasurementdetails: (data) => {
+        return new Promise((resolve, reject) => {
+            fetch(`${BASE_URL}UOM/update`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(
+                    {
+                        Unit: data.Unit,
+                        Symbol: data.Symbol,
+                        Discription: data.Discription,
+                        UOMDescription: data.Unit,
+                        UserID: 1,
+                    }
+                )
+            })
+        })
+    },
+    editTaxmaster: (data) => {
+        return new Promise((resolve, reject) => {
+            fetch(`${BASE_URL}Tax/update`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(
+                    {
+                        TaxCode: data.TaxCode,
+                        TaxPercentage: data.TaxPercentage,
+                        Taxable: data.Taxable,
+                        TypeOfTax: data.TypeOfTax,
+                        UserID: 1,
+                        CMPid: 1
+                    }
+                )
+            })
+        })
+    },
+    editPurchaseReturn : (data) => {
+    return new Promise((resolve, reject) => {
+        fetch(`${BASE_URL}PurchaseReturn/update`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(
+                {
+                    purchase: {
+                        "ArrivalDate": data.ArrivalDate,
+                        "ArrivalNo": data.ArrivalNo,
+                        "InvoiceNo": data.InvoiceNo,
+                        "InvoiceDate": data.InvoiceDate,
+                        "PaymentType": data.PaymentType,
+                        "supplierid": data.supplierid,
+                        "Address": data.Address,
+                        "GSTNo": data.GSTNo,
+                        "GrandTotal": data.GrandTotal,
+                        "TotalDiscount": data.Discount,
+                        "CMPid": 1,
+                    },
+
+                    purchaseDeatails: [
+                        { "ProdctId": data.ProdctsId, "Qty": data.Qty, "FreeQty": data.FreeQty, "Rate": data.Rate, "HSNCode": data.HSNCode, "BatchNo": data.BatchNo, "Expiry": data.Expiry, "GST": data.GST, "TaxParam": data.TAX, "Total": data.Total, "UserID": 1, "CMPid": 1 }
+                    ]
+                }
+            )
+        })
+    })
+    },
+    editStockadjustment : (data) =>{
+        return new Promise((resolve, reject) => {
+            fetch(`${BASE_URL}StockAdjust/update`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(
+                    {
+                        "ProdctId": 2,
+                        "BatchNo": "sads",
+                        "QtyAdd": 1,
+                        "QtyDeduct": 2,
+                        "Stock": 5,
+                        "Expiry": "2020-01-01",
+                        "Amount": 20.0,
+                        "Rate": 12.000,
+                        "DeductAmount": 10.0,
+                        "UserID": 1,
+                        "CMPid": 1,
+                        "RefNo": "vgvgh",
+                        "Todate": "2321-01-10",
+                        "ArrivalDate": "2020-01-01"
+                    }
+                )
+            })
+        })
+    },
+    editPurchaseorder : (main,sub) =>{
+        return new Promise((resolve, reject) => {
+            fetch(`${BASE_URL}PurchaseOrder/update`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(
+                    {
+                        purchaseOrder: {
+                            "CMPid": 1,
+                            "Address": main.Address,
+                            "supplierid": main.supplierid,
+                            "OrderNo": main.OrderNo,
+                            "OrderDate": main.OrderDate,
+                        },
+                        details: [
+                            { "ProdctId": sub.PrdctId, "Qty": sub.Qty, "Rate": sub.Rate, "TotalAmount": sub.Amount, "Remarks": sub.Remarks }
+                        ]
+                    }
+                )
+            })
+        })
+    },editStocktransfer : (data) =>{
+        return new Promise((resolve, reject) => {
+            fetch(`${BASE_URL}StockTransfer/update`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(
+                    {
+                        stkTransfer: {
+                            "FromBranchId": data.BranchID,
+                            "Date": data.ReturnDate,
+                            "Qty": "45",
+                            "supplierid": 1,
+                            "Address": "OMRR",
+                            "GSTNo": 12,
+                            "Status": "COMPLETED",
+                            "NetAmount": 300.000,
+                            "TotalDiscount": 29.0,
+                            "UserID": 1,
+                            "IsApprove": 1,
+                            "CMPid": 1,
+                            "IsReject": 0,
+                            "ApprovedBy": "aaa",
+                            "ApprovedDate": "2222-01-02",
+                            "VerifIedBy": "hdsghf",
+                            "CreditNoteAmount": 546,
+                            "TotalNoOfProducts": 6,
+                            "Discription": "Uregent",
+                            "TotalTax": 10,
+                            "GrossAmount": 120
+
+
+                        },
+                        trnsfrDetails: [
+                            { "IsAccept": 1, "ProdctId": 4, "Qty": 3, "FreeQty": 0, "Rate": 10, "HSNCode": "123", "BatchNo": "DSD", "Expiry": "2022-02-02", "GST": 12, "TaxParam": "Qty", "Taxid": "1", "Total": 3434, "UserID": 1, "CMPid": 1 },
+
+                        ]
+                    }
+                )
+            })
+        })
+    },
+    editGoodsreceipt : (main,sub) =>{
+        return new Promise((resolve, reject) => {
+            fetch(`${BASE_URL}GoodsReceipt/update`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(
+                    {
+                        goodsReceipt: {
+
+                            "TransDate": main.TransDate,
+                            "TransNo": main.TransNo,
+                            "RefNo": main.RefNo,
+                            "RefDate": main.RefDate,
+                            "Payment": main.PaymentType,
+                            "Address": main.Address,
+                            "TotalDiscount": main.GrandTotal,
+                            "TotalTax": main.totalTax,
+                            "UserID": 1,
+                            "CMPid": 1,
+                        },
+    
+                        goodsReceiptDetais: [
+                            { "ProdctId": sub.productID, "Qty": sub.Qty, "FreeQty": sub.FreeQty, "Rate": sub.Rate, "HSNCode": sub.HSNCode, "BatchNo": sub.dd, "Expiry": sub.Expiry, "GST": sub.GST, "UserID": 1, "CMPid": 1 }
+                        ]
+                    }
+                )
+            })
+        })
+    },
+
 }

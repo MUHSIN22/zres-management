@@ -15,6 +15,7 @@ function StockAdjustment() {
   const [fromDate,setfromDate]= useState('')
   const [editmode,setEditmode] = useState(false)
   const [toDate,settoDate]= useState('')
+  const [editabledata,setEditabledata] = useState([])
   const [dataStoredForEditableUpdatable, setDataStoredForEditableUpdatable] =
     useState([]);
 
@@ -48,6 +49,8 @@ function StockAdjustment() {
         <EditableUpdatablePage
           setMainTableView={setMainTableView}
           setEditableUpdatable={setEditableUpdatable}
+          editable={editabledata}
+          status={editmode}
         />
       )}
 
@@ -169,6 +172,7 @@ function StockAdjustment() {
                         setDataStoredForEditableUpdatable(datas);
                         setEditableUpdatable(true);
                         setMainTableView(false);
+                        setEditabledata(datas)
                         }
                         deletemode && 
                         deleteAction(datas)

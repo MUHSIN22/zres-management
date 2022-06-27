@@ -113,6 +113,10 @@ function AddNew({
     console.log(data)
   }
 
+  const handleEditProductmaster =(data)=>{
+    inventoryServices.editProductmaster(data)
+  }
+
   useEffect(
     () => () => {
       files.forEach((file) => URL.revokeObjectURL(file.preview));
@@ -401,7 +405,7 @@ inventoryServices.getInventorygroupname()
               </div>
             </div>
             <div className="bottom__btn__section">
-              {addNewBtn && <button onClick={()=>handleAddProductmaster(DataToSend)} type="submit">save</button>}
+              {addNewBtn && <button onClick={ ()=>{ (status) ? handleEditProductmaster(DataToSend) : handleAddProductmaster(DataToSend)}} type="submit">save</button>}
 
               {editOption && <button type="submit">Update</button>}
             </div>

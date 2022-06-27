@@ -50,18 +50,22 @@ const purchaseDeatailsFilter = (from,to)=>{
 
 const totalAmount = ()=>{
   let total = 0
+  
   data.map(item=>{
     total = total + item.Amount
   })
   setTotal(total)
 }
 
+useEffect(() => {
+  totalAmount()
+})
   useEffect(() => {
     inventoryServices.getTransactionproductdeatails()
       .then(data => {
         setData(data)
       }).catch(err => console.log(err))
-      ;totalAmount()
+      ;
   }, [])
   console.log(editmode)
 
@@ -271,7 +275,7 @@ const totalAmount = ()=>{
                         className={datas.Status === "canceled" && "Canceled "}
                       >
                         <NumberFormat
-                          value={datas.PaidAmount}
+                          value={datas.Amount}
                           displayType={"text"}
                           thousandSeparator={true}
                         />

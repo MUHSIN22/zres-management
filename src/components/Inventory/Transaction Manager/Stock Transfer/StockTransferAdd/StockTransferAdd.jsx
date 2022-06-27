@@ -27,6 +27,11 @@ function StockTransferAdd({ setAddNewBtn, setMainTableView,status,editable }) {
   };
   console.log(Mainvalues)
 
+
+  const handleEditdata = (data) =>{
+    inventoryServices.editStocktransfer(data)
+  }
+
   useEffect(() => {
     inventoryServices.getAllbranchess()
       .then((data) => {

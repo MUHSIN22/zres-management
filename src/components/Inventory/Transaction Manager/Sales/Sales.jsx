@@ -44,7 +44,7 @@ function Sales() {
   const totalGrossvalue = ()=>{
     let total = 0
     data.map(item=>{
-      total = total + item.Gross
+      total = total + item.GrossAmount
     })
     setTotalgross(total);
   }
@@ -52,10 +52,16 @@ function Sales() {
   const totalNetamount = ()=>{
     let total = 0
     data.map(item=>{
-      total = total + item.Net
+      total = total + item.NetAmount
     })
     setNetamount(total);
   }
+
+  useEffect(() => {
+    totalNetamount()
+    totalGrossvalue()
+    totalAmount()
+  })
 
   useEffect(() => {
     inventoryServices.getSales()

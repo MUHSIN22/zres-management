@@ -106,6 +106,12 @@ function AddGoodsReport({ setAddNewBtn, setMainTableView ,status,editable}) {
     window.alert("form submited");
     console.log("dataToSend", Mainvalues, dataInTable);
   };
+
+  const handleEdit = (e,main,sub) =>{
+    e.preventDefault();
+    inventoryServices.editGoodsreceipt(main,sub)
+  }
+
 console.log(subData)
   const handleDataforTable = (e) => {
     e.preventDefault();
@@ -145,6 +151,7 @@ setSubdata({
    Qty: (data[0] !== '') && data[0].Quantity,
    productID: (data[0] !== '') && data[0].ProdctId,
   Discount: (data[0] !== '') && data[0].Discount,
+
   
       })
     } 
@@ -527,7 +534,7 @@ setSubdata({
             </div>
           </div>
           <div className="bottom__btn__section">
-            <button onClick={(e)=>mainFormSubmit(e,Mainvalues,subData)}>Save</button>
+            <button onClick={(e)=> status ? handleEdit(e,Mainvalues,subData) :  mainFormSubmit(e,Mainvalues,subData)}>Save</button>
             <button>Print</button>
             <button
               onClick={() => {
