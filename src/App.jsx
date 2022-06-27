@@ -24,7 +24,9 @@ import Billgenerated from "./components/Walkin/Bills/Billgenerated";
 import { EssentialProvider } from "./Data manager/EssentialContext";
 import KdcOrder from "./components/KDC CLOUD/KDC Order/KdcOrder";
 
+
 function App() {
+
   return (
     <EssentialProvider>
       <div className="App">
@@ -36,7 +38,8 @@ function App() {
               <Route path="/setting" element={<Settings />}/>
               <Route path="/foodOrder" element={<FoodOrderPage />}/>
               <Route path="/dinein" element={<DineIn />}/>
-              <Route path="/walkin" element={<Walkin />}/>
+                <Route path="/walkin" element={<Walkin />}/>
+              
               <Route path="/DashBoad" element={<DashBoard />}/>
               <Route path="/kdcCloud" element={<KdcCoud />}>
                 <Route path="orders" element={<KdcOrder />}/>

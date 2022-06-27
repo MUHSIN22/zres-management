@@ -22,6 +22,8 @@ import Stack from "@mui/material/Stack";
 import { faLaptopHouse } from "@fortawesome/free-solid-svg-icons";
 import Placeorder from "./placeorder/placeorder";
 import Discount from "./discount/Discount";
+import { Elements } from "@stripe/react-stripe-js";
+import { loadStripe } from "@stripe/stripe-js";
 
 
 function Walkin({ dataToSendToWlkinPage, dinein }) {
@@ -42,8 +44,9 @@ function Walkin({ dataToSendToWlkinPage, dinein }) {
   const [beverage, setBeverage] = useState([])
   const [itembymenu, setItembymenu] = useState([])
   const [menubyid, setMenubyid] = useState('')
-  const [discount,setDiscount] = useState(false)
-  const [placeorder,setPlaceorder] = useState(false)
+  const [discount,setDiscount] = useState(false);
+  const [placeorder,setPlaceorder] = useState(false);
+
 
   const calculateTotal = ()=>{
     let price = CartItem.reduce(
@@ -218,7 +221,7 @@ function Walkin({ dataToSendToWlkinPage, dinein }) {
   const totalNumberOfPrdts = CartItem.reduce((total,item)=>total+item?.quantity,0);
   const totalTaxPercent = CartItem.reduce((tax, item) => tax + item?.quantity *item?.TaxPercentage,0)
   const taxAmount = Math.round((((totalTaxPercent/totalNumberOfPrdts)/100)*subTotal)*100)/100 || 0;
-    
+  const stripePromise = loadStripe('pk_live_51L14E1BlqVCLxONn4xOdQyr4rgvzSwiuZm6anksyqRcQhfbwNlxXBSrnXOfCPOkQZRAGy4feTvaks6zM5PG76mFD00wgY8M8tJ');
   
   
 
@@ -260,15 +263,17 @@ function Walkin({ dataToSendToWlkinPage, dinein }) {
           {paymentOption && (
             <div className="Burger__option__selection__section__container ">
               <div className="burger__option__sections__inner__div payment__area">
-                <Payment
-                  dinein={dinein}
-                  subTotal={subTotal}
-                  taxAmount={taxAmount}
-                  items={CartItem}
-                  setPaymentSUcessfull={setPaymentSUcessfull}
-                  setPaymentOption={setPaymentOption}
-                  paymentOption={paymentOption}
-                />
+                <Elements stripe={stripePromise}>
+                  <Payment
+                    dinein={dinein}
+                    subTotal={subTotal}
+                    taxAmount={taxAmount}
+                    items={CartItem}
+                    setPaymentSUcessfull={setPaymentSUcessfull}
+                    setPaymentOption={setPaymentOption}
+                    paymentOption={paymentOption}
+                  />
+                </Elements>
               </div>
             </div>
           )}
@@ -558,14 +563,14 @@ function Walkin({ dataToSendToWlkinPage, dinein }) {
                                           </g>
                                         </svg>
                                         <div className="detaills">
-                                          <h6>{d.name}</h6>
+                                          <h6>{d.MItemName}</h6>
                                           <p
                                             style={{
                                               fontSize: "8px",
                                               marginLeft: "5px",
                                             }}
                                           >
-                                            + {d.price} OMR
+                                            + {d.Rate} OMR
                                           </p>
                                         </div>
                                       </div>
